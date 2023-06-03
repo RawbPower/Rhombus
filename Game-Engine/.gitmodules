@@ -1,0 +1,12 @@
+[submodule "Game-Engine/vendor/spdlog"]
+	path = Game-Engine/vendor/spdlog
+	url = https://github.com/gabime/spdlog
+[submodule "Game-Engine/vendor/GLFW"]
+	path = Game-Engine/vendor/GLFW
+	url = https://github.com/glfw/glfw
+[submodule "Game-Engine/vendor/imgui"]
+	path = Game-Engine/vendor/imgui
+	url = https://github.com/RawbPower/imgui
+[submodule "Game-Engine/vendor/glm"]
+	path = Game-Engine/vendor/glm
+	url = https://github.com/g-truc/glm

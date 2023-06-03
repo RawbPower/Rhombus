@@ -1,0 +1,11 @@
+# Binaries
+**/bin/
+!vendor/bin/premake/
+bin-int/
+
+# Files
+.vs/
+**.sln
+**.vcxproj
+**.vcxproj.filters
+**.vcxproj.user

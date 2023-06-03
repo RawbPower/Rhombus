@@ -10,3 +10,6 @@
 [submodule "Game-Engine/vendor/glm"]
 	path = Game-Engine/vendor/glm
 	url = https://github.com/g-truc/glm
+[submodule "Game-Engine/vendor/SDL"]
+	path = Game-Engine/vendor/SDL
+	url = https://github.com/RawbPower/SDL

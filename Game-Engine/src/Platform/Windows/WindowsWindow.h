@@ -4,6 +4,7 @@
 #include "GameEngine/Renderer/GraphicsContext.h"
 
 #include <GLFW/glfw3.h>
+#include <SDL.h>
 
 namespace ge {
 
@@ -30,6 +31,8 @@ namespace ge {
 	private:
 		GLFWwindow* m_Window;
 		GraphicsContext* m_Context;
+
+		SDL_Window* m_SDLWindow;
 
 		struct WindowData
 		{

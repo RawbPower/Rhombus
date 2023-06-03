@@ -11,6 +11,9 @@ namespace ge {
 
 	static bool s_GLFWInitialized = false;
 
+	const int SCREEN_WIDTH = 640;
+	const int SCREEN_HEIGHT = 480;
+
 	static void GLFWErrorCallback(int error, const char* description)
 	{
 		GE_CORE_ERROR("GLFW Error ({0}): {1}", error, description);
@@ -24,11 +27,49 @@ namespace ge {
 	WindowsWindow::WindowsWindow(const WindowProps& props)
 	{
 		Init(props);
+
+		//The window we'll be rendering to
+		m_SDLWindow = NULL;
+
+		//The surface contained by the window
+		SDL_Surface* screenSurface = NULL;
+
+		//Initialize SDL
+		if (SDL_Init(SDL_INIT_VIDEO) < 0)
+		{
+			printf("SDL could not initialize! SDL_Error: %s\n", SDL_GetError());
+		}
+		else
+		{
+			//Create window
+			m_SDLWindow = SDL_CreateWindow("SDL Tutorial", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
+			if (m_SDLWindow == NULL)
+			{
+				printf("Window could not be created! SDL_Error: %s\n", SDL_GetError());
+			}
+			else
+			{
+				//Get window surface
+				screenSurface = SDL_GetWindowSurface(m_SDLWindow);
+
+				//Fill the surface white
+				SDL_FillRect(screenSurface, NULL, SDL_MapRGB(screenSurface->format, 0xFF, 0xFF, 0xFF));
+
+				//Update the surface
+				SDL_UpdateWindowSurface(m_SDLWindow);
+			}
+		}
 	}
 
 	WindowsWindow::~WindowsWindow()
 	{
 		Shutdown();
+
+		//Destroy window
+		SDL_DestroyWindow(m_SDLWindow);
+
+		//Quit SDL subsystems
+		SDL_Quit();
 	}
 
 	void WindowsWindow::Init(const WindowProps& props)

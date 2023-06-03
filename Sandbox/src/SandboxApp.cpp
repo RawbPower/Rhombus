@@ -15,14 +15,14 @@ public:
 		: Layer("Example"), m_CameraController(1280.0f / 720.0f, true)
 	{
 		/* Vertex Array (required for core OpenGL profile) */
-		m_VertexArray.reset(ge::VertexArray::Create());
+		//m_VertexArray.reset(ge::VertexArray::Create());
 		//m_VertexArray->Bind();
 
 		/* Vertex Buffer */
 
 		// 3D coordinates and there are 3 of them
 		// OpenGl default clip space is -1 to 1 x, y, z
-		float vertices[3 * 7] = {
+		/*float vertices[3 * 7] = {
 			-0.5f, -0.5f, 0.0f, 0.8f, 0.2f, 0.8f, 1.0f,				// vertex coordinate on each row
 			0.5f, -0.5f, 0.0f, 0.2f, 0.3f, 0.8f, 1.0f,
 			0.0f, 0.5f, 0.0f, 0.8f, 0.8f, 0.2f, 1.0f
@@ -39,12 +39,12 @@ public:
 		vertexBuffer->SetLayout(layout);
 
 		// Tell OpenGL what the layout of the buffer is
-		m_VertexArray->AddVertexBuffer(vertexBuffer);
+		m_VertexArray->AddVertexBuffer(vertexBuffer);*/
 
 
 		/* Index Buffer (gives index to vertices, describes what order to draw vertices) */
 
-		uint32_t indices[3] = { 0, 1, 2 };		// 3 points in the triangle
+		/*uint32_t indices[3] = {0, 1, 2};		// 3 points in the triangle
 		ge::Ref<ge::IndexBuffer> indexBuffer;
 		indexBuffer.reset(ge::IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t)));
 		m_VertexArray->SetIndexBuffer(indexBuffer);
@@ -73,13 +73,13 @@ public:
 		uint32_t squareIndices[6] = { 0, 1, 2, 2, 3, 0 };
 		ge::Ref<ge::IndexBuffer> squareIB;
 		squareIB.reset(ge::IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(uint32_t)));
-		m_SquareVA->SetIndexBuffer(squareIB);
+		m_SquareVA->SetIndexBuffer(squareIB);*/
 
 		/* Shader (If we do nothing GPU drivers will make a default one) */
 
 		// Shader source code
 		// R prefix allows multiple line strings
-		std::string vertexSrc = R"(
+		/* std::string vertexSrc = R"(
 			#version 330 core
 
 			layout(location = 0) in vec3 a_Position;
@@ -157,13 +157,13 @@ public:
 		m_BlendTexture = ge::Texture2D::Create("assets/textures/ChernoLogo.png");
 
 		std::dynamic_pointer_cast<ge::OpenGLShader>(textureShader)->Bind();
-		std::dynamic_pointer_cast<ge::OpenGLShader>(textureShader)->UploadUniformInt("u_Texture", 0);		// 0 is the texure slot of m_Texture
+		std::dynamic_pointer_cast<ge::OpenGLShader>(textureShader)->UploadUniformInt("u_Texture", 0);*/		// 0 is the texure slot of m_Texture
 	}
 
 	void OnUpdate(ge::DeltaTime dt) override
 	{
 		// Update
-		m_CameraController.OnUpdate(dt);
+		/*m_CameraController.OnUpdate(dt);
 
 		// Render
 		ge::RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
@@ -197,7 +197,7 @@ public:
 		// Render triangle
 		//ge::Renderer::Submit(m_Shader, m_VertexArray);
 
-		ge::Renderer::EndScene();
+		ge::Renderer::EndScene();*/
 	}
 
 	virtual void OnImGuiRender() override
@@ -209,7 +209,7 @@ public:
 
 	void OnEvent(ge::Event& e) override
 	{
-		m_CameraController.OnEvent(e);
+		//m_CameraController.OnEvent(e);
 	}
 
 	bool OnKeyPressedEvent(ge::KeyPressedEvent& event) 

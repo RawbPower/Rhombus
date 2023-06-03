@@ -84,9 +84,7 @@ project "Game-Engine"
 		"GLFW",
 		"Glad",
 		"ImGui",
-		"opengl32.lib",
-		"SDL2",
-		"SDL2main"
+		"opengl32.lib"
 	}
 
 	filter "system:windows"

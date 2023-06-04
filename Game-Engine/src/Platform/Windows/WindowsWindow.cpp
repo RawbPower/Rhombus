@@ -19,14 +19,14 @@ namespace ge {
 		GE_CORE_ERROR("GLFW Error ({0}): {1}", error, description);
 	}
 
-	Window* Window::Create(const WindowProps& props)
+	Window* Window::Create(const WindowParams& params)
 	{
-		return new WindowsWindow(props);
+		return new WindowsWindow(params);
 	}
 
-	WindowsWindow::WindowsWindow(const WindowProps& props)
+	WindowsWindow::WindowsWindow(const WindowParams& params)
 	{
-		Init(props);
+		Init(params);
 
 		//The window we'll be rendering to
 		m_SDLWindow = NULL;
@@ -37,15 +37,15 @@ namespace ge {
 		//Initialize SDL
 		if (SDL_Init(SDL_INIT_VIDEO) < 0)
 		{
-			printf("SDL could not initialize! SDL_Error: %s\n", SDL_GetError());
+			GE_CORE_ERROR("SDL could not initialize! SDL_Error: %s\n", SDL_GetError());
 		}
 		else
 		{
 			//Create window
-			m_SDLWindow = SDL_CreateWindow("SDL Tutorial", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
+			m_SDLWindow = SDL_CreateWindow(m_Data.Title.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, m_Data.Width, m_Data.Height, SDL_WINDOW_SHOWN);
 			if (m_SDLWindow == NULL)
 			{
-				printf("Window could not be created! SDL_Error: %s\n", SDL_GetError());
+				GE_CORE_ERROR("Window could not be created! SDL_Error: %s\n", SDL_GetError());
 			}
 			else
 			{
@@ -53,7 +53,7 @@ namespace ge {
 				screenSurface = SDL_GetWindowSurface(m_SDLWindow);
 
 				//Fill the surface white
-				SDL_FillRect(screenSurface, NULL, SDL_MapRGB(screenSurface->format, 0xFF, 0xFF, 0xFF));
+				SDL_FillRect(screenSurface, NULL, SDL_MapRGB(screenSurface->format, 55, 55, 55));
 
 				//Update the surface
 				SDL_UpdateWindowSurface(m_SDLWindow);
@@ -72,13 +72,13 @@ namespace ge {
 		SDL_Quit();
 	}
 
-	void WindowsWindow::Init(const WindowProps& props)
+	void WindowsWindow::Init(const WindowParams& params)
 	{
-		m_Data.Title = props.Title;
-		m_Data.Width = props.Width;
-		m_Data.Height = props.Height;
+		m_Data.Title = params.Title;
+		m_Data.Width = params.Width;
+		m_Data.Height = params.Height;
 
-		GE_CORE_INFO("Creating window {0} ({1}, {2})", props.Title, props.Width, props.Height);
+		GE_CORE_INFO("Creating window {0} ({1}, {2})", params.Title, params.Width, params.Height);
 
 		if (!s_GLFWInitialized)
 		{
@@ -89,7 +89,7 @@ namespace ge {
 			s_GLFWInitialized = true;
 		}
 
-		m_Window = glfwCreateWindow((int)props.Width, (int)props.Height, m_Data.Title.c_str(), nullptr, nullptr);
+		m_Window = glfwCreateWindow((int)params.Width, (int)params.Height, m_Data.Title.c_str(), nullptr, nullptr);
 		// This could be changed from OpenGL to DirectX or Vulcan in the future
 		m_Context = new OpenGLContext(m_Window);
 		m_Context->Init();

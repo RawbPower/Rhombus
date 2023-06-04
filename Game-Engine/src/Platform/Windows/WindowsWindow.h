@@ -11,7 +11,7 @@ namespace ge {
 	class WindowsWindow : public Window
 	{
 	public:
-		WindowsWindow(const WindowProps& props);
+		WindowsWindow(const WindowParams& params);
 		virtual ~WindowsWindow();
 
 		void OnUpdate() override;
@@ -26,7 +26,7 @@ namespace ge {
 
 		inline virtual void* GetNativeWindow() const { return m_Window; }
 	private:
-		virtual void Init(const WindowProps& props);
+		virtual void Init(const WindowParams& params);
 		virtual void Shutdown();
 	private:
 		GLFWwindow* m_Window;

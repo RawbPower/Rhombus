@@ -1,4 +1,4 @@
-workspace "Game-Engine"
+workspace "Rhombus"
 	architecture "x64"
 
 	configurations
@@ -19,22 +19,22 @@ startproject "Sandbox"
 
 -- Include directories relative to root folder (solution directory)
 IncludeDir = {}
-IncludeDir["GLFW"] = "Game-Engine/vendor/GLFW/include"
-IncludeDir["Glad"] = "Game-Engine/vendor/Glad/include"
-IncludeDir["ImGui"] = "Game-Engine/vendor/imgui"
-IncludeDir["glm"] = "Game-Engine/vendor/glm"
-IncludeDir["stb_image"] = "Game-Engine/vendor/stb_image"
-IncludeDir["SDL2"] = "Game-Engine/vendor/SDL2/include"
+IncludeDir["GLFW"] = "Rhombus/vendor/GLFW/include"
+IncludeDir["Glad"] = "Rhombus/vendor/Glad/include"
+IncludeDir["ImGui"] = "Rhombus/vendor/imgui"
+IncludeDir["glm"] = "Rhombus/vendor/glm"
+IncludeDir["stb_image"] = "Rhombus/vendor/stb_image"
+IncludeDir["SDL2"] = "Rhombus/vendor/SDL2/include"
 
 group "Dependencies"
-	include "Game-Engine/vendor/GLFW"
-	include "Game-Engine/vendor/Glad"
-	include "Game-Engine/vendor/imgui"
+	include "Rhombus/vendor/GLFW"
+	include "Rhombus/vendor/Glad"
+	include "Rhombus/vendor/imgui"
 
 group ""
 
-project "Game-Engine"
-	location "Game-Engine"
+project "Rhombus"
+	location "Rhombus"
 	kind "StaticLib"
 	language "C++"
 	cppdialect "C++17"
@@ -44,7 +44,7 @@ project "Game-Engine"
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
 
 	pchheader "rbpch.h"
-	pchsource "Game-Engine/src/rbpch.cpp"
+	pchsource "Rhombus/src/rbpch.cpp"
 
 	files 
 	{
@@ -76,7 +76,7 @@ project "Game-Engine"
 	
 	libdirs
 	{
-		"Game-Engine/vendor/SDL2/lib/x64"
+		"Rhombus/vendor/SDL2/lib/x64"
 	}
 
 	links
@@ -132,17 +132,17 @@ project "Sandbox"
 
 	includedirs
 	{
-		"Game-Engine/vendor/spdlog/include",
-		"Game-Engine/src",
-		"Game-Engine/vendor",
+		"Rhombus/vendor/spdlog/include",
+		"Rhombus/src",
+		"Rhombus/vendor",
 		"%{IncludeDir.glm}",
-		"Game-Engine/vendor/assimp/include",
+		"Rhombus/vendor/assimp/include",
 	}
 
 	links
 	{
-		"Game-Engine",
-		"Game-Engine/vendor/assimp/lib/assimp.lib"
+		"Rhombus",
+		"Rhombus/vendor/assimp/lib/assimp.lib"
 	}
 
 	filter "system:windows"

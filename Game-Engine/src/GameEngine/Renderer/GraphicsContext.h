@@ -1,6 +1,6 @@
 #pragma once
 
-namespace ge {
+namespace Rhombus {
 
 	class GraphicsContext {
 

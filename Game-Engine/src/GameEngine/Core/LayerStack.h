@@ -5,9 +5,9 @@
 
 #include <vector>
 
-namespace ge {
+namespace Rhombus {
 
-	class GE_API LayerStack
+	class RB_API LayerStack
 	{
 	public:
 		LayerStack();

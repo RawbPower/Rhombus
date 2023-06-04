@@ -2,7 +2,7 @@
 
 #include "GameEngine/Core/Input.h"
 
-namespace ge {
+namespace Rhombus {
 
 	class WindowsInput : public Input 
 	{

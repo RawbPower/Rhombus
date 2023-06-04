@@ -2,7 +2,7 @@
 
 #include "GameEngine/Renderer/Buffer.h"
 
-namespace ge {
+namespace Rhombus {
 
 	class OpenGLVertexBuffer : public VertexBuffer 
 	{

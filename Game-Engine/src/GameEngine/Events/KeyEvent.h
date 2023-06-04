@@ -2,10 +2,10 @@
 
 #include "Event.h"
 
-namespace ge {
+namespace Rhombus {
 
 	// Key event base class
-	class GE_API KeyEvent : public Event
+	class RB_API KeyEvent : public Event
 	{
 	public:
 		inline int GetKeyCode() const { return m_KeyCode; }
@@ -19,7 +19,7 @@ namespace ge {
 
 	};
 
-	class GE_API KeyPressedEvent : public KeyEvent
+	class RB_API KeyPressedEvent : public KeyEvent
 	{
 	public:
 		KeyPressedEvent(int keycode, int repeatCount)
@@ -39,7 +39,7 @@ namespace ge {
 		int m_RepeatCount;
 	};
 
-	class GE_API KeyReleasedEvent : public KeyEvent
+	class RB_API KeyReleasedEvent : public KeyEvent
 	{
 	public:
 		KeyReleasedEvent(int keycode)
@@ -55,7 +55,7 @@ namespace ge {
 		EVENT_CLASS_TYPE(KeyReleased)
 	};
 
-	class GE_API KeyTypedEvent : public KeyEvent
+	class RB_API KeyTypedEvent : public KeyEvent
 	{
 	public:
 		KeyTypedEvent(int keycode)

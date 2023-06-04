@@ -2,9 +2,9 @@
 
 #include "GameEngine/Core/Core.h"
 
-namespace ge {
+namespace Rhombus {
 
-	class GE_API Input
+	class RB_API Input
 	{
 	public:
 		inline static bool IsKeyPressed(int keycode) { return s_Instance->IsKeyPressedImpl(keycode); }

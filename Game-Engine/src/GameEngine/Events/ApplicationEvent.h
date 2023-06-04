@@ -2,9 +2,9 @@
 
 #include "Event.h"
 
-namespace ge {
+namespace Rhombus {
 
-	class GE_API WindowResizeEvent : public Event
+	class RB_API WindowResizeEvent : public Event
 	{
 	public:
 		WindowResizeEvent(unsigned int width, unsigned int height)
@@ -26,7 +26,7 @@ namespace ge {
 		unsigned int m_Width, m_Height;
 	};
 
-	class GE_API WindowCloseEvent : public Event
+	class RB_API WindowCloseEvent : public Event
 	{
 	public:
 		WindowCloseEvent() {}
@@ -35,7 +35,7 @@ namespace ge {
 		EVENT_CLASS_CATEGORY(EventCategoryApplication)
 	};
 
-	class GE_API AppTickEvent : public Event
+	class RB_API AppTickEvent : public Event
 	{
 	public:
 		AppTickEvent() {}
@@ -44,7 +44,7 @@ namespace ge {
 		EVENT_CLASS_CATEGORY(EventCategoryApplication)
 	};
 
-	class GE_API AppUpdateEvent : public Event
+	class RB_API AppUpdateEvent : public Event
 	{
 	public:
 		AppUpdateEvent() {}
@@ -53,7 +53,7 @@ namespace ge {
 		EVENT_CLASS_CATEGORY(EventCategoryApplication)
 	};
 
-	class GE_API AppRenderEvent : public Event
+	class RB_API AppRenderEvent : public Event
 	{
 	public:
 		AppRenderEvent() {}

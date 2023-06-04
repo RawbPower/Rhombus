@@ -1,9 +1,9 @@
-#include "gepch.h"
+#include "rbpch.h"
 #include "OpenGLRendererAPI.h"
 
 #include <glad/glad.h>
 
-namespace ge {
+namespace Rhombus {
 
 	void OpenGLRendererAPI::Init()
 	{

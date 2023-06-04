@@ -2,7 +2,7 @@
 
 #include "GameEngine/Renderer/RendererAPI.h"
 
-namespace ge {
+namespace Rhombus {
 
 	class OpenGLRendererAPI : public RendererAPI {
 	public:

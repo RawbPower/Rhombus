@@ -1,11 +1,11 @@
 #pragma once
 
-#include "gepch.h"
+#include "rbpch.h"
 
 #include "GameEngine/Core/Core.h"
 #include "GameEngine/Events/Event.h"
 
-namespace ge {
+namespace Rhombus {
 
 	struct WindowParams
 	{
@@ -23,7 +23,7 @@ namespace ge {
 	};
 
 	// Interface representing a desktop system based Window
-	class GE_API Window
+	class RB_API Window
 	{
 	public:
 		using EventCallbackFn = std::function<void(Event&)>;

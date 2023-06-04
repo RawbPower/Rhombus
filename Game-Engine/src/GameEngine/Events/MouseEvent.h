@@ -2,9 +2,9 @@
 
 #include "Event.h"
 
-namespace ge {
+namespace Rhombus {
 
-	class GE_API MouseMovedEvent : public Event
+	class RB_API MouseMovedEvent : public Event
 	{
 	public:
 		MouseMovedEvent(float x, float y)
@@ -26,7 +26,7 @@ namespace ge {
 		float m_MouseX, m_MouseY;
 	};
 
-	class GE_API MouseScrolledEvent : public Event
+	class RB_API MouseScrolledEvent : public Event
 	{
 	public:
 		MouseScrolledEvent(float xOffset, float yOffset)
@@ -48,7 +48,7 @@ namespace ge {
 		float m_XOffset, m_YOffset;
 	};
 
-	class GE_API MouseButtonEvent : public Event
+	class RB_API MouseButtonEvent : public Event
 	{
 	public:
 		inline int GetMouseButton() const { return m_Button; }
@@ -61,7 +61,7 @@ namespace ge {
 		int m_Button;
 	};
 
-	class GE_API MouseButtonPressedEvent : public MouseButtonEvent
+	class RB_API MouseButtonPressedEvent : public MouseButtonEvent
 	{
 	public:
 		MouseButtonPressedEvent(int button)
@@ -77,7 +77,7 @@ namespace ge {
 		EVENT_CLASS_TYPE(MouseButtonPressed);
 	};
 
-	class GE_API MouseButtonReleasedEvent : public MouseButtonEvent
+	class RB_API MouseButtonReleasedEvent : public MouseButtonEvent
 	{
 	public:
 		MouseButtonReleasedEvent(int button)

@@ -15,7 +15,7 @@
 
 #include "GameEngine/Core/Log.h"
 
-#ifdef GE_PLATFORM_WINDOWS
+#ifdef RB_PLATFORM_WINDOWS
 	#include <Windows.h>
 #endif
 

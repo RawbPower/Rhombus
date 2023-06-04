@@ -1,9 +1,9 @@
 #pragma once
 
-#include "gepch.h"
+#include "rbpch.h"
 #include "GameEngine/Core/Core.h"
 
-namespace ge {
+namespace Rhombus {
 
 	// Events in the game engine are currently blocking, meaning when an event occurs it 
 	// immediately get dispatched and must be dealt with right there and then. For the 
@@ -36,7 +36,7 @@ namespace ge {
 #define EVENT_CLASS_CATEGORY(category) virtual int GetCategoryFlags() const override { return category; }
 
 	// Event class (base class for events)
-	class GE_API Event
+	class RB_API Event
 	{
 	public:
 		// Says if event is handled so it doesn't propogate further in the layers

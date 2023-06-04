@@ -2,7 +2,7 @@
 
 #include "GameEngine/Renderer/Texture.h"
 
-namespace ge {
+namespace Rhombus {
 
 	class OpenGLTexture2D : public Texture2D 
 	{

@@ -3,7 +3,7 @@
 #include <memory>
 #include "Buffer.h"
 
-namespace ge {
+namespace Rhombus {
 
 	class VertexArray
 	{

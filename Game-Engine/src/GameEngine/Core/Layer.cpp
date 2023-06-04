@@ -1,7 +1,7 @@
-#include "gepch.h"
+#include "rbpch.h"
 #include "GameEngine/Core/Layer.h"
 
-namespace ge {
+namespace Rhombus {
 
 	Layer::Layer(const std::string& debugName)
 		: m_DebugName(debugName)

@@ -1,10 +1,10 @@
-#include "gepch.h"
+#include "rbpch.h"
 #include "OrthographicCameraController.h"
 
 #include "GameEngine/Core/Input.h"
 #include "GameEngine/Core/KeyCodes.h"
 
-namespace ge {
+namespace Rhombus {
 
 	OrthographicCameraController::OrthographicCameraController(float aspectRatio, bool rotation)
 		: m_AspectRatio(aspectRatio), m_Camera(-m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel,-m_ZoomLevel, m_ZoomLevel), m_Rotation(rotation)
@@ -15,24 +15,24 @@ namespace ge {
 	void OrthographicCameraController::OnUpdate(DeltaTime dt)
 	{
 		// Camera Movement
-		if (Input::IsKeyPressed(GE_KEY_A))
+		if (Input::IsKeyPressed(RB_KEY_A))
 			m_CameraPosition.x -= m_CameraTranslationSpeed * dt;
-		else if (Input::IsKeyPressed(GE_KEY_D))
+		else if (Input::IsKeyPressed(RB_KEY_D))
 			m_CameraPosition.x += m_CameraTranslationSpeed * dt;
 
-		if (Input::IsKeyPressed(GE_KEY_S))
+		if (Input::IsKeyPressed(RB_KEY_S))
 			m_CameraPosition.y -= m_CameraTranslationSpeed * dt;
-		else if (Input::IsKeyPressed(GE_KEY_W))
+		else if (Input::IsKeyPressed(RB_KEY_W))
 			m_CameraPosition.y += m_CameraTranslationSpeed * dt;
 
 		// Camera Rotation
 		if (m_Rotation)
 		{
 			// For some reason the positive rotation is clockwise
-			if (Input::IsKeyPressed(GE_KEY_Q))
+			if (Input::IsKeyPressed(RB_KEY_Q))
 				m_CameraRotation += m_CameraRotationSpeed * dt;
 
-			if (Input::IsKeyPressed(GE_KEY_E))
+			if (Input::IsKeyPressed(RB_KEY_E))
 				m_CameraRotation -= m_CameraRotationSpeed * dt;
 
 			m_Camera.SetRotation(m_CameraRotation);
@@ -46,8 +46,8 @@ namespace ge {
 	void OrthographicCameraController::OnEvent(Event& e)
 	{
 		EventDispatcher dispatcher(e);
-		dispatcher.Dispatch<MouseScrolledEvent>(GE_BIND_EVENT_FN(OrthographicCameraController::OnMouseScrolled));
-		dispatcher.Dispatch<WindowResizeEvent>(GE_BIND_EVENT_FN(OrthographicCameraController::OnWindowResized));
+		dispatcher.Dispatch<MouseScrolledEvent>(RB_BIND_EVENT_FN(OrthographicCameraController::OnMouseScrolled));
+		dispatcher.Dispatch<WindowResizeEvent>(RB_BIND_EVENT_FN(OrthographicCameraController::OnWindowResized));
 	}
 
 	bool OrthographicCameraController::OnMouseScrolled(MouseScrolledEvent& e)

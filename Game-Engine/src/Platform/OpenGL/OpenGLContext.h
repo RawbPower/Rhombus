@@ -5,7 +5,7 @@
 // Forward Declaration
 struct GLFWwindow;
 
-namespace ge {
+namespace Rhombus {
 
 	class OpenGLContext : public GraphicsContext {
 

@@ -4,9 +4,9 @@
 #include "spdlog/spdlog.h"
 #include "spdlog/fmt/ostr.h"
 
-namespace ge {
+namespace Rhombus {
 
-	class GE_API Log
+	class RB_API Log
 	{
 	public:
 		// Two consoles, one for client (for the engine - core) and one for app
@@ -23,23 +23,23 @@ namespace ge {
 }
 
 // Core log macros
-#define GE_CORE_TRACE(...)    ::ge::Log::GetCoreLogger()->trace(__VA_ARGS__)
-#define GE_CORE_INFO(...)     ::ge::Log::GetCoreLogger()->info(__VA_ARGS__)
-#define GE_CORE_WARN(...)     ::ge::Log::GetCoreLogger()->warn(__VA_ARGS__)
-#define GE_CORE_ERROR(...)    ::ge::Log::GetCoreLogger()->error(__VA_ARGS__)
-#define GE_CORE_FATAL(...)    ::ge::Log::GetCoreLogger()->critical(__VA_ARGS__)
+#define RB_CORE_TRACE(...)    ::Rhombus::Log::GetCoreLogger()->trace(__VA_ARGS__)
+#define RB_CORE_INFO(...)     ::Rhombus::Log::GetCoreLogger()->info(__VA_ARGS__)
+#define RB_CORE_WARN(...)     ::Rhombus::Log::GetCoreLogger()->warn(__VA_ARGS__)
+#define RB_CORE_ERROR(...)    ::Rhombus::Log::GetCoreLogger()->error(__VA_ARGS__)
+#define RB_CORE_FATAL(...)    ::Rhombus::Log::GetCoreLogger()->critical(__VA_ARGS__)
 
 // Client log macros
-#define GE_TRACE(...)    ::ge::Log::GetClientLogger()->trace(__VA_ARGS__)
-#define GE_INFO(...)     ::ge::Log::GetClientLogger()->info(__VA_ARGS__)
-#define GE_WARN(...)     ::ge::Log::GetClientLogger()->warn(__VA_ARGS__)
-#define GE_ERROR(...)    ::ge::Log::GetClientLogger()->error(__VA_ARGS__)
-#define GE_FATAL(...)    ::ge::Log::GetClientLogger()->critical(__VA_ARGS__)
+#define RB_TRACE(...)    ::Rhombus::Log::GetClientLogger()->trace(__VA_ARGS__)
+#define RB_INFO(...)     ::Rhombus::Log::GetClientLogger()->info(__VA_ARGS__)
+#define RB_WARN(...)     ::Rhombus::Log::GetClientLogger()->warn(__VA_ARGS__)
+#define RB_ERROR(...)    ::Rhombus::Log::GetClientLogger()->error(__VA_ARGS__)
+#define RB_FATAL(...)    ::Rhombus::Log::GetClientLogger()->critical(__VA_ARGS__)
 
 /* Macros are used here instead of functions so that they can be
 	stripped from the distribution built with
 	// if dist build
-	#define GE_CORE_INFO
+	#define RB_CORE_INFO
 	etc
 */
 

@@ -1,21 +1,21 @@
-#include "gepch.h"
+#include "rbpch.h"
 #include "Shader.h"
 
 #include "Renderer.h"
 #include "Platform/OpenGL/OpenGLShader.h"
 
-namespace ge {
+namespace Rhombus {
 
 	Ref<Shader> Shader::Create(const std::string& filepath)
 	{
 		switch (Renderer::GetAPI())
 		{
-			case RendererAPI::API::None:		GE_CORE_ASSERT(false, "RendererAPI::None is currently not supported"); return nullptr;
+			case RendererAPI::API::None:		RB_CORE_ASSERT(false, "RendererAPI::None is currently not supported"); return nullptr;
 
 			case RendererAPI::API::OpenGL:	return std::make_shared<OpenGLShader>(filepath);
 		}
 
-		GE_CORE_ASSERT(false, "Unknown RendererAPI");
+		RB_CORE_ASSERT(false, "Unknown RendererAPI");
 		return nullptr;
 	}
 
@@ -23,18 +23,18 @@ namespace ge {
 	{
 		switch (Renderer::GetAPI())
 		{
-			case RendererAPI::API::None:		GE_CORE_ASSERT(false, "RendererAPI::None is currently not supported"); return nullptr;
+			case RendererAPI::API::None:		RB_CORE_ASSERT(false, "RendererAPI::None is currently not supported"); return nullptr;
 
 			case RendererAPI::API::OpenGL:	return std::make_shared<OpenGLShader>(name, vertexSrc, pixelSrc);
 		}
 
-		GE_CORE_ASSERT(false, "Unknown RendererAPI");
+		RB_CORE_ASSERT(false, "Unknown RendererAPI");
 		return nullptr;
 	}
 
 	void ShaderLibrary::Add(const std::string& name, const Ref<Shader>& shader)
 	{
-		GE_CORE_ASSERT(!Exists(name), "Shader already exists!");
+		RB_CORE_ASSERT(!Exists(name), "Shader already exists!");
 		m_Shaders[name] = shader;
 	}
 
@@ -44,23 +44,23 @@ namespace ge {
 		Add(name, shader);
 	}
 
-	ge::Ref<Shader> ShaderLibrary::Load(const std::string& filepath) 
+	Rhombus::Ref<Shader> ShaderLibrary::Load(const std::string& filepath) 
 	{
 		auto shader = Shader::Create(filepath);
 		Add(shader);
 		return shader;
 	}
 
-	ge::Ref<Shader> ShaderLibrary::Load(const std::string& name, const std::string& filepath) 
+	Rhombus::Ref<Shader> ShaderLibrary::Load(const std::string& name, const std::string& filepath) 
 	{
 		auto shader = Shader::Create(filepath);
 		Add(name, shader);
 		return shader;
 	}
 
-	ge::Ref<Shader> ShaderLibrary::Get(const std::string& name)
+	Rhombus::Ref<Shader> ShaderLibrary::Get(const std::string& name)
 	{
-		GE_CORE_ASSERT(Exists(name), "Shader not found!");
+		RB_CORE_ASSERT(Exists(name), "Shader not found!");
 		return m_Shaders[name];
 	}
 

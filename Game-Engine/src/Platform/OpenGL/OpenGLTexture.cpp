@@ -1,10 +1,10 @@
-#include "gepch.h"
+#include "rbpch.h"
 #include "OpenGLTexture.h"
 
 #include "stb_image.h"
 #include <glad/glad.h>
 
-namespace ge {
+namespace Rhombus {
 
 	OpenGLTexture2D::OpenGLTexture2D(const std::string& path)
 		: m_Path(path)
@@ -13,7 +13,7 @@ namespace ge {
 		int width, height, channels;
 		stbi_set_flip_vertically_on_load(1);		// Flip into correct format for OpenGL
 		stbi_uc* data = stbi_load(path.c_str(), &width, &height, &channels, 0);
-		GE_CORE_ASSERT(data, "Failed to load image!");
+		RB_CORE_ASSERT(data, "Failed to load image!");
 		// stbi_load returns signed integers so we need to reassign everything
 		m_Width = width;
 		m_Height = height;
@@ -30,7 +30,7 @@ namespace ge {
 			dataFormat = GL_RGB;
 		}
 
-		GE_CORE_ASSERT(internalFormat & dataFormat, "Format not supported!");
+		RB_CORE_ASSERT(internalFormat & dataFormat, "Format not supported!");
 
 		// Upload to OpenGL
 		glCreateTextures(GL_TEXTURE_2D, 1, &m_RendererID);

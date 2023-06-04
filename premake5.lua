@@ -43,8 +43,8 @@ project "Game-Engine"
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
 
-	pchheader "gepch.h"
-	pchsource "Game-Engine/src/gepch.cpp"
+	pchheader "rbpch.h"
+	pchsource "Game-Engine/src/rbpch.cpp"
 
 	files 
 	{
@@ -94,23 +94,23 @@ project "Game-Engine"
 
 		defines
 		{
-			"GE_PLATFORM_WINDOWS",
-			"GE_BUILD_DLL",
+			"RB_PLATFORM_WINDOWS",
+			"RB_BUILD_DLL",
 			"GLFW_INCLUDE_NONE"
 		}
 
 	filter "configurations:Debug"
-		defines "GE_DEBUG"
+		defines "RB_DEBUG"
 		runtime "Debug"
 		symbols "on"
 
 	filter "configurations:Release"
-		defines "GE_Release"
+		defines "RB_Release"
 		runtime "Release"
 		optimize "on"
 
 	filter "configurations:Dist"
-		defines "GE_DIST"
+		defines "RB_DIST"
 		runtime "Release"
 		optimize "on"
 
@@ -150,23 +150,23 @@ project "Sandbox"
 
 		defines
 		{
-			"GE_PLATFORM_WINDOWS"
+			"RB_PLATFORM_WINDOWS"
 		}
 
 	filter "configurations:Debug"
-		defines "GE_DEBUG"
+		defines "RB_DEBUG"
 		runtime "Debug"
 		symbols "on"
 
 
 	filter "configurations:Release"
-		defines "GE_Release"
+		defines "RB_Release"
 		runtime "Release"
 		optimize "on"
 
 
 	filter "configurations:Dist"
-		defines "GE_DIST"
+		defines "RB_DIST"
 		runtime "Release"
 		optimize "on"
 

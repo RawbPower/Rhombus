@@ -1,4 +1,4 @@
-#include "gepch.h"
+#include "rbpch.h"
 #include "WindowsWindow.h"
 
 #include "GameEngine/Events/ApplicationEvent.h"
@@ -7,7 +7,7 @@
 
 #include "Platform/OpenGL/OpenGLContext.h"
 
-namespace ge {
+namespace Rhombus {
 
 	static bool s_GLFWInitialized = false;
 
@@ -16,7 +16,7 @@ namespace ge {
 
 	static void GLFWErrorCallback(int error, const char* description)
 	{
-		GE_CORE_ERROR("GLFW Error ({0}): {1}", error, description);
+		RB_CORE_ERROR("GLFW Error ({0}): {1}", error, description);
 	}
 
 	Window* Window::Create(const WindowParams& params)
@@ -37,7 +37,7 @@ namespace ge {
 		//Initialize SDL
 		if (SDL_Init(SDL_INIT_VIDEO) < 0)
 		{
-			GE_CORE_ERROR("SDL could not initialize! SDL_Error: %s\n", SDL_GetError());
+			RB_CORE_ERROR("SDL could not initialize! SDL_Error: %s\n", SDL_GetError());
 		}
 		else
 		{
@@ -45,7 +45,7 @@ namespace ge {
 			m_SDLWindow = SDL_CreateWindow(m_Data.Title.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, m_Data.Width, m_Data.Height, SDL_WINDOW_SHOWN);
 			if (m_SDLWindow == NULL)
 			{
-				GE_CORE_ERROR("Window could not be created! SDL_Error: %s\n", SDL_GetError());
+				RB_CORE_ERROR("Window could not be created! SDL_Error: %s\n", SDL_GetError());
 			}
 			else
 			{
@@ -78,13 +78,13 @@ namespace ge {
 		m_Data.Width = params.Width;
 		m_Data.Height = params.Height;
 
-		GE_CORE_INFO("Creating window {0} ({1}, {2})", params.Title, params.Width, params.Height);
+		RB_CORE_INFO("Creating window {0} ({1}, {2})", params.Title, params.Width, params.Height);
 
 		if (!s_GLFWInitialized)
 		{
 			// TODO: glfwTerminate on system shutdown
 			int success = glfwInit();
-			GE_CORE_ASSERT(success, "Could not initialize GLFW!");
+			RB_CORE_ASSERT(success, "Could not initialize GLFW!");
 			glfwSetErrorCallback(GLFWErrorCallback);
 			s_GLFWInitialized = true;
 		}
@@ -107,7 +107,7 @@ namespace ge {
 			data.Height = height;
 
 			WindowResizeEvent event(width, height);
-			GE_CORE_WARN("{0}, {1}", width, height);
+			RB_CORE_WARN("{0}, {1}", width, height);
 			// Dispatch it
 			data.EventCallback(event);
 		});

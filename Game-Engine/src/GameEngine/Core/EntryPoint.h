@@ -1,20 +1,20 @@
 #pragma once
 
-#ifdef GE_PLATFORM_WINDOWS
+#ifdef RB_PLATFORM_WINDOWS
 
-extern ge::Application* ge::CreateApplication();
+extern Rhombus::Application* Rhombus::CreateApplication();
 	
 int main(int argc, char** argv) {
 
-	ge::Log::Init();
-	//ge::Log::GetCoreLogger()->warn("Initialized Log!");
-	//ge::Log::GetClientLogger()->info("Hello!");
-	GE_CORE_WARN("Initialized Log!");
+	Rhombus::Log::Init();
+	//rhombus::Log::GetCoreLogger()->warn("Initialized Log!");
+	//rhombus::Log::GetClientLogger()->info("Hello!");
+	RB_CORE_WARN("Initialized Log!");
 	int a = 4;
-	GE_INFO("Hello! Var={0}", a);
+	RB_INFO("Hello! Var={0}", a);
 
 	//printf("Game Engine\n");
-	auto app = ge::CreateApplication();
+	auto app = Rhombus::CreateApplication();
 	app->Run();
 	delete app;
 }

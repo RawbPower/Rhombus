@@ -2,7 +2,7 @@
 
 #include "GameEngine/Renderer/VertexArray.h"
 
-namespace ge {
+namespace Rhombus {
 
 	class OpenGLVertexArray : public VertexArray
 	{

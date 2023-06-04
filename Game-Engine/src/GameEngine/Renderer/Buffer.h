@@ -1,6 +1,6 @@
 #pragma once
 
-namespace ge {
+namespace Rhombus {
 
 	enum class ShaderDataType 
 	{
@@ -24,7 +24,7 @@ namespace ge {
 			case ShaderDataType::Bool:		return 1;
 		}
 
-		GE_CORE_ASSERT(false, "Unknown ShaderDataType!");
+		RB_CORE_ASSERT(false, "Unknown ShaderDataType!");
 		return 0;
 	}
 
@@ -61,7 +61,7 @@ namespace ge {
 				case ShaderDataType::Bool:		return 1;
 			}
 
-			GE_CORE_ASSERT(false, "Unknown ShaderDataType!");
+			RB_CORE_ASSERT(false, "Unknown ShaderDataType!");
 			return 0;
 		}
 	};

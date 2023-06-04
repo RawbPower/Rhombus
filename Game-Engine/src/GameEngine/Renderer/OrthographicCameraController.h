@@ -6,7 +6,7 @@
 #include "GameEngine/Events/ApplicationEvent.h"
 #include "GameEngine/Events/MouseEvent.h"
 
-namespace ge {
+namespace Rhombus {
 
 	class OrthographicCameraController 
 	{

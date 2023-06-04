@@ -1,6 +1,6 @@
 // Will probably have a different imgui layer for wach platform
 
-#include "gepch.h"
+#include "rbpch.h"
 #include "ImGuiLayer.h"
 
 #include "imgui.h"
@@ -13,7 +13,7 @@
 #include <GLFW/glfw3.h>
 #include <glad/glad.h>
 
-namespace ge {
+namespace Rhombus {
 
 	ImGuiLayer::ImGuiLayer() 
 		: Layer("ImGuiLayer")

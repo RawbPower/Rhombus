@@ -1,7 +1,7 @@
-#include "gepch.h"
+#include "rbpch.h"
 #include "RendererAPI.h"
 
-namespace ge {
+namespace Rhombus {
 	
 	RendererAPI::API RendererAPI::s_API = RendererAPI::API::OpenGL;
 }

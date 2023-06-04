@@ -11,7 +11,7 @@
 
 #include "GameEngine/ImGui/ImGuiLayer.h"
 
-namespace ge {
+namespace Rhombus {
 
 	class Application
 	{

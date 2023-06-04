@@ -1,11 +1,11 @@
-#include "gepch.h"
+#include "rbpch.h"
 #include "OpenGLShader.h"
 
 #include <fstream>
 #include <glad/glad.h>
 #include <glm/gtc/type_ptr.hpp>
 
-namespace ge {
+namespace Rhombus {
 
 	static GLenum ShaderTypeFromString(const std::string& type)
 	{
@@ -14,7 +14,7 @@ namespace ge {
 		if (type == "pixel" || type == "fragment")
 			return GL_FRAGMENT_SHADER;
 
-		GE_CORE_ASSERT(false, "Unknown shader type!");
+		RB_CORE_ASSERT(false, "Unknown shader type!");
 		return 0;
 	}
 
@@ -55,7 +55,7 @@ namespace ge {
 		// Get a program object.
 		GLuint program = glCreateProgram();
 
-		GE_CORE_ASSERT(shaderSources.size() <= 2, "We only support 2 shaders!");
+		RB_CORE_ASSERT(shaderSources.size() <= 2, "We only support 2 shaders!");
 		
 		// Keep track of shader IDs
 		std::array<GLenum, 2> glShaderIDs;
@@ -92,8 +92,8 @@ namespace ge {
 
 				// Use the infoLog as you see fit.
 
-				GE_CORE_ERROR("{0}", infoLog.data());
-				GE_CORE_ASSERT(false, "Shader Compilation Failure!");
+				RB_CORE_ERROR("{0}", infoLog.data());
+				RB_CORE_ASSERT(false, "Shader Compilation Failure!");
 
 				break;
 			}
@@ -127,8 +127,8 @@ namespace ge {
 				glDeleteShader(id);
 
 			// Use the infoLog as you see fit.
-			GE_CORE_ERROR("{0}", infoLog.data());
-			GE_CORE_ASSERT(false, "Shader Link Failure!");
+			RB_CORE_ERROR("{0}", infoLog.data());
+			RB_CORE_ASSERT(false, "Shader Link Failure!");
 
 			return;
 		}
@@ -159,7 +159,7 @@ namespace ge {
 		}
 		else
 		{
-			GE_CORE_ERROR("Could not open file '{0}'", filepath);
+			RB_CORE_ERROR("Could not open file '{0}'", filepath);
 		}
 
 		return result;
@@ -175,10 +175,10 @@ namespace ge {
 		while (pos != std::string::npos)
 		{
 			size_t eol = source.find_first_of("\r\n", pos);			// End of line
-			GE_CORE_ASSERT(eol != std::string::npos, "Syntax error!");
+			RB_CORE_ASSERT(eol != std::string::npos, "Syntax error!");
 			size_t begin = pos + typeTokenLength + 1;
 			std::string type = source.substr(begin, eol - begin);
-			GE_CORE_ASSERT(ShaderTypeFromString(type), "Invalid shader type specified!");
+			RB_CORE_ASSERT(ShaderTypeFromString(type), "Invalid shader type specified!");
 
 			size_t nextLinePos = source.find_first_not_of("\r\n", eol);
 			pos = source.find(typeToken, nextLinePos);

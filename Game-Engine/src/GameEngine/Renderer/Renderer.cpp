@@ -1,9 +1,9 @@
-#include "gepch.h"
+#include "rbpch.h"
 #include "Renderer.h"
 
 #include "Platform/OpenGL/OpenGLShader.h"
 
-namespace ge {
+namespace Rhombus {
 
 	Renderer::SceneData* Renderer::s_SceneData = new Renderer::SceneData;
 

@@ -1,4 +1,4 @@
-#include "gepch.h"
+#include "rbpch.h"
 #include "Application.h"
 
 #include "GameEngine/Core/Log.h"
@@ -9,7 +9,7 @@
 
 #include <glfw/glfw3.h>
 
-namespace ge {
+namespace Rhombus {
 
 #define BIND_EVENT_FN(x) std::bind(&Application::x, this, std::placeholders::_1)
 
@@ -18,7 +18,7 @@ namespace ge {
 	Application::Application()
 	{
 		// Making application a singleton
-		GE_CORE_ASSERT(!s_Instance, "Application already exists!");
+		RB_CORE_ASSERT(!s_Instance, "Application already exists!");
 		s_Instance = this;
 
 		m_Window = std::unique_ptr<Window>(Window::Create());
@@ -50,7 +50,7 @@ namespace ge {
 
 		dispatcher.Dispatch<WindowResizeEvent>(BIND_EVENT_FN(OnWindowResize));
 
-		//GE_CORE_TRACE("{0}", e);
+		//RB_CORE_TRACE("{0}", e);
 
 		for (auto it = m_LayerStack.end(); it != m_LayerStack.begin(); )
 		{

@@ -1,9 +1,9 @@
-#include "gepch.h"
+#include "rbpch.h"
 #include "OpenGLVertexArray.h"
 
 #include <glad/glad.h>
 
-namespace ge {
+namespace Rhombus {
 
 	// Temporarily put here
 	static GLenum ShaderDataTypeToOpenGLBaseType(ShaderDataType type)
@@ -22,7 +22,7 @@ namespace ge {
 			case ShaderDataType::Int4:		return GL_INT;
 			case ShaderDataType::Bool:		return GL_BOOL;
 		}
-		GE_CORE_ASSERT(false, "Unknown ShaderDataType!");
+		RB_CORE_ASSERT(false, "Unknown ShaderDataType!");
 		return 0;
 	}
 
@@ -48,7 +48,7 @@ namespace ge {
 
 	void OpenGLVertexArray::AddVertexBuffer(const Ref<VertexBuffer>& vertexBuffer)
 	{
-		GE_CORE_ASSERT(vertexBuffer->GetLayout().GetElements.size(), "Vertex Buffer has no layout!")
+		RB_CORE_ASSERT(vertexBuffer->GetLayout().GetElements().size(), "Vertex Buffer has no layout!")
 
 		glBindVertexArray(m_RendererID);
 		vertexBuffer->Bind();

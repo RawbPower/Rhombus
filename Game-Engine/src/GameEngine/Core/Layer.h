@@ -4,9 +4,9 @@
 #include "GameEngine/Events/Event.h"
 #include "GameEngine/Core/DeltaTime.h"
 
-namespace ge {
+namespace Rhombus {
 
-	class GE_API Layer
+	class RB_API Layer
 	{
 	public:
 		Layer(const std::string& name = "Layer");

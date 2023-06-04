@@ -1,7 +1,7 @@
-#include "gepch.h"
+#include "rbpch.h"
 #include "GameEngine/Core/LayerStack.h"
 
-namespace ge {
+namespace Rhombus {
 
 	LayerStack::LayerStack()
 	{

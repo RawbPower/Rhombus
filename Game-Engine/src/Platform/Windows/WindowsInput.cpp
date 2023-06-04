@@ -1,11 +1,11 @@
-#include "gepch.h"
+#include "rbpch.h"
 #include "WindowsInput.h"
 
 // It's fine to this as we a inside a platform specific file
 #include "GameEngine/Core/Application.h"
 #include <GLFW/glfw3.h>
 
-namespace ge 
+namespace Rhombus 
 {
 
 	Input* Input::s_Instance = new WindowsInput();

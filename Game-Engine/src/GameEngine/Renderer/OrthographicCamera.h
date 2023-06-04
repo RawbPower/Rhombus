@@ -2,7 +2,7 @@
 
 #include <glm/glm.hpp>
 
-namespace ge {
+namespace Rhombus {
 
 	class OrthographicCamera {
 	public:

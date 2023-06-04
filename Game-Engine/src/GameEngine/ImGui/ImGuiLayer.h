@@ -6,9 +6,9 @@
 #include "GameEngine/Events/KeyEvent.h"
 #include "GameEngine/Events/MouseEvent.h"
 
-namespace ge {
+namespace Rhombus {
 
-	class GE_API ImGuiLayer : public Layer
+	class RB_API ImGuiLayer : public Layer
 	{
 	public:
 		ImGuiLayer();

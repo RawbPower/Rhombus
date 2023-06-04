@@ -4,7 +4,7 @@
 
 #include "GameEngine/Core/Core.h"
 
-namespace ge {
+namespace Rhombus {
 
 	// Virtaul abstract base class for other texture classic to inherit from
 	class Texture 

@@ -65,62 +65,6 @@ namespace rhombus {
 		// A pointer to our Windows data struct
 		glfwSetWindowUserPointer(m_Window, &m_Data);
 		SetVSync(true);
-		
-		// Set GLFW callbacks - using a lambda function
-		glfwSetWindowSizeCallback(m_Window, [](GLFWwindow* window, int width, int height)
-		{
-			// The prefix asterix dereferences
-			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
-			data.Width = width;
-			data.Height = height;
-
-			WindowResizeEvent event(width, height);
-			RB_CORE_WARN("{0}, {1}", width, height);
-			// Dispatch it
-			data.EventCallback(event);
-		});
-
-		glfwSetWindowCloseCallback(m_Window, [](GLFWwindow* window)
-		{
-			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
-			WindowCloseEvent event;
-			data.EventCallback(event);
-		});
-
-		glfwSetKeyCallback(m_Window, [](GLFWwindow* window, int key, int scancode, int action, int mods)
-		{
-			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
-			
-			switch (action)
-			{
-			case GLFW_PRESS:
-			{
-				KeyPressedEvent event(key, 0);
-				data.EventCallback(event);
-				break;
-			}
-			case GLFW_RELEASE:
-			{
-				KeyReleasedEvent event(key);
-				data.EventCallback(event);
-				break;
-			}
-			case GLFW_REPEAT:
-			{
-				KeyPressedEvent event(key, 1);
-				data.EventCallback(event);
-				break;
-			}
-			}
-		});
-
-		glfwSetCharCallback(m_Window, [](GLFWwindow* window, unsigned int keycode)
-		{
-			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
-
-			KeyTypedEvent event(keycode);
-			data.EventCallback(event);
-		});
 
 		glfwSetMouseButtonCallback(m_Window, [](GLFWwindow* window, int button, int action, int mods)
 		{
@@ -220,6 +164,18 @@ namespace rhombus {
 		SDL_UpdateWindowSurface(m_SDLWindow);
 	}
 
+	SDL_Surface* loadSurface(std::string path)
+	{
+		//Load image at specified path
+		SDL_Surface* loadedSurface = SDL_LoadBMP(path.c_str());
+		if (loadedSurface == NULL)
+		{
+			printf("Unable to load image %s! SDL Error: %s\n", path.c_str(), SDL_GetError());
+		}
+
+		return loadedSurface;
+	}
+
 	void WindowsWindow::Update_SDL()
 	{
 		//Load splash image
@@ -238,27 +194,52 @@ namespace rhombus {
 		//Handle events on queue
 		while (SDL_PollEvent(&e) != 0)
 		{
-			//User requests quit
-			if (e.type == SDL_QUIT)
+			switch (e.type)
 			{
-				WindowCloseEvent event;
-				m_Data.EventCallback(event);
-			}
-			else if (e.type == SDL_WINDOWEVENT)
-			{
-				if (e.window.event == SDL_WINDOWEVENT_SIZE_CHANGED)
+				//User requests quit
+				case SDL_QUIT:
 				{
-					// Don't call this until we update the rendering context
-					/*float width = e.window.data1;
-					float height = e.window.data2;
-					m_Data.Width = width;
-					m_Data.Height = height;
-
-					WindowResizeEvent event(width, height);
-					RB_CORE_WARN("{0}, {1}", width, height);
-					// Dispatch it
-					m_Data.EventCallback(event);*/
+					WindowCloseEvent event;
+					m_Data.EventCallback(event);
+					break;
 				}
+				case SDL_WINDOWEVENT:
+				{
+					if (e.window.event == SDL_WINDOWEVENT_SIZE_CHANGED)
+					{
+						// Don't call this until we update the rendering context
+						/*float width = e.window.data1;
+						float height = e.window.data2;
+						m_Data.Width = width;
+						m_Data.Height = height;
+
+						WindowResizeEvent event(width, height);
+						RB_CORE_WARN("{0}, {1}", width, height);
+						// Dispatch it
+						m_Data.EventCallback(event);*/
+					}
+					break;
+				}
+				case SDL_KEYDOWN:
+				{
+					KeyPressedEvent event(e.key.keysym.sym, 0);
+					m_Data.EventCallback(event);
+					break;
+				}
+				case SDL_KEYUP:
+				{
+					KeyReleasedEvent event(e.key.keysym.sym);
+					m_Data.EventCallback(event);
+					break;
+				}
+				case SDL_TEXTINPUT:
+				{
+					KeyTypedEvent event(std::string(e.text.text));
+					m_Data.EventCallback(event);
+					break;
+				}
+				default:
+					break;
 			}
 		}
 	}

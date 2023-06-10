@@ -51,6 +51,12 @@ namespace rhombus {
 
 		dispatcher.Dispatch<WindowResizeEvent>(BIND_EVENT_FN(OnWindowResize));
 
+		dispatcher.Dispatch<KeyPressedEvent>(BIND_EVENT_FN(OnKeyPressed));
+
+		dispatcher.Dispatch<KeyReleasedEvent>(BIND_EVENT_FN(OnKeyReleased));
+
+		dispatcher.Dispatch<KeyTypedEvent>(BIND_EVENT_FN(OnKeyTyped));
+
 		//RB_CORE_TRACE("{0}", e);
 
 		for (auto it = m_LayerStack.end(); it != m_LayerStack.begin(); )
@@ -105,5 +111,26 @@ namespace rhombus {
 		Renderer::OnWindowResize(e.GetWidth(), e.GetHeight());
 
 		return false;
+	}
+
+	bool Application::OnKeyPressed(KeyPressedEvent& e)
+	{
+		RB_CORE_INFO(e.ToString());
+
+		return true;
+	}
+
+	bool Application::OnKeyReleased(KeyReleasedEvent& e)
+	{
+		RB_CORE_INFO(e.ToString());
+
+		return true;
+	}
+
+	bool Application::OnKeyTyped(KeyTypedEvent& e)
+	{
+		RB_CORE_INFO(e.ToString());
+
+		return true;
 	}
 }

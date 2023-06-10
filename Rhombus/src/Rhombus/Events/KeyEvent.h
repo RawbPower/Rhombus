@@ -30,7 +30,7 @@ namespace rhombus {
 		std::string ToString() const override
 		{
 			std::stringstream ss;
-			ss << "KeyPressedEvent: " << m_KeyCode << " (" << m_RepeatCount << " repeats)";
+			ss << "KeyPressedEvent: " << static_cast<char>(m_KeyCode) << " (" << m_RepeatCount << " repeats)";
 			return ss.str();
 		}
 
@@ -48,27 +48,30 @@ namespace rhombus {
 		std::string ToString() const override
 		{
 			std::stringstream ss;
-			ss << "KeyReleasedEvent: " << m_KeyCode;
+			ss << "KeyReleasedEvent: " << static_cast<char>(m_KeyCode);
 			return ss.str();
 		}
 
 		EVENT_CLASS_TYPE(KeyReleased)
 	};
 
-	class RB_API KeyTypedEvent : public KeyEvent
+	class RB_API KeyTypedEvent : public Event
 	{
 	public:
-		KeyTypedEvent(int keycode)
-			: KeyEvent(keycode) {}
+		KeyTypedEvent(std::string text)
+			: m_Text(text) {}
 
+		EVENT_CLASS_CATEGORY(EventCategoryKeyboard | EventCategoryInput)
+		EVENT_CLASS_TYPE(KeyTyped)
 
 		std::string ToString() const override
 		{
 			std::stringstream ss;
-			ss << "KeyTypedEvent: " << m_KeyCode;
+			ss << "KeyTypeEvent: " << m_Text;
 			return ss.str();
 		}
 
-		EVENT_CLASS_TYPE(KeyTyped)
+		std::string m_Text;
+
 	};
 }

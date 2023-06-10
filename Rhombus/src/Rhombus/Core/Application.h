@@ -32,6 +32,9 @@ namespace rhombus {
 	private:
 		bool OnWindowClose(WindowCloseEvent& e);
 		bool OnWindowResize(WindowResizeEvent& e);
+		bool OnKeyPressed(KeyPressedEvent& e);
+		bool OnKeyReleased(KeyReleasedEvent& e);
+		bool OnKeyTyped(KeyTypedEvent& e);
 
 	private:
 		std::unique_ptr<Window> m_Window;

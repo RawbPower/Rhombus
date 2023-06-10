@@ -174,7 +174,7 @@ namespace rhombus {
 		else
 		{
 			//Create window
-			m_SDLWindow = SDL_CreateWindow(m_Data.Title.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
+			m_SDLWindow = SDL_CreateWindow(m_Data.Title.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
 			if (m_SDLWindow == NULL)
 			{
 				RB_CORE_ERROR("Window could not be created! SDL_Error: %s\n", SDL_GetError());
@@ -243,6 +243,22 @@ namespace rhombus {
 			{
 				WindowCloseEvent event;
 				m_Data.EventCallback(event);
+			}
+			else if (e.type == SDL_WINDOWEVENT)
+			{
+				if (e.window.event == SDL_WINDOWEVENT_SIZE_CHANGED)
+				{
+					// Don't call this until we update the rendering context
+					/*float width = e.window.data1;
+					float height = e.window.data2;
+					m_Data.Width = width;
+					m_Data.Height = height;
+
+					WindowResizeEvent event(width, height);
+					RB_CORE_WARN("{0}, {1}", width, height);
+					// Dispatch it
+					m_Data.EventCallback(event);*/
+				}
 			}
 		}
 	}

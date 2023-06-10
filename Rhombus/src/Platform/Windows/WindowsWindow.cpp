@@ -28,52 +28,20 @@ namespace Rhombus {
 	{
 		Init(params);
 
-		//The window we'll be rendering to
-		m_SDLWindow = NULL;
-
-		//The surface contained by the window
-		SDL_Surface* screenSurface = NULL;
-
-		//Initialize SDL
-		if (SDL_Init(SDL_INIT_VIDEO) < 0)
-		{
-			RB_CORE_ERROR("SDL could not initialize! SDL_Error: %s\n", SDL_GetError());
-		}
-		else
-		{
-			//Create window
-			m_SDLWindow = SDL_CreateWindow(m_Data.Title.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, m_Data.Width, m_Data.Height, SDL_WINDOW_SHOWN);
-			if (m_SDLWindow == NULL)
-			{
-				RB_CORE_ERROR("Window could not be created! SDL_Error: %s\n", SDL_GetError());
-			}
-			else
-			{
-				//Get window surface
-				screenSurface = SDL_GetWindowSurface(m_SDLWindow);
-
-				//Fill the surface white
-				SDL_FillRect(screenSurface, NULL, SDL_MapRGB(screenSurface->format, 55, 55, 55));
-
-				//Update the surface
-				SDL_UpdateWindowSurface(m_SDLWindow);
-			}
-		}
+		Init_SDL();
+		Update_SDL();
 	}
 
 	WindowsWindow::~WindowsWindow()
 	{
 		Shutdown();
-
-		//Destroy window
-		SDL_DestroyWindow(m_SDLWindow);
-
-		//Quit SDL subsystems
-		SDL_Quit();
+		Shutdown_SDL();
 	}
 
 	void WindowsWindow::Init(const WindowParams& params)
 	{
+		// This is a virtual function and calls virtual functions in the constructor.
+		// Seems like a no no but this code will be gone soon and is deprecated
 		m_Data.Title = params.Title;
 		m_Data.Width = params.Width;
 		m_Data.Height = params.Height;
@@ -192,15 +160,72 @@ namespace Rhombus {
 		});
 	}
 
+	void WindowsWindow::Init_SDL()
+	{
+		m_SDLWindow = NULL;
+		m_SDLScreenSurface = NULL;
+		m_SDLHelloWorld = NULL;
+
+		//Initialize SDL
+		if (SDL_Init(SDL_INIT_VIDEO) < 0)
+		{
+			RB_CORE_ERROR("SDL could not initialize! SDL_Error: %s\n", SDL_GetError());
+		}
+		else
+		{
+			//Create window
+			m_SDLWindow = SDL_CreateWindow(m_Data.Title.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
+			if (m_SDLWindow == NULL)
+			{
+				RB_CORE_ERROR("Window could not be created! SDL_Error: %s\n", SDL_GetError());
+			}
+			else
+			{
+				//Get window surface
+				m_SDLScreenSurface = SDL_GetWindowSurface(m_SDLWindow);
+			}
+		}
+	}
+
 	void WindowsWindow::Shutdown()
 	{
 		glfwDestroyWindow(m_Window);
+	}
+
+	void WindowsWindow::Shutdown_SDL()
+	{
+		//Deallocate surface
+		SDL_FreeSurface(m_SDLHelloWorld);
+		m_SDLHelloWorld = NULL;
+
+		//Destroy window
+		SDL_DestroyWindow(m_SDLWindow);
+		m_SDLWindow = NULL;
+
+		//Quit SDL subsystems
+		SDL_Quit();
 	}
 
 	void WindowsWindow::OnUpdate()
 	{
 		glfwPollEvents();
 		m_Context->SwapBuffers();
+
+		//Apply the image
+		SDL_BlitSurface(m_SDLHelloWorld, NULL, m_SDLScreenSurface, NULL);
+
+		//Update the surface
+		SDL_UpdateWindowSurface(m_SDLWindow);
+	}
+
+	void WindowsWindow::Update_SDL()
+	{
+		//Load splash image
+		m_SDLHelloWorld = SDL_LoadBMP("../Sandbox/assets/textures/hello_world.bmp");
+		if (m_SDLHelloWorld == NULL)
+		{
+			RB_CORE_ERROR("Unable to load image %s! SDL Error: %s\n", "hello_world.bmp", SDL_GetError());
+		}
 	}
 
 	void WindowsWindow::SetVSync(bool enabled)

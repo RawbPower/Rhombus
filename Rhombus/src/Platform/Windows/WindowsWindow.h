@@ -28,11 +28,22 @@ namespace Rhombus {
 	private:
 		virtual void Init(const WindowParams& params);
 		virtual void Shutdown();
+
+		void Init_SDL();
+		void Shutdown_SDL();
+		void Update_SDL();
+
+		void HandleEvents_SDL();
 	private:
 		GLFWwindow* m_Window;
 		GraphicsContext* m_Context;
 
+		//The window we'll be rendering to
 		SDL_Window* m_SDLWindow;
+		//The surface contained by the window
+		SDL_Surface* m_SDLScreenSurface;
+		//The image we will load and show on the screen
+		SDL_Surface* m_SDLHelloWorld;
 
 		struct WindowData
 		{

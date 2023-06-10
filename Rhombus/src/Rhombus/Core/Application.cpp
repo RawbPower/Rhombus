@@ -8,6 +8,7 @@
 #include "Input.h"
 
 #include <glfw/glfw3.h>
+#include <SDL.h>
 
 namespace Rhombus {
 
@@ -80,7 +81,26 @@ namespace Rhombus {
 				layer->OnImGuiRender();
 			m_ImGuiLayer->End();
 
+			HandleEvents_SDL();
+
 			m_Window->OnUpdate();
+		}
+	}
+
+	void Application::HandleEvents_SDL()
+	{
+		//Event handler
+		SDL_Event e;
+
+		//Handle events on queue
+		while (SDL_PollEvent(&e) != 0)
+		{
+			//User requests quit
+			if (e.type == SDL_QUIT)
+			{
+				WindowCloseEvent windowCloseEvent;
+				OnEvent(windowCloseEvent);
+			}
 		}
 	}
 

@@ -1,15 +1,15 @@
-[submodule "Game-Engine/vendor/spdlog"]
-	path = Game-Engine/vendor/spdlog
+[submodule "Rhombus/vendor/spdlog"]
+	path = Rhombus/vendor/spdlog
 	url = https://github.com/gabime/spdlog
-[submodule "Game-Engine/vendor/GLFW"]
-	path = Game-Engine/vendor/GLFW
+[submodule "Rhombus/vendor/GLFW"]
+	path = Rhombus/vendor/GLFW
 	url = https://github.com/glfw/glfw
-[submodule "Game-Engine/vendor/imgui"]
-	path = Game-Engine/vendor/imgui
+[submodule "Rhombus/vendor/imgui"]
+	path = Rhombus/vendor/imgui
 	url = https://github.com/RawbPower/imgui
-[submodule "Game-Engine/vendor/glm"]
-	path = Game-Engine/vendor/glm
+[submodule "Rhombus/vendor/glm"]
+	path = Rhombus/vendor/glm
 	url = https://github.com/g-truc/glm
-[submodule "Game-Engine/vendor/SDL"]
-	path = Game-Engine/vendor/SDL
+[submodule "Rhombus/vendor/SDL"]
+	path = Rhombus/vendor/SDL
 	url = https://github.com/RawbPower/SDL

@@ -4,7 +4,7 @@
 
 #include "VertexArray.h"
 
-namespace Rhombus {
+namespace rhombus {
 
 	// There will be an implementation of this class for each platform (ie. OpenGL, DirectX, Vulcan etc.)
 	class RendererAPI {

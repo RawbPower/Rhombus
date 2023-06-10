@@ -5,7 +5,7 @@
 #include "Rhombus/Core/Core.h"
 #include "Rhombus/Events/Event.h"
 
-namespace Rhombus {
+namespace rhombus {
 
 	struct WindowParams
 	{

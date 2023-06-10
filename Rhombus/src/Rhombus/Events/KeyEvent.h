@@ -2,7 +2,7 @@
 
 #include "Event.h"
 
-namespace Rhombus {
+namespace rhombus {
 
 	// Key event base class
 	class RB_API KeyEvent : public Event

@@ -3,7 +3,7 @@
 #include "rbpch.h"
 #include "Rhombus/Core/Core.h"
 
-namespace Rhombus {
+namespace rhombus {
 
 	// Events in the game engine are currently blocking, meaning when an event occurs it 
 	// immediately get dispatched and must be dealt with right there and then. For the 

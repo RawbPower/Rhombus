@@ -4,7 +4,7 @@
 #include "Renderer.h"
 #include "Platform/OpenGL/OpenGLShader.h"
 
-namespace Rhombus {
+namespace rhombus {
 
 	Ref<Shader> Shader::Create(const std::string& filepath)
 	{
@@ -44,21 +44,21 @@ namespace Rhombus {
 		Add(name, shader);
 	}
 
-	Rhombus::Ref<Shader> ShaderLibrary::Load(const std::string& filepath) 
+	rhombus::Ref<Shader> ShaderLibrary::Load(const std::string& filepath) 
 	{
 		auto shader = Shader::Create(filepath);
 		Add(shader);
 		return shader;
 	}
 
-	Rhombus::Ref<Shader> ShaderLibrary::Load(const std::string& name, const std::string& filepath) 
+	rhombus::Ref<Shader> ShaderLibrary::Load(const std::string& name, const std::string& filepath) 
 	{
 		auto shader = Shader::Create(filepath);
 		Add(name, shader);
 		return shader;
 	}
 
-	Rhombus::Ref<Shader> ShaderLibrary::Get(const std::string& name)
+	rhombus::Ref<Shader> ShaderLibrary::Get(const std::string& name)
 	{
 		RB_CORE_ASSERT(Exists(name), "Shader not found!");
 		return m_Shaders[name];

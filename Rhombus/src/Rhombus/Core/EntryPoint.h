@@ -2,11 +2,11 @@
 
 #ifdef RB_PLATFORM_WINDOWS
 
-extern Rhombus::Application* Rhombus::CreateApplication();
+extern rhombus::Application* rhombus::CreateApplication();
 	
 int main(int argc, char** argv) {
 
-	Rhombus::Log::Init();
+	rhombus::Log::Init();
 	//rhombus::Log::GetCoreLogger()->warn("Initialized Log!");
 	//rhombus::Log::GetClientLogger()->info("Hello!");
 	RB_CORE_WARN("Initialized Log!");
@@ -14,7 +14,7 @@ int main(int argc, char** argv) {
 	RB_INFO("Hello! Var={0}", a);
 
 	//printf("Game Engine\n");
-	auto app = Rhombus::CreateApplication();
+	auto app = rhombus::CreateApplication();
 	app->Run();
 	delete app;
 }

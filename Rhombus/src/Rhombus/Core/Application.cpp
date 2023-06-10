@@ -10,7 +10,7 @@
 #include <glfw/glfw3.h>
 #include <SDL.h>
 
-namespace Rhombus {
+namespace rhombus {
 
 #define BIND_EVENT_FN(x) std::bind(&Application::x, this, std::placeholders::_1)
 

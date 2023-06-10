@@ -7,7 +7,7 @@
 
 #include "Platform/OpenGL/OpenGLContext.h"
 
-namespace Rhombus {
+namespace rhombus {
 
 	static bool s_GLFWInitialized = false;
 

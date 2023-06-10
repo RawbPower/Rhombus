@@ -2,7 +2,7 @@
 
 #include "Event.h"
 
-namespace Rhombus {
+namespace rhombus {
 
 	class RB_API WindowResizeEvent : public Event
 	{

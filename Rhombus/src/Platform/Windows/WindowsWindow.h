@@ -6,7 +6,7 @@
 #include <GLFW/glfw3.h>
 #include <SDL.h>
 
-namespace Rhombus {
+namespace rhombus {
 
 	class WindowsWindow : public Window
 	{

@@ -1,7 +1,7 @@
 #include "rbpch.h"
 #include "Rhombus/Core/LayerStack.h"
 
-namespace Rhombus {
+namespace rhombus {
 
 	LayerStack::LayerStack()
 	{

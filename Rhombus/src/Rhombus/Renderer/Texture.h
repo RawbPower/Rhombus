@@ -4,7 +4,7 @@
 
 #include "Rhombus/Core/Core.h"
 
-namespace Rhombus {
+namespace rhombus {
 
 	// Virtaul abstract base class for other texture classic to inherit from
 	class Texture 

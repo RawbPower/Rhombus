@@ -4,7 +4,7 @@
 
 #include "Platform/OpenGL/OpenGLBuffer.h"
 
-namespace Rhombus {
+namespace rhombus {
 
 	VertexBuffer* VertexBuffer::Create(float* vertices, uint32_t size)
 	{

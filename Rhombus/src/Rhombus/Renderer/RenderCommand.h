@@ -2,7 +2,7 @@
 
 #include "RendererAPI.h"
 
-namespace Rhombus {
+namespace rhombus {
 
 	// Works basically as a wrapper for the RendererAPI
 	class RenderCommand 

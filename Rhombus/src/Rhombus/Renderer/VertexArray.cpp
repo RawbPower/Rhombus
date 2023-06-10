@@ -4,7 +4,7 @@
 #include "Renderer.h"
 #include "Platform/OpenGL/OpenGLVertexArray.h"
 
-namespace Rhombus {
+namespace rhombus {
 
 	VertexArray* VertexArray::Create()
 	{

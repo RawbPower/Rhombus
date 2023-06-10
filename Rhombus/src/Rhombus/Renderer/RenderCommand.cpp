@@ -3,7 +3,7 @@
 
 #include "Platform/OpenGL/OpenGLRendererAPI.h"
 
-namespace Rhombus {
+namespace rhombus {
 
 	RendererAPI* RenderCommand::s_RendererAPI = new OpenGLRendererAPI();
 }

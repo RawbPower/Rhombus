@@ -5,7 +5,7 @@
 
 #include <vector>
 
-namespace Rhombus {
+namespace rhombus {
 
 	class RB_API LayerStack
 	{

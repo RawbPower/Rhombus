@@ -5,7 +5,7 @@
 #include "Rhombus/Core/Application.h"
 #include <GLFW/glfw3.h>
 
-namespace Rhombus 
+namespace rhombus 
 {
 
 	Input* Input::s_Instance = new WindowsInput();

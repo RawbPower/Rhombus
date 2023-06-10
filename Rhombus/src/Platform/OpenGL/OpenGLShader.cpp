@@ -5,7 +5,7 @@
 #include <glad/glad.h>
 #include <glm/gtc/type_ptr.hpp>
 
-namespace Rhombus {
+namespace rhombus {
 
 	static GLenum ShaderTypeFromString(const std::string& type)
 	{

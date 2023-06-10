@@ -3,7 +3,7 @@
 
 #include <glad/glad.h>
 
-namespace Rhombus {
+namespace rhombus {
 
 	// Temporarily put here
 	static GLenum ShaderDataTypeToOpenGLBaseType(ShaderDataType type)

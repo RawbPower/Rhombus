@@ -2,7 +2,7 @@
 
 #include "Rhombus/Core/Input.h"
 
-namespace Rhombus {
+namespace rhombus {
 
 	class WindowsInput : public Input 
 	{

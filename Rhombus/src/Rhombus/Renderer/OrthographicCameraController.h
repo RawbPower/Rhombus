@@ -6,7 +6,7 @@
 #include "Rhombus/Events/ApplicationEvent.h"
 #include "Rhombus/Events/MouseEvent.h"
 
-namespace Rhombus {
+namespace rhombus {
 
 	class OrthographicCameraController 
 	{

@@ -2,7 +2,7 @@
 
 #include "Rhombus/Renderer/Texture.h"
 
-namespace Rhombus {
+namespace rhombus {
 
 	class OpenGLTexture2D : public Texture2D 
 	{

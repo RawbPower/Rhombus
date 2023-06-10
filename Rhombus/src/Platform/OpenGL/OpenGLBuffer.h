@@ -2,7 +2,7 @@
 
 #include "Rhombus/Renderer/Buffer.h"
 
-namespace Rhombus {
+namespace rhombus {
 
 	class OpenGLVertexBuffer : public VertexBuffer 
 	{

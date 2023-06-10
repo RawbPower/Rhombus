@@ -4,7 +4,7 @@
 #include "OrthographicCamera.h"
 #include "Shader.h"
 
-namespace Rhombus {
+namespace rhombus {
 
 	class Renderer {
 	public:

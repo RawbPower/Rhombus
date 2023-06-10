@@ -6,7 +6,7 @@
 #include "Rhombus/Events/KeyEvent.h"
 #include "Rhombus/Events/MouseEvent.h"
 
-namespace Rhombus {
+namespace rhombus {
 
 	class RB_API ImGuiLayer : public Layer
 	{

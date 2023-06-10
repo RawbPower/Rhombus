@@ -1,6 +1,6 @@
 #pragma once
 
-namespace Rhombus {
+namespace rhombus {
 
 	enum class ShaderDataType 
 	{

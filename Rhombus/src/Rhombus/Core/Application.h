@@ -11,7 +11,7 @@
 
 #include "Rhombus/ImGui/ImGuiLayer.h"
 
-namespace Rhombus {
+namespace rhombus {
 
 	class Application
 	{

@@ -5,7 +5,7 @@
 #include <glad/glad.h>
 #include <GL/GL.h>
 
-namespace Rhombus {
+namespace rhombus {
 
 	OpenGLContext::OpenGLContext(GLFWwindow* windowHandle)
 		: m_WindowHandle(windowHandle)

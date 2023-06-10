@@ -3,7 +3,7 @@
 #include <string>
 #include <unordered_map>
 
-namespace Rhombus {
+namespace rhombus {
 
 	class Shader {
 	public:

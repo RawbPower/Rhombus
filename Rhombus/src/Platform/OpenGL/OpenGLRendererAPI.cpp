@@ -3,7 +3,7 @@
 
 #include <glad/glad.h>
 
-namespace Rhombus {
+namespace rhombus {
 
 	void OpenGLRendererAPI::Init()
 	{

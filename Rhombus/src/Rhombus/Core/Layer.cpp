@@ -1,7 +1,7 @@
 #include "rbpch.h"
 #include "Rhombus/Core/Layer.h"
 
-namespace Rhombus {
+namespace rhombus {
 
 	Layer::Layer(const std::string& debugName)
 		: m_DebugName(debugName)

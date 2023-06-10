@@ -7,7 +7,7 @@
 // TODO: REMOVE!
 typedef unsigned int GLenum;
 
-namespace Rhombus {
+namespace rhombus {
 
 	class OpenGLShader : public Shader
 	{

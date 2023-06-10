@@ -4,7 +4,7 @@
 #include "Rhombus/Events/Event.h"
 #include "Rhombus/Core/DeltaTime.h"
 
-namespace Rhombus {
+namespace rhombus {
 
 	class RB_API Layer
 	{

@@ -2,7 +2,7 @@
 
 #include "Rhombus/Renderer/RendererAPI.h"
 
-namespace Rhombus {
+namespace rhombus {
 
 	class OpenGLRendererAPI : public RendererAPI {
 	public:

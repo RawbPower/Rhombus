@@ -4,7 +4,7 @@
 #include "Renderer.h"
 #include "Platform/OpenGL/OpenGLTexture.h"
 
-namespace Rhombus {
+namespace rhombus {
 
 	Ref<Texture2D> Texture2D::Create(const std::string& path) 
 	{

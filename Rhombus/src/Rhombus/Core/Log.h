@@ -4,7 +4,7 @@
 #include "spdlog/spdlog.h"
 #include "spdlog/fmt/ostr.h"
 
-namespace Rhombus {
+namespace rhombus {
 
 	class RB_API Log
 	{
@@ -23,18 +23,18 @@ namespace Rhombus {
 }
 
 // Core log macros
-#define RB_CORE_TRACE(...)    ::Rhombus::Log::GetCoreLogger()->trace(__VA_ARGS__)
-#define RB_CORE_INFO(...)     ::Rhombus::Log::GetCoreLogger()->info(__VA_ARGS__)
-#define RB_CORE_WARN(...)     ::Rhombus::Log::GetCoreLogger()->warn(__VA_ARGS__)
-#define RB_CORE_ERROR(...)    ::Rhombus::Log::GetCoreLogger()->error(__VA_ARGS__)
-#define RB_CORE_FATAL(...)    ::Rhombus::Log::GetCoreLogger()->critical(__VA_ARGS__)
+#define RB_CORE_TRACE(...)    ::rhombus::Log::GetCoreLogger()->trace(__VA_ARGS__)
+#define RB_CORE_INFO(...)     ::rhombus::Log::GetCoreLogger()->info(__VA_ARGS__)
+#define RB_CORE_WARN(...)     ::rhombus::Log::GetCoreLogger()->warn(__VA_ARGS__)
+#define RB_CORE_ERROR(...)    ::rhombus::Log::GetCoreLogger()->error(__VA_ARGS__)
+#define RB_CORE_FATAL(...)    ::rhombus::Log::GetCoreLogger()->critical(__VA_ARGS__)
 
 // Client log macros
-#define RB_TRACE(...)    ::Rhombus::Log::GetClientLogger()->trace(__VA_ARGS__)
-#define RB_INFO(...)     ::Rhombus::Log::GetClientLogger()->info(__VA_ARGS__)
-#define RB_WARN(...)     ::Rhombus::Log::GetClientLogger()->warn(__VA_ARGS__)
-#define RB_ERROR(...)    ::Rhombus::Log::GetClientLogger()->error(__VA_ARGS__)
-#define RB_FATAL(...)    ::Rhombus::Log::GetClientLogger()->critical(__VA_ARGS__)
+#define RB_TRACE(...)    ::rhombus::Log::GetClientLogger()->trace(__VA_ARGS__)
+#define RB_INFO(...)     ::rhombus::Log::GetClientLogger()->info(__VA_ARGS__)
+#define RB_WARN(...)     ::rhombus::Log::GetClientLogger()->warn(__VA_ARGS__)
+#define RB_ERROR(...)    ::rhombus::Log::GetClientLogger()->error(__VA_ARGS__)
+#define RB_FATAL(...)    ::rhombus::Log::GetClientLogger()->critical(__VA_ARGS__)
 
 /* Macros are used here instead of functions so that they can be
 	stripped from the distribution built with

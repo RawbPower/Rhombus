@@ -2,7 +2,7 @@
 
 #include "Rhombus/Core/Core.h"
 
-namespace Rhombus {
+namespace rhombus {
 
 	class RB_API Input
 	{

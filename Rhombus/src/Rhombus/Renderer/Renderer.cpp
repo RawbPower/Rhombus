@@ -3,7 +3,7 @@
 
 #include "Platform/OpenGL/OpenGLShader.h"
 
-namespace Rhombus {
+namespace rhombus {
 
 	Renderer::SceneData* Renderer::s_SceneData = new Renderer::SceneData;
 

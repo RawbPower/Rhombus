@@ -15,14 +15,14 @@ namespace rhombus {
 	void OrthographicCameraController::OnUpdate(DeltaTime dt)
 	{
 		// Camera Movement
-		if (Input::IsKeyPressed(RB_KEY_A))
+		if (Input::IsKeyPressed(RB_KEY_A) || Input::IsKeyPressed(RB_KEY_LEFT))
 			m_CameraPosition.x -= m_CameraTranslationSpeed * dt;
-		else if (Input::IsKeyPressed(RB_KEY_D))
+		else if (Input::IsKeyPressed(RB_KEY_D) || Input::IsKeyPressed(RB_KEY_RIGHT))
 			m_CameraPosition.x += m_CameraTranslationSpeed * dt;
 
-		if (Input::IsKeyPressed(RB_KEY_S))
+		if (Input::IsKeyPressed(RB_KEY_S) || Input::IsKeyPressed(RB_KEY_DOWN))
 			m_CameraPosition.y -= m_CameraTranslationSpeed * dt;
-		else if (Input::IsKeyPressed(RB_KEY_W))
+		else if (Input::IsKeyPressed(RB_KEY_W) || Input::IsKeyPressed(RB_KEY_UP))
 			m_CameraPosition.y += m_CameraTranslationSpeed * dt;
 
 		// Camera Rotation

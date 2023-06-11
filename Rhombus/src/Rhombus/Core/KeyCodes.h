@@ -1,125 +1,125 @@
 #pragma once
 
-// From glfw3.h
-#define RB_KEY_SPACE              32
-#define RB_KEY_APOSTROPHE         39  /* ' */
-#define RB_KEY_COMMA              44  /* , */
-#define RB_KEY_MINUS              45  /* - */
-#define RB_KEY_PERIOD             46  /* . */
-#define RB_KEY_SLASH              47  /* / */
-#define RB_KEY_0                  48
-#define RB_KEY_1                  49
-#define RB_KEY_2                  50
-#define RB_KEY_3                  51
-#define RB_KEY_4                  52
-#define RB_KEY_5                  53
-#define RB_KEY_6                  54
-#define RB_KEY_7                  55
-#define RB_KEY_8                  56
-#define RB_KEY_9                  57
-#define RB_KEY_SEMICOLON          59  /* ; */
-#define RB_KEY_EQUAL              61  /* = */
-#define RB_KEY_A                  65
-#define RB_KEY_B                  66
-#define RB_KEY_C                  67
-#define RB_KEY_D                  68
-#define RB_KEY_E                  69
-#define RB_KEY_F                  70
-#define RB_KEY_G                  71
-#define RB_KEY_H                  72
-#define RB_KEY_I                  73
-#define RB_KEY_J                  74
-#define RB_KEY_K                  75
-#define RB_KEY_L                  76
-#define RB_KEY_M                  77
-#define RB_KEY_N                  78
-#define RB_KEY_O                  79
-#define RB_KEY_P                  80
-#define RB_KEY_Q                  81
-#define RB_KEY_R                  82
-#define RB_KEY_S                  83
-#define RB_KEY_T                  84
-#define RB_KEY_U                  85
-#define RB_KEY_V                  86
-#define RB_KEY_W                  87
-#define RB_KEY_X                  88
-#define RB_KEY_Y                  89
-#define RB_KEY_Z                  90
-#define RB_KEY_LEFT_BRACKET       91  /* [ */
-#define RB_KEY_BACKSLASH          92  /* \ */
-#define RB_KEY_RIGHT_BRACKET      93  /* ] */
-#define RB_KEY_GRAVE_ACCENT       96  /* ` */
+// From SDL_keycode.h
+#define RB_KEY_SPACE              ' '
+#define RB_KEY_APOSTROPHE         '\''  /* ' */
+#define RB_KEY_COMMA              ','  /* , */
+#define RB_KEY_MINUS              '-'  /* - */
+#define RB_KEY_PERIOD             '.'  /* . */
+#define RB_KEY_SLASH              '/'  /* / */
+#define RB_KEY_0                  '0'
+#define RB_KEY_1                  '1'
+#define RB_KEY_2                  '2'
+#define RB_KEY_3                  '3'
+#define RB_KEY_4                  '4'
+#define RB_KEY_5                  '5'
+#define RB_KEY_6                  '6'
+#define RB_KEY_7                  '7'
+#define RB_KEY_8                  '8'
+#define RB_KEY_9                  '9'
+#define RB_KEY_SEMICOLON          ';'  /* ; */
+#define RB_KEY_EQUAL              '='  /* = */
+#define RB_KEY_A                  'a'
+#define RB_KEY_B                  'b'
+#define RB_KEY_C                  'c'
+#define RB_KEY_D                  'd'
+#define RB_KEY_E                  'e'
+#define RB_KEY_F                  'f'
+#define RB_KEY_G                  'g'
+#define RB_KEY_H                  'h'
+#define RB_KEY_I                  'i'
+#define RB_KEY_J                  'j'
+#define RB_KEY_K                  'k'
+#define RB_KEY_L                  'l'
+#define RB_KEY_M                  'm'
+#define RB_KEY_N                  'n'
+#define RB_KEY_O                  'o'
+#define RB_KEY_P                  'p'
+#define RB_KEY_Q                  'q'
+#define RB_KEY_R                  'r'
+#define RB_KEY_S                  's'
+#define RB_KEY_T                  't'
+#define RB_KEY_U                  'u'
+#define RB_KEY_V                  'v'
+#define RB_KEY_W                  'w'
+#define RB_KEY_X                  'x'
+#define RB_KEY_Y                  'y'
+#define RB_KEY_Z                  'z'
+#define RB_KEY_LEFT_BRACKET       '['  /* [ */
+#define RB_KEY_BACKSLASH          '\\'  /* \ */
+#define RB_KEY_RIGHT_BRACKET      ']'  /* ] */
+#define RB_KEY_GRAVE_ACCENT       '`'  /* ` */
 #define RB_KEY_WORLD_1            161 /* non-US #1 */
 #define RB_KEY_WORLD_2            162 /* non-US #2 */
 
 /* Function keys */
-#define RB_KEY_ESCAPE             256
-#define RB_KEY_ENTER              257
-#define RB_KEY_TAB                258
-#define RB_KEY_BACKSPACE          259
-#define RB_KEY_INSERT             260
-#define RB_KEY_DELETE             261
-#define RB_KEY_RIGHT              262
-#define RB_KEY_LEFT               263
-#define RB_KEY_DOWN               264
-#define RB_KEY_UP                 265
-#define RB_KEY_PARB_UP            266
-#define RB_KEY_PARB_DOWN          267
-#define RB_KEY_HOME               268
-#define RB_KEY_END                269
-#define RB_KEY_CAPS_LOCK          280
-#define RB_KEY_SCROLL_LOCK        281
-#define RB_KEY_NUM_LOCK           282
-#define RB_KEY_PRINT_SCREEN       283
-#define RB_KEY_PAUSE              284
-#define RB_KEY_F1                 290
-#define RB_KEY_F2                 291
-#define RB_KEY_F3                 292
-#define RB_KEY_F4                 293
-#define RB_KEY_F5                 294
-#define RB_KEY_F6                 295
-#define RB_KEY_F7                 296
-#define RB_KEY_F8                 297
-#define RB_KEY_F9                 298
-#define RB_KEY_F10                299
-#define RB_KEY_F11                300
-#define RB_KEY_F12                301
-#define RB_KEY_F13                302
-#define RB_KEY_F14                303
-#define RB_KEY_F15                304
-#define RB_KEY_F16                305
-#define RB_KEY_F17                306
-#define RB_KEY_F18                307
-#define RB_KEY_F19                308
-#define RB_KEY_F20                309
-#define RB_KEY_F21                310
-#define RB_KEY_F22                311
-#define RB_KEY_F23                312
-#define RB_KEY_F24                313
-#define RB_KEY_F25                314
-#define RB_KEY_KP_0               320
-#define RB_KEY_KP_1               321
-#define RB_KEY_KP_2               322
-#define RB_KEY_KP_3               323
-#define RB_KEY_KP_4               324
-#define RB_KEY_KP_5               325
-#define RB_KEY_KP_6               326
-#define RB_KEY_KP_7               327
-#define RB_KEY_KP_8               328
-#define RB_KEY_KP_9               329
-#define RB_KEY_KP_DECIMAL         330
-#define RB_KEY_KP_DIVIDE          331
-#define RB_KEY_KP_MULTIPLY        332
-#define RB_KEY_KP_SUBTRACT        333
-#define RB_KEY_KP_ADD             334
-#define RB_KEY_KP_ENTER           335
-#define RB_KEY_KP_EQUAL           336
-#define RB_KEY_LEFT_SHIFT         340
-#define RB_KEY_LEFT_CONTROL       341
-#define RB_KEY_LEFT_ALT           342
-#define RB_KEY_LEFT_SUPER         343
-#define RB_KEY_RIGHT_SHIFT        344
-#define RB_KEY_RIGHT_CONTROL      345
-#define RB_KEY_RIGHT_ALT          346
-#define RB_KEY_RIGHT_SUPER        347
-#define RB_KEY_MENU               348 
+#define RB_KEY_ESCAPE             '\x1B'
+#define RB_KEY_ENTER              13
+#define RB_KEY_TAB                '\t'
+#define RB_KEY_BACKSPACE          '\b'
+#define RB_KEY_INSERT             1073741897
+#define RB_KEY_DELETE             127
+#define RB_KEY_RIGHT              1073741903
+#define RB_KEY_LEFT               1073741904
+#define RB_KEY_DOWN               1073741905
+#define RB_KEY_UP                 1073741906
+#define RB_KEY_PG_UP			  1073741899
+#define RB_KEY_PG_DOWN            1073741902
+#define RB_KEY_HOME               1073741898
+#define RB_KEY_END                1073741901
+#define RB_KEY_CAPS_LOCK          1073741881
+#define RB_KEY_SCROLL_LOCK        1073741895
+#define RB_KEY_NUM_LOCK           1073741907
+#define RB_KEY_PRINT_SCREEN       1073741894
+#define RB_KEY_PAUSE              1073741896
+#define RB_KEY_F1                 1073741882
+#define RB_KEY_F2                 1073741883
+#define RB_KEY_F3                 1073741884
+#define RB_KEY_F4                 1073741885
+#define RB_KEY_F5                 1073741886
+#define RB_KEY_F6                 1073741887
+#define RB_KEY_F7                 1073741888
+#define RB_KEY_F8                 1073741889
+#define RB_KEY_F9                 1073741890
+#define RB_KEY_F10                1073741891
+#define RB_KEY_F11                1073741892
+#define RB_KEY_F12                1073741893
+#define RB_KEY_F13                1073741894
+#define RB_KEY_F14                1073741895
+#define RB_KEY_F15                1073741896
+#define RB_KEY_F16                1073741897
+#define RB_KEY_F17                1073741898
+#define RB_KEY_F18                1073741899
+#define RB_KEY_F19                1073741900
+#define RB_KEY_F20                1073741901
+#define RB_KEY_F21                1073741902
+#define RB_KEY_F22                1073741903
+#define RB_KEY_F23                1073741904
+#define RB_KEY_F24                1073741905
+#define RB_KEY_F25                1073741906
+#define RB_KEY_KP_0               1073741922
+#define RB_KEY_KP_1               1073741913
+#define RB_KEY_KP_2               1073741914
+#define RB_KEY_KP_3               1073741915
+#define RB_KEY_KP_4				  1073741916
+#define RB_KEY_KP_5               1073741917
+#define RB_KEY_KP_6               1073741918
+#define RB_KEY_KP_7               1073741919
+#define RB_KEY_KP_8               1073741920
+#define RB_KEY_KP_9               1073741921
+#define RB_KEY_KP_DECIMAL         1073741923
+#define RB_KEY_KP_DIVIDE          1073741908
+#define RB_KEY_KP_MULTIPLY        1073741909
+#define RB_KEY_KP_SUBTRACT        1073741910
+#define RB_KEY_KP_ADD             1073741911
+#define RB_KEY_KP_ENTER           1073741912
+#define RB_KEY_KP_EQUAL           1073741913
+#define RB_KEY_LEFT_SHIFT         1073742049
+#define RB_KEY_LEFT_CONTROL       1073742048
+#define RB_KEY_LEFT_ALT           1073742050
+#define RB_KEY_LEFT_SUPER         1073742051
+#define RB_KEY_RIGHT_SHIFT        1073742053
+#define RB_KEY_RIGHT_CONTROL      1073742052
+#define RB_KEY_RIGHT_ALT          1073742054
+#define RB_KEY_RIGHT_SUPER        1073742055
+#define RB_KEY_MENU               1073741925 

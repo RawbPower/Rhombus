@@ -4,6 +4,7 @@
 // It's fine to this as we a inside a platform specific file
 #include "Rhombus/Core/Application.h"
 #include <GLFW/glfw3.h>
+#include <SDL.h>
 
 namespace rhombus 
 {
@@ -12,10 +13,9 @@ namespace rhombus
 
 	bool  WindowsInput::IsKeyPressedImpl(int keycode)
 	{
-		auto window = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNativeWindow());
-		auto state = glfwGetKey(window, keycode);
+		const Uint8* currentKeyStates = SDL_GetKeyboardState(NULL);
 						
-		return state == GLFW_PRESS || state == GLFW_REPEAT;
+		return currentKeyStates[SDL_GetScancodeFromKey((SDL_Keycode)keycode)];
 	}
 
 	bool WindowsInput::IsMouseButtonPressedImpl(int button)

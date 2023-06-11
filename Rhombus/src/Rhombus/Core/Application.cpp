@@ -133,4 +133,32 @@ namespace rhombus {
 
 		return true;
 	}
+
+	bool Application::OnMouseButtonPressed(MouseButtonPressedEvent& e)
+	{
+		RB_CORE_INFO(e.ToString());
+
+		return true;
+	}
+
+	bool Application::OnMouseButtonReleased(MouseButtonReleasedEvent& e)
+	{
+		RB_CORE_INFO(e.ToString());
+
+		return true;
+	}
+
+	bool Application::OnMouseScrolled(MouseScrolledEvent& e)
+	{
+		RB_CORE_INFO(e.ToString());
+
+		return true;
+	}
+
+	bool Application::OnMouseMoved(MouseMovedEvent& e)
+	{
+		RB_CORE_INFO(e.ToString());
+
+		return true;
+	}
 }

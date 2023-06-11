@@ -3,7 +3,6 @@
 
 // It's fine to this as we a inside a platform specific file
 #include "Rhombus/Core/Application.h"
-#include <GLFW/glfw3.h>
 #include <SDL.h>
 
 namespace rhombus 
@@ -20,19 +19,23 @@ namespace rhombus
 
 	bool WindowsInput::IsMouseButtonPressedImpl(int button)
 	{
-		auto window = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNativeWindow());
-		auto state = glfwGetMouseButton(window, button);
+		int x, y;
+		Uint32 b;
 
-		return state == GLFW_PRESS;
+		SDL_PumpEvents();  // make sure we have the latest mouse state.
+		b = SDL_GetMouseState(&x, &y);
+
+		return (b & button) != 0;
 	}
 
 	std::pair<float, float> WindowsInput::GetMousePositionImpl()
 	{
-		auto window = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNativeWindow());
-		double xpos, ypos;
-		glfwGetCursorPos(window, &xpos, &ypos);
+		int x, y;
 
-		return { (float)xpos, (float)ypos };
+		SDL_PumpEvents();  // make sure we have the latest mouse state.
+		SDL_GetMouseState(&x, &y);
+
+		return { (float)x, (float)y };
 	}
 
 	float WindowsInput::GetMouseXImpl()

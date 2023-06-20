@@ -1,9 +1,6 @@
 [submodule "Rhombus/vendor/spdlog"]
 	path = Rhombus/vendor/spdlog
 	url = https://github.com/gabime/spdlog
-[submodule "Rhombus/vendor/GLFW"]
-	path = Rhombus/vendor/GLFW
-	url = https://github.com/glfw/glfw
 [submodule "Rhombus/vendor/imgui"]
 	path = Rhombus/vendor/imgui
 	url = https://github.com/RawbPower/imgui

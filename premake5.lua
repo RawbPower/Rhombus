@@ -19,7 +19,6 @@ startproject "Sandbox"
 
 -- Include directories relative to root folder (solution directory)
 IncludeDir = {}
-IncludeDir["GLFW"] = "Rhombus/vendor/GLFW/include"
 IncludeDir["Glad"] = "Rhombus/vendor/Glad/include"
 IncludeDir["ImGui"] = "Rhombus/vendor/imgui"
 IncludeDir["glm"] = "Rhombus/vendor/glm"
@@ -27,7 +26,6 @@ IncludeDir["stb_image"] = "Rhombus/vendor/stb_image"
 IncludeDir["SDL2"] = "Rhombus/vendor/SDL2/include"
 
 group "Dependencies"
-	include "Rhombus/vendor/GLFW"
 	include "Rhombus/vendor/Glad"
 	include "Rhombus/vendor/imgui"
 
@@ -65,7 +63,6 @@ project "Rhombus"
 	{
 		"%{prj.name}/src",
 		"%{prj.name}/vendor/spdlog/include",
-		"%{IncludeDir.GLFW}",
 		"%{IncludeDir.Glad}",
 		"%{IncludeDir.ImGui}",
 		"%{IncludeDir.glm}",
@@ -81,7 +78,6 @@ project "Rhombus"
 
 	links
 	{
-		"GLFW",
 		"Glad",
 		"ImGui",
 		"opengl32.lib",
@@ -96,7 +92,6 @@ project "Rhombus"
 		{
 			"RB_PLATFORM_WINDOWS",
 			"RB_BUILD_DLL",
-			"GLFW_INCLUDE_NONE"
 		}
 
 	filter "configurations:Debug"

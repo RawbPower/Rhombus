@@ -5,12 +5,12 @@
 
 #include "imgui.h"
 #include "examples/imgui_impl_opengl3.h"
-#include "examples/imgui_impl_glfw.h"
+#include "examples/imgui_impl_sdl.h"
 
 #include "Rhombus/Core/Application.h"
 
 // TEMPORARY
-#include <GLFW/glfw3.h>
+#include <SDL.h>
 #include <glad/glad.h>
 
 namespace rhombus {
@@ -47,23 +47,27 @@ namespace rhombus {
 		}
 
 		Application& app = Application::Get();
-		GLFWwindow* window = static_cast<GLFWwindow*>(app.GetWindow().GetNativeWindow());
+		SDL_Window* window = static_cast<SDL_Window*>(app.GetWindow().GetNativeWindow());
+		SDL_GLContext context = SDL_GL_GetCurrentContext();
 
 		// Setup Platform/Renderer bindings
-		ImGui_ImplGlfw_InitForOpenGL(window, true);
+		ImGui_ImplSDL2_InitForOpenGL(window, context);
 		ImGui_ImplOpenGL3_Init("#version 410");
 	}
 
 	void ImGuiLayer::OnDetach()
 	{
 		ImGui_ImplOpenGL3_Shutdown();
-		ImGui_ImplGlfw_Shutdown();
+		ImGui_ImplSDL2_Shutdown();
 		ImGui::DestroyContext();
 	}
 
 	void ImGuiLayer::Begin() {
+		Application& app = Application::Get();
+		SDL_Window* window = static_cast<SDL_Window*>(app.GetWindow().GetNativeWindow());
+
 		ImGui_ImplOpenGL3_NewFrame();
-		ImGui_ImplGlfw_NewFrame();
+		ImGui_ImplSDL2_NewFrame(window);
 		ImGui::NewFrame();
 	}
 
@@ -79,10 +83,11 @@ namespace rhombus {
 
 		if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
 		{
-			GLFWwindow* backup_current_context = glfwGetCurrentContext();
+			SDL_Window* backup_current_window = SDL_GL_GetCurrentWindow();
+			SDL_GLContext backup_current_context = SDL_GL_GetCurrentContext();
 			ImGui::UpdatePlatformWindows();
 			ImGui::RenderPlatformWindowsDefault();
-			glfwMakeContextCurrent(backup_current_context);
+			SDL_GL_MakeCurrent(backup_current_window, backup_current_context);
 		}
 	}
 	

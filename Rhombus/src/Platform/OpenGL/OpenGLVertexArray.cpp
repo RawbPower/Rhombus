@@ -28,6 +28,7 @@ namespace rhombus {
 
 	OpenGLVertexArray::OpenGLVertexArray()
 	{
+		const GLubyte* glversion = glGetString(GL_VERSION);
 		glCreateVertexArrays(1, &m_RendererID);
 	}
 

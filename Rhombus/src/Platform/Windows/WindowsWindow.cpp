@@ -8,16 +8,8 @@
 #include "Platform/OpenGL/OpenGLContext.h"
 
 namespace rhombus {
-
-	static bool s_GLFWInitialized = false;
-
 	const int SCREEN_WIDTH = 640;
 	const int SCREEN_HEIGHT = 480;
-
-	static void GLFWErrorCallback(int error, const char* description)
-	{
-		RB_CORE_ERROR("GLFW Error ({0}): {1}", error, description);
-	}
 
 	Window* Window::Create(const WindowParams& params)
 	{
@@ -27,15 +19,11 @@ namespace rhombus {
 	WindowsWindow::WindowsWindow(const WindowParams& params)
 	{
 		Init(params);
-
-		Init_SDL();
-		Update_SDL();
 	}
 
 	WindowsWindow::~WindowsWindow()
 	{
 		Shutdown();
-		Shutdown_SDL();
 	}
 
 	void WindowsWindow::Init(const WindowParams& params)
@@ -48,30 +36,7 @@ namespace rhombus {
 
 		RB_CORE_INFO("Creating window {0} ({1}, {2})", params.Title, params.Width, params.Height);
 
-		if (!s_GLFWInitialized)
-		{
-			// TODO: glfwTerminate on system shutdown
-			int success = glfwInit();
-			RB_CORE_ASSERT(success, "Could not initialize GLFW!");
-			glfwSetErrorCallback(GLFWErrorCallback);
-			s_GLFWInitialized = true;
-		}
-
-		m_Window = glfwCreateWindow((int)params.Width, (int)params.Height, m_Data.Title.c_str(), nullptr, nullptr);
-		// This could be changed from OpenGL to DirectX or Vulcan in the future
-		m_Context = new OpenGLContext(m_Window);
-		m_Context->Init();
-
-		// A pointer to our Windows data struct
-		glfwSetWindowUserPointer(m_Window, &m_Data);
-		SetVSync(true);
-	}
-
-	void WindowsWindow::Init_SDL()
-	{
-		m_SDLWindow = NULL;
-		m_SDLScreenSurface = NULL;
-		m_SDLHelloWorld = NULL;
+		m_Window = NULL;
 
 		//Initialize SDL
 		if (SDL_Init(SDL_INIT_VIDEO) < 0)
@@ -80,34 +45,41 @@ namespace rhombus {
 		}
 		else
 		{
+			// SDL_GL_LoadLibrary(NULL);
+			
+			//Use OpenGL 3.1 core
+			SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
+			SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
+			SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 6);
+			SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+			// Also request a depth buffer
+			SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+			SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
+
 			//Create window
-			m_SDLWindow = SDL_CreateWindow(m_Data.Title.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
-			if (m_SDLWindow == NULL)
+			m_Window = SDL_CreateWindow(m_Data.Title.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, m_Data.Width, m_Data.Height, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
+			//m_SDLWindow = SDL_CreateWindow(m_Data.Title.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, m_Data.Width, m_Data.Height, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
+			if (m_Window == NULL)
 			{
 				RB_CORE_ERROR("Window could not be created! SDL_Error: %s\n", SDL_GetError());
 			}
 			else
 			{
-				//Get window surface
-				m_SDLScreenSurface = SDL_GetWindowSurface(m_SDLWindow);
+				m_Context = new OpenGLContext(m_Window);
+				m_Context->Init();
 			}
 		}
 	}
 
 	void WindowsWindow::Shutdown()
 	{
-		glfwDestroyWindow(m_Window);
-	}
-
-	void WindowsWindow::Shutdown_SDL()
-	{
 		//Deallocate surface
-		SDL_FreeSurface(m_SDLHelloWorld);
-		m_SDLHelloWorld = NULL;
+		//SDL_FreeSurface(m_SDLHelloWorld);
+		//m_SDLHelloWorld = NULL;
 
 		//Destroy window
-		SDL_DestroyWindow(m_SDLWindow);
-		m_SDLWindow = NULL;
+		SDL_DestroyWindow(m_Window);
+		m_Window = NULL;
 
 		//Quit SDL subsystems
 		SDL_Quit();
@@ -115,16 +87,15 @@ namespace rhombus {
 
 	void WindowsWindow::OnUpdate()
 	{
-		glfwPollEvents();
 		m_Context->SwapBuffers();
 
-		HandleEvents_SDL();
+		HandleEvents();
 
 		//Apply the image
-		SDL_BlitSurface(m_SDLHelloWorld, NULL, m_SDLScreenSurface, NULL);
+		//SDL_BlitSurface(m_SDLHelloWorld, NULL, m_SDLScreenSurface, NULL);
 
 		//Update the surface
-		SDL_UpdateWindowSurface(m_SDLWindow);
+		//SDL_UpdateWindowSurface(m_SDLWindow);
 	}
 
 	SDL_Surface* loadSurface(std::string path)
@@ -139,17 +110,7 @@ namespace rhombus {
 		return loadedSurface;
 	}
 
-	void WindowsWindow::Update_SDL()
-	{
-		//Load splash image
-		m_SDLHelloWorld = SDL_LoadBMP("../Sandbox/assets/textures/hello_world.bmp");
-		if (m_SDLHelloWorld == NULL)
-		{
-			RB_CORE_ERROR("Unable to load image %s! SDL Error: %s\n", "hello_world.bmp", SDL_GetError());
-		}
-	}
-
-	void WindowsWindow::HandleEvents_SDL()
+	void WindowsWindow::HandleEvents()
 	{
 		//Event handler
 		SDL_Event e;
@@ -229,16 +190,6 @@ namespace rhombus {
 					break;
 			}
 		}
-	}
-
-	void WindowsWindow::SetVSync(bool enabled)
-	{
-		if (enabled)
-			glfwSwapInterval(1);
-		else
-			glfwSwapInterval(0);
-
-		m_Data.VSync = enabled;
 	}
 
 	bool WindowsWindow::IsVSync() const

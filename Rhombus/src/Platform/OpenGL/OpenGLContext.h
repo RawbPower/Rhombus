@@ -3,7 +3,7 @@
 #include "Rhombus/Renderer/GraphicsContext.h"
 
 // Forward Declaration
-struct GLFWwindow;
+struct SDL_Window;
 
 namespace rhombus {
 
@@ -11,11 +11,11 @@ namespace rhombus {
 
 	public:
 		//Constructor 
-		OpenGLContext(GLFWwindow* windowHandle);
+		OpenGLContext(SDL_Window* windowHandle);
 		virtual void Init() override;
 		virtual void SwapBuffers() override;
 	private:
-		GLFWwindow* m_WindowHandle;
+		SDL_Window* m_WindowHandle;
 
 	};
 }

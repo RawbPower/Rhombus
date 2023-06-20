@@ -7,7 +7,6 @@
 
 #include "Input.h"
 
-#include <glfw/glfw3.h>
 #include <SDL.h>
 
 namespace rhombus {
@@ -71,7 +70,7 @@ namespace rhombus {
 	{
 		while (m_Running) 
 		{
-			float time = (float)glfwGetTime();			// Will be in Platform GetTime() in the future
+			float time = (float)SDL_GetTicks64()/1000.0f;			// Will be in Platform GetTime() in the future
 			DeltaTime deltaTime = time - m_LastFrameTime;
 			m_LastFrameTime = time;
 

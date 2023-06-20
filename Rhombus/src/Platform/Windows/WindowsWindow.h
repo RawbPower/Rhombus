@@ -3,8 +3,8 @@
 #include "Rhombus/Core/Window.h"
 #include "Rhombus/Renderer/GraphicsContext.h"
 
-#include <GLFW/glfw3.h>
 #include <SDL.h>
+#include <SDL_opengl.h>
 
 namespace rhombus {
 
@@ -21,29 +21,22 @@ namespace rhombus {
 
 		// Window attributes
 		inline void SetEventCallback(const EventCallbackFn& callback) override { m_Data.EventCallback = callback; }
-		void SetVSync(bool enabled) override;
+		//void SetVSync(bool enabled) override;
 		bool IsVSync() const override;
 
 		inline virtual void* GetNativeWindow() const { return m_Window; }
+		inline virtual void* GetNativeContext() const { return m_SDLContext; }
 	private:
 		virtual void Init(const WindowParams& params);
 		virtual void Shutdown();
 
-		void Init_SDL();
-		void Shutdown_SDL();
-		void Update_SDL();
-
-		void HandleEvents_SDL();
+		void HandleEvents();
 	private:
-		GLFWwindow* m_Window;
 		GraphicsContext* m_Context;
 
 		//The window we'll be rendering to
-		SDL_Window* m_SDLWindow;
-		//The surface contained by the window
-		SDL_Surface* m_SDLScreenSurface;
-		//The image we will load and show on the screen
-		SDL_Surface* m_SDLHelloWorld;
+		SDL_Window* m_Window;
+		SDL_GLContext m_SDLContext;
 
 		struct WindowData
 		{

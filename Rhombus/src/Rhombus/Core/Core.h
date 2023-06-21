@@ -2,19 +2,60 @@
 
 #include <memory>
 
-#ifdef RB_PLATFORM_WINDOWS
-// Code for using dll instead of static library
-#if RB_DYNAMIC_LINK
-	#ifdef RB_BUILD_DLL
-		// Exports in dll file
-		#define RB_API __declspec(dllexport)
+// Platform detection using macros
+#ifdef _WIN32
+	/* Windows x64/x86 */
+	#ifdef _WIN64
+		/* Window x64 */
+		#define RB_PLATFORM_WINDOWS
 	#else
-		#define RB_API __declspec(dllimport)
+		#error "x86 Builds are not supported"
 	#endif
+#elif defined(__APPLE__) || (__MACH__)
+	#include <TargetConditionals.h>
+	/* TARGET_OS_MAC exists on all the platforms
+	 * so we must check all of them (in this order)
+	 * to ensure that we're running on MAC
+	 * and not some other Apple platform */
+	#if TARGET_IPHONE_SIMULATOR == 1
+		#error "IOS simulator is not supported!"
+	#elif TARGET_OS_PHONE == 1
+		#define RB_PLATFORM_IOS
+		#error "IOS is not supported"
+	#elif TARGET_OS_MAC == 1
+		#define RB_PLATFORM_MACOS
+		#error "MacOS is not supported (but it really should be)"
+	#else
+		#define RHOMBUS_API __declspec(dllimport)
+		#error "Unknown Apple platform"
+	#endif
+/* We also have to check __ANDROID__ before __linux__
+* since android is based on the linux kernel
+* it has __linux__ defined */
+#elif defined(__ANDROID__)
+	#define RB_PLATFORM_ANDROID
+	#error "Android is not supported"
+#elif defined(__linux__)
+	#define RB_PLATFORM_LINUX
+	#error "Linux is not supported (but it really should be)"
 #else
-	#define RB_API
-#endif
+	/* Unknown compiler/platform */
+	#error "Unknown platform!"
+#endif // End of platform detection
 
+
+// Code for using dll instead of static library
+#ifdef RB_PLATFORM_WINDOWS
+	#if RB_DYNAMIC_LINK
+		#ifdef RB_BUILD_DLL
+			// Exports in dll file
+			#define RB_API __declspec(dllexport)
+		#else
+			#define RB_API __declspec(dllimport)
+		#endif
+	#else
+		#define RB_API
+	#endif
 #else 
 	#error Game Engine only support Windows (for now)
 #endif

@@ -41,6 +41,7 @@ namespace rhombus {
 		virtual bool IsVSync() const = 0;
 
 		virtual void* GetNativeWindow() const = 0;
+		virtual void* GetNativeContext() const = 0;
 
 		// This get called depending on Platform
 		static Window* Create(const WindowParams& params = WindowParams());

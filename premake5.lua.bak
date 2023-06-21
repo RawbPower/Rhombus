@@ -90,9 +90,7 @@ project "Rhombus"
 
 		defines
 		{
-			"RB_PLATFORM_WINDOWS",
 			"RB_BUILD_DLL",
-			"GLFW_INCLUDE_NONE"
 		}
 
 	filter "configurations:Debug"

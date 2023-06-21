@@ -16,14 +16,26 @@ namespace rhombus {
 	{
 		// Camera Movement
 		if (Input::IsKeyPressed(RB_KEY_A) || Input::IsKeyPressed(RB_KEY_LEFT))
-			m_CameraPosition.x -= m_CameraTranslationSpeed * dt;
+		{
+			m_CameraPosition.x -= cos(glm::radians(m_CameraRotation)) * m_CameraTranslationSpeed * dt;
+			m_CameraPosition.y -= sin(glm::radians(m_CameraRotation)) * m_CameraTranslationSpeed * dt;
+		}
 		else if (Input::IsKeyPressed(RB_KEY_D) || Input::IsKeyPressed(RB_KEY_RIGHT))
-			m_CameraPosition.x += m_CameraTranslationSpeed * dt;
+		{
+			m_CameraPosition.x += cos(glm::radians(m_CameraRotation)) * m_CameraTranslationSpeed * dt;
+			m_CameraPosition.y += sin(glm::radians(m_CameraRotation)) * m_CameraTranslationSpeed * dt;
+		}
 
 		if (Input::IsKeyPressed(RB_KEY_S) || Input::IsKeyPressed(RB_KEY_DOWN))
-			m_CameraPosition.y -= m_CameraTranslationSpeed * dt;
+		{
+			m_CameraPosition.x -= -sin(glm::radians(m_CameraRotation)) * m_CameraTranslationSpeed * dt;
+			m_CameraPosition.y -= cos(glm::radians(m_CameraRotation)) * m_CameraTranslationSpeed * dt;
+		}
 		else if (Input::IsKeyPressed(RB_KEY_W) || Input::IsKeyPressed(RB_KEY_UP))
-			m_CameraPosition.y += m_CameraTranslationSpeed * dt;
+		{
+			m_CameraPosition.x += -sin(glm::radians(m_CameraRotation)) * m_CameraTranslationSpeed * dt;
+			m_CameraPosition.y += cos(glm::radians(m_CameraRotation)) * m_CameraTranslationSpeed * dt;
+		}
 
 		// Camera Rotation
 		if (m_Rotation)
@@ -34,6 +46,12 @@ namespace rhombus {
 
 			if (Input::IsKeyPressed(RB_KEY_E))
 				m_CameraRotation -= m_CameraRotationSpeed * dt;
+
+			// Keep rotation between -180 to 180 degrees
+			if (m_CameraRotation > 180.0f)
+				m_CameraRotation -= 360.0f;
+			else if (m_CameraRotation <= -180.0f)
+				m_CameraRotation += 360.0f;
 
 			m_Camera.SetRotation(m_CameraRotation);
 		}

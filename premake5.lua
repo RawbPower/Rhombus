@@ -90,7 +90,6 @@ project "Rhombus"
 
 		defines
 		{
-			"RB_PLATFORM_WINDOWS",
 			"RB_BUILD_DLL",
 		}
 
@@ -142,11 +141,6 @@ project "Sandbox"
 
 	filter "system:windows"
 		systemversion "latest"
-
-		defines
-		{
-			"RB_PLATFORM_WINDOWS"
-		}
 
 	filter "configurations:Debug"
 		defines "RB_DEBUG"

@@ -48,7 +48,7 @@ namespace rhombus {
 
 		Application& app = Application::Get();
 		SDL_Window* window = static_cast<SDL_Window*>(app.GetWindow().GetNativeWindow());
-		SDL_GLContext context = SDL_GL_GetCurrentContext();
+		SDL_GLContext context = static_cast<SDL_GLContext*>(app.GetWindow().GetNativeContext());
 
 		// Setup Platform/Renderer bindings
 		ImGui_ImplSDL2_InitForOpenGL(window, context);
@@ -85,6 +85,7 @@ namespace rhombus {
 		{
 			SDL_Window* backup_current_window = SDL_GL_GetCurrentWindow();
 			SDL_GLContext backup_current_context = SDL_GL_GetCurrentContext();
+
 			ImGui::UpdatePlatformWindows();
 			ImGui::RenderPlatformWindowsDefault();
 			SDL_GL_MakeCurrent(backup_current_window, backup_current_context);

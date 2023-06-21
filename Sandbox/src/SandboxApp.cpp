@@ -1,6 +1,7 @@
 // CLIENT
 
 #include <Rhombus.h>
+#include <Rhombus/Core/EntryPoint.h>
 
 #include "imgui/imgui.h"
 
@@ -9,13 +10,15 @@
 
 #include "Platform/OpenGL/OpenGLShader.h"
 
+#include "Sandbox2D.h"
+
 class ExampleLayer : public rhombus::Layer {
 public:
 	ExampleLayer()
 		: Layer("Example"), m_CameraController(1280.0f / 720.0f, true)
 	{
 		/* Vertex Array (required for core OpenGL profile) */
-		m_VertexArray.reset(rhombus::VertexArray::Create());
+		m_VertexArray = rhombus::VertexArray::Create();
 		m_VertexArray->Bind();
 
 		/* Vertex Buffer */
@@ -51,7 +54,7 @@ public:
 
 		// Square vertex array test
 
-		m_SquareVA.reset(rhombus::VertexArray::Create());
+		m_SquareVA = rhombus::VertexArray::Create();
 
 		float squareVertices[5 * 4] = {
 			-0.5f, -0.5f, 0.0f,	0.0f, 0.0f,		// 3 vertex coordinate on each row and 2 texture coords
@@ -238,7 +241,8 @@ class Sandbox : public rhombus::Application
 {
 public:
 	Sandbox() {
-		PushLayer(new ExampleLayer());
+		//PushLayer(new ExampleLayer());
+		PushLayer(new Sandbox2D());
 	}
 
 	~Sandbox() {

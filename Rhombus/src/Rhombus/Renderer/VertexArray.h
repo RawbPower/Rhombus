@@ -20,6 +20,6 @@ namespace rhombus {
 		virtual const Ref<IndexBuffer>& GetIndexBuffer() const = 0;
 
 		// Use this instead of constructor
-		static VertexArray* Create();
+		static Ref<VertexArray> Create();
 	};
 }

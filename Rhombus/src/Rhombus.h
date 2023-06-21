@@ -26,7 +26,3 @@
 
 #include "Rhombus/Renderer/OrthographicCamera.h"
 //--------------------------------
-
-// ---Entry Point-----------------
-#include "Rhombus/Core/EntryPoint.h"
-//--------------------------------

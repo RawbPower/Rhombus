@@ -42,7 +42,7 @@ namespace rhombus {
 		//Use Vsync
 		if (SDL_GL_SetSwapInterval(1) < 0)
 		{
-			RB_CORE_ERROR("Warning: Unable to set VSync! SDL Error: %s\n", SDL_GetError());
+			RB_CORE_ERROR("Warning: Unable to set VSync! SDL Error: {0}\n", SDL_GetError());
 		}
 
 		// Disable depth test and face culling.

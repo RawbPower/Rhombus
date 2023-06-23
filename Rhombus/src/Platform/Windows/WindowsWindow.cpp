@@ -37,11 +37,12 @@ namespace rhombus {
 		RB_CORE_INFO("Creating window {0} ({1}, {2})", params.Title, params.Width, params.Height);
 
 		m_Window = NULL;
+		m_IconSurface = NULL;
 
 		//Initialize SDL
 		if (SDL_Init(SDL_INIT_VIDEO) < 0)
 		{
-			RB_CORE_ERROR("SDL could not initialize! SDL_Error: %s\n", SDL_GetError());
+			RB_CORE_ERROR("SDL could not initialize! SDL_Error: {0}\n", SDL_GetError());
 		}
 		else
 		{
@@ -61,10 +62,20 @@ namespace rhombus {
 			//m_SDLWindow = SDL_CreateWindow(m_Data.Title.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, m_Data.Width, m_Data.Height, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
 			if (m_Window == NULL)
 			{
-				RB_CORE_ERROR("Window could not be created! SDL_Error: %s\n", SDL_GetError());
+				RB_CORE_ERROR("Window could not be created! SDL_Error: {0}\n", SDL_GetError());
 			}
 			else
 			{
+				m_IconSurface = SDL_LoadBMP("../Rhombus/assets/RhombusIconBlueLarge.bmp");	
+				if (m_IconSurface == NULL)
+				{
+					RB_CORE_ERROR("Unable to load image {0}! SDL Error: {1}\n", "assets/RhombusIconBlueLarge.bmp", SDL_GetError());
+				}
+				else
+				{
+					SDL_SetWindowIcon(m_Window, m_IconSurface);
+				}
+
 				m_Context = new OpenGLContext(m_Window);
 				m_Context->Init();
 			}
@@ -104,7 +115,7 @@ namespace rhombus {
 		SDL_Surface* loadedSurface = SDL_LoadBMP(path.c_str());
 		if (loadedSurface == NULL)
 		{
-			printf("Unable to load image %s! SDL Error: %s\n", path.c_str(), SDL_GetError());
+			printf("Unable to load image {0}! SDL Error: {1}\n", path.c_str(), SDL_GetError());
 		}
 
 		return loadedSurface;

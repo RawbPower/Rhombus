@@ -34,6 +34,8 @@ namespace rhombus {
 	private:
 		GraphicsContext* m_Context;
 
+		SDL_Surface* m_IconSurface;
+
 		//The window we'll be rendering to
 		SDL_Window* m_Window;
 		SDL_GLContext m_SDLContext;

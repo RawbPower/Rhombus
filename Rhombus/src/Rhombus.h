@@ -17,6 +17,7 @@
 
 // ---Renderer--------------------
 #include "Rhombus/Renderer/Renderer.h"
+#include "Rhombus/Renderer/Renderer2D.h"
 #include "Rhombus/Renderer/RenderCommand.h"
 
 #include "Rhombus/Renderer/Buffer.h"

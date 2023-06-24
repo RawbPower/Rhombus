@@ -1,8 +1,5 @@
 #include "Sandbox2D.h"
 
-// Needs to be abstracted
-#include "Platform/OpenGL/OpenGLShader.h"
-
 #include "imgui/imgui.h"
 
 #include <glm/gtc/matrix_transform.hpp>
@@ -16,35 +13,10 @@ Sandbox2D::Sandbox2D()
 
 void Sandbox2D::OnAttach()
 {
-	m_SquareVA = rhombus::VertexArray::Create();
-
-	float squareVertices[3 * 4] = {
-		-0.5f, -0.5f, 0.0f,
-		0.5f, -0.5f, 0.0f,
-		0.5f, 0.5f, 0.0f,
-		-0.5f, 0.5f, 0.0f,
-	};
-
-	rhombus::Ref<rhombus::VertexBuffer> squareVB;
-	squareVB.reset(rhombus::VertexBuffer::Create(squareVertices, sizeof(squareVertices)));
-
-	squareVB->SetLayout({
-		{ rhombus::ShaderDataType::Float3, "a_Position" }
-	});
-
-	m_SquareVA->AddVertexBuffer(squareVB);
-
-	uint32_t squareIndices[6] = { 0, 1, 2, 2, 3, 0 };
-	rhombus::Ref<rhombus::IndexBuffer> squareIB;
-	squareIB.reset(rhombus::IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(uint32_t)));
-	m_SquareVA->SetIndexBuffer(squareIB);
-
-	m_FlatColourShader = rhombus::Shader::Create("assets/shaders/FlatColour.glsl");
 }
 
 void Sandbox2D::OnDetach()
 {
-
 }
 
 void Sandbox2D::OnUpdate(rhombus::DeltaTime dt)
@@ -56,15 +28,10 @@ void Sandbox2D::OnUpdate(rhombus::DeltaTime dt)
 	rhombus::RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
 	rhombus::RenderCommand::Clear();
 
-	rhombus::Renderer::BeginScene(m_CameraController.GetCamera());
-
-	// Set up uniform
-	std::dynamic_pointer_cast<rhombus::OpenGLShader>(m_FlatColourShader)->Bind();
-	std::dynamic_pointer_cast<rhombus::OpenGLShader>(m_FlatColourShader)->UploadUniformFloat4("u_Color", m_SquareColor);
-
-	rhombus::Renderer::Submit(m_FlatColourShader, m_SquareVA, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
-
-	rhombus::Renderer::EndScene();
+	rhombus::Renderer2D::BeginScene(m_CameraController.GetCamera());
+	rhombus::Renderer2D::DrawQuad({ -1.0f, 0.0f }, 0.0f, { 0.8, 0.8 }, { 0.8f, 0.2f, 0.3f, 1.0f });
+	rhombus::Renderer2D::DrawQuad({ 0.5f, -0.5f }, 3.14f/3.0f, { 0.5, 0.75 }, { 0.3f, 0.1f, 0.8f, 1.0f });
+	rhombus::Renderer2D::EndScene();
 }
 
 void Sandbox2D::OnImGuiRender()

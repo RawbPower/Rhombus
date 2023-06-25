@@ -16,6 +16,8 @@ namespace rhombus {
 
 	void OpenGLContext::Init() 
 	{
+		RB_PROFILE_FUNCTION();
+
 		//Create context
 		SDL_GLContext glContext = SDL_GL_CreateContext(m_WindowHandle);
 		if (glContext == NULL)
@@ -52,6 +54,8 @@ namespace rhombus {
 
 	void OpenGLContext::SwapBuffers() 
 	{
+		RB_PROFILE_FUNCTION();
+
 		SDL_GL_SwapWindow(m_WindowHandle);
 	}
 }

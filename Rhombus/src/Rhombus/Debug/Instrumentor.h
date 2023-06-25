@@ -7,6 +7,8 @@
 
 #include <thread>
 
+// Profile jsons can be visualised in chrome://tracing/
+
 namespace rhombus
 {
 	struct ProfileResult

@@ -10,6 +10,8 @@ namespace rhombus {
 
 	void Renderer::Init()
 	{
+		RB_PROFILE_FUNCTION();
+
 		RenderCommand::Init();
 		Renderer2D::Init();
 	}

@@ -18,16 +18,21 @@ namespace rhombus {
 
 	WindowsWindow::WindowsWindow(const WindowParams& params)
 	{
+		//RB_PROFILE_FUNCTION();
 		Init(params);
 	}
 
 	WindowsWindow::~WindowsWindow()
 	{
+		RB_PROFILE_FUNCTION();
+
 		Shutdown();
 	}
 
 	void WindowsWindow::Init(const WindowParams& params)
 	{
+		RB_PROFILE_FUNCTION();
+
 		// This is a virtual function and calls virtual functions in the constructor.
 		// Seems like a no no but this code will be gone soon and is deprecated
 		m_Data.Title = params.Title;
@@ -40,7 +45,12 @@ namespace rhombus {
 		m_IconSurface = NULL;
 
 		//Initialize SDL
-		if (SDL_Init(SDL_INIT_VIDEO) < 0)
+		bool sdlFail = false;
+		{
+			RB_PROFILE_SCOPE("SDL_Init");
+			sdlFail = SDL_Init(SDL_INIT_VIDEO) < 0;
+		}
+		if (sdlFail)
 		{
 			RB_CORE_ERROR("SDL could not initialize! SDL_Error: {0}\n", SDL_GetError());
 		}
@@ -58,7 +68,10 @@ namespace rhombus {
 			SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
 
 			//Create window
-			m_Window = SDL_CreateWindow(m_Data.Title.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, m_Data.Width, m_Data.Height, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
+			{
+				RB_PROFILE_SCOPE("SDL_CreateWindow");
+				m_Window = SDL_CreateWindow(m_Data.Title.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, m_Data.Width, m_Data.Height, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
+			}
 			//m_SDLWindow = SDL_CreateWindow(m_Data.Title.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, m_Data.Width, m_Data.Height, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
 			if (m_Window == NULL)
 			{
@@ -84,9 +97,11 @@ namespace rhombus {
 
 	void WindowsWindow::Shutdown()
 	{
+		RB_PROFILE_FUNCTION();
+
 		//Deallocate surface
-		//SDL_FreeSurface(m_SDLHelloWorld);
-		//m_SDLHelloWorld = NULL;
+		SDL_FreeSurface(m_IconSurface);
+		m_IconSurface = NULL;
 
 		//Destroy window
 		SDL_DestroyWindow(m_Window);
@@ -98,6 +113,8 @@ namespace rhombus {
 
 	void WindowsWindow::OnUpdate()
 	{
+		RB_PROFILE_FUNCTION();
+
 		m_Context->SwapBuffers();
 
 		HandleEvents();

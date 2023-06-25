@@ -14,6 +14,8 @@ namespace rhombus {
 
 	void OrthographicCameraController::OnUpdate(DeltaTime dt)
 	{
+		RB_PROFILE_FUNCTION();
+
 		// Camera Movement
 		if (Input::IsKeyPressed(RB_KEY_A) || Input::IsKeyPressed(RB_KEY_LEFT))
 		{
@@ -63,6 +65,8 @@ namespace rhombus {
 
 	void OrthographicCameraController::OnEvent(Event& e)
 	{
+		RB_PROFILE_FUNCTION();
+
 		EventDispatcher dispatcher(e);
 		dispatcher.Dispatch<MouseScrolledEvent>(RB_BIND_EVENT_FN(OrthographicCameraController::OnMouseScrolled));
 		dispatcher.Dispatch<WindowResizeEvent>(RB_BIND_EVENT_FN(OrthographicCameraController::OnWindowResized));
@@ -70,6 +74,8 @@ namespace rhombus {
 
 	bool OrthographicCameraController::OnMouseScrolled(MouseScrolledEvent& e)
 	{
+		RB_PROFILE_FUNCTION();
+
 		m_ZoomLevel -= e.GetYOffset() * 0.25f;
 		m_ZoomLevel = std::max(m_ZoomLevel, 0.25f);
 		m_Camera.SetProjection(-m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel);
@@ -78,6 +84,8 @@ namespace rhombus {
 
 	bool OrthographicCameraController::OnWindowResized(WindowResizeEvent& e)
 	{
+		RB_PROFILE_FUNCTION();
+
 		m_AspectRatio = (float)e.GetWidth() / (float)e.GetHeight();
 		m_Camera.SetProjection(-m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel);
 		return false;

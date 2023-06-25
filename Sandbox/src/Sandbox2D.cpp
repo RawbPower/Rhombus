@@ -13,11 +13,14 @@ Sandbox2D::Sandbox2D()
 
 void Sandbox2D::OnAttach()
 {
+	RB_PROFILE_FUNCTION();
+
 	m_CheckerboardTexture = rhombus::Texture2D::Create("assets/textures/Checkerboard.png");
 }
 
 void Sandbox2D::OnDetach()
 {
+	RB_PROFILE_FUNCTION();
 }
 
 void Sandbox2D::OnUpdate(rhombus::DeltaTime dt)
@@ -25,10 +28,7 @@ void Sandbox2D::OnUpdate(rhombus::DeltaTime dt)
 	RB_PROFILE_FUNCTION();
 
 	// Update
-	{
-		RB_PROFILE_SCOPE("CameraController::OnUpdate");
-		m_CameraController.OnUpdate(dt);
-	}
+	m_CameraController.OnUpdate(dt);
 
 	// Render
 	{

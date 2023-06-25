@@ -21,6 +21,8 @@ namespace rhombus
 
 	void Renderer2D::Init()
 	{
+		RB_PROFILE_FUNCTION();
+
 		s_Data = new Renderer2DStorage();
 
 		s_Data->QuadVertexArray = VertexArray::Create();
@@ -58,18 +60,22 @@ namespace rhombus
 
 	void Renderer2D::Shutdown()
 	{
+		RB_PROFILE_FUNCTION();
+
 		delete s_Data;
 	}
 
 	void Renderer2D::BeginScene(const OrthographicCamera& camera)
 	{
+		RB_PROFILE_FUNCTION();
+
 		s_Data->TextureShader->Bind();
 		s_Data->TextureShader->SetMat4("u_ViewProjection", camera.GetViewProjectionMatrix());
 	}
 
 	void Renderer2D::EndScene()
 	{
-
+		RB_PROFILE_FUNCTION();
 	}
 
 	void Renderer2D::DrawQuad(const glm::vec2& position, const float& angle, const glm::vec2& scale, const glm::vec4& color)
@@ -79,6 +85,8 @@ namespace rhombus
 
 	void Renderer2D::DrawQuad(const glm::vec3& position, const float& angle, const glm::vec2& scale, const glm::vec4& color)
 	{
+		RB_PROFILE_FUNCTION();
+
 		// Need to add rotation between position and scale
 		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * glm::rotate(glm::mat4(1.0f), angle, glm::vec3(0.0f, 0.0f, 1.0f)) * glm::scale(glm::mat4(1.0f), { scale.x, scale.y, 1.0f });
 		s_Data->TextureShader->SetMat4("u_Transform", transform);
@@ -107,6 +115,8 @@ namespace rhombus
 
 	void Renderer2D::DrawQuad(const glm::vec3& position, const float& angle, const glm::vec2& scale, const Ref<Texture2D>& texture, const glm::vec4& color)
 	{
+		RB_PROFILE_FUNCTION();
+
 		// Need to add rotation between position and scale
 		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * glm::rotate(glm::mat4(1.0f), angle, glm::vec3(0.0f, 0.0f, 1.0f)) * glm::scale(glm::mat4(1.0f), { scale.x, scale.y, 1.0f });
 		s_Data->TextureShader->SetMat4("u_Transform", transform);

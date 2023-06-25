@@ -8,6 +8,8 @@ namespace rhombus {
 	OpenGLTexture2D::OpenGLTexture2D(uint32_t width, uint32_t height)
 		: m_Width(width), m_Height(height)
 	{
+		RB_PROFILE_FUNCTION();
+
 		m_InternalFormat = GL_RGBA8;
 		m_DataFormat = GL_RGBA;
 
@@ -26,10 +28,16 @@ namespace rhombus {
 	OpenGLTexture2D::OpenGLTexture2D(const std::string& path)
 		: m_Path(path)
 	{
+		RB_PROFILE_FUNCTION();
+
 		// Load image
 		int width, height, channels;
 		stbi_set_flip_vertically_on_load(1);		// Flip into correct format for OpenGL
-		stbi_uc* data = stbi_load(path.c_str(), &width, &height, &channels, 0);
+		stbi_uc* data = nullptr;
+		{
+			RB_PROFILE_SCOPE("stbi_load - OpenGLTexture2D::OpenGLTexture2D(const std::string&)");
+			data = stbi_load(path.c_str(), &width, &height, &channels, 0);
+		}
 		RB_CORE_ASSERT(data, "Failed to load image!");
 		// stbi_load returns signed integers so we need to reassign everything
 		m_Width = width;
@@ -72,11 +80,15 @@ namespace rhombus {
 
 	OpenGLTexture2D::~OpenGLTexture2D()
 	{
+		RB_PROFILE_FUNCTION();
+
 		glDeleteTextures(1, &m_RendererID);
 	}
 
 	void OpenGLTexture2D::SetData(void* data, uint32_t size)
 	{
+		RB_PROFILE_FUNCTION();
+
 		uint32_t bytesPerPixel = m_DataFormat == GL_RGBA ? 4 : 3;
 		RB_CORE_ASSERT(size = m_Width * m_Height * bytesPerPixel, "Data must be entire texture!");
 		glTextureSubImage2D(m_RendererID, 0, 0, 0, m_Width, m_Height, m_DataFormat, GL_UNSIGNED_BYTE, data);
@@ -84,6 +96,8 @@ namespace rhombus {
 
 	void OpenGLTexture2D::Bind(uint32_t slot) const
 	{
+		RB_PROFILE_FUNCTION();
+
 		glBindTextureUnit(slot, m_RendererID);
 	}
 }

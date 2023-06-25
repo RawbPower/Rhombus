@@ -23,6 +23,8 @@ namespace rhombus {
 
 	void ImGuiLayer::OnAttach()
 	{
+		RB_PROFILE_FUNCTION();
+
 		// Setup Dear ImGui context
 		IMGUI_CHECKVERSION();
 		ImGui::CreateContext();
@@ -57,12 +59,17 @@ namespace rhombus {
 
 	void ImGuiLayer::OnDetach()
 	{
+		RB_PROFILE_FUNCTION();
+
 		ImGui_ImplOpenGL3_Shutdown();
 		ImGui_ImplSDL2_Shutdown();
 		ImGui::DestroyContext();
 	}
 
-	void ImGuiLayer::Begin() {
+	void ImGuiLayer::Begin() 
+	{
+		RB_PROFILE_FUNCTION();
+
 		Application& app = Application::Get();
 		SDL_Window* window = static_cast<SDL_Window*>(app.GetWindow().GetNativeWindow());
 
@@ -73,6 +80,8 @@ namespace rhombus {
 
 	void ImGuiLayer::End()
 	{
+		RB_PROFILE_FUNCTION();
+
 		ImGuiIO& io = ImGui::GetIO();
 		Application& app = Application::Get();
 		io.DisplaySize = ImVec2((float)app.GetWindow().GetWidth(), (float)app.GetWindow().GetHeight());

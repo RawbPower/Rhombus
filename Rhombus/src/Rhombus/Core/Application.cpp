@@ -17,6 +17,8 @@ namespace rhombus {
 
 	Application::Application()
 	{
+		RB_PROFILE_FUNCTION();
+
 		// Making application a singleton
 		RB_CORE_ASSERT(!s_Instance, "Application already exists!");
 		s_Instance = this;
@@ -30,18 +32,34 @@ namespace rhombus {
 		PushOverlay(m_ImGuiLayer);
 	}
 
+	// Look into this
+	/*Application::~Application()
+	{
+		RB_PROFILE_FUNCTION();
+
+		Renderer::Shutdown();
+	}*/
+
 	// Essentially a wrapper
 	void Application::PushLayer(Layer* layer)
 	{
+		RB_PROFILE_FUNCTION();
+
 		m_LayerStack.PushLayer(layer);
+		layer->OnAttach();
 	}
 
 	void Application::PushOverlay(Layer* overlay)
 	{
+		RB_PROFILE_FUNCTION();
+
 		m_LayerStack.PushOverlay(overlay);
+		overlay->OnAttach();
 	}
 
-	void Application::OnEvent(Event& e) {
+	void Application::OnEvent(Event& e) 
+	{
+		RB_PROFILE_FUNCTION();
 
 		// Dispatch events
 		EventDispatcher dispatcher(e);
@@ -68,23 +86,35 @@ namespace rhombus {
 
 	void Application::Run() 
 	{
+		RB_PROFILE_FUNCTION();
+
 		while (m_Running) 
 		{
+			RB_PROFILE_SCOPE("Run Loop");
+
 			float time = (float)SDL_GetTicks64()/1000.0f;			// Will be in Platform GetTime() in the future
 			DeltaTime deltaTime = time - m_LastFrameTime;
 			m_LastFrameTime = time;
 
 			if (!m_Minimised)
 			{
-				for (Layer* layer : m_LayerStack)
-					layer->OnUpdate(deltaTime);
-			}
+				{
+					RB_PROFILE_SCOPE("LayerStack OnUpdates");
 
-			// Render ImGui
-			m_ImGuiLayer->Begin();
-			for (Layer* layer : m_LayerStack)
-				layer->OnImGuiRender();
-			m_ImGuiLayer->End();
+					for (Layer* layer : m_LayerStack)
+						layer->OnUpdate(deltaTime);
+				}
+
+				// Render ImGui
+				m_ImGuiLayer->Begin();
+				{
+					RB_PROFILE_SCOPE("LayerStack OnImGuiRender");
+
+					for (Layer* layer : m_LayerStack)
+						layer->OnImGuiRender();
+				}
+				m_ImGuiLayer->End();
+			}
 
 			m_Window->OnUpdate();
 		}
@@ -98,6 +128,8 @@ namespace rhombus {
 
 	bool Application::OnWindowResize(WindowResizeEvent& e)
 	{
+		RB_PROFILE_FUNCTION();
+
 		if (e.GetWidth() == 0 || e.GetHeight() == 0)
 		{
 			m_Minimised = true;

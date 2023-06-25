@@ -21,6 +21,8 @@ private:
 	rhombus::Ref<rhombus::Shader> m_FlatColourShader;
 	rhombus::Ref<rhombus::VertexArray> m_SquareVA;
 
+	rhombus::Ref<rhombus::Texture2D> m_CheckerboardTexture;
+
 	rhombus::OrthographicCameraController m_CameraController;
 	glm::vec4 m_SquareColor = { 0.2f, 0.3f, 0.8f, 1.0f };
 

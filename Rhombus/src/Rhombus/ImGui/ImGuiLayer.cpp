@@ -91,15 +91,4 @@ namespace rhombus {
 			SDL_GL_MakeCurrent(backup_current_window, backup_current_context);
 		}
 	}
-	
-	void ImGuiLayer::OnImGuiRender()
-	{
-		static bool show = true;
-		ImGui::ShowDemoWindow(&show);
-
-		// These were put here so they are used for sandbox using the dll
-		//ImGui::Begin("");
-		//ImGui::End();
-	}
-
 }

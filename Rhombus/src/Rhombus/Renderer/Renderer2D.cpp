@@ -88,9 +88,19 @@ namespace rhombus
 		RB_PROFILE_FUNCTION();
 
 		// Need to add rotation between position and scale
-		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * glm::rotate(glm::mat4(1.0f), angle, glm::vec3(0.0f, 0.0f, 1.0f)) * glm::scale(glm::mat4(1.0f), { scale.x, scale.y, 1.0f });
+		glm::mat4 transform(1.0f);
+		if (abs(angle) > 0.001f)
+		{
+			glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * glm::rotate(glm::mat4(1.0f), angle, glm::vec3(0.0f, 0.0f, 1.0f)) * glm::scale(glm::mat4(1.0f), { scale.x, scale.y, 1.0f });
+		}
+		else
+		{
+			glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), { scale.x, scale.y, 1.0f });
+		}
+
 		s_Data->TextureShader->SetMat4("u_Transform", transform);
 		s_Data->TextureShader->SetFloat4("u_Color", color);
+		s_Data->TextureShader->SetFloat("u_TilingFactor", 1.0f);
 
 		s_Data->BlankTexture->Bind();
 
@@ -98,29 +108,38 @@ namespace rhombus
 		RenderCommand::DrawIndexed(s_Data->QuadVertexArray);
 	}
 
-	void Renderer2D::DrawQuad(const glm::vec2& position, const float& angle, const glm::vec2& scale, const Ref<Texture2D>& texture)
+	void Renderer2D::DrawQuad(const glm::vec2& position, const float& angle, const glm::vec2& scale, const Ref<Texture2D>& texture, float tilingFactor)
 	{
-		DrawQuad({ position.x, position.y, 0.0f }, angle, scale, texture);
+		DrawQuad({ position.x, position.y, 0.0f }, angle, scale, texture, tilingFactor);
 	}
 
-	void Renderer2D::DrawQuad(const glm::vec2& position, const float& angle, const glm::vec2& scale, const Ref<Texture2D>& texture, const glm::vec4& color)
+	void Renderer2D::DrawQuad(const glm::vec2& position, const float& angle, const glm::vec2& scale, const Ref<Texture2D>& texture, const glm::vec4& color, float tilingFactor)
 	{
-		DrawQuad({ position.x, position.y, 0.0f }, angle, scale, texture, color);
+		DrawQuad({ position.x, position.y, 0.0f }, angle, scale, texture, color, tilingFactor);
 	}
 
-	void Renderer2D::DrawQuad(const glm::vec3& position, const float& angle, const glm::vec2& scale, const Ref<Texture2D>& texture)
+	void Renderer2D::DrawQuad(const glm::vec3& position, const float& angle, const glm::vec2& scale, const Ref<Texture2D>& texture, float tilingFactor)
 	{
-		DrawQuad({ position.x, position.y, 0.0f }, angle, scale, texture, glm::vec4(1.0f));
+		DrawQuad({ position.x, position.y, 0.0f }, angle, scale, texture, glm::vec4(1.0f), tilingFactor);
 	}
 
-	void Renderer2D::DrawQuad(const glm::vec3& position, const float& angle, const glm::vec2& scale, const Ref<Texture2D>& texture, const glm::vec4& color)
+	void Renderer2D::DrawQuad(const glm::vec3& position, const float& angle, const glm::vec2& scale, const Ref<Texture2D>& texture, const glm::vec4& color, float tilingFactor)
 	{
 		RB_PROFILE_FUNCTION();
 
 		// Need to add rotation between position and scale
-		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * glm::rotate(glm::mat4(1.0f), angle, glm::vec3(0.0f, 0.0f, 1.0f)) * glm::scale(glm::mat4(1.0f), { scale.x, scale.y, 1.0f });
+		glm::mat4 transform(1.0f);
+		if (abs(angle) > 0.001f)
+		{
+			transform = glm::translate(glm::mat4(1.0f), position) * glm::rotate(glm::mat4(1.0f), angle, glm::vec3(0.0f, 0.0f, 1.0f)) * glm::scale(glm::mat4(1.0f), { scale.x, scale.y, 1.0f });
+		}
+		else
+		{
+			transform = glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), { scale.x, scale.y, 1.0f });
+		}
 		s_Data->TextureShader->SetMat4("u_Transform", transform);
 		s_Data->TextureShader->SetFloat4("u_Color", color);
+		s_Data->TextureShader->SetFloat("u_TilingFactor", tilingFactor);
 
 		texture->Bind();
 

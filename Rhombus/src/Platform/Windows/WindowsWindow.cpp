@@ -5,6 +5,8 @@
 #include "Rhombus/Events/MouseEvent.h"
 #include "Rhombus/Events/KeyEvent.h"
 
+#include "Rhombus/Renderer/Renderer.h"
+
 #include "Platform/OpenGL/OpenGLContext.h"
 
 namespace rhombus {
@@ -66,6 +68,11 @@ namespace rhombus {
 			// Also request a depth buffer
 			SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 			SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
+
+			#if defined(RB_DEBUG)
+				if (Renderer::GetAPI() == RendererAPI::API::OpenGL)
+					SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_DEBUG_FLAG);
+			#endif
 
 			//Create window
 			{

@@ -3,6 +3,9 @@
 !vendor/bin/premake/
 bin-int/
 
+# Rhombus files
+*.log
+
 # Files
 .vs/
 **.sln

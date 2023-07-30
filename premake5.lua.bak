@@ -142,11 +142,6 @@ project "Sandbox"
 	filter "system:windows"
 		systemversion "latest"
 
-		defines
-		{
-			"RB_PLATFORM_WINDOWS"
-		}
-
 	filter "configurations:Debug"
 		defines "RB_DEBUG"
 		runtime "Debug"

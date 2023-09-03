@@ -117,10 +117,16 @@ namespace rhombus {
 		virtual void SetLayout(const BufferLayout& layout) = 0;
 		virtual const BufferLayout& GetLayout() const = 0;
 
+		virtual void SetData(const void* data, uint32_t size) = 0;
+
 		// Use this instead of constructor
+		// Static Vertex Buffer
 		static VertexBuffer* Create(float* vertices, uint32_t size);
+		// Dyanmic Vertex Buffer
+		static VertexBuffer* Create(uint32_t size);
 	};
 
+	// Only supports 32 bit inde buffers
 	class IndexBuffer 
 	{
 	public:

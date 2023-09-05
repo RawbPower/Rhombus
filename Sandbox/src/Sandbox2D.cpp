@@ -40,6 +40,14 @@ void Sandbox2D::OnUpdate(rhombus::DeltaTime dt)
 
 	{
 		RB_PROFILE_SCOPE("Renderer Draw");
+
+		rhombus::Renderer2D::BeginScene(m_CameraController.GetCamera());
+		rhombus::Renderer2D::DrawQuad({ 0.5f, -0.5f }, 3.14f / 3.0f, { 0.5, 0.75 }, { 0.3f, 0.1f, 0.8f, 1.0f });
+		rhombus::Renderer2D::DrawQuad({ 0.0f, 0.0f, 0.1f }, 3.14f / 4.0f, { 1.0, 1.0 }, m_CheckerboardTexture, 20.0f);
+		rhombus::Renderer2D::DrawQuad({ 0.0f, 0.0f, -0.1f }, 0.0f, { 10.0, 10.0 }, m_CheckerboardTexture, 10.0f);
+		rhombus::Renderer2D::DrawQuad({ -1.0f, 0.0f }, 0.0f, { 0.8, 0.8 }, { 0.8f, 0.2f, 0.3f, 1.0f });
+		rhombus::Renderer2D::EndScene();
+
 		rhombus::Renderer2D::BeginScene(m_CameraController.GetCamera());
 		for (float y = -5.0f; y < 5.0f; y += 0.5f)
 		{
@@ -49,13 +57,6 @@ void Sandbox2D::OnUpdate(rhombus::DeltaTime dt)
 				rhombus::Renderer2D::DrawQuad({ x, y }, 0.0f, { 0.45, 0.45 }, color);
 			}
 		}
-		rhombus::Renderer2D::EndScene();
-
-		rhombus::Renderer2D::BeginScene(m_CameraController.GetCamera());
-		rhombus::Renderer2D::DrawQuad({ -1.0f, 0.0f }, 0.0f, { 0.8, 0.8 }, { 0.8f, 0.2f, 0.3f, 1.0f });
-		rhombus::Renderer2D::DrawQuad({ 0.5f, -0.5f }, 3.14f / 3.0f, { 0.5, 0.75 }, { 0.3f, 0.1f, 0.8f, 0.1f });
-		rhombus::Renderer2D::DrawQuad({ 0.0f, 0.0f, 0.0f }, 3.14f / 4.0f, { 1.0, 1.0 }, m_CheckerboardTexture, 20.0f);
-		rhombus::Renderer2D::DrawQuad({ 0.0f, 0.0f, 0.0f }, 0.0f, { 10.0, 10.0 }, { 1.0f, 1.0f, 1.0f, 1.0f });
 		rhombus::Renderer2D::EndScene();
 	}
 }

@@ -231,7 +231,7 @@ namespace rhombus
 
 	void Renderer2D::DrawQuad(const glm::vec3& position, const float& angle, const glm::vec2& scale, const Ref<Texture2D>& texture, float tilingFactor)
 	{
-		DrawQuad({ position.x, position.y, 0.0f }, angle, scale, texture, glm::vec4(1.0f), tilingFactor);
+		DrawQuad(position, angle, scale, texture, glm::vec4(1.0f), tilingFactor);
 	}
 
 	void Renderer2D::DrawQuad(const glm::vec3& position, const float& angle, const glm::vec2& scale, const Ref<Texture2D>& texture, const glm::vec4& color, float tilingFactor)

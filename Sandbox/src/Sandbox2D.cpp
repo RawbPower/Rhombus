@@ -46,6 +46,7 @@ void Sandbox2D::OnUpdate(rhombus::DeltaTime dt)
 		rhombus::Renderer2D::DrawQuad({ 0.0f, 0.0f, 0.1f }, 3.14f / 4.0f, { 1.0, 1.0 }, m_CheckerboardTexture, 20.0f);
 		rhombus::Renderer2D::DrawQuad({ 0.0f, 0.0f, -0.1f }, 0.0f, { 10.0, 10.0 }, m_CheckerboardTexture, 10.0f);
 		rhombus::Renderer2D::DrawQuad({ -1.0f, 0.0f }, 0.0f, { 0.8, 0.8 }, { 0.8f, 0.2f, 0.3f, 1.0f });
+		rhombus::Renderer2D::SetFPDStat(dt);
 		rhombus::Renderer2D::EndScene();
 
 		rhombus::Renderer2D::BeginScene(m_CameraController.GetCamera());
@@ -57,6 +58,7 @@ void Sandbox2D::OnUpdate(rhombus::DeltaTime dt)
 				rhombus::Renderer2D::DrawQuad({ x, y }, 0.0f, { 0.45, 0.45 }, color);
 			}
 		}
+		rhombus::Renderer2D::SetFPDStat(dt);
 		rhombus::Renderer2D::EndScene();
 	}
 }
@@ -73,6 +75,7 @@ void Sandbox2D::OnImGuiRender()
 	ImGui::Text("Quads: %d", stats.QuadCount);
 	ImGui::Text("Vertices: %d", stats.GetTotalVertexCount());
 	ImGui::Text("Indices: %d", stats.GetTotalIndexCount());
+	ImGui::Text("FPS: %f", stats.FPS);
 
 	ImGui::ColorEdit4("Square Color", glm::value_ptr(m_SquareColor));
 

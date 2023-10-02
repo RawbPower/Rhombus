@@ -170,7 +170,7 @@ namespace rhombus {
 					if (e.window.event == SDL_WINDOWEVENT_SIZE_CHANGED)
 					{
 						// Don't call this until we update the rendering context
-						/*float width = e.window.data1;
+						float width = e.window.data1;
 						float height = e.window.data2;
 						m_Data.Width = width;
 						m_Data.Height = height;
@@ -178,7 +178,7 @@ namespace rhombus {
 						WindowResizeEvent event(width, height);
 						RB_CORE_WARN("{0}, {1}", width, height);
 						// Dispatch it
-						m_Data.EventCallback(event);*/
+						m_Data.EventCallback(event);
 					}
 					break;
 				}

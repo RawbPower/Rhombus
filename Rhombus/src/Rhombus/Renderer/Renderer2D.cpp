@@ -317,4 +317,9 @@ namespace rhombus
 	{
 		return s_Data.Stats;
 	}
+
+	void Renderer2D::SetFPDStat(float dt)
+	{
+		s_Data.Stats.FPS = dt > 0.0f ? 1.0f/dt : 0.0f;
+	}
 }

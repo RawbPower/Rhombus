@@ -27,6 +27,7 @@ namespace rhombus
 		{
 			uint32_t DrawCalls = 0;
 			uint32_t QuadCount = 0;
+			float FPS = 0.0f;
 
 			uint32_t GetTotalVertexCount() { return QuadCount * 4; }
 			uint32_t GetTotalIndexCount() { return QuadCount * 6; }
@@ -34,6 +35,7 @@ namespace rhombus
 
 		static void ResetStats();
 		static Statistics GetStats();
+		static void SetFPDStat(float dt);
 
 	private:
 		static void FlushAndReset();

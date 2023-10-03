@@ -16,11 +16,12 @@ void Sandbox2D::OnAttach()
 	RB_PROFILE_FUNCTION();
 
 	m_CheckerboardTexture = rhombus::Texture2D::Create("assets/textures/Checkerboard.png");
+	m_SpriteSheet = rhombus::Texture2D::Create("assets/PocketRPG/Pocket_RPG_v5/Pocket_RPG_v3/Indoors_misc.png");
 
 	// Init particles
 	m_Particle.colorBegin = { 254 / 255.0f, 212 / 255.0f, 123 / 255.0f, 1.0f };
 	m_Particle.colorEnd = { 254 / 255.0f, 109 / 255.0f, 41 / 255.0f, 1.0f };
-	m_Particle.sizeBegin = 0.5f, m_Particle.sizeVariation = 0.3f, m_Particle.sizeEnd = 0.0f;
+	m_Particle.sizeBegin = 0.5f, m_Particle.sizeVariation = 0.0f, m_Particle.sizeEnd = 0.5f;
 	m_Particle.lifetime = 1.0f;
 	m_Particle.velocity = { 0.0f, 0.0f };
 	m_Particle.velocityVariation = { 3.0f, 1.0f };
@@ -47,12 +48,16 @@ void Sandbox2D::OnUpdate(rhombus::DeltaTime dt)
 		rhombus::RenderCommand::Clear();
 	}
 
+#if 0
 	{
+		static float rotation = 0.0f;
+		rotation += dt * 50.0f;
+
 		RB_PROFILE_SCOPE("Renderer Draw");
 
 		rhombus::Renderer2D::BeginScene(m_CameraController.GetCamera());
 		rhombus::Renderer2D::DrawQuad({ 0.5f, -0.5f }, 3.14f / 3.0f, { 0.5, 0.75 }, { 0.3f, 0.1f, 0.8f, 1.0f });
-		rhombus::Renderer2D::DrawQuad({ 0.0f, 0.0f, 0.1f }, 3.14f / 4.0f, { 1.0, 1.0 }, m_CheckerboardTexture, 20.0f);
+		rhombus::Renderer2D::DrawQuad({ 0.0f, 0.0f, 0.1f }, glm::radians(rotation), { 1.0, 1.0 }, m_CheckerboardTexture, 20.0f);
 		rhombus::Renderer2D::DrawQuad({ 0.0f, 0.0f, -0.1f }, 0.0f, { 10.0, 10.0 }, m_CheckerboardTexture, 10.0f);
 		rhombus::Renderer2D::DrawQuad({ -1.0f, 0.0f }, 0.0f, { 0.8, 0.8 }, { 0.8f, 0.2f, 0.3f, 1.0f });
 		rhombus::Renderer2D::SetFPDStat(dt);
@@ -70,8 +75,9 @@ void Sandbox2D::OnUpdate(rhombus::DeltaTime dt)
 		rhombus::Renderer2D::SetFPDStat(dt);
 		rhombus::Renderer2D::EndScene();
 	}
+#endif
 
-	if (rhombus::Input::IsMouseButtonPressed(RB_MOUSE_BUTTON_RIGHT))
+	if (rhombus::Input::IsMouseButtonPressed(RB_MOUSE_BUTTON_LEFT))
 	{
 		auto [x, y] = rhombus::Input::GetMousePosition();
 		auto width = rhombus::Application::Get().GetWindow().GetWidth();
@@ -82,7 +88,7 @@ void Sandbox2D::OnUpdate(rhombus::DeltaTime dt)
 		x = (x / width) * bounds.GetWidth() - bounds.GetWidth() * 0.5f;
 		y = bounds.GetHeight() * 0.5f - (y / height) * bounds.GetHeight();
 		m_Particle.position = { x + pos.x, y + pos.y };
-		for (int i = 0; i < 5; i++)
+		for (int i = 0; i < 1; i++)
 		{
 			m_ParticleSystem.Emit(m_Particle);
 		}
@@ -90,6 +96,10 @@ void Sandbox2D::OnUpdate(rhombus::DeltaTime dt)
 
 	m_ParticleSystem.OnUpdate(dt);
 	m_ParticleSystem.OnRender(m_CameraController.GetCamera());
+
+	rhombus::Renderer2D::BeginScene(m_CameraController.GetCamera());
+	rhombus::Renderer2D::DrawQuad({ 0.0f, 0.0f, 0.0f }, 0.0f, { 1.0, 1.0 }, m_SpriteSheet);
+	rhombus::Renderer2D::EndScene();
 }
 
 void Sandbox2D::OnImGuiRender()

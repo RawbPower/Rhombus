@@ -50,6 +50,7 @@ namespace rhombus {
 		// Disable depth test and face culling.
 		glDisable(GL_DEPTH_TEST);
 		glDisable(GL_CULL_FACE);
+		glDisable(GL_SCISSOR_TEST);
 	}
 
 	void OpenGLContext::SwapBuffers() 

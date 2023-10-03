@@ -66,11 +66,12 @@ namespace rhombus {
 			SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 6);
 			SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
 			// Also request a depth buffer
-			SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 5);
-			SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 5);
-			SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 5);
-			SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-			SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 16);
+			SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
+			SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
+			SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
+			SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
+			SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 0);
+			//SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 16);
 
 			#if defined(RB_DEBUG)
 				if (Renderer::GetAPI() == RendererAPI::API::OpenGL)

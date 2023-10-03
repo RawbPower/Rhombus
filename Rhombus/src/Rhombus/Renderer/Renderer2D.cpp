@@ -238,6 +238,10 @@ namespace rhombus
 	{
 		RB_PROFILE_FUNCTION();
 
+		constexpr float x = 7.0f, y = 2.0f;
+		constexpr float sheetWidth = 224.0f, sheetHeight = 192.0f;
+		constexpr float spriteWidth = 16.0f, spriteHeight = 16.0f;
+
 		if (s_Data.QuadIndexCount >= Renderer2DData::MaxIndices)
 		{
 			FlushAndReset();
@@ -274,7 +278,8 @@ namespace rhombus
 		// Bottom Left
 		s_Data.QuadVertexBufferPtr->Position = transform * s_Data.QuadVertexPosition[0];
 		s_Data.QuadVertexBufferPtr->Color = color;
-		s_Data.QuadVertexBufferPtr->TexCoord = { 0.0f, 0.0f };
+		//s_Data.QuadVertexBufferPtr->TexCoord = { 0.0f, 0.0f };
+		s_Data.QuadVertexBufferPtr->TexCoord = { (x * spriteWidth) / sheetWidth, (y * spriteHeight) / sheetHeight };
 		s_Data.QuadVertexBufferPtr->TextureIndex = textureIndex;
 		s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
 		s_Data.QuadVertexBufferPtr++;
@@ -282,7 +287,8 @@ namespace rhombus
 		// Bottom Right
 		s_Data.QuadVertexBufferPtr->Position = transform * s_Data.QuadVertexPosition[1];
 		s_Data.QuadVertexBufferPtr->Color = color;
-		s_Data.QuadVertexBufferPtr->TexCoord = { 1.0f, 0.0f };
+		//s_Data.QuadVertexBufferPtr->TexCoord = { 1.0f, 0.0f };
+		s_Data.QuadVertexBufferPtr->TexCoord = { ((x+1.0f) * spriteWidth)/sheetWidth, (y * spriteHeight) / sheetHeight };
 		s_Data.QuadVertexBufferPtr->TextureIndex = textureIndex;
 		s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
 		s_Data.QuadVertexBufferPtr++;
@@ -290,7 +296,8 @@ namespace rhombus
 		// Top Right
 		s_Data.QuadVertexBufferPtr->Position = transform * s_Data.QuadVertexPosition[2];
 		s_Data.QuadVertexBufferPtr->Color = color;
-		s_Data.QuadVertexBufferPtr->TexCoord = { 1.0f, 1.0f };
+		//s_Data.QuadVertexBufferPtr->TexCoord = { 1.0f, 1.0f };
+		s_Data.QuadVertexBufferPtr->TexCoord = { ((x+1.0f) * spriteWidth) / sheetWidth, ((y+1.0f) * spriteHeight) / sheetHeight };
 		s_Data.QuadVertexBufferPtr->TextureIndex = textureIndex;
 		s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
 		s_Data.QuadVertexBufferPtr++;
@@ -298,7 +305,8 @@ namespace rhombus
 		// Top Left
 		s_Data.QuadVertexBufferPtr->Position = transform * s_Data.QuadVertexPosition[3];
 		s_Data.QuadVertexBufferPtr->Color = color;
-		s_Data.QuadVertexBufferPtr->TexCoord = { 0.0f, 1.0f };
+		//s_Data.QuadVertexBufferPtr->TexCoord = { 0.0f, 1.0f };
+		s_Data.QuadVertexBufferPtr->TexCoord = { (x * spriteWidth) / sheetWidth, ((y+1.0f) * spriteHeight) / sheetHeight };
 		s_Data.QuadVertexBufferPtr->TextureIndex = textureIndex;
 		s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
 		s_Data.QuadVertexBufferPtr++;

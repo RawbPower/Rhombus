@@ -12,6 +12,7 @@ ParticleSystem::ParticleSystem(uint32_t maxParticles)
 
 void ParticleSystem::OnUpdate(rhombus::DeltaTime dt)
 {
+	m_isAnyParticleActive = false;
 	for (auto& particle : m_particlePool)
 	{
 		if (!particle.active)
@@ -25,6 +26,8 @@ void ParticleSystem::OnUpdate(rhombus::DeltaTime dt)
 			continue;
 		}
 
+		m_isAnyParticleActive = true;
+
 		particle.lifeRemaining -= dt;
 		particle.position += particle.velocity * (float)dt;
 		particle.rotation += 0.01f * dt;
@@ -33,23 +36,26 @@ void ParticleSystem::OnUpdate(rhombus::DeltaTime dt)
 
 void ParticleSystem::OnRender(rhombus::OrthographicCamera& camera)
 {
-	rhombus::Renderer2D::BeginScene(camera);
-	for (auto& particle : m_particlePool)
+	if (m_isAnyParticleActive)
 	{
-		if (!particle.active)
+		rhombus::Renderer2D::BeginScene(camera);
+		for (auto& particle : m_particlePool)
 		{
-			continue;
+			if (!particle.active)
+			{
+				continue;
+			}
+
+			// Fade away particles
+			float life = particle.lifeRemaining / particle.lifetime;
+			glm::vec4 color = glm::lerp(particle.colorEnd, particle.colorBegin, life);
+
+			float size = glm::lerp(particle.sizeEnd, particle.sizeBegin, life);
+			glm::vec3 particlePosition = { particle.position.x, particle.position.y, 0.2f };
+			rhombus::Renderer2D::DrawQuad(particlePosition, particle.rotation, { size, size }, color);
 		}
-
-		// Fade away particles
-		float life = particle.lifeRemaining / particle.lifetime;
-		glm::vec4 color = glm::lerp(particle.colorEnd, particle.colorBegin, life);
-
-		float size = glm::lerp(particle.sizeEnd, particle.sizeBegin, life);
-		glm::vec3 particlePosition = { particle.position.x, particle.position.y, 0.2f };
-		rhombus::Renderer2D::DrawQuad(particlePosition, particle.rotation, { size, size }, color);
+		rhombus::Renderer2D::EndScene();
 	}
-	rhombus::Renderer2D::EndScene();
 }
 
 void ParticleSystem::Emit(const ParticleParams& params)

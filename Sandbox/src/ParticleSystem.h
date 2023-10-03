@@ -37,4 +37,5 @@ private:
 
 	std::vector<Particle> m_particlePool;
 	uint32_t m_poolIndex;
+	bool m_isAnyParticleActive = false;
 };

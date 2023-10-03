@@ -25,7 +25,7 @@ namespace rhombus
 		SDL_PumpEvents();  // make sure we have the latest mouse state.
 		b = SDL_GetMouseState(&x, &y);
 
-		return (b & button) != 0;
+		return (b & SDL_BUTTON(button)) != 0;
 	}
 
 	std::pair<float, float> WindowsInput::GetMousePositionImpl()

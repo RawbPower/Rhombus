@@ -15,6 +15,7 @@
 
 #include "Rhombus/Core/Log.h"
 #include "Rhombus/Debug/Instrumentor.h"
+#include "Rhombus/Core/Random.h"
 
 #ifdef RB_PLATFORM_WINDOWS
 	#include <Windows.h>

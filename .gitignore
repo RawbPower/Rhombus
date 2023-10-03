@@ -12,3 +12,5 @@ bin-int/
 **.vcxproj
 **.vcxproj.filters
 **.vcxproj.user
+Sandbox/RhombusProfile-Runtime.json
+Sandbox/RhombusProfile-Startup.json

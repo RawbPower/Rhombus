@@ -61,12 +61,22 @@
 #endif
 
 #ifdef RB_DEBUG
+	#if defined(RB_PLATFORM_WINDOWS)
+		#define RB_DEBUGBREAK() __debugbreak()
+	#elif defined(RB_PLATFORM_LINUX)
+		#include <signal.h>
+		#define RB_DEBUGBREAK() raise(SIGTRAP)
+	#else
+		#error "Platform doesn't support debugbreak yet!"
+	#endif
 	#define RB_ENABLE_ASSERTS
+#else
+	#define RB_DEBUGBREAK()
 #endif
 
 #ifdef RB_ENABLE_ASSERTS
-	#define RB_ASSERT(x, ...) { if(!(x)) { RB_ERROR("Assertion Failed: {0}", __VA_ARGS__); __debugbreak(); } }
-	#define RB_CORE_ASSERT(x, ...) { if(!(x)) { RB_CORE_ERROR("Assertion Failed: {0}", __VA_ARGS__); __debugbreak(); } }
+	#define RB_ASSERT(x, ...) { if(!(x)) { RB_ERROR("Assertion Failed: {0}", __VA_ARGS__); RB_DEBUGBREAK(); } }
+	#define RB_CORE_ASSERT(x, ...) { if(!(x)) { RB_CORE_ERROR("Assertion Failed: {0}", __VA_ARGS__); RB_DEBUGBREAK(); } }
 #else
 	#define RB_ASSERT(x, ...)
 	#define RB_CORE_ASSERT(x, ...)

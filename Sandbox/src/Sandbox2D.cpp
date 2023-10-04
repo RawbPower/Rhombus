@@ -6,7 +6,7 @@
 #include <glm/gtc/type_ptr.hpp>
 
 Sandbox2D::Sandbox2D()
-	: Layer("Sandbox2D"), m_CameraController(960.0f / 540.0f, true)
+	: Layer("Sandbox2D"), m_CameraController(960.0f / 540.0f, true), m_SquareColor({ 0.2f, 0.3f, 0.8f, 1.0f })
 {
 
 }
@@ -21,7 +21,7 @@ void Sandbox2D::OnAttach()
 	// Init particles
 	m_Particle.colorBegin = { 254 / 255.0f, 212 / 255.0f, 123 / 255.0f, 1.0f };
 	m_Particle.colorEnd = { 254 / 255.0f, 109 / 255.0f, 41 / 255.0f, 1.0f };
-	m_Particle.sizeBegin = 0.5f, m_Particle.sizeVariation = 0.0f, m_Particle.sizeEnd = 0.5f;
+	m_Particle.sizeBegin = 0.5f, m_Particle.sizeVariation = 0.3f, m_Particle.sizeEnd = 0.0f;
 	m_Particle.lifetime = 1.0f;
 	m_Particle.velocity = { 0.0f, 0.0f };
 	m_Particle.velocityVariation = { 3.0f, 1.0f };

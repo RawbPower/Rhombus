@@ -52,8 +52,8 @@ namespace rhombus {
 				case ShaderDataType::Float2:	return 2;
 				case ShaderDataType::Float3:	return 3;
 				case ShaderDataType::Float4:	return 4;
-				case ShaderDataType::Mat3:		return 3 * 3;
-				case ShaderDataType::Mat4:		return 4 * 4;
+				case ShaderDataType::Mat3:		return 3; // 3* float3
+				case ShaderDataType::Mat4:		return 4; // 4* float4
 				case ShaderDataType::Int:		return 1;
 				case ShaderDataType::Int2:		return 2;
 				case ShaderDataType::Int3:		return 3;
@@ -121,9 +121,9 @@ namespace rhombus {
 
 		// Use this instead of constructor
 		// Static Vertex Buffer
-		static VertexBuffer* Create(float* vertices, uint32_t size);
+		static Ref<VertexBuffer> Create(float* vertices, uint32_t size);
 		// Dyanmic Vertex Buffer
-		static VertexBuffer* Create(uint32_t size);
+		static Ref<VertexBuffer> Create(uint32_t size);
 	};
 
 	// Only supports 32 bit inde buffers
@@ -138,7 +138,7 @@ namespace rhombus {
 		virtual uint32_t GetCount() const = 0;
 
 		// Use this instead of constructor
-		static IndexBuffer* Create(uint32_t* indices, uint32_t count);
+		static Ref<IndexBuffer> Create(uint32_t* indices, uint32_t count);
 	};
 
 }

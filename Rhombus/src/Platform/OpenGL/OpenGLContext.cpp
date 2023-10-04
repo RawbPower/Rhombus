@@ -2,7 +2,6 @@
 #include "OpenGLContext.h"
 
 #include <glad/glad.h>
-#include <GL/GL.h>
 #include <SDL.h>
 #include <SDL_opengl.h>
 

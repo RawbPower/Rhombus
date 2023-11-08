@@ -5,6 +5,21 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+static const uint32_t s_MapWidth = 16;
+static const char* s_MapTiles =
+"BBBBBBBBBBBBBBBB"
+"BBBBBBBBBBBBBBBB"
+"BBBBBBBBBBBBBBBB"
+"BBBBFFFFFFFFBBBB"
+"BBBBFFFFFFFFBBBB"
+"BBBBFFFFFFFFBBBB"
+"BBBBFFFFFFFFBBBB"
+"BBBBFFFFFFFFBBBB"
+"BBBBFFFFFFFFBBBB"
+"BBBBBBBBBBBBBBBB"
+"BBBBBBBBBBBBBBBB"
+"BBBBBBBBBBBBBBBB";
+
 Sandbox2D::Sandbox2D()
 	: Layer("Sandbox2D"), m_CameraController(960.0f / 540.0f, true), m_SquareColor({ 0.2f, 0.3f, 0.8f, 1.0f })
 {
@@ -24,6 +39,12 @@ void Sandbox2D::OnAttach()
 	m_TextureDoor = rhombus::SubTexture2D::CreateFromCoords(m_SpriteSheetIndoor, { 4, 0 }, { 16, 16 });
 	m_TextureVendingMachine = rhombus::SubTexture2D::CreateFromCoords(m_SpriteSheetOutdoor, { 4, 2 }, { 16, 16 }, { 1, 2 });
 
+	m_MapWidth = s_MapWidth;
+	m_MapHeight = strlen(s_MapTiles) / m_MapWidth;
+
+	m_TextureMap['F'] = rhombus::SubTexture2D::CreateFromCoords(m_SpriteSheetIndoor, { 0, 4 }, { 16, 16 });
+	m_TextureMap['B'] = rhombus::SubTexture2D::CreateFromCoords(m_SpriteSheetIndoor, { 5, 8 }, { 16, 16 });
+
 	// Init particles
 	m_Particle.colorBegin = { 254 / 255.0f, 212 / 255.0f, 123 / 255.0f, 1.0f };
 	m_Particle.colorEnd = { 254 / 255.0f, 109 / 255.0f, 41 / 255.0f, 1.0f };
@@ -32,6 +53,8 @@ void Sandbox2D::OnAttach()
 	m_Particle.velocity = { 0.0f, 0.0f };
 	m_Particle.velocityVariation = { 3.0f, 1.0f };
 	m_Particle.position = { 0.0f, 0.0f };
+
+	m_CameraController.SetZoomLevel(5.0f);
 }
 
 void Sandbox2D::OnDetach()
@@ -104,9 +127,19 @@ void Sandbox2D::OnUpdate(rhombus::DeltaTime dt)
 	m_ParticleSystem.OnRender(m_CameraController.GetCamera());
 
 	rhombus::Renderer2D::BeginScene(m_CameraController.GetCamera());
-	rhombus::Renderer2D::DrawQuad({ 0.0f, 0.0f, 0.0f }, 0.0f, { 1.0, 1.0 }, m_TextureStairs);
-	rhombus::Renderer2D::DrawQuad({ 1.0f, 0.0f, 0.0f }, 0.0f, { 1.0, 1.0 }, m_TextureDoor);
-	rhombus::Renderer2D::DrawQuad({ -1.0f, 0.0f, 0.0f }, 0.0f, { 1.0, 2.0 }, m_TextureVendingMachine);
+
+	for (uint32_t y = 0; y < m_MapHeight; y++)
+	{
+		for (uint32_t x = 0; x < m_MapWidth; x++)
+		{
+			char tileType = s_MapTiles[x + y * m_MapWidth];
+			rhombus::Renderer2D::DrawQuad({ x - m_MapWidth * 0.5f, m_MapHeight - y - m_MapHeight * 0.5f, 0.0f }, 0.0f, { 1.0, 1.0 }, m_TextureMap[tileType]);
+		}
+	}
+
+	//rhombus::Renderer2D::DrawQuad({ 0.0f, 0.0f, 0.0f }, 0.0f, { 1.0, 1.0 }, m_TextureStairs);
+	//rhombus::Renderer2D::DrawQuad({ 1.0f, 0.0f, 0.0f }, 0.0f, { 1.0, 1.0 }, m_TextureDoor);
+	//rhombus::Renderer2D::DrawQuad({ -1.0f, 0.0f, 0.0f }, 0.0f, { 1.0, 2.0 }, m_TextureVendingMachine);
 	rhombus::Renderer2D::EndScene();
 }
 

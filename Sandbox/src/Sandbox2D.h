@@ -32,4 +32,7 @@ private:
 
 	ParticleSystem m_ParticleSystem;
 	ParticleParams m_Particle;
+
+	uint32_t m_MapWidth, m_MapHeight;
+	std::unordered_map<char, rhombus::Ref<rhombus::SubTexture2D>> m_TextureMap;
 };

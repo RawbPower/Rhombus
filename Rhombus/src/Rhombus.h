@@ -23,6 +23,7 @@
 #include "Rhombus/Renderer/Buffer.h"
 #include "Rhombus/Renderer/Shader.h"
 #include "Rhombus/Renderer/Texture.h"
+#include "Rhombus/Renderer/SubTexture2D.h"
 #include "Rhombus/Renderer/VertexArray.h"
 
 #include "Rhombus/Renderer/OrthographicCamera.h"

@@ -23,8 +23,9 @@ private:
 	rhombus::Ref<rhombus::Shader> m_FlatColourShader;
 	rhombus::Ref<rhombus::VertexArray> m_SquareVA;
 
-	rhombus::Ref<rhombus::Texture2D> m_CheckerboardTexture;
-	rhombus::Ref<rhombus::Texture2D> m_SpriteSheet;
+	rhombus::Ref<rhombus::Texture2D> m_CheckerboardTexture, m_LogoTexture;
+	rhombus::Ref<rhombus::Texture2D> m_SpriteSheetIndoor, m_SpriteSheetOutdoor;
+	rhombus::Ref<rhombus::SubTexture2D> m_TextureStairs, m_TextureDoor, m_TextureVendingMachine;
 
 	rhombus::OrthographicCameraController m_CameraController;
 	glm::vec4 m_SquareColor = { 0.2f, 0.3f, 0.8f, 1.0f };

@@ -2,6 +2,7 @@
 
 #include "OrthographicCamera.h"
 #include "Texture.h"
+#include "SubTexture2D.h"
 
 namespace rhombus
 {
@@ -19,9 +20,12 @@ namespace rhombus
 		static void DrawQuad(const glm::vec2& position, const float& angle, const glm::vec2& scale, const glm::vec4& color);
 		static void DrawQuad(const glm::vec3& position, const float& angle, const glm::vec2& scale, const glm::vec4& color);
 		static void DrawQuad(const glm::vec2& position, const float& angle, const glm::vec2& scale, const Ref<Texture2D>& texture, float tilingFactor = 1.0f);
-		static void DrawQuad(const glm::vec2& position, const float& angle, const glm::vec2& scale, const Ref<Texture2D>& texture, const glm::vec4& color, float tilingFactor = 1.0f);
+		static void DrawQuad(const glm::vec2& position, const float& angle, const glm::vec2& scale, const Ref<Texture2D>& texture, const glm::vec4& color = glm::vec4(1.0f), float tilingFactor = 1.0f);
+		static void DrawQuad(const glm::vec2& position, const float& angle, const glm::vec2& scale, const Ref<SubTexture2D>& subTexture, const glm::vec4& color = glm::vec4(1.0f), float tilingFactor = 1.0f);
 		static void DrawQuad(const glm::vec3& position, const float& angle, const glm::vec2& scale, const Ref<Texture2D>& texture, float tilingFactor = 1.0f);
+		static void DrawQuad(const glm::vec3& position, const float& angle, const glm::vec2& scale, const Ref<SubTexture2D>& subTexture, float tilingFactor = 1.0f);
 		static void DrawQuad(const glm::vec3& position, const float& angle, const glm::vec2& scale, const Ref<Texture2D>& texture, const glm::vec4& color, float tilingFactor = 1.0f);
+		static void DrawQuad(const glm::vec3& position, const float& angle, const glm::vec2& scale, const Ref<SubTexture2D>& subTexture, const glm::vec4& color, float tilingFactor = 1.0f);
 
 		struct Statistics
 		{

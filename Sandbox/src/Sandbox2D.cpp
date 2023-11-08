@@ -16,7 +16,13 @@ void Sandbox2D::OnAttach()
 	RB_PROFILE_FUNCTION();
 
 	m_CheckerboardTexture = rhombus::Texture2D::Create("assets/textures/Checkerboard.png");
-	m_SpriteSheet = rhombus::Texture2D::Create("assets/PocketRPG/Pocket_RPG_v5/Pocket_RPG_v3/Indoors_misc.png");
+	m_LogoTexture = rhombus::Texture2D::Create("assets/textures/ChernoLogo.png");
+	m_SpriteSheetIndoor = rhombus::Texture2D::Create("assets/PocketRPG/Pocket_RPG_v5/Pocket_RPG_v3/Indoors_misc.png");
+	m_SpriteSheetOutdoor = rhombus::Texture2D::Create("assets/PocketRPG/Pocket_RPG_v5/Pocket_RPG_v3/Outdoors_misc.png");
+
+	m_TextureStairs = rhombus::SubTexture2D::CreateFromCoords(m_SpriteSheetIndoor, { 7, 2 }, { 16, 16 });
+	m_TextureDoor = rhombus::SubTexture2D::CreateFromCoords(m_SpriteSheetIndoor, { 4, 0 }, { 16, 16 });
+	m_TextureVendingMachine = rhombus::SubTexture2D::CreateFromCoords(m_SpriteSheetOutdoor, { 4, 2 }, { 16, 16 }, { 1, 2 });
 
 	// Init particles
 	m_Particle.colorBegin = { 254 / 255.0f, 212 / 255.0f, 123 / 255.0f, 1.0f };
@@ -98,7 +104,9 @@ void Sandbox2D::OnUpdate(rhombus::DeltaTime dt)
 	m_ParticleSystem.OnRender(m_CameraController.GetCamera());
 
 	rhombus::Renderer2D::BeginScene(m_CameraController.GetCamera());
-	rhombus::Renderer2D::DrawQuad({ 0.0f, 0.0f, 0.0f }, 0.0f, { 1.0, 1.0 }, m_SpriteSheet);
+	rhombus::Renderer2D::DrawQuad({ 0.0f, 0.0f, 0.0f }, 0.0f, { 1.0, 1.0 }, m_TextureStairs);
+	rhombus::Renderer2D::DrawQuad({ 1.0f, 0.0f, 0.0f }, 0.0f, { 1.0, 1.0 }, m_TextureDoor);
+	rhombus::Renderer2D::DrawQuad({ -1.0f, 0.0f, 0.0f }, 0.0f, { 1.0, 2.0 }, m_TextureVendingMachine);
 	rhombus::Renderer2D::EndScene();
 }
 

@@ -30,7 +30,7 @@ namespace rhombus {
 	{
 		RB_PROFILE_FUNCTION();
 
-#ifdef HZ_DEBUG
+#ifdef RB_DEBUG
 		glEnable(GL_DEBUG_OUTPUT);
 		glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
 		glDebugMessageCallback(OpenGLMessageCallback, nullptr);

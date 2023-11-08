@@ -30,7 +30,7 @@ namespace rhombus {
 	{
 		RB_PROFILE_FUNCTION();
 
-		const GLubyte* glversion = glGetString(GL_VERSION);
+		//const GLubyte* glversion = glGetString(GL_VERSION);
 		glCreateVertexArrays(1, &m_RendererID);
 	}
 

@@ -42,7 +42,7 @@ void Sandbox2D::OnAttach()
 	m_MapWidth = s_MapWidth;
 	m_MapHeight = strlen(s_MapTiles) / m_MapWidth;
 
-	m_TextureMap['F'] = rhombus::SubTexture2D::CreateFromCoords(m_SpriteSheetIndoor, { 0, 4 }, { 16, 16 });
+	m_TextureMap['F'] = rhombus::SubTexture2D::CreateFromCoords(m_SpriteSheetIndoor, { 0, 5 }, { 16, 16 });
 	m_TextureMap['B'] = rhombus::SubTexture2D::CreateFromCoords(m_SpriteSheetIndoor, { 5, 8 }, { 16, 16 });
 
 	// Init particles

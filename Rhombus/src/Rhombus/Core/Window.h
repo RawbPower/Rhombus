@@ -10,12 +10,12 @@ namespace rhombus {
 	struct WindowParams
 	{
 		std::string Title;
-		unsigned int Width;
-		unsigned int Height;
+		uint32_t Width;
+		uint32_t Height;
 
 		WindowParams(const std::string& title = "Game Engine",
-			unsigned int width = 960,
-			unsigned int height = 540)
+			uint32_t width = 960,
+			uint32_t height = 540)
 			: Title(title), Width(width), Height(height)
 		{
 
@@ -32,8 +32,8 @@ namespace rhombus {
 
 		virtual void OnUpdate() = 0;
 
-		virtual unsigned int GetWidth() const = 0;
-		virtual unsigned int GetHeight() const = 0;
+		virtual uint32_t GetWidth() const = 0;
+		virtual uint32_t GetHeight() const = 0;
 
 		// Window attributes
 		virtual void SetEventCallback(const EventCallbackFn& callback) = 0;

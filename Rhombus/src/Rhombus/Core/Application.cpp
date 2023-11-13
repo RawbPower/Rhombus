@@ -57,6 +57,11 @@ namespace rhombus {
 		overlay->OnAttach();
 	}
 
+	void Application::Close()
+	{
+		m_Running = false;
+	}
+
 	void Application::OnEvent(Event& e) 
 	{
 		RB_PROFILE_FUNCTION();

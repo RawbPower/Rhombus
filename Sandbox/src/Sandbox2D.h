@@ -22,6 +22,7 @@ private:
 	// Temp (These needs to be abstracted away)
 	rhombus::Ref<rhombus::Shader> m_FlatColourShader;
 	rhombus::Ref<rhombus::VertexArray> m_SquareVA;
+	rhombus::Ref<rhombus::Framebuffer> m_Framebuffer;
 
 	rhombus::Ref<rhombus::Texture2D> m_CheckerboardTexture, m_LogoTexture;
 	rhombus::Ref<rhombus::Texture2D> m_SpriteSheetIndoor, m_SpriteSheetOutdoor;

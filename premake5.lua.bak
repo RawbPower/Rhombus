@@ -158,4 +158,55 @@ project "Sandbox"
 		defines "RB_DIST"
 		runtime "Release"
 		optimize "on"
+		
+project "Rhombus-Editor"
+	location "Rhombus-Editor"
+	kind "ConsoleApp"
+	language "C++"
+	cppdialect "C++17"
+	staticruntime "on"
+
+	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
+	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
+
+	files 
+	{
+		"%{prj.name}/src/**.h",
+		"%{prj.name}/src/**.cpp"
+	}
+
+	includedirs
+	{
+		"Rhombus/vendor/spdlog/include",
+		"Rhombus/src",
+		"Rhombus/vendor",
+		"%{IncludeDir.glm}",
+		"Rhombus/vendor/assimp/include",
+	}
+
+	links
+	{
+		"Rhombus",
+		"Rhombus/vendor/assimp/lib/assimp.lib"
+	}
+
+	filter "system:windows"
+		systemversion "latest"
+
+	filter "configurations:Debug"
+		defines "RB_DEBUG"
+		runtime "Debug"
+		symbols "on"
+
+
+	filter "configurations:Release"
+		defines "RB_Release"
+		runtime "Release"
+		optimize "on"
+
+
+	filter "configurations:Dist"
+		defines "RB_DIST"
+		runtime "Release"
+		optimize "on"
 

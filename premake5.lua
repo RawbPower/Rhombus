@@ -15,7 +15,7 @@ workspace "Rhombus"
 
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
-startproject "Sandbox"
+startproject "Rhombus-Editor"
 
 -- Include directories relative to root folder (solution directory)
 IncludeDir = {}

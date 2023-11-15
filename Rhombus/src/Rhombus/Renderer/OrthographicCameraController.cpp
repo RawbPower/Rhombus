@@ -78,6 +78,12 @@ namespace rhombus {
 		m_Camera.SetProjection(m_Bounds.left, m_Bounds.right, m_Bounds.bottom, m_Bounds.top);
 	}
 
+	void OrthographicCameraController::OnResize(float width, float height)
+	{
+		m_AspectRatio = width / height;
+		CalculateView();
+	}
+
 	bool OrthographicCameraController::OnMouseScrolled(MouseScrolledEvent& e)
 	{
 		RB_PROFILE_FUNCTION();
@@ -92,8 +98,7 @@ namespace rhombus {
 	{
 		RB_PROFILE_FUNCTION();
 
-		m_AspectRatio = (float)e.GetWidth() / (float)e.GetHeight();
-		CalculateView();
+		OnResize((float)e.GetWidth(), (float)e.GetHeight());
 		return false;
 	}
 }

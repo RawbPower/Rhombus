@@ -39,6 +39,8 @@ namespace rhombus {
 	class RB_API Event
 	{
 	public:
+		virtual ~Event() = default;
+
 		// Says if event is handled so it doesn't propogate further in the layers
 		bool Handled = false;
 

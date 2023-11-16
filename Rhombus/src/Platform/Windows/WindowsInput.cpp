@@ -1,5 +1,5 @@
 #include "rbpch.h"
-#include "WindowsInput.h"
+#include "Rhombus/Core/Input.h"
 
 // It's fine to this as we a inside a platform specific file
 #include "Rhombus/Core/Application.h"
@@ -7,17 +7,14 @@
 
 namespace rhombus 
 {
-
-	Input* Input::s_Instance = new WindowsInput();
-
-	bool  WindowsInput::IsKeyPressedImpl(int keycode)
+	bool  Input::IsKeyPressed(int keycode)
 	{
 		const Uint8* currentKeyStates = SDL_GetKeyboardState(NULL);
 						
 		return currentKeyStates[SDL_GetScancodeFromKey((SDL_Keycode)keycode)];
 	}
 
-	bool WindowsInput::IsMouseButtonPressedImpl(int button)
+	bool Input::IsMouseButtonPressed(int button)
 	{
 		int x, y;
 		Uint32 b;
@@ -28,7 +25,7 @@ namespace rhombus
 		return (b & SDL_BUTTON(button)) != 0;
 	}
 
-	std::pair<float, float> WindowsInput::GetMousePositionImpl()
+	std::pair<float, float> Input::GetMousePosition()
 	{
 		int x, y;
 
@@ -38,16 +35,16 @@ namespace rhombus
 		return { (float)x, (float)y };
 	}
 
-	float WindowsInput::GetMouseXImpl()
+	float Input::GetMouseX()
 	{
-		auto[x, y] = GetMousePositionImpl();
+		auto[x, y] = GetMousePosition();
 
 		return x;
 	}
 
-	float WindowsInput::GetMouseYImpl()
+	float Input::GetMouseY()
 	{
-		auto[x, y] = GetMousePositionImpl();
+		auto[x, y] = GetMousePosition();
 
 		return y;
 	}

@@ -166,18 +166,6 @@ namespace rhombus
 
 	void Renderer2D::DrawQuad(const glm::vec3& position, const float& angle, const glm::vec2& scale, const glm::vec4& color)
 	{
-		RB_PROFILE_FUNCTION();
-
-		constexpr size_t quadVertexCount = 4;
-		constexpr float textureIndex = 0.0f;		// Blank texture
-		constexpr glm::vec2 textureCoords[] = { { 0.0f, 0.0f }, { 1.0f, 0.0f }, { 1.0f, 1.0f }, { 0.0f, 1.0f } };
-		constexpr float tilingFactor = 1.0f;
-
-		if (s_Data.QuadIndexCount >= Renderer2DData::MaxIndices)
-		{
-			FlushAndReset();
-		}
-
 		glm::mat4 transform(1.0f);
 		if (abs(angle) > 0.001f)
 		{
@@ -188,19 +176,7 @@ namespace rhombus
 			transform = glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), { scale.x, scale.y, 1.0f });
 		}
 
-		for (size_t i = 0; i < quadVertexCount; i++)
-		{
-			s_Data.QuadVertexBufferPtr->Position = transform * s_Data.QuadVertexPosition[i];
-			s_Data.QuadVertexBufferPtr->Color = color;
-			s_Data.QuadVertexBufferPtr->TexCoord = textureCoords[i];
-			s_Data.QuadVertexBufferPtr->TextureIndex = textureIndex;
-			s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
-			s_Data.QuadVertexBufferPtr++;
-		}
-
-		s_Data.QuadIndexCount += 6;
-
-		s_Data.Stats.QuadCount++;
+		DrawQuad(transform, color);
 	}
 
 	void Renderer2D::DrawQuad(const glm::vec2& position, const float& angle, const glm::vec2& scale, const Ref<Texture2D>& texture, float tilingFactor)
@@ -229,6 +205,65 @@ namespace rhombus
 	}
 
 	void Renderer2D::DrawQuad(const glm::vec3& position, const float& angle, const glm::vec2& scale, const Ref<Texture2D>& texture, const glm::vec4& color, float tilingFactor)
+	{
+		glm::mat4 transform(1.0f);
+		if (abs(angle) > 0.001f)
+		{
+			transform = glm::translate(glm::mat4(1.0f), position) * glm::rotate(glm::mat4(1.0f), angle, glm::vec3(0.0f, 0.0f, 1.0f)) * glm::scale(glm::mat4(1.0f), { scale.x, scale.y, 1.0f });
+		}
+		else
+		{
+			transform = glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), { scale.x, scale.y, 1.0f });
+		}
+
+		DrawQuad(transform, texture, color, tilingFactor);
+	}
+
+	void Renderer2D::DrawQuad(const glm::vec3& position, const float& angle, const glm::vec2& scale, const Ref<SubTexture2D>& subTexture, const glm::vec4& color, float tilingFactor)
+	{
+		glm::mat4 transform(1.0f);
+		if (abs(angle) > 0.001f)
+		{
+			transform = glm::translate(glm::mat4(1.0f), position) * glm::rotate(glm::mat4(1.0f), angle, glm::vec3(0.0f, 0.0f, 1.0f)) * glm::scale(glm::mat4(1.0f), { scale.x, scale.y, 1.0f });
+		}
+		else
+		{
+			transform = glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), { scale.x, scale.y, 1.0f });
+		}
+
+		DrawQuad(transform, subTexture, color, tilingFactor);
+	}
+
+	void Renderer2D::DrawQuad(const glm::mat4& transform, const glm::vec4& color)
+	{
+		RB_PROFILE_FUNCTION();
+
+		constexpr size_t quadVertexCount = 4;
+		constexpr float textureIndex = 0.0f;		// Blank texture
+		constexpr glm::vec2 textureCoords[] = { { 0.0f, 0.0f }, { 1.0f, 0.0f }, { 1.0f, 1.0f }, { 0.0f, 1.0f } };
+		constexpr float tilingFactor = 1.0f;
+
+		if (s_Data.QuadIndexCount >= Renderer2DData::MaxIndices)
+		{
+			FlushAndReset();
+		}
+
+		for (size_t i = 0; i < quadVertexCount; i++)
+		{
+			s_Data.QuadVertexBufferPtr->Position = transform * s_Data.QuadVertexPosition[i];
+			s_Data.QuadVertexBufferPtr->Color = color;
+			s_Data.QuadVertexBufferPtr->TexCoord = textureCoords[i];
+			s_Data.QuadVertexBufferPtr->TextureIndex = textureIndex;
+			s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
+			s_Data.QuadVertexBufferPtr++;
+		}
+
+		s_Data.QuadIndexCount += 6;
+
+		s_Data.Stats.QuadCount++;
+	}
+
+	void Renderer2D::DrawQuad(const glm::mat4& transform, const Ref<Texture2D>& texture, const glm::vec4& color, float tilingFactor)
 	{
 		RB_PROFILE_FUNCTION();
 
@@ -263,16 +298,6 @@ namespace rhombus
 			s_Data.TextureSlotIndex++;
 		}
 
-		glm::mat4 transform(1.0f);
-		if (abs(angle) > 0.001f)
-		{
-			transform = glm::translate(glm::mat4(1.0f), position) * glm::rotate(glm::mat4(1.0f), angle, glm::vec3(0.0f, 0.0f, 1.0f)) * glm::scale(glm::mat4(1.0f), { scale.x, scale.y, 1.0f });
-		}
-		else
-		{
-			transform = glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), { scale.x, scale.y, 1.0f });
-		}
-
 		for (size_t i = 0; i < quadVertexCount; i++)
 		{
 			s_Data.QuadVertexBufferPtr->Position = transform * s_Data.QuadVertexPosition[i];
@@ -288,7 +313,7 @@ namespace rhombus
 		s_Data.Stats.QuadCount++;
 	}
 
-	void Renderer2D::DrawQuad(const glm::vec3& position, const float& angle, const glm::vec2& scale, const Ref<SubTexture2D>& subTexture, const glm::vec4& color, float tilingFactor)
+	void Renderer2D::DrawQuad(const glm::mat4& transform, const Ref<SubTexture2D>& subTexture, const glm::vec4& color, float tilingFactor)
 	{
 		RB_PROFILE_FUNCTION();
 
@@ -322,16 +347,6 @@ namespace rhombus
 			textureIndex = (float)s_Data.TextureSlotIndex;
 			s_Data.TextureSlots[s_Data.TextureSlotIndex] = texture;
 			s_Data.TextureSlotIndex++;
-		}
-
-		glm::mat4 transform(1.0f);
-		if (abs(angle) > 0.001f)
-		{
-			transform = glm::translate(glm::mat4(1.0f), position) * glm::rotate(glm::mat4(1.0f), angle, glm::vec3(0.0f, 0.0f, 1.0f)) * glm::scale(glm::mat4(1.0f), { scale.x, scale.y, 1.0f });
-		}
-		else
-		{
-			transform = glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), { scale.x, scale.y, 1.0f });
 		}
 
 		for (size_t i = 0; i < quadVertexCount; i++)

@@ -25,6 +25,13 @@ namespace rhombus
 		fbSpec.Width = 1280;
 		fbSpec.Height = 720;
 		m_Framebuffer = Framebuffer::Create(fbSpec);
+
+		m_ActiveScene = std::make_shared <Scene>();
+
+		m_SquareEntity = m_ActiveScene->CreateEntity();
+
+		m_ActiveScene->Reg().emplace<TransformComponent>(m_SquareEntity);
+		m_ActiveScene->Reg().emplace<SpriteRendererComponent>(m_SquareEntity, glm::vec4{ 0.0f, 1.0f, 0.0f, 1.0f });
 	}
 
 	void EditorLayer::OnDetach()
@@ -51,40 +58,18 @@ namespace rhombus
 
 		// Render
 		Renderer2D::ResetStats();
-		{
-			RB_PROFILE_SCOPE("Renderer Prep");
-			m_Framebuffer->Bind();
-			RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
-			RenderCommand::Clear();
-		}
+		m_Framebuffer->Bind();
+		RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
+		RenderCommand::Clear();
 
-		{
-			static float rotation = 0.0f;
-			rotation += dt * 50.0f;
+		Renderer2D::BeginScene(m_CameraController.GetCamera());
 
-			RB_PROFILE_SCOPE("Renderer Draw");
+		// Update Scene
+		m_ActiveScene->OnUpdate(dt);
 
-			Renderer2D::BeginScene(m_CameraController.GetCamera());
-			Renderer2D::DrawQuad({ 0.5f, -0.5f }, 3.14f / 3.0f, { 0.5, 0.75 }, { 0.3f, 0.1f, 0.8f, 1.0f });
-			Renderer2D::DrawQuad({ 0.0f, 0.0f, 0.1f }, glm::radians(rotation), { 1.0, 1.0 }, m_CheckerboardTexture, 20.0f);
-			Renderer2D::DrawQuad({ 0.0f, 0.0f, -0.1f }, 0.0f, { 10.0, 10.0 }, m_CheckerboardTexture, 10.0f);
-			Renderer2D::DrawQuad({ -1.0f, 0.0f }, 0.0f, { 0.8, 0.8 }, { 0.8f, 0.2f, 0.3f, 1.0f });
-			Renderer2D::SetFPDStat(dt);
-			Renderer2D::EndScene();
+		Renderer2D::EndScene();
 
-			Renderer2D::BeginScene(m_CameraController.GetCamera());
-			for (float y = -5.0f; y < 5.0f; y += 0.5f)
-			{
-				for (float x = -5.0f; x < 5.0f; x += 0.5f)
-				{
-					glm::vec4 color = { (x + 5.0f) / 10.0f, 0.4f, (y + 5.0f) / 10.0f, 0.5f };
-					Renderer2D::DrawQuad({ x, y, 0.0f }, 0.0f, { 0.45, 0.45 }, color);
-				}
-			}
-			Renderer2D::SetFPDStat(dt);
-			Renderer2D::EndScene();
-			m_Framebuffer->Unbind();
-		}
+		m_Framebuffer->Unbind();
 	}
 
 	void EditorLayer::OnImGuiRender()
@@ -163,7 +148,8 @@ namespace rhombus
 		ImGui::Text("Indices: %d", stats.GetTotalIndexCount());
 		ImGui::Text("FPS: %f", stats.FPS);
 
-		ImGui::ColorEdit4("Square Color", glm::value_ptr(m_SquareColor));
+		auto& squareColor = m_ActiveScene->Reg().get<SpriteRendererComponent>(m_SquareEntity).GetColor();
+		ImGui::ColorEdit4("Square Color", glm::value_ptr(squareColor));
 
 		ImGui::End();
 

@@ -27,6 +27,10 @@ namespace rhombus
 		static void DrawQuad(const glm::vec3& position, const float& angle, const glm::vec2& scale, const Ref<Texture2D>& texture, const glm::vec4& color, float tilingFactor = 1.0f);
 		static void DrawQuad(const glm::vec3& position, const float& angle, const glm::vec2& scale, const Ref<SubTexture2D>& subTexture, const glm::vec4& color, float tilingFactor = 1.0f);
 
+		static void DrawQuad(const glm::mat4& transform, const glm::vec4& color);
+		static void DrawQuad(const glm::mat4& transform, const Ref<Texture2D>& texture, const glm::vec4& color, float tilingFactor = 1.0f);
+		static void DrawQuad(const glm::mat4& transform, const Ref<SubTexture2D>& subTexture, const glm::vec4& color, float tilingFactor = 1.0f);
+
 		struct Statistics
 		{
 			uint32_t DrawCalls = 0;

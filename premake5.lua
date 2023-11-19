@@ -24,6 +24,7 @@ IncludeDir["ImGui"] = "Rhombus/vendor/imgui"
 IncludeDir["glm"] = "Rhombus/vendor/glm"
 IncludeDir["stb_image"] = "Rhombus/vendor/stb_image"
 IncludeDir["SDL2"] = "Rhombus/vendor/SDL2/include"
+IncludeDir["EnTT"] = "Rhombus/vendor/EnTT/include"
 
 group "Dependencies"
 	include "Rhombus/vendor/Glad"
@@ -68,6 +69,7 @@ project "Rhombus"
 		"%{IncludeDir.glm}",
 		"%{IncludeDir.stb_image}",
 		"%{IncludeDir.SDL2}",
+		"%{IncludeDir.EnTT}",
 		"%{prj.name}/vendor/assimp/include"
 	}
 	
@@ -130,6 +132,7 @@ project "Sandbox"
 		"Rhombus/src",
 		"Rhombus/vendor",
 		"%{IncludeDir.glm}",
+		"%{IncludeDir.EnTT}",
 		"Rhombus/vendor/assimp/include",
 	}
 
@@ -181,6 +184,7 @@ project "Rhombus-Editor"
 		"Rhombus/src",
 		"Rhombus/vendor",
 		"%{IncludeDir.glm}",
+		"%{IncludeDir.EnTT}",
 		"Rhombus/vendor/assimp/include",
 	}
 

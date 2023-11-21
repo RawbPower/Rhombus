@@ -4,6 +4,18 @@
 
 namespace rhombus
 {
+	class TagComponent
+	{
+	public:
+		TagComponent() = default;
+		TagComponent(const TagComponent&) = default;
+		TagComponent(const std::string& tag) : m_tag(tag) {}
+
+		std::string m_tag;
+	private:
+		friend class Scene;
+	};
+
 	class TransformComponent
 	{
 	public:

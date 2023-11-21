@@ -16,6 +16,7 @@
 #include "Rhombus/ImGui/ImGuiLayer.h"
 
 #include "Rhombus/ECS/Scene.h"
+#include "Rhombus/ECS/Entity.h"
 #include "Rhombus/ECS/Component.h"
 
 // ---Renderer--------------------

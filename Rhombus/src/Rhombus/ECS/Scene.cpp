@@ -1,6 +1,7 @@
 #include "rbpch.h"
 #include "Scene.h"
 #include "Component.h"
+#include "Entity.h"
 #include "Rhombus/Renderer/Renderer2D.h"
 
 #include <glm/glm.hpp>
@@ -46,9 +47,13 @@ namespace rhombus
 
 	}
 
-	entt::entity Scene::CreateEntity()
+	Entity Scene::CreateEntity(const std::string& name)
 	{
-		return m_Registry.create();
+		Entity entity(m_Registry.create(), this);
+		entity.AddComponent<TransformComponent>();
+		auto& tag = entity.AddComponent<TagComponent>();
+		tag.m_tag = name.empty() ? "Entity" : name;
+		return entity;
 	}
 
 	void Scene::OnUpdate(DeltaTime dt)

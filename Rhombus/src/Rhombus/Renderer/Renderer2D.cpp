@@ -111,6 +111,21 @@ namespace rhombus
 		delete[] s_Data.QuadVertexBufferBase;	
 	}
 
+	void Renderer2D::BeginScene(const Camera& camera, const glm::mat4& transform)
+	{
+		RB_PROFILE_FUNCTION();
+
+		glm::mat4 viewProjection = camera.GetProjection() * glm::inverse(transform);
+
+		s_Data.TextureShader->Bind();
+		s_Data.TextureShader->SetMat4("u_ViewProjection", viewProjection);
+
+		s_Data.QuadIndexCount = 0;
+		s_Data.QuadVertexBufferPtr = s_Data.QuadVertexBufferBase;
+
+		s_Data.TextureSlotIndex = 1;
+	}
+
 	void Renderer2D::BeginScene(const OrthographicCamera& camera)
 	{
 		RB_PROFILE_FUNCTION();

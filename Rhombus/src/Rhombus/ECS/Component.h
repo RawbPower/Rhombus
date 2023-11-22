@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Rhombus/Renderer/Camera.h"
+
 #include <glm/glm.hpp>
 
 namespace rhombus
@@ -40,5 +42,20 @@ namespace rhombus
 
 	private:
 		glm::vec4 m_color{ 1.0f, 1.0f, 1.0f, 1.0f };
+	};
+
+	class CameraComponent
+	{
+	public:
+		CameraComponent() = default;
+		CameraComponent(const CameraComponent&) = default;
+		CameraComponent(const glm::mat4& projection) : m_camera(projection) {}
+
+		Camera* GetCamera() { return &m_camera; }
+		void SetIsPrimaryCamera(bool primary) { m_primary = primary; }
+		bool GetIsPrimaryCamera() { return m_primary; }
+	private:
+		Camera m_camera;
+		bool m_primary = true;	// Maybe move this to the scene nad out of the component
 	};
 }

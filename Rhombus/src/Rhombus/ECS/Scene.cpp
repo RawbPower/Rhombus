@@ -58,12 +58,37 @@ namespace rhombus
 
 	void Scene::OnUpdate(DeltaTime dt)
 	{
-		auto group = m_Registry.group<TransformComponent>(entt::get<SpriteRendererComponent>);
-		for (auto entity : group)
+		// Render sprites
+		Camera* mainCamera = nullptr;
+		glm::mat4* cameraTransform = nullptr;
 		{
-			auto& [transformComponent, spriteRendererComponent] = group.get<TransformComponent, SpriteRendererComponent>(entity);
+			auto group = m_Registry.view<TransformComponent, CameraComponent>();
+			for (auto entity : group)
+			{
+				auto& [transformComponent, cameraComponent] = group.get<TransformComponent, CameraComponent>(entity);
 
-			Renderer2D::DrawQuad(transformComponent.GetTransform(), spriteRendererComponent.GetColor());
+				if (cameraComponent.GetIsPrimaryCamera())
+				{
+					mainCamera = cameraComponent.GetCamera();
+					cameraTransform = &transformComponent.GetTransform();
+					break;
+				}
+			}
+		}
+
+		if (mainCamera)
+		{
+			Renderer2D::BeginScene(mainCamera->GetProjection(), *cameraTransform);
+
+			auto group = m_Registry.group<TransformComponent>(entt::get<SpriteRendererComponent>);
+			for (auto entity : group)
+			{
+				auto& [transformComponent, spriteRendererComponent] = group.get<TransformComponent, SpriteRendererComponent>(entity);
+
+				Renderer2D::DrawQuad(transformComponent.GetTransform(), spriteRendererComponent.GetColor());
+			}
+
+			Renderer2D::EndScene();
 		}
 	}
 }

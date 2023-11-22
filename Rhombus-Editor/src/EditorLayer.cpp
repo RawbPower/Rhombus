@@ -30,6 +30,13 @@ namespace rhombus
 
 		m_SquareEntity = m_ActiveScene->CreateEntity("Square");
 		m_SquareEntity.AddComponent<SpriteRendererComponent>(glm::vec4{ 0.0f, 1.0f, 0.0f, 1.0f });
+
+		m_CameraEntity = m_ActiveScene->CreateEntity("Camera");
+		m_CameraEntity.AddComponent<CameraComponent>(glm::ortho(-16.0f, 16.0f, -9.0f, 9.0f, -1.0f, 1.0f));
+
+		m_SecondaryCameraEntity = m_ActiveScene->CreateEntity("Camera");
+		auto& cameraComponent = m_SecondaryCameraEntity.AddComponent<CameraComponent>(glm::ortho(-1.0f, 1.0f, -1.0f, 1.0f, -1.0f, 1.0f));
+		cameraComponent.SetIsPrimaryCamera(false);
 	}
 
 	void EditorLayer::OnDetach()
@@ -60,12 +67,8 @@ namespace rhombus
 		RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
 		RenderCommand::Clear();
 
-		Renderer2D::BeginScene(m_CameraController.GetCamera());
-
 		// Update Scene
 		m_ActiveScene->OnUpdate(dt);
-
-		Renderer2D::EndScene();
 
 		m_Framebuffer->Unbind();
 	}
@@ -154,6 +157,15 @@ namespace rhombus
 
 			auto& squareColor = m_SquareEntity.GetComponent<SpriteRendererComponent>().GetColor();
 			ImGui::ColorEdit4("Square Color", glm::value_ptr(squareColor));
+		}
+
+		ImGui::DragFloat3("Camera Transform",
+			glm::value_ptr(m_CameraEntity.GetComponent<TransformComponent>().GetTransform()[3]));
+
+		if (ImGui::Checkbox("Camera A", &m_PrimaryCamera))
+		{
+			m_CameraEntity.GetComponent<CameraComponent>().SetIsPrimaryCamera(m_PrimaryCamera);
+			m_SecondaryCameraEntity.GetComponent<CameraComponent>().SetIsPrimaryCamera(!m_PrimaryCamera);
 		}
 
 		ImGui::End();

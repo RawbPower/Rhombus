@@ -37,6 +37,36 @@ namespace rhombus
 		m_SecondaryCameraEntity = m_ActiveScene->CreateEntity("Secondary Camera");
 		auto& cameraComponent = m_SecondaryCameraEntity.AddComponent<CameraComponent>();
 		cameraComponent.SetIsPrimaryCamera(false);
+
+		class CameraController : public ScriptableEntity
+		{
+		public:
+			void OnReady()
+			{
+			}
+
+			void OnDestroy()
+			{
+
+			}
+
+			void OnUpdate(DeltaTime dt)
+			{
+				auto& transform = GetComponent<TransformComponent>().GetTransform();
+				float speed = 5.0f;
+
+				if (Input::IsKeyPressed(RB_KEY_A))
+					transform[3][0] -= speed * dt;
+				if (Input::IsKeyPressed(RB_KEY_D))
+					transform[3][0] += speed * dt;
+				if (Input::IsKeyPressed(RB_KEY_W))
+					transform[3][1] += speed * dt;
+				if (Input::IsKeyPressed(RB_KEY_S))
+					transform[3][1] -= speed * dt;
+			}
+		};
+
+		m_CameraEntity.AddComponent<NativeScriptComponent>().Bind<CameraController>();
 	}
 
 	void EditorLayer::OnDetach()

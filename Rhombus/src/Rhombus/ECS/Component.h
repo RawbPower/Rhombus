@@ -1,6 +1,7 @@
 #pragma once
 
 #include "SceneCamera.h"
+#include "ScriptableEntity.h"
 
 #include <glm/glm.hpp>
 
@@ -58,7 +59,25 @@ namespace rhombus
 		bool GetHasFixedAspectRatio() { return m_fixedAspectRatio; }
 	private:
 		SceneCamera m_camera;
-		bool m_primary = true;	// Maybe move this to the scene nad out of the component
+		bool m_primary = true;	// Maybe move this to the scene and out of the component
 		bool m_fixedAspectRatio = false;
+	};
+
+	class NativeScriptComponent
+	{
+	public:
+		ScriptableEntity* (*InstantiateScript)();
+		void (*DestroyScript)(NativeScriptComponent*);
+
+		template<typename T>
+		void Bind()
+		{
+			InstantiateScript = []() { return static_cast<ScriptableEntity*>(new T()); };
+			DestroyScript = [](NativeScriptComponent* nsc) { delete nsc->m_instance; nsc->m_instance = nullptr; };
+		}
+
+	private:
+		ScriptableEntity* m_instance = nullptr;
+		friend class Scene;
 	};
 }

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Rhombus/Renderer/Camera.h"
+#include "SceneCamera.h"
 
 #include <glm/glm.hpp>
 
@@ -49,13 +49,16 @@ namespace rhombus
 	public:
 		CameraComponent() = default;
 		CameraComponent(const CameraComponent&) = default;
-		CameraComponent(const glm::mat4& projection) : m_camera(projection) {}
 
-		Camera* GetCamera() { return &m_camera; }
+		SceneCamera& GetCamera() { return m_camera; }
 		void SetIsPrimaryCamera(bool primary) { m_primary = primary; }
 		bool GetIsPrimaryCamera() { return m_primary; }
+
+		void SetHasFixedAspectRatio(bool fixedAspectRatio) { m_fixedAspectRatio = fixedAspectRatio; }
+		bool GetHasFixedAspectRatio() { return m_fixedAspectRatio; }
 	private:
-		Camera m_camera;
+		SceneCamera m_camera;
 		bool m_primary = true;	// Maybe move this to the scene nad out of the component
+		bool m_fixedAspectRatio = false;
 	};
 }

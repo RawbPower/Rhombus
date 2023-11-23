@@ -51,8 +51,13 @@ namespace rhombus
 
 			return m_scene->m_Registry.remove<T>(m_entityId);
 		}
+
+		bool operator==(const Entity& other) const { return m_entityId == other.m_entityId && m_scene == other.m_scene; }
+
+		bool operator!=(const Entity & other) const { return !(*this == other); }
 		
 		operator bool() const { return m_entityId != entt::null; }
+		operator uint32_t() const { return (uint32_t)m_entityId; }
 
 	private:
 		entt::entity m_entityId = entt::null;

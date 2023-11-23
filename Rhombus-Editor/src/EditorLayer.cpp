@@ -67,6 +67,8 @@ namespace rhombus
 		};
 
 		m_CameraEntity.AddComponent<NativeScriptComponent>().Bind<CameraController>();
+
+		m_sceneHierarchyPanel.SetContext(m_ActiveScene);
 	}
 
 	void EditorLayer::OnDetach()
@@ -170,6 +172,8 @@ namespace rhombus
 
 			ImGui::EndMenuBar();
 		}
+
+		m_sceneHierarchyPanel.OnImGuiRender();
 
 		ImGui::Begin("Settings");
 

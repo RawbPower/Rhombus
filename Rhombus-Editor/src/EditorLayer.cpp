@@ -41,16 +41,16 @@ namespace rhombus
 		class CameraController : public ScriptableEntity
 		{
 		public:
-			void OnReady()
+			virtual void OnReady() override
 			{
 			}
 
-			void OnDestroy()
+			virtual void OnDestroy() override
 			{
 
 			}
 
-			void OnUpdate(DeltaTime dt)
+			virtual void OnUpdate(DeltaTime dt) override
 			{
 				auto& transform = GetComponent<TransformComponent>().GetTransform();
 				float speed = 5.0f;
@@ -173,7 +173,7 @@ namespace rhombus
 			ImGui::EndMenuBar();
 		}
 
-		m_sceneHierarchyPanel.OnImGuiRender();
+		m_sceneHierarchyPanel.OnImGuiRender();	
 
 		ImGui::Begin("Settings");
 

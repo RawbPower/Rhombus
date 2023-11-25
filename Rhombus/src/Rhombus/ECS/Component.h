@@ -53,10 +53,10 @@ namespace rhombus
 
 		SceneCamera& GetCamera() { return m_camera; }
 		void SetIsPrimaryCamera(bool primary) { m_primary = primary; }
-		bool GetIsPrimaryCamera() { return m_primary; }
+		bool& GetIsPrimaryCamera() { return m_primary; }
 
 		void SetHasFixedAspectRatio(bool fixedAspectRatio) { m_fixedAspectRatio = fixedAspectRatio; }
-		bool GetHasFixedAspectRatio() { return m_fixedAspectRatio; }
+		bool& GetHasFixedAspectRatio() { return m_fixedAspectRatio; }
 	private:
 		SceneCamera m_camera;
 		bool m_primary = true;	// Maybe move this to the scene and out of the component

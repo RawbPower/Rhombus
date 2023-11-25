@@ -7,6 +7,9 @@
 
 #include "Rhombus/Renderer/Renderer.h"
 
+#include "imgui.h"
+#include "examples/imgui_impl_sdl.h"
+
 #include "Platform/OpenGL/OpenGLContext.h"
 
 namespace rhombus {
@@ -157,6 +160,7 @@ namespace rhombus {
 		//Handle events on queue
 		while (SDL_PollEvent(&e) != 0)
 		{
+			ImGui_ImplSDL2_ProcessEvent(&e);
 			switch (e.type)
 			{
 				//User requests quit

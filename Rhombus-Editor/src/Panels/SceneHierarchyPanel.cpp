@@ -72,7 +72,6 @@ namespace rhombus
 		{
 			auto& tag = entity.GetComponent<TagComponent>().m_tag;
 
-			// FIX IMGUI KEYBOARD INPUTS
 			char buffer[256];
 			memset(buffer, 0, sizeof(buffer));
 			strcpy_s(buffer, sizeof(buffer), tag.c_str());

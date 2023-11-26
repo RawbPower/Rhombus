@@ -81,7 +81,6 @@ namespace rhombus
 			}
 		}
 
-
 		if (entity.HasComponent<TransformComponent>())
 		{
 			if (ImGui::TreeNodeEx((void*)typeid(TransformComponent).hash_code(), ImGuiTreeNodeFlags_DefaultOpen, "Transform"))
@@ -93,9 +92,26 @@ namespace rhombus
 			}
 		}
 
+		/*DrawComponent<SpriteRendererComponent>("Sprite Renderer"), []()
+		{
+			auto& spriteRendererComponent = entity.GetComponent<SpriteRendererComponent>();
+			ImGui::ColorEdit4("Colour", glm::value_ptr(spriteRendererComponent.GetColor()));
+		});*/
+
+		if (entity.HasComponent<SpriteRendererComponent>())
+		{
+			if (ImGui::TreeNodeEx((void*)typeid(SpriteRendererComponent).hash_code(), ImGuiTreeNodeFlags_DefaultOpen, "Sprite Renderer"))
+			{
+				auto& spriteRendererComponent = entity.GetComponent<SpriteRendererComponent>();
+				ImGui::ColorEdit4("Colour", glm::value_ptr(spriteRendererComponent.GetColor()));
+
+				ImGui::TreePop();
+			}
+		}
+
 		if (entity.HasComponent<CameraComponent>())
 		{
-			if (ImGui::TreeNodeEx((void*)typeid(CameraComponent).hash_code(), ImGuiTreeNodeFlags_DefaultOpen, "Camera Component"))
+			if (ImGui::TreeNodeEx((void*)typeid(CameraComponent).hash_code(), ImGuiTreeNodeFlags_DefaultOpen, "Camera"))
 			{
 				auto& cameraComponent = entity.GetComponent<CameraComponent>();
 				auto& camera = cameraComponent.GetCamera();

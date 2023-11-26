@@ -178,44 +178,14 @@ namespace rhombus
 
 		m_sceneHierarchyPanel.OnImGuiRender();	
 
-		ImGui::Begin("Settings");
+		ImGui::Begin("Renderer Stats");
 
 		auto stats = Renderer2D::GetStats();
-		ImGui::Text("Renderer 2D Stats:");
 		ImGui::Text("Draw Calls: %d", stats.DrawCalls);
 		ImGui::Text("Quads: %d", stats.QuadCount);
 		ImGui::Text("Vertices: %d", stats.GetTotalVertexCount());
 		ImGui::Text("Indices: %d", stats.GetTotalIndexCount());
 		ImGui::Text("FPS: %f", stats.FPS);
-
-		if (m_SquareEntity.HasComponent<SpriteRendererComponent>())
-		{
-			ImGui::Separator();
-			std::string& tag = m_SquareEntity.GetComponent<TagComponent>().m_tag;
-			ImGui::Text("%s", tag.c_str());
-
-			auto& squareColor = m_SquareEntity.GetComponent<SpriteRendererComponent>().GetColor();
-			ImGui::ColorEdit4("Square Color", glm::value_ptr(squareColor));
-		}
-
-		ImGui::DragFloat3("Camera Transform",
-			glm::value_ptr(m_CameraEntity.GetComponent<TransformComponent>().GetTransform()[3]));
-
-		if (ImGui::Checkbox("Camera A", &m_PrimaryCamera))
-		{
-			m_CameraEntity.GetComponent<CameraComponent>().SetIsPrimaryCamera(m_PrimaryCamera);
-			m_SecondaryCameraEntity.GetComponent<CameraComponent>().SetIsPrimaryCamera(!m_PrimaryCamera);
-		}
-
-		{
-			auto& camera = m_SecondaryCameraEntity.GetComponent<CameraComponent>().GetCamera();
-			float orthoSize = camera.GetOrthographicSize();
-			if (ImGui::DragFloat("Secondary Camera Ortho Size", &orthoSize))
-			{
-				camera.SetOrthographicSize(orthoSize);
-			}
-
-		}
 
 		ImGui::End();
 

@@ -67,6 +67,9 @@ namespace rhombus
 		{
 			Renderer2D::BeginScene(mainCamera->GetProjection(), *cameraTransform);
 
+			// TODO: Work out Z sorting
+			// To make blending work for multiple objects we have to draw the
+			// most distant object first and the closest object last
 			auto group = m_Registry.group<TransformComponent>(entt::get<SpriteRendererComponent>);
 			for (auto entity : group)
 			{

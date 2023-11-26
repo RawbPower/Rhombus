@@ -73,7 +73,7 @@ namespace rhombus {
 			// Check is the event type of the incoming event is equal to the static type of the template used between <>
 			if (m_Event.GetEventType() == T::GetStaticType())
 			{
-				m_Event.Handled = func(static_cast<T&>(m_Event));
+				m_Event.Handled |= func(static_cast<T&>(m_Event));
 				return true;
 			}
 			return false;

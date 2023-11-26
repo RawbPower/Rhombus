@@ -65,7 +65,7 @@ namespace rhombus
 		// Render Sprites
 		if (mainCamera)
 		{
-			Renderer2D::BeginScene(mainCamera->GetProjection(), *cameraTransform);
+			Renderer2D::BeginScene(*mainCamera, *cameraTransform);
 
 			// To make blending work for multiple objects we have to draw the
 			// most distant object first and the closest object last

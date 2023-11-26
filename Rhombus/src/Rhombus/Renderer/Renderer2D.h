@@ -39,8 +39,8 @@ namespace rhombus
 			uint32_t QuadCount = 0;
 			float FPS = 0.0f;
 
-			uint32_t GetTotalVertexCount() { return QuadCount * 4; }
-			uint32_t GetTotalIndexCount() { return QuadCount * 6; }
+			uint32_t GetTotalVertexCount() const { return QuadCount * 4; }
+			uint32_t GetTotalIndexCount() const { return QuadCount * 6; }
 		};
 
 		static void ResetStats();
@@ -48,6 +48,7 @@ namespace rhombus
 		static void SetFPDStat(float dt);
 
 	private:
-		static void FlushAndReset();
+		static void StartBatch();
+		static void NextBatch();
 	};
 }

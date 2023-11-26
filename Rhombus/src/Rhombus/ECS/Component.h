@@ -27,6 +27,7 @@ namespace rhombus
 		TransformComponent(const glm::mat4 & transform) : m_transform(transform) {}
 
 		glm::mat4& GetTransform() { return m_transform; }
+		glm::mat4 GetTransform() const { return m_transform; }
 
 	private:
 		glm::mat4 m_transform{ 1.0f };

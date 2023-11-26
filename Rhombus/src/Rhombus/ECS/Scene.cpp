@@ -45,7 +45,6 @@ namespace rhombus
 			});
 		}
 
-		// Render sprites
 		Camera* mainCamera = nullptr;
 		glm::mat4* cameraTransform = nullptr;
 		{
@@ -63,17 +62,22 @@ namespace rhombus
 			}
 		}
 
+		// Render Sprites
 		if (mainCamera)
 		{
 			Renderer2D::BeginScene(mainCamera->GetProjection(), *cameraTransform);
 
-			// TODO: Work out Z sorting
 			// To make blending work for multiple objects we have to draw the
 			// most distant object first and the closest object last
-			auto group = m_Registry.group<TransformComponent>(entt::get<SpriteRendererComponent>);
-			for (auto entity : group)
+			m_Registry.sort<SpriteRendererComponent>([&](const entt::entity lhs, const entt::entity rhs) {
+				return m_Registry.get<TransformComponent>(lhs).GetTransform()[3].z < m_Registry.get<TransformComponent>(rhs).GetTransform()[3].z;
+			});
+
+			auto view = m_Registry.view<SpriteRendererComponent, TransformComponent>();
+
+			for (auto entity : view)
 			{
-				auto [transformComponent, spriteRendererComponent] = group.get<TransformComponent, SpriteRendererComponent>(entity);
+				auto [spriteRendererComponent, transformComponent] = view.get<SpriteRendererComponent, TransformComponent>(entity);
 
 				Renderer2D::DrawQuad(transformComponent.GetTransform(), spriteRendererComponent.GetColor());
 			}

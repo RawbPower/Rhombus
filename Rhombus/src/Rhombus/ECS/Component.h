@@ -1,9 +1,10 @@
 #pragma once
 
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+
 #include "SceneCamera.h"
 #include "ScriptableEntity.h"
-
-#include <glm/glm.hpp>
 
 namespace rhombus
 {
@@ -24,13 +25,24 @@ namespace rhombus
 	public:
 		TransformComponent() = default;
 		TransformComponent(const TransformComponent&) = default;
-		TransformComponent(const glm::mat4 & transform) : m_transform(transform) {}
+		TransformComponent(const glm::vec3 & position) : m_position(position) {}
 
-		glm::mat4& GetTransform() { return m_transform; }
-		glm::mat4 GetTransform() const { return m_transform; }
+		glm::mat4 GetTransform() const 
+		{ 
+			glm::mat4 rotation = glm::rotate(glm::mat4(1.0f), m_rotation.x, { 1, 0, 0 })
+				* glm::rotate(glm::mat4(1.0f), m_rotation.y, { 0, 1, 0 })
+				* glm::rotate(glm::mat4(1.0f), m_rotation.z, { 0, 0, 1 });
 
-	private:
-		glm::mat4 m_transform{ 1.0f };
+			glm::mat4 transform = glm::translate(glm::mat4(1.0f), m_position)
+				* rotation
+				* glm::scale(glm::mat4(1.0f), m_scale);
+
+			return transform;
+		}
+
+		glm::vec3 m_position = { 0.0f, 0.0f, 0.0f };
+		glm::vec3 m_rotation = { 0.0f, 0.0f, 0.0f };
+		glm::vec3 m_scale = { 1.0f, 1.0f, 1.0f };
 	};
 
 	class SpriteRendererComponent

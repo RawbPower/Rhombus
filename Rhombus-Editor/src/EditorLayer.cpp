@@ -55,17 +55,17 @@ namespace rhombus
 
 			virtual void OnUpdate(DeltaTime dt) override
 			{
-				auto& transform = GetComponent<TransformComponent>().GetTransform();
+				auto& position = GetComponent<TransformComponent>().m_position;
 				float speed = 5.0f;
 
 				if (Input::IsKeyPressed(RB_KEY_A))
-					transform[3][0] -= speed * dt;
+					position.x -= speed * dt;
 				if (Input::IsKeyPressed(RB_KEY_D))
-					transform[3][0] += speed * dt;
+					position.x += speed * dt;
 				if (Input::IsKeyPressed(RB_KEY_W))
-					transform[3][1] += speed * dt;
+					position.y += speed * dt;
 				if (Input::IsKeyPressed(RB_KEY_S))
-					transform[3][1] -= speed * dt;
+					position.y -= speed * dt;
 			}
 		};
 

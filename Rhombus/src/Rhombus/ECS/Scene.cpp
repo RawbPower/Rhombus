@@ -46,7 +46,7 @@ namespace rhombus
 		}
 
 		Camera* mainCamera = nullptr;
-		glm::mat4* cameraTransform = nullptr;
+		glm::mat4 cameraTransform;
 		{
 			auto view = m_Registry.view<TransformComponent, CameraComponent>();
 			for (auto entity : view)
@@ -56,7 +56,7 @@ namespace rhombus
 				if (cameraComponent.GetIsPrimaryCamera())
 				{
 					mainCamera = &cameraComponent.GetCamera();
-					cameraTransform = &transformComponent.GetTransform();
+					cameraTransform = transformComponent.GetTransform();
 					break;
 				}
 			}
@@ -65,12 +65,12 @@ namespace rhombus
 		// Render Sprites
 		if (mainCamera)
 		{
-			Renderer2D::BeginScene(*mainCamera, *cameraTransform);
+			Renderer2D::BeginScene(*mainCamera, cameraTransform);
 
 			// To make blending work for multiple objects we have to draw the
 			// most distant object first and the closest object last
 			m_Registry.sort<SpriteRendererComponent>([&](const entt::entity lhs, const entt::entity rhs) {
-				return m_Registry.get<TransformComponent>(lhs).GetTransform()[3].z < m_Registry.get<TransformComponent>(rhs).GetTransform()[3].z;
+				return m_Registry.get<TransformComponent>(lhs).m_position.z < m_Registry.get<TransformComponent>(rhs).m_position.z;
 			});
 
 			auto view = m_Registry.view<SpriteRendererComponent, TransformComponent>();

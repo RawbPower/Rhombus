@@ -40,8 +40,9 @@ namespace rhombus
 		T& AddComponent(Args&&... args)
 		{
 			RB_CORE_ASSERT(!HasComponent<T>(), "Entity ({0}) already has component that is being added!", m_entityId);
-
-			return m_scene->m_Registry.emplace<T>(m_entityId, std::forward<Args>(args)...);
+			T& component = m_scene->m_Registry.emplace<T>(m_entityId, std::forward<Args>(args)...);
+			m_scene->OnComponentAdded<T>(*this, component);
+			return component;
 		}
 
 		template<typename T>
@@ -49,7 +50,7 @@ namespace rhombus
 		{
 			RB_CORE_ASSERT(HasComponent<T>(), "Entity ({0}) does not have component trying to be removed!", m_entityId);
 
-			return m_scene->m_Registry.remove<T>(m_entityId);
+			m_scene->m_Registry.remove<T>(m_entityId);
 		}
 
 		bool operator==(const Entity& other) const { return m_entityId == other.m_entityId && m_scene == other.m_scene; }
@@ -57,6 +58,7 @@ namespace rhombus
 		bool operator!=(const Entity & other) const { return !(*this == other); }
 		
 		operator bool() const { return m_entityId != entt::null; }
+		operator entt::entity() const { return m_entityId; }
 		operator uint32_t() const { return (uint32_t)m_entityId; }
 
 	private:

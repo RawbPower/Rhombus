@@ -37,7 +37,7 @@ namespace rhombus {
 		//io.ConfigFlags |= ImGuiConfigFlags_ViewportsNoTaskBarIcons;
 		//io.ConfigFlags |= ImGuiConfigFlags_ViewportsNoMerge;
 
-		io.Fonts->AddFontFromFileTTF("assets/fonts/ProggyClean.ttf", 13.0f);
+		io.FontDefault = io.Fonts->AddFontFromFileTTF("assets/fonts/ProggyClean.ttf", 13.0f);
 
 		// Setup Dear ImGui
 		//ImGui::StyleColorsDark();
@@ -50,6 +50,8 @@ namespace rhombus {
 			style.WindowRounding = 0.0f;
 			style.Colors[ImGuiCol_WindowBg].w = 1.0f;
 		}
+
+		SetRhombusThemeColors();
 
 		Application& app = Application::Get();
 		SDL_Window* window = static_cast<SDL_Window*>(app.GetWindow().GetNativeWindow());
@@ -112,5 +114,54 @@ namespace rhombus {
 			ImGui::RenderPlatformWindowsDefault();
 			SDL_GL_MakeCurrent(backup_current_window, backup_current_context);
 		}
+	}
+
+	void ImGuiLayer::SetRhombusThemeColors()
+	{
+		auto& colors = ImGui::GetStyle().Colors;
+
+		ImVec4 orange{ 0.764f, 0.427f, 0.267f , 1.0f };
+		ImVec4 orangeLight{ 0.890f, 0.580f, 0.329f , 1.0f };
+		ImVec4 orangeLight2{ 0.9059f, 0.690f, 0.4235f , 1.0f };
+		ImVec4 orangeDark{ 0.6745f, 0.3137f, 0.2627f , 1.0f };
+
+		ImVec4 wine{ 0.376f, 0.145f, 0.2784f , 1.0f };
+		ImVec4 purple{ 0.2156f, 0.102f, 0.2784f , 1.0f };
+		ImVec4 yellow{ 0.9686f, 0.925f, 0.682f , 1.0f };
+
+		colors[ImGuiCol_WindowBg] = ImVec4{ 0.165f, 0.155f, 0.15f, 1.0f };
+		colors[ImGuiCol_MenuBarBg] = purple;
+
+		// Headers
+		colors[ImGuiCol_Header] = orangeDark;
+		colors[ImGuiCol_HeaderHovered] = orangeLight;
+		colors[ImGuiCol_HeaderActive] = orangeLight2;
+
+		// Buttons
+		colors[ImGuiCol_Button] = orangeDark;
+		colors[ImGuiCol_ButtonHovered] = orangeLight;
+		colors[ImGuiCol_ButtonActive] = orangeLight2;
+
+		// Frame BG
+		colors[ImGuiCol_FrameBg] = orange;
+		colors[ImGuiCol_FrameBgHovered] = orangeLight;
+		colors[ImGuiCol_FrameBgActive] = orangeLight2;
+
+		// Tabs
+		colors[ImGuiCol_Tab] = orangeLight2;
+		colors[ImGuiCol_TabHovered] = orange;
+		colors[ImGuiCol_TabActive] = orangeDark;
+		colors[ImGuiCol_TabUnfocused] = orangeLight2;
+		colors[ImGuiCol_TabUnfocusedActive] = orangeDark;
+
+		// Title
+		colors[ImGuiCol_TitleBg] = orange;
+		colors[ImGuiCol_TitleBgActive] = orange;
+		colors[ImGuiCol_TitleBgCollapsed] = orange;
+
+		// Scrollbar
+		colors[ImGuiCol_ScrollbarGrab] = orange;
+		colors[ImGuiCol_ScrollbarGrabHovered] = orange;
+		colors[ImGuiCol_ScrollbarGrabActive] = orangeLight2;
 	}
 }

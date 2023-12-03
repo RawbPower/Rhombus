@@ -226,13 +226,19 @@ namespace rhombus
 		{
 			if (ImGui::MenuItem("Camera"))
 			{
-				m_selectionContext.AddComponent<CameraComponent>();
+				if (!m_selectionContext.HasComponent<CameraComponent>())
+					m_selectionContext.AddComponent<CameraComponent>();
+				else
+					RB_CORE_WARN("This entity already has the Camera Component!");
 				ImGui::CloseCurrentPopup();
 			}
 
 			if (ImGui::MenuItem("Sprite Renderer"))
 			{
-				m_selectionContext.AddComponent<SpriteRendererComponent>();
+				if (!m_selectionContext.HasComponent<SpriteRendererComponent>())
+					m_selectionContext.AddComponent<SpriteRendererComponent>();
+				else
+					RB_CORE_WARN("This entity already has the Sprite Renderer Component!");
 				ImGui::CloseCurrentPopup();
 			}
 

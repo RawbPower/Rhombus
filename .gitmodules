@@ -10,3 +10,6 @@
 [submodule "Rhombus/vendor/SDL"]
 	path = Rhombus/vendor/SDL
 	url = https://github.com/RawbPower/SDL
+[submodule "Rhombus/vendor/yaml-cpp"]
+	path = Rhombus/vendor/yaml-cpp
+	url = https://github.com/RawbPower/yaml-cpp

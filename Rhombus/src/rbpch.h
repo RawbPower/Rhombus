@@ -13,6 +13,7 @@
 #include <unordered_map>
 #include <unordered_set>
 
+#include "Rhombus/Core/Core.h"
 #include "Rhombus/Core/Log.h"
 #include "Rhombus/Debug/Instrumentor.h"
 #include "Rhombus/Core/Random.h"

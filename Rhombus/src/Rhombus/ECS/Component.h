@@ -53,6 +53,7 @@ namespace rhombus
 		SpriteRendererComponent(const glm::vec4& color) : m_color(color) {}
 
 		glm::vec4& GetColor() { return m_color; }
+		void GetColor(glm::vec4 color) { m_color = color; }
 
 	private:
 		glm::vec4 m_color{ 1.0f, 1.0f, 1.0f, 1.0f };

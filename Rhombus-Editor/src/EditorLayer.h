@@ -20,6 +20,11 @@ namespace rhombus
 		void OnEvent(Event& e) override;
 
 	private:
+		bool OnKeyPressed(KeyPressedEvent& e);
+		void NewScene();
+		void OpenScene();
+		void SaveSceneAs();
+
 		// Temp (These needs to be abstracted away)
 		Ref<Shader> m_FlatColourShader;
 		Ref<VertexArray> m_SquareVA;

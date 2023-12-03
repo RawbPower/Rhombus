@@ -4,7 +4,7 @@ Entities:
     TagComponent:
       Tag: Green Square
     TransformComponent:
-      Position: [0, 0, 0]
+      Position: [0, 0, -4.80000019]
       Rotation: [0, 0, 0]
       Scale: [1, 1, 1]
     SpriteRendererComponent:
@@ -13,7 +13,7 @@ Entities:
     TagComponent:
       Tag: Red Square
     TransformComponent:
-      Position: [1.60000002, -0.899999976, 0]
+      Position: [1.70000005, 0, 1.10000002]
       Rotation: [0, 0, 0]
       Scale: [1, 1, 1]
     SpriteRendererComponent:
@@ -34,23 +34,23 @@ Entities:
         OrthographicSize: 10
         OrthographicNear: -1
         OrthographicFar: 1
-      Primary: true
+      Primary: false
       FixedAspectRatio: false
   - Entity: 12837192831273
     TagComponent:
       Tag: Secondary Camera
     TransformComponent:
-      Position: [0, 0, 0]
+      Position: [1, 0, 6.69999981]
       Rotation: [0, 0, 0]
       Scale: [1, 1, 1]
     CameraComponent:
       Camera:
-        ProjectionType: 0
+        ProjectionType: 1
         PerspectiveFOV: 0.785398185
         PerspectiveNear: 0.00999999978
         PerspectiveFar: 1000
         OrthographicSize: 10
         OrthographicNear: -1
         OrthographicFar: 1
-      Primary: false
+      Primary: true
       FixedAspectRatio: false

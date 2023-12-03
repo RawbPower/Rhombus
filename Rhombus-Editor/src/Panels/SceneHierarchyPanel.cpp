@@ -16,6 +16,7 @@ namespace rhombus
 	void SceneHierarchyPanel::SetContext(const Ref<Scene>& context)
 	{
 		m_context = context;
+		m_selectionContext = {};
 	}
 
 	void SceneHierarchyPanel::OnImGuiRender()

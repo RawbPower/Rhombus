@@ -13,6 +13,8 @@
 #include <SDL.h>
 #include <glad/glad.h>
 
+#include "ImGuizmo.h"
+
 namespace rhombus {
 
 	ImGuiLayer::ImGuiLayer() 
@@ -91,6 +93,7 @@ namespace rhombus {
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplSDL2_NewFrame(window);
 		ImGui::NewFrame();
+		ImGuizmo::BeginFrame();
 	}
 
 	void ImGuiLayer::End()

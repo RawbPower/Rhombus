@@ -17,7 +17,10 @@ project "Rhombus"
 		"vendor/stb_image/**.h",
 		"vendor/stb_image/**.cpp",
 		"vendor/glm/glm/**.hpp",
-		"vendor/glm/glm/**.inl"
+		"vendor/glm/glm/**.inl",
+		
+		"vendor/ImGuizmo/ImGuizmo.h",
+		"vendor/ImGuizmo/ImGuizmo.cpp"
 	}
 
 	defines 
@@ -35,7 +38,8 @@ project "Rhombus"
 		"%{IncludeDir.stb_image}",
 		"%{IncludeDir.SDL2}",
 		"%{IncludeDir.EnTT}",
-		"%{IncludeDir.yaml_cpp}"
+		"%{IncludeDir.yaml_cpp}",
+		"%{IncludeDir.ImGuizmo}"
 	}
 	
 	libdirs
@@ -52,6 +56,9 @@ project "Rhombus"
 		"SDL2",
 		"SDL2main"
 	}
+	
+	filter "files:vendor/ImGuizmo/**.cpp"
+	flags { "NoPCH" }
 
 	filter "system:windows"
 		systemversion "latest"

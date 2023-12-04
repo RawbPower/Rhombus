@@ -13,3 +13,6 @@
 [submodule "Rhombus/vendor/yaml-cpp"]
 	path = Rhombus/vendor/yaml-cpp
 	url = https://github.com/RawbPower/yaml-cpp
+[submodule "Rhombus/vendor/ImGuizmo"]
+	path = Rhombus/vendor/ImGuizmo
+	url = https://github.com/RawbPower/ImGuizmo

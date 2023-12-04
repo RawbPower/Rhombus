@@ -1,5 +1,4 @@
 project "Rhombus-Editor"
-	location "Rhombus-Editor"
 	kind "ConsoleApp"
 	language "C++"
 	cppdialect "C++17"

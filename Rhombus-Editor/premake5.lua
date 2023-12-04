@@ -19,7 +19,8 @@ project "Rhombus-Editor"
 		"%{wks.location}/Rhombus/src",
 		"%{wks.location}/Rhombus/vendor",
 		"%{IncludeDir.glm}",
-		"%{IncludeDir.EnTT}"
+		"%{IncludeDir.EnTT}",
+		"%{IncludeDir.ImGuizmo}"
 	}
 
 	links

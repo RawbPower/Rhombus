@@ -3,6 +3,9 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
+#define GLM_ENABLE_EXPERIMENTAL
+#include <glm/gtx/quaternion.hpp>
+
 #include "SceneCamera.h"
 #include "ScriptableEntity.h"
 
@@ -29,9 +32,11 @@ namespace rhombus
 
 		glm::mat4 GetTransform() const 
 		{ 
-			glm::mat4 rotation = glm::rotate(glm::mat4(1.0f), m_rotation.x, { 1, 0, 0 })
+			/*glm::mat4 rotation = glm::rotate(glm::mat4(1.0f), m_rotation.x, {1, 0, 0})
 				* glm::rotate(glm::mat4(1.0f), m_rotation.y, { 0, 1, 0 })
-				* glm::rotate(glm::mat4(1.0f), m_rotation.z, { 0, 0, 1 });
+				* glm::rotate(glm::mat4(1.0f), m_rotation.z, { 0, 0, 1 });*/
+
+			glm::mat4 rotation = glm::toMat4(glm::quat(m_rotation));
 
 			glm::mat4 transform = glm::translate(glm::mat4(1.0f), m_position)
 				* rotation

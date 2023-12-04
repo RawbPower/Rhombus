@@ -108,6 +108,21 @@ namespace rhombus
 		}
 	}
 
+	Entity Scene::GetPrimaryCameraEntity()
+	{
+		auto view = m_Registry.view<CameraComponent>();
+		for (auto entity : view)
+		{
+			auto& camera = view.get<CameraComponent>(entity);
+			if (camera.GetIsPrimaryCamera())
+			{
+				return Entity{ entity, this };
+			}
+		}
+
+		return {};
+	}
+
 	// Not sure about this template specialization stuff :/
 	template<typename T>
 	void Scene::OnComponentAdded(Entity entity, T& component)

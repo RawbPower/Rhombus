@@ -7,6 +7,9 @@
 
 #include "Rhombus/ECS/SceneSerializer.h"
 #include "Rhombus/Utils/PlatformUtils.h"
+#include "Rhombus/Math/Math.h"
+
+#include "ImGuizmo.h"
 
 namespace rhombus
 {
@@ -221,7 +224,7 @@ namespace rhombus
 		m_ViewportFocused = ImGui::IsWindowFocused();
 		m_ViewportHovered = ImGui::IsWindowHovered();
 		
-		Application::Get().GetImGuiLayer()->BlockEvents(!m_ViewportFocused || !m_ViewportHovered);
+		Application::Get().GetImGuiLayer()->BlockEvents(!m_ViewportFocused && !m_ViewportHovered);
 
 		ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
 
@@ -229,6 +232,53 @@ namespace rhombus
 
 		uint32_t textureID = m_Framebuffer->GetColorAttachmentRendererID();
 		ImGui::Image((void*)textureID, ImVec2{ m_ViewportSize.x, m_ViewportSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+		
+		// Gimzos
+		// TODO: Get a independent selection from the mouse picker and use events to update different panels
+		Entity selectedEntity = m_sceneHierarchyPanel.GetSelectedEntity();
+		if (selectedEntity && m_gizmoType != -1)
+		{
+			ImGuizmo::SetOrthographic(false);
+			ImGuizmo::SetDrawlist();
+
+			float windowWidth = (float)ImGui::GetWindowWidth();
+			float windowHeight = (float)ImGui::GetWindowHeight();
+			ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, windowWidth, windowHeight);
+
+			// Camera
+			auto cameraEntity = m_ActiveScene->GetPrimaryCameraEntity();
+			const auto& camera = cameraEntity.GetComponent<CameraComponent>().GetCamera();
+			const glm::mat4& cameraProjection = camera.GetProjection();
+			glm::mat4 cameraView = glm::inverse(cameraEntity.GetComponent<TransformComponent>().GetTransform());
+
+			// Entity transform
+			auto& transformComponent = selectedEntity.GetComponent<TransformComponent>();
+			glm::mat4 transform = transformComponent.GetTransform();
+
+			// Snapping
+			bool snap = Input::IsKeyPressed(RB_KEY_LEFT_CONTROL);
+			float snapValue = 0.5f; // Snap to 0.5m for translation/scale
+			// Snap to 45 degrees for rotation
+			if (m_gizmoType == ImGuizmo::OPERATION::ROTATE)
+				snapValue = 45.0f;
+
+			float snapValues[3] = { snapValue, snapValue, snapValue };
+
+			ImGuizmo::Manipulate(glm::value_ptr(cameraView), glm::value_ptr(cameraProjection),
+				(ImGuizmo::OPERATION)m_gizmoType, ImGuizmo::LOCAL, glm::value_ptr(transform),
+				nullptr, snap ? snapValues : nullptr);
+
+			if (ImGuizmo::IsUsing())
+			{
+				glm::vec3 translation, rotation, scale;
+				math::DecomposeTransform(transform, translation, rotation, scale);
+
+				transformComponent.m_position = translation;
+				transformComponent.m_rotation = rotation;		// TODO: Look into gimbal lock issue
+				transformComponent.m_scale = scale;
+			}
+		}
+		
 		ImGui::End();
 		ImGui::PopStyleVar();
 
@@ -283,6 +333,20 @@ namespace rhombus
 
 				break;
 			}
+
+			// Gizmos
+			case RB_KEY_Q:
+				m_gizmoType = -1;
+				break;
+			case RB_KEY_W:
+				m_gizmoType = ImGuizmo::OPERATION::TRANSLATE;
+				break;
+			case RB_KEY_E:
+				m_gizmoType = ImGuizmo::OPERATION::ROTATE;
+				break;
+			case RB_KEY_R:
+				m_gizmoType = ImGuizmo::OPERATION::SCALE;
+				break;
 		}
 	}
 

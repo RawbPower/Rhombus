@@ -86,8 +86,6 @@
 
 #define RB_BIND_EVENT_FN(fn) [this](auto&&... args) -> decltype(auto) { return this->fn(std::forward<decltype(args)>(args)...);}
 
-#define YAML_CPP_STATIC_DEFINE		// Needed for yaml static library to work for some reason
-
 namespace rhombus {
 
 	template<typename T>

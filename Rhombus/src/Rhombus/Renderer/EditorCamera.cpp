@@ -26,7 +26,7 @@ namespace rhombus {
 
 	void EditorCamera::UpdateView()
 	{
-		// m_Yaw = m_Pitch = 0.0f; // Lock the camera's rotation
+		//m_yaw = m_pitch = 0.0f; // Lock the camera's rotation
 		m_position = CalculatePosition();
 
 		glm::quat orientation = GetOrientation();
@@ -73,6 +73,12 @@ namespace rhombus {
 				MouseRotate(delta);
 			else if (Input::IsMouseButtonPressed(RB_MOUSE_BUTTON_RIGHT))
 				MouseZoom(delta.y);
+		}
+		
+		if (Input::IsKeyPressed(RB_KEY_L))
+		{
+			// Reset rotation
+			m_yaw = m_pitch = 0.0f;
 		}
 
 		UpdateView();

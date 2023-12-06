@@ -108,8 +108,9 @@ namespace rhombus
 		if (m_ViewportFocused)
 		{
 			m_CameraController.OnUpdate(dt);
-			m_EditorCamera.OnUpdate(dt);
 		}
+
+		m_EditorCamera.OnUpdate(dt);
 
 		// Render
 		Renderer2D::ResetStats();

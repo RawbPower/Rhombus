@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Rhombus/Core/DeltaTime.h"
+#include "Rhombus/Renderer/EditorCamera.h"
 
 #include <entt.hpp>
 
@@ -17,7 +18,8 @@ namespace rhombus
 		Entity CreateEntity(const std::string& name = std::string());
 		void DestroyEntity(Entity entity);
 
-		void OnUpdate(DeltaTime dt);
+		void OnUpdateRuntime(DeltaTime dt);
+		void OnUpdateEditor(DeltaTime dt, EditorCamera& camera);
 		void OnViewportResize(uint32_t width, uint32_t height);
 
 		Entity GetPrimaryCameraEntity();

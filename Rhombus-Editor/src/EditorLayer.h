@@ -2,6 +2,7 @@
 
 #include "Rhombus.h"
 #include "Panels/SceneHierarchyPanel.h"
+#include "Rhombus/Renderer/EditorCamera.h"
 
 namespace rhombus
 {
@@ -37,6 +38,8 @@ namespace rhombus
 
 		bool m_PrimaryCamera = true;
 
+		EditorCamera m_EditorCamera;
+
 		Ref<Texture2D> m_CheckerboardTexture;
 
 		OrthographicCameraController m_CameraController;
@@ -48,7 +51,7 @@ namespace rhombus
 
 		glm::vec4 m_SquareColor = { 0.2f, 0.3f, 0.8f, 1.0f };
 
-		int m_gizmoType = -1;
+		int m_gizmoType = 7;		// ImGuizmo::OPERATION::TRANSLATE
 
 		// Panels
 		SceneHierarchyPanel m_sceneHierarchyPanel;

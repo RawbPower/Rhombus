@@ -31,7 +31,7 @@ namespace rhombus
 		m_Registry.destroy(entity);
 	}
 
-	void Scene::OnUpdate(DeltaTime dt)
+	void Scene::OnUpdateRuntime(DeltaTime dt)
 	{
 		// Update Scripts
 		{
@@ -89,6 +89,28 @@ namespace rhombus
 
 			Renderer2D::EndScene();
 		}
+	}
+
+	void Scene::OnUpdateEditor(DeltaTime dt, EditorCamera& camera)
+	{
+		Renderer2D::BeginScene(camera);
+
+		// To make blending work for multiple objects we have to draw the
+		// most distant object first and the closest object last
+		m_Registry.sort<SpriteRendererComponent>([&](const entt::entity lhs, const entt::entity rhs) {
+			return m_Registry.get<TransformComponent>(lhs).m_position.z < m_Registry.get<TransformComponent>(rhs).m_position.z;
+			});
+
+		auto view = m_Registry.view<SpriteRendererComponent, TransformComponent>();
+
+		for (auto entity : view)
+		{
+			auto [spriteRendererComponent, transformComponent] = view.get<SpriteRendererComponent, TransformComponent>(entity);
+
+			Renderer2D::DrawQuad(transformComponent.GetTransform(), spriteRendererComponent.GetColor());
+		}
+
+		Renderer2D::EndScene();
 	}
 
 	void Scene::OnViewportResize(uint32_t width, uint32_t height)

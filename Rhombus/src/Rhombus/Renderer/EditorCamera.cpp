@@ -74,6 +74,16 @@ namespace rhombus {
 			else if (Input::IsMouseButtonPressed(RB_MOUSE_BUTTON_RIGHT))
 				MouseZoom(delta.y);
 		}
+		else
+		{
+			const glm::vec2& mouse{ Input::GetMouseX(), Input::GetMouseY() };
+			glm::vec2 delta = (mouse - m_initialMousePosition) * 0.003f;
+			m_initialMousePosition = mouse;
+			if (Input::IsMouseButtonPressed(RB_MOUSE_BUTTON_MIDDLE))
+			{
+				MouseRotate(delta);
+			}
+		}
 		
 		if (Input::IsKeyPressed(RB_KEY_L))
 		{

@@ -17,13 +17,17 @@ namespace rhombus
 
 		virtual void Resize(uint32_t width, uint32_t height) override;
 
-		virtual uint32_t GetColorAttachmentRendererID() const override { return m_ColorAttachment; }
+		virtual uint32_t GetColorAttachmentRendererID(uint32_t index = 0) const override { RB_CORE_ASSERT(index < m_colorAttachmentIDs.size(), "Invalid color attachment index!") return m_colorAttachmentIDs[index]; }
 
 		virtual const FramebufferSpecification& GetSpecification() const override { return m_Specification; }
 	private:
 		uint32_t m_RendererID = 0;
-		uint32_t m_ColorAttachment = 0;
-		uint32_t m_DepthAttachment = 0;
 		FramebufferSpecification m_Specification;
+
+		std::vector<FramebufferTextureSpecification> m_colorAttachmentSpecifications;
+		FramebufferTextureSpecification m_depthAttachmentSpecification;
+
+		std::vector<uint32_t> m_colorAttachmentIDs;
+		uint32_t m_depthAttachmentID = 0;
 	};
 }

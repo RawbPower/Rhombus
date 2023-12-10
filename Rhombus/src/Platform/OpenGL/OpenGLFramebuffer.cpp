@@ -76,6 +76,18 @@ namespace rhombus
 			return false;
 		}
 
+		static GLenum FramebufferTextureFormatToGL(FramebufferTextureFormat format)
+		{
+			switch (format)
+			{
+			case FramebufferTextureFormat::RGBA8:       return GL_RGBA8;
+			case FramebufferTextureFormat::RED_INTEGER: return GL_RED_INTEGER;
+			}
+
+			RB_CORE_ASSERT(false, "Unknown framebuffer texture format.");
+			return 0;
+		}
+
 	}
 
 	OpenGLFramebuffer::OpenGLFramebuffer(const FramebufferSpecification& spec)
@@ -195,7 +207,17 @@ namespace rhombus
 		RB_CORE_ASSERT(attachmentIndex < m_colorAttachmentIDs.size(), "Invalid attachment index!");
 		glReadBuffer(GL_COLOR_ATTACHMENT0 + attachmentIndex);
 		int pixelData;
-		glReadPixels(x, y, 1, 1, GL_RED_INTEGER, GL_INT, &pixelData);		// Bad hardcoding needs fix
+		glReadPixels(x, y, 1, 1, GL_RED_INTEGER, GL_INT, &pixelData);		// TODO: Bad hardcoding needs fix
 		return pixelData;
+	}
+
+	void OpenGLFramebuffer::ClearAttachment(uint32_t attachmentIndex, int value)
+	{
+		RB_CORE_ASSERT(attachmentIndex < m_colorAttachmentIDs.size(), "Invalid color attachment ID!");
+
+		auto& spec = m_colorAttachmentSpecifications[attachmentIndex];
+
+		glClearTexImage(m_colorAttachmentIDs[attachmentIndex], 0, 
+			utils::FramebufferTextureFormatToGL(spec.TextureFormat), GL_INT, &value);   // TODO: better way to figure out other non-int types
 	}
 }

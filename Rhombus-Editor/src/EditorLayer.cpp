@@ -119,6 +119,9 @@ namespace rhombus
 		RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
 		RenderCommand::Clear();
 
+		// Clear our entity ID attachment to -1
+		m_Framebuffer->ClearAttachment(1, -1);
+
 		// Update Scene
 		m_ActiveScene->OnUpdateEditor(dt, m_EditorCamera);
 
@@ -372,17 +375,37 @@ namespace rhombus
 
 			// Gizmos
 			case RB_KEY_Q:
-				m_gizmoType = -1;
+			{
+				if (!ImGuizmo::IsUsing())
+				{
+					m_gizmoType = -1;
+				}
 				break;
+			}
 			case RB_KEY_W:
-				m_gizmoType = ImGuizmo::OPERATION::TRANSLATE;
+			{
+				if (!ImGuizmo::IsUsing())
+				{
+					m_gizmoType = ImGuizmo::OPERATION::TRANSLATE;
+				}
 				break;
+			}
 			case RB_KEY_E:
-				m_gizmoType = ImGuizmo::OPERATION::ROTATE;
+			{
+				if (!ImGuizmo::IsUsing())
+				{
+					m_gizmoType = ImGuizmo::OPERATION::ROTATE;
+				}
 				break;
+			}
 			case RB_KEY_R:
-				m_gizmoType = ImGuizmo::OPERATION::SCALE;
+			{
+				if (!ImGuizmo::IsUsing())
+				{
+					m_gizmoType = ImGuizmo::OPERATION::SCALE;
+				}
 				break;
+			}
 		}
 	}
 

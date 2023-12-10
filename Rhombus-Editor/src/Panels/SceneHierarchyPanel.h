@@ -18,6 +18,7 @@ namespace rhombus
 		void OnImGuiRender();
 
 		Entity GetSelectedEntity() const { return m_selectionContext; }
+		void SetSelectedEntity(Entity entity) { m_selectionContext = entity; }
 	private:
 		void DrawEntityNode(Entity entity);
 		void DrawComponents(Entity entity);

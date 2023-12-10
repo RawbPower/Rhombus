@@ -84,7 +84,7 @@ namespace rhombus
 			{
 				auto [spriteRendererComponent, transformComponent] = view.get<SpriteRendererComponent, TransformComponent>(entity);
 
-				Renderer2D::DrawQuad(transformComponent.GetTransform(), spriteRendererComponent.GetColor());
+				Renderer2D::DrawSprite(transformComponent.GetTransform(), spriteRendererComponent, (int)entity);
 			}
 
 			Renderer2D::EndScene();
@@ -107,7 +107,7 @@ namespace rhombus
 		{
 			auto [spriteRendererComponent, transformComponent] = view.get<SpriteRendererComponent, TransformComponent>(entity);
 
-			Renderer2D::DrawQuad(transformComponent.GetTransform(), spriteRendererComponent.GetColor());
+			Renderer2D::DrawSprite(transformComponent.GetTransform(), spriteRendererComponent, (int)entity);
 		}
 
 		Renderer2D::EndScene();

@@ -22,6 +22,7 @@ namespace rhombus
 
 	private:
 		bool OnKeyPressed(KeyPressedEvent& e);
+		bool OnMouseButtonPressed(MouseButtonPressedEvent& e);
 		void NewScene();
 		void OpenScene();
 		void SaveSceneAs();
@@ -35,6 +36,7 @@ namespace rhombus
 		Entity m_SquareEntity;
 		Entity m_CameraEntity;
 		Entity m_SecondaryCameraEntity;
+		Entity m_HoveredEntity;
 
 		bool m_PrimaryCamera = true;
 

@@ -2,6 +2,7 @@
 
 #include "Rhombus.h"
 #include "Panels/SceneHierarchyPanel.h"
+#include "Panels/ContentBrowerPanel.h";
 #include "Rhombus/Renderer/EditorCamera.h"
 
 namespace rhombus
@@ -58,5 +59,6 @@ namespace rhombus
 
 		// Panels
 		SceneHierarchyPanel m_sceneHierarchyPanel;
+		ContentBrowserPanel m_contentBrowserPanel;
 	};
 }

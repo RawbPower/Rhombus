@@ -229,7 +229,8 @@ namespace rhombus
 			ImGui::EndMenuBar();
 		}
 
-		m_sceneHierarchyPanel.OnImGuiRender();	
+		m_sceneHierarchyPanel.OnImGuiRender();
+		m_contentBrowserPanel.OnImGuiRender();
 
 		ImGui::Begin("Renderer Stats");
 

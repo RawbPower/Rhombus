@@ -148,6 +148,7 @@ namespace rhombus
 
 			auto& spriteRendererComponent = entity.GetComponent<SpriteRendererComponent>();
 			out << YAML::Key << "Color" << YAML::Value << spriteRendererComponent.GetColor();
+			out << YAML::Key << "Texture" << YAML::Value << spriteRendererComponent.m_texture->GetPath();
 
 			out << YAML::EndMap; // SpriteRendererComponent
 		}
@@ -242,6 +243,10 @@ namespace rhombus
 				{
 					auto& src = deserializedEntity.AddComponent<SpriteRendererComponent>();
 					src.GetColor() = spriteRendererComponent["Color"].as<glm::vec4>();
+					if (spriteRendererComponent["Texture"].Type() != YAML::NodeType::Undefined)
+					{
+						src.m_texture = Texture2D::Create(spriteRendererComponent["Texture"].as<std::string>());
+					}
 				}
 			}
 		}

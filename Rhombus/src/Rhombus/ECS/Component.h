@@ -8,6 +8,7 @@
 
 #include "SceneCamera.h"
 #include "ScriptableEntity.h"
+#include "Rhombus/Renderer/Texture.h"
 
 namespace rhombus
 {
@@ -59,7 +60,9 @@ namespace rhombus
 
 		glm::vec4& GetColor() { return m_color; }
 		glm::vec4 GetColor() const { return m_color; }
-		void GetColor(glm::vec4 color) { m_color = color; }
+		void SetColor(glm::vec4 color) { m_color = color; }
+
+		Ref<Texture2D> m_texture;
 
 	private:
 		glm::vec4 m_color{ 1.0f, 1.0f, 1.0f, 1.0f };

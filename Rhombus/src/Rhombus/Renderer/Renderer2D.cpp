@@ -399,7 +399,10 @@ namespace rhombus
 
 	void Renderer2D::DrawSprite(const glm::mat4& transform, const SpriteRendererComponent& src, int entityID)
 	{
-		DrawQuad(transform, src.GetColor(), entityID);
+		if (src.m_texture)
+			DrawQuad(transform, src.m_texture, src.GetColor(), 1.0f, entityID);
+		else
+			DrawQuad(transform, src.GetColor(), entityID);
 	}
 
 	void Renderer2D::ResetStats()

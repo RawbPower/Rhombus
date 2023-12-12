@@ -5,9 +5,12 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include "Rhombus/ECS/Component.h"
+#include <filesystem>
 
 namespace rhombus
 {
+	extern const std::filesystem::path g_AssetPath;
+
 	SceneHierarchyPanel::SceneHierarchyPanel(const Ref<Scene>& context)
 	{
 		SetContext(context);
@@ -35,7 +38,7 @@ namespace rhombus
 		}
 
 		// Right-click on blank space
-		if (ImGui::BeginPopupContextWindow(0, 1))
+		if (ImGui::BeginPopupContextWindow(0, ImGuiPopupFlags_MouseButtonRight | ImGuiPopupFlags_NoOpenOverItems))
 		{
 			if (ImGui::MenuItem("Create New Entity"))
 				m_context->CreateEntity("Untitled Entity");
@@ -259,6 +262,18 @@ namespace rhombus
 		DrawComponent<SpriteRendererComponent>("Sprite Renderer", entity, [](auto& component)
 		{
 			ImGui::ColorEdit4("Colour", glm::value_ptr(component.GetColor()));
+
+			ImGui::Button("Texture", ImVec2(100.0f, 0.0f));
+			if (ImGui::BeginDragDropTarget())
+			{
+				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
+				{
+					const wchar_t* path = (const wchar_t*)payload->Data;
+					std::filesystem::path texturePath = std::filesystem::path(g_AssetPath) / path;
+					component.m_texture = Texture2D::Create(texturePath.string());
+				}
+				ImGui::EndDragDropTarget();
+			}
 		});
 
 		DrawComponent<CameraComponent>("Camera", entity, [](auto& component)

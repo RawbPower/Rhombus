@@ -65,6 +65,10 @@ namespace rhombus
 				{
 					m_currentDirectory /= path.filename();
 				}
+				else
+				{
+
+				}
 			}
 
 			ImGui::TextWrapped(filenameString.c_str());

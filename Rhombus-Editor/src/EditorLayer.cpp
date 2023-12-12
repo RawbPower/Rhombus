@@ -13,6 +13,7 @@
 
 namespace rhombus
 {
+	extern const std::filesystem::path g_AssetPath;
 
 	EditorLayer::EditorLayer()
 		: Layer("Editor"), m_CameraController(960.0f / 540.0f, true), m_SquareColor({ 0.2f, 0.3f, 0.8f, 1.0f })
@@ -270,6 +271,18 @@ namespace rhombus
 
 		uint32_t textureID = m_Framebuffer->GetColorAttachmentRendererID();
 		ImGui::Image((void*)textureID, ImVec2{ m_ViewportSize.x, m_ViewportSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+
+		// TODO: Might be better to open a scene from double clicking in the content browser
+		// Would need to listen to some even though
+		if (ImGui::BeginDragDropTarget())
+		{
+			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
+			{
+				const wchar_t* path = (const wchar_t*)payload->Data;
+				OpenScene(std::filesystem::path(g_AssetPath) / path);
+			}
+			ImGui::EndDragDropTarget();
+		}
 		
 		// Gimzos
 		// TODO: Get a independent selection from the mouse picker and use events to update different panels
@@ -435,13 +448,18 @@ namespace rhombus
 		std::string filepath = FileDialogs::OpenFile("Rhombus Scene (*.rb)\0*.rb\0");
 		if (!filepath.empty())
 		{
-			m_ActiveScene = CreateRef<Scene>();
-			m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
-			m_sceneHierarchyPanel.SetContext(m_ActiveScene);
-
-			SceneSerializer serializer(m_ActiveScene);
-			serializer.Deserialize(filepath);
+			OpenScene(filepath);
 		}
+	}
+
+	void EditorLayer::OpenScene(const std::filesystem::path& path)
+	{
+		m_ActiveScene = CreateRef<Scene>();
+		m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
+		m_sceneHierarchyPanel.SetContext(m_ActiveScene);
+
+		SceneSerializer serializer(m_ActiveScene);
+		serializer.Deserialize(path.string());
 	}
 
 	void EditorLayer::SaveSceneAs()

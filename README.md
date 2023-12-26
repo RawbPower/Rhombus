@@ -4,3 +4,9 @@ Rhombus is a 2D game engine made using SDL2. It will focus on pixel art games wi
 <p align="center">
   <img width="480" height="480" src="https://github.com/RawbPower/Rhombus/blob/main/Rhombus/assets/RhombusIconBlueLarge.png">
 </p>
+
+Additional Testing Assets By:
+
+https://faultbox.itch.io/
+
+https://vryell.itch.io/

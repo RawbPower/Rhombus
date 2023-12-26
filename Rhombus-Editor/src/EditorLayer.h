@@ -29,6 +29,12 @@ namespace rhombus
 		void OpenScene(const std::filesystem::path& path);
 		void SaveSceneAs();
 
+		void OnScenePlay();
+		void OnSceneStop();
+
+		// UI Panel
+		void UI_Toolbar();
+
 		// Temp (These needs to be abstracted away)
 		Ref<Shader> m_FlatColourShader;
 		Ref<VertexArray> m_SquareVA;
@@ -58,8 +64,19 @@ namespace rhombus
 
 		int m_gizmoType = 7;		// ImGuizmo::OPERATION::TRANSLATE
 
+		enum SceneState
+		{
+			Edit = 0,
+			Play = 1
+		};
+
+		SceneState m_SceneState = SceneState::Edit;
+
 		// Panels
 		SceneHierarchyPanel m_sceneHierarchyPanel;
 		ContentBrowserPanel m_contentBrowserPanel;
+
+		// Editor resources
+		Ref<Texture2D> m_IconPlay, m_IconStop;
 	};
 }

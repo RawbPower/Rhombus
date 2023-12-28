@@ -33,11 +33,13 @@ IncludeDir["SDL2"] = "%{wks.location}/Rhombus/vendor/SDL2/include"
 IncludeDir["EnTT"] = "%{wks.location}/Rhombus/vendor/EnTT/include"
 IncludeDir["yaml_cpp"] = "%{wks.location}/Rhombus/vendor/yaml-cpp/include"
 IncludeDir["ImGuizmo"] = "%{wks.location}/Rhombus/vendor/ImGuizmo"
+IncludeDir["Box2d"] = "%{wks.location}/Rhombus/vendor/box2d/include"
 
 group "Dependencies"
 	include "Rhombus/vendor/Glad"
 	include "Rhombus/vendor/imgui"
 	include "Rhombus/vendor/yaml-cpp"
+	include "Rhombus/vendor/box2d"
 
 group ""
 

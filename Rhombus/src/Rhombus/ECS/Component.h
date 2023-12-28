@@ -103,4 +103,38 @@ namespace rhombus
 		ScriptableEntity* m_instance = nullptr;
 		friend class Scene;
 	};
+
+	// Physics
+	class Rigidbody2DComponent
+	{
+	public:
+		enum class BodyType { Static = 0, Dynamic, Kinematic };
+		BodyType m_type = BodyType::Static;
+		bool m_fixedRotation = false;
+
+		// Storage for runtime
+		void* m_runtimeBody = nullptr;
+
+		Rigidbody2DComponent() = default;
+		Rigidbody2DComponent(const Rigidbody2DComponent& other) = default;
+	};
+
+	class BoxCollider2DComponent
+	{
+	public:
+		glm::vec2 m_offset = { 0.0f, 0.0f };
+		glm::vec2 m_size = { 0.5f, 0.5f };
+
+		// TODO: Move to physics material
+		float m_density = 1.0f;
+		float m_friction = 0.5f;
+		float m_restitution = 0.0f;
+		float m_restitutionThreshold = 0.5f;
+
+		// Storage for runtime
+		void* m_runtimeFixture = nullptr;
+
+		BoxCollider2DComponent() = default;
+		BoxCollider2DComponent(const BoxCollider2DComponent& other) = default;
+	};
 }

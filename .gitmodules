@@ -16,3 +16,6 @@
 [submodule "Rhombus/vendor/ImGuizmo"]
 	path = Rhombus/vendor/ImGuizmo
 	url = https://github.com/RawbPower/ImGuizmo
+[submodule "Rhombus/vendor/box2d"]
+	path = Rhombus/vendor/box2d
+	url = https://github.com/RawbPower/box2d

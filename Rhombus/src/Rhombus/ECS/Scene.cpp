@@ -2,6 +2,7 @@
 #include "Scene.h"
 #include "Component.h"
 #include "Entity.h"
+#include "ScriptableEntity.h"
 #include "Rhombus/Renderer/Renderer2D.h"
 
 #include <glm/glm.hpp>
@@ -38,7 +39,13 @@ namespace rhombus
 
 	Entity Scene::CreateEntity(const std::string& name)
 	{
+		return CreateEntityWithUUID(UUID(), name);
+	}
+
+	Entity Scene::CreateEntityWithUUID(UUID uuid, const std::string& name)
+	{
 		Entity entity(m_Registry.create(), this);
+		entity.AddComponent<IDComponent>(uuid);
 		entity.AddComponent<TransformComponent>();
 		auto& tag = entity.AddComponent<TagComponent>();
 		tag.m_tag = name.empty() ? "Entity" : name;
@@ -235,6 +242,11 @@ namespace rhombus
 	void Scene::OnComponentAdded(Entity entity, T& component)
 	{
 		static_assert(false);
+	}
+
+	template<>
+	void Scene::OnComponentAdded<IDComponent>(Entity entity, IDComponent& component)
+	{
 	}
 
 	template<>

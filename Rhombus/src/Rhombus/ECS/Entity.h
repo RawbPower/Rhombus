@@ -1,6 +1,8 @@
 #pragma once
 
+#include "Rhombus/Core/UUID.h"
 #include "Scene.h"
+#include "Component.h"
 
 #include "entt.hpp"
 
@@ -60,6 +62,8 @@ namespace rhombus
 		operator bool() const { return m_entityId != entt::null; }
 		operator entt::entity() const { return m_entityId; }
 		operator uint32_t() const { return (uint32_t)m_entityId; }
+
+		UUID GetUUID() { return GetComponent<IDComponent>().m_id; }
 
 	private:
 		entt::entity m_entityId = entt::null;

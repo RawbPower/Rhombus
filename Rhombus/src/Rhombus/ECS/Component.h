@@ -1,17 +1,26 @@
 #pragma once
 
+#include "SceneCamera.h"
+#include "Rhombus/Core/UUID.h"
+#include "Rhombus/Renderer/Texture.h"
+
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/quaternion.hpp>
 
-#include "SceneCamera.h"
-#include "ScriptableEntity.h"
-#include "Rhombus/Renderer/Texture.h"
-
 namespace rhombus
 {
+	class IDComponent
+	{
+	public:
+		UUID m_id;
+
+		IDComponent() = default;
+		IDComponent(const IDComponent&) = default;
+	};
+
 	class TagComponent
 	{
 	public:
@@ -85,6 +94,9 @@ namespace rhombus
 		bool m_primary = true;	// Maybe move this to the scene and out of the component
 		bool m_fixedAspectRatio = false;
 	};
+
+	// Forward declaration
+	class ScriptableEntity;
 
 	class NativeScriptComponent
 	{

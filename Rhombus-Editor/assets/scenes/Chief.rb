@@ -1,16 +1,16 @@
 Scene: Untitled
 Entities:
-  - Entity: 6907134579260574627
+  - Entity: 6529422571402075691
     TagComponent:
-      Tag: Floor
+      Tag: Chief
     TransformComponent:
-      Position: [0, -1.50873947, 0]
-      Rotation: [0, -0, 0]
-      Scale: [7.16815186, 0.611474156, 0.98999995]
+      Position: [0.466043085, -0.482601285, 0.105968513]
+      Rotation: [0.0511592478, -0.00950342324, -0.00478666136]
+      Scale: [0.999955714, 1.00000012, 0.999999762]
     SpriteRendererComponent:
-      Color: [0.287389487, 0.594675303, 0.90196079, 1]
+      Color: [0.921568632, 0.921568632, 0.262014627, 1]
     Rigidbody2DComponent:
-      BodyType: Static
+      BodyType: Dynamic
       FixedRotation: false
     BoxCollider2DComponent:
       Offset: [0, 0]
@@ -37,17 +37,17 @@ Entities:
         OrthographicFar: 1
       Primary: true
       FixedAspectRatio: false
-  - Entity: 6529422571402075691
+  - Entity: 6907134579260574627
     TagComponent:
-      Tag: Chief
+      Tag: Floor
     TransformComponent:
-      Position: [0.476757944, 2.00911784, 0.233549833]
-      Rotation: [0.0511592478, -0.00950282998, -0.00478666183]
-      Scale: [0.999985576, 1.00000012, 0.999999762]
+      Position: [0, -1.50873947, 0]
+      Rotation: [0, -0, 0]
+      Scale: [7.16815186, 0.611474156, 0.98999995]
     SpriteRendererComponent:
-      Color: [0.921568632, 0.921568632, 0.262014627, 1]
+      Color: [0.287389487, 0.594675303, 0.90196079, 1]
     Rigidbody2DComponent:
-      BodyType: Dynamic
+      BodyType: Static
       FixedRotation: false
     BoxCollider2DComponent:
       Offset: [0, 0]

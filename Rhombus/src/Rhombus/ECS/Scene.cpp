@@ -282,7 +282,8 @@ namespace rhombus
 			{
 				auto [spriteRendererComponent, transformComponent] = view.get<SpriteRendererComponent, TransformComponent>(entity);
 
-				Renderer2D::DrawSprite(transformComponent.GetTransform(), spriteRendererComponent, (int)entity);
+				//Renderer2D::DrawSprite(transformComponent.GetTransform(), spriteRendererComponent, (int)entity);
+				Renderer2D::DrawRect(transformComponent.GetTransform(), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), (int)entity);
 			}
 		}
 
@@ -304,6 +305,8 @@ namespace rhombus
 					circleRendererComponent.m_thickness, circleRendererComponent.m_fade, (int)entity);
 			}
 		}
+
+		Renderer2D::DrawLine(glm::vec3(0.0f), glm::vec3(5.0f), glm::vec4(1.0f, 0.0f, 1.0f, 1.0f));
 
 		Renderer2D::EndScene();
 	}

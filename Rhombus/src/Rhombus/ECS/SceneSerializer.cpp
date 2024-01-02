@@ -251,6 +251,22 @@ namespace rhombus
 			out << YAML::EndMap; // BoxCollider2DComponent
 		}
 
+		if (entity.HasComponent<CircleCollider2DComponent>())
+		{
+			out << YAML::Key << "CircleCollider2DComponent";
+			out << YAML::BeginMap; // CircleCollider2DComponent
+
+			auto& collider2DComponent = entity.GetComponent<CircleCollider2DComponent>();
+			out << YAML::Key << "Offset" << YAML::Value << collider2DComponent.m_offset;
+			out << YAML::Key << "Radius" << YAML::Value << collider2DComponent.m_radius;
+			out << YAML::Key << "Density" << YAML::Value << collider2DComponent.m_density;
+			out << YAML::Key << "Friction" << YAML::Value << collider2DComponent.m_friction;
+			out << YAML::Key << "Restitution" << YAML::Value << collider2DComponent.m_restitution;
+			out << YAML::Key << "RestitutionThreshold" << YAML::Value << collider2DComponent.m_restitutionThreshold;
+
+			out << YAML::EndMap; // CircleCollider2DComponent
+		}
+
 		out << YAML::EndMap; // Entity
 	}
 
@@ -383,6 +399,18 @@ namespace rhombus
 					coll.m_friction = boxCollider2DComponent["Friction"].as<float>();
 					coll.m_restitution = boxCollider2DComponent["Restitution"].as<float>();
 					coll.m_restitutionThreshold = boxCollider2DComponent["RestitutionThreshold"].as<float>();
+				}
+
+				auto circleCollider2DComponent = entity["CircleCollider2DComponent"];
+				if (circleCollider2DComponent)
+				{
+					auto& coll = deserializedEntity.AddComponent<CircleCollider2DComponent>();
+					coll.m_offset = circleCollider2DComponent["Offset"].as<glm::vec2>();
+					coll.m_radius = circleCollider2DComponent["Radius"].as<float>();
+					coll.m_density = circleCollider2DComponent["Density"].as<float>();
+					coll.m_friction = circleCollider2DComponent["Friction"].as<float>();
+					coll.m_restitution = circleCollider2DComponent["Restitution"].as<float>();
+					coll.m_restitutionThreshold = circleCollider2DComponent["RestitutionThreshold"].as<float>();
 				}
 			}
 		}

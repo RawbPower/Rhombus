@@ -12,6 +12,7 @@
 #include <box2d/b2_body.h>
 #include <box2d/b2_fixture.h>
 #include <box2d/b2_polygon_shape.h>
+#include <box2d/b2_circle_shape.h>
 
 namespace rhombus
 {
@@ -88,6 +89,7 @@ namespace rhombus
 		CopyComponent<NativeScriptComponent>(destSceneRegistry, srcSceneRegistry, enttMap);
 		CopyComponent<Rigidbody2DComponent>(destSceneRegistry, srcSceneRegistry, enttMap);
 		CopyComponent<BoxCollider2DComponent>(destSceneRegistry, srcSceneRegistry, enttMap);
+		CopyComponent<CircleCollider2DComponent>(destSceneRegistry, srcSceneRegistry, enttMap);
 
 		return destScene;
 	}
@@ -146,6 +148,23 @@ namespace rhombus
 				fixtureDef.restitution = collider.m_restitution;
 				fixtureDef.restitutionThreshold = collider.m_restitutionThreshold;
 				body->CreateFixture(&	fixtureDef);
+			}
+
+			if (entity.HasComponent<CircleCollider2DComponent>())
+			{
+				auto& collider = entity.GetComponent<CircleCollider2DComponent>();
+
+				b2CircleShape circleShape;
+				circleShape.m_p.Set(collider.m_offset.x, collider.m_offset.y);
+				circleShape.m_radius = collider.m_radius;
+
+				b2FixtureDef fixtureDef;
+				fixtureDef.shape = &circleShape;
+				fixtureDef.density = collider.m_density;
+				fixtureDef.friction = collider.m_friction;
+				fixtureDef.restitution = collider.m_restitution;
+				fixtureDef.restitutionThreshold = collider.m_restitutionThreshold;
+				body->CreateFixture(&fixtureDef);
 			}
 		}
 	}
@@ -282,8 +301,7 @@ namespace rhombus
 			{
 				auto [spriteRendererComponent, transformComponent] = view.get<SpriteRendererComponent, TransformComponent>(entity);
 
-				//Renderer2D::DrawSprite(transformComponent.GetTransform(), spriteRendererComponent, (int)entity);
-				Renderer2D::DrawRect(transformComponent.GetTransform(), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), (int)entity);
+				Renderer2D::DrawSprite(transformComponent.GetTransform(), spriteRendererComponent, (int)entity);
 			}
 		}
 
@@ -305,8 +323,6 @@ namespace rhombus
 					circleRendererComponent.m_thickness, circleRendererComponent.m_fade, (int)entity);
 			}
 		}
-
-		Renderer2D::DrawLine(glm::vec3(0.0f), glm::vec3(5.0f), glm::vec4(1.0f, 0.0f, 1.0f, 1.0f));
 
 		Renderer2D::EndScene();
 	}
@@ -339,7 +355,8 @@ namespace rhombus
 		CopyComponentIfExists<CameraComponent>(newEntity, entity);
 		CopyComponentIfExists<NativeScriptComponent>(newEntity, entity);
 		CopyComponentIfExists<Rigidbody2DComponent>(newEntity, entity);
-		CopyComponentIfExists<BoxCollider2DComponent>(newEntity, entity);	
+		CopyComponentIfExists<BoxCollider2DComponent>(newEntity, entity);
+		CopyComponentIfExists<CircleCollider2DComponent>(newEntity, entity);
 	}
 
 	Entity Scene::GetPrimaryCameraEntity()
@@ -410,6 +427,11 @@ namespace rhombus
 
 	template<>
 	void Scene::OnComponentAdded<BoxCollider2DComponent>(Entity entity, BoxCollider2DComponent& component)
+	{
+	}
+
+	template<>
+	void Scene::OnComponentAdded<CircleCollider2DComponent>(Entity entity, CircleCollider2DComponent& component)
 	{
 	}
 }

@@ -30,11 +30,65 @@ namespace rhombus
 
 	Scene::Scene()
 	{
+
 	}
 
 	Scene::~Scene()
 	{
 
+	}
+
+	template<typename Component>
+	static void CopyComponent(entt::registry& dest, const entt::registry& src, const	std::unordered_map<UUID, entt::entity>& enttMap)
+	{
+		auto view = src.view<Component>();
+		for (auto e : view)
+		{
+			UUID uuid = src.get<IDComponent>(e).m_id;
+			entt::entity destEntityID = enttMap.at(uuid);
+
+			auto& component = src.get<Component>(e);
+			dest.emplace_or_replace<Component>(destEntityID, component);
+		}
+	}
+
+	template<typename Component>
+	static void CopyComponentIfExists(Entity dest, Entity src)
+	{
+		if (src.HasComponent<Component>())
+			dest.AddOrReplaceComponent<Component>(src.GetComponent<Component>());
+	}
+
+	Ref<Scene> Scene::Copy(Ref<Scene> srcScene)
+	{
+		Ref<Scene> destScene = CreateRef<Scene>();
+
+		destScene->m_ViewportHeight = srcScene->m_ViewportHeight;
+		destScene->m_ViewportWidth = srcScene->m_ViewportWidth;
+
+		auto& srcSceneRegistry = srcScene->m_Registry;
+		auto& destSceneRegistry = destScene->m_Registry;
+		std::unordered_map<UUID, entt::entity> enttMap;
+
+		// Create new entities for scene
+		auto idView = srcSceneRegistry.view<IDComponent>();		// Every entity
+		for (auto e : idView)
+		{
+			UUID uuid = srcSceneRegistry.get<IDComponent>(e).m_id;
+			const auto& name = srcSceneRegistry.get<TagComponent>(e).m_tag;
+			Entity newEntity = destScene->CreateEntityWithUUID(uuid, name);
+			enttMap[uuid] = (entt::entity)newEntity;
+		}
+
+		// Copy components (except IDComponent and TagComponent)
+		CopyComponent<TransformComponent>(destSceneRegistry, srcSceneRegistry, enttMap);
+		CopyComponent<SpriteRendererComponent>(destSceneRegistry, srcSceneRegistry, enttMap);
+		CopyComponent<CameraComponent>(destSceneRegistry, srcSceneRegistry, enttMap);
+		CopyComponent<NativeScriptComponent>(destSceneRegistry, srcSceneRegistry, enttMap);
+		CopyComponent<Rigidbody2DComponent>(destSceneRegistry, srcSceneRegistry, enttMap);
+		CopyComponent<BoxCollider2DComponent>(destSceneRegistry, srcSceneRegistry, enttMap);
+
+		return destScene;
 	}
 
 	Entity Scene::CreateEntity(const std::string& name)
@@ -222,6 +276,19 @@ namespace rhombus
 		}
 	}
 
+	void Scene::DuplicateEntity(Entity entity)
+	{
+		std::string name = entity.GetName();
+		Entity newEntity = CreateEntity(name);
+
+		CopyComponentIfExists<TransformComponent>(newEntity, entity);
+		CopyComponentIfExists<SpriteRendererComponent>(newEntity, entity);
+		CopyComponentIfExists<CameraComponent>(newEntity, entity);
+		CopyComponentIfExists<NativeScriptComponent>(newEntity, entity);
+		CopyComponentIfExists<Rigidbody2DComponent>(newEntity, entity);
+		CopyComponentIfExists<BoxCollider2DComponent>(newEntity, entity);	
+	}
+
 	Entity Scene::GetPrimaryCameraEntity()
 	{
 		auto view = m_Registry.view<CameraComponent>();
@@ -257,7 +324,10 @@ namespace rhombus
 	template<>
 	void Scene::OnComponentAdded<CameraComponent>(Entity entity, CameraComponent& component)
 	{
-		component.GetCamera().SetViewportResize(m_ViewportWidth, m_ViewportHeight);
+		if (m_ViewportWidth > 0 && m_ViewportHeight > 0)
+		{
+			component.GetCamera().SetViewportResize(m_ViewportWidth, m_ViewportHeight);
+		}
 	}
 
 	template<>

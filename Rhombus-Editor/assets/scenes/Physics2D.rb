@@ -2,9 +2,9 @@ Scene: Untitled
 Entities:
   - Entity: 6538702533909334857
     TagComponent:
-      Tag: Sprite
+      Tag: Sprite 2
     TransformComponent:
-      Position: [0, 0, 0]
+      Position: [1.07606816, 2.00525546, 0]
       Rotation: [0, -0, 0.558835864]
       Scale: [0.99999994, 0.99999994, 1]
     SpriteRendererComponent:
@@ -55,4 +55,23 @@ Entities:
       Density: 1
       Friction: 0.5
       Restitution: 0
+      RestitutionThreshold: 0.5
+  - Entity: 14103137884157560823
+    TagComponent:
+      Tag: Sprite
+    TransformComponent:
+      Position: [-1.70669341, 0.141008988, 0]
+      Rotation: [0, -0, 0.558835864]
+      Scale: [0.99999994, 0.99999994, 1]
+    SpriteRendererComponent:
+      Color: [1, 1, 1, 1]
+    Rigidbody2DComponent:
+      BodyType: Dynamic
+      FixedRotation: false
+    BoxCollider2DComponent:
+      Offset: [0, 0]
+      Size: [0.5, 0.5]
+      Density: 1
+      Friction: 0.5
+      Restitution: 0.460000008
       RestitutionThreshold: 0.5

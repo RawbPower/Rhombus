@@ -47,6 +47,14 @@ namespace rhombus
 			return component;
 		}
 
+		template<typename T, typename... Args>
+		T& AddOrReplaceComponent(Args&&... args)
+		{
+			T& component = m_scene->m_Registry.emplace_or_replace<T>(m_entityId, std::forward<Args>(args)...);
+			m_scene->OnComponentAdded<T>(*this, component);
+			return component;
+		}
+
 		template<typename T>
 		void RemoveComponent()
 		{
@@ -64,6 +72,7 @@ namespace rhombus
 		operator uint32_t() const { return (uint32_t)m_entityId; }
 
 		UUID GetUUID() { return GetComponent<IDComponent>().m_id; }
+		const std::string GetName() { return GetComponent<TagComponent>().m_tag; }
 
 	private:
 		entt::entity m_entityId = entt::null;

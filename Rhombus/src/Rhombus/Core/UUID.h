@@ -23,7 +23,7 @@ namespace std
 	template<>
 	struct hash<rhombus::UUID>
 	{
-		std::size_t operator()(const rhombus::UUID& uuid)
+		std::size_t operator()(const rhombus::UUID& uuid) const
 		{
 			return hash<uint64_t>()((uint64_t)uuid);
 		}

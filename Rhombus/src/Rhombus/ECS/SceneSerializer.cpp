@@ -210,6 +210,19 @@ namespace rhombus
 			out << YAML::EndMap; // SpriteRendererComponent
 		}
 
+		if (entity.HasComponent<CircleRendererComponent>())
+		{
+			out << YAML::Key << "CircleRendererComponent";
+			out << YAML::BeginMap; // CircleRendererComponent
+
+			auto& circleRendererComponent = entity.GetComponent<CircleRendererComponent>();
+			out << YAML::Key << "Color" << YAML::Value << circleRendererComponent.m_color;
+			out << YAML::Key << "Thickness" << YAML::Value << circleRendererComponent.m_thickness;
+			out << YAML::Key << "Fade" << YAML::Value << circleRendererComponent.m_fade;
+
+			out << YAML::EndMap; // CircleRendererComponent
+		}
+
 		if (entity.HasComponent<Rigidbody2DComponent>())
 		{
 			out << YAML::Key << "Rigidbody2DComponent";
@@ -341,6 +354,15 @@ namespace rhombus
 					{
 						src.m_texture = Texture2D::Create(spriteRendererComponent["Texture"].as<std::string>());
 					}
+				}
+
+				auto circleRendererComponent = entity["CircleRendererComponent"];
+				if (circleRendererComponent)
+				{
+					auto& crc = deserializedEntity.AddComponent<CircleRendererComponent>();
+					crc.m_color = circleRendererComponent["Color"].as<glm::vec4>();
+					crc.m_thickness = circleRendererComponent["Thickness"].as<float>();
+					crc.m_fade = circleRendererComponent["Fade"].as<float>();
 				}
 
 				auto rigidbody2DComponent = entity["Rigidbody2DComponent"];

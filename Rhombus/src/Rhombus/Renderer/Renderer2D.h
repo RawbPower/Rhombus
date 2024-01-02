@@ -37,6 +37,8 @@ namespace rhombus
 		static void DrawQuad(const glm::mat4& transform, const Ref<Texture2D>& texture, const glm::vec4& color, float tilingFactor = 1.0f, int entityID = -1);
 		static void DrawQuad(const glm::mat4& transform, const Ref<SubTexture2D>& subTexture, const glm::vec4& color, float tilingFactor = 1.0f, int entityID = -1);
 
+		static void DrawCircle(const glm::mat4& transform, const glm::vec4& color, float thickness = 1.0f, float fade = 0.0f, int entityID = -1);
+
 		static void DrawSprite(const glm::mat4& transform, const SpriteRendererComponent& src, int entityID);
 
 		struct Statistics

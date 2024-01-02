@@ -77,6 +77,16 @@ namespace rhombus
 		glm::vec4 m_color{ 1.0f, 1.0f, 1.0f, 1.0f };
 	};
 
+	struct CircleRendererComponent
+	{
+		glm::vec4 m_color{ 1.0f, 1.0f, 1.0f, 1.0f };
+		float m_thickness = 1.0f;
+		float m_fade = 0.0f;
+
+		CircleRendererComponent() = default;
+		CircleRendererComponent(const CircleRendererComponent&) = default;
+	};
+
 	class CameraComponent
 	{
 	public:

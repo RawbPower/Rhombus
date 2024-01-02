@@ -54,3 +54,14 @@ Entities:
       Scale: [1, 1, 1]
     SpriteRendererComponent:
       Color: [0, 1, 0, 1]
+  - Entity: 396830245665569953
+    TagComponent:
+      Tag: Circle
+    TransformComponent:
+      Position: [0, 1.28485107, 0]
+      Rotation: [0, -0, 0]
+      Scale: [1, 1, 1]
+    CircleRendererComponent:
+      Color: [1, 1, 1, 1]
+      Thickness: 0.200000003
+      Fade: 0

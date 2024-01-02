@@ -83,6 +83,7 @@ namespace rhombus
 		// Copy components (except IDComponent and TagComponent)
 		CopyComponent<TransformComponent>(destSceneRegistry, srcSceneRegistry, enttMap);
 		CopyComponent<SpriteRendererComponent>(destSceneRegistry, srcSceneRegistry, enttMap);
+		CopyComponent<CircleRendererComponent>(destSceneRegistry, srcSceneRegistry, enttMap);
 		CopyComponent<CameraComponent>(destSceneRegistry, srcSceneRegistry, enttMap);
 		CopyComponent<NativeScriptComponent>(destSceneRegistry, srcSceneRegistry, enttMap);
 		CopyComponent<Rigidbody2DComponent>(destSceneRegistry, srcSceneRegistry, enttMap);
@@ -218,19 +219,43 @@ namespace rhombus
 		{
 			Renderer2D::BeginScene(*mainCamera, cameraTransform);
 
-			// To make blending work for multiple objects we have to draw the
-			// most distant object first and the closest object last
-			m_Registry.sort<SpriteRendererComponent>([&](const entt::entity lhs, const entt::entity rhs) {
-				return m_Registry.get<TransformComponent>(lhs).m_position.z < m_Registry.get<TransformComponent>(rhs).m_position.z;
-			});
+			// TODO: Account for all types of rendering when ordering the draw calls
 
-			auto view = m_Registry.view<SpriteRendererComponent, TransformComponent>();
-
-			for (auto entity : view)
+			// Draw sprites
 			{
-				auto [spriteRendererComponent, transformComponent] = view.get<SpriteRendererComponent, TransformComponent>(entity);
+				// To make blending work for multiple objects we have to draw the
+				// most distant object first and the closest object last
+				m_Registry.sort<SpriteRendererComponent>([&](const entt::entity lhs, const entt::entity rhs) {
+					return m_Registry.get<TransformComponent>(lhs).m_position.z < m_Registry.get<TransformComponent>(rhs).m_position.z;
+					});
 
-				Renderer2D::DrawSprite(transformComponent.GetTransform(), spriteRendererComponent, (int)entity);
+				auto view = m_Registry.view<SpriteRendererComponent, TransformComponent>();
+
+				for (auto entity : view)
+				{
+					auto [spriteRendererComponent, transformComponent] = view.get<SpriteRendererComponent, TransformComponent>(entity);
+
+					Renderer2D::DrawSprite(transformComponent.GetTransform(), spriteRendererComponent, (int)entity);
+				}
+			}
+
+			// Draw circles
+			{
+				// To make blending work for multiple objects we have to draw the
+				// most distant object first and the closest object last
+				m_Registry.sort<CircleRendererComponent>([&](const entt::entity lhs, const entt::entity rhs) {
+					return m_Registry.get<TransformComponent>(lhs).m_position.z < m_Registry.get<TransformComponent>(rhs).m_position.z;
+				});
+
+				auto view = m_Registry.view<CircleRendererComponent, TransformComponent>();
+
+				for (auto entity : view)
+				{
+					auto [circleRendererComponent, transformComponent] = view.get<CircleRendererComponent, TransformComponent>(entity);
+
+					Renderer2D::DrawCircle(transformComponent.GetTransform(), circleRendererComponent.m_color,
+						circleRendererComponent.m_thickness, circleRendererComponent.m_fade, (int)entity);
+				}
 			}
 
 			Renderer2D::EndScene();
@@ -241,19 +266,43 @@ namespace rhombus
 	{
 		Renderer2D::BeginScene(camera);
 
-		// To make blending work for multiple objects we have to draw the
-		// most distant object first and the closest object last
-		m_Registry.sort<SpriteRendererComponent>([&](const entt::entity lhs, const entt::entity rhs) {
-			return m_Registry.get<TransformComponent>(lhs).m_position.z < m_Registry.get<TransformComponent>(rhs).m_position.z;
-			});
+		// TODO: Account for all types of rendering when ordering the draw calls
 
-		auto view = m_Registry.view<SpriteRendererComponent, TransformComponent>();
-
-		for (auto entity : view)
+		// Draw Sprites
 		{
-			auto [spriteRendererComponent, transformComponent] = view.get<SpriteRendererComponent, TransformComponent>(entity);
+			// To make blending work for multiple objects we have to draw the
+			// most distant object first and the closest object last
+			m_Registry.sort<SpriteRendererComponent>([&](const entt::entity lhs, const entt::entity rhs) {
+				return m_Registry.get<TransformComponent>(lhs).m_position.z < m_Registry.get<TransformComponent>(rhs).m_position.z;
+				});
 
-			Renderer2D::DrawSprite(transformComponent.GetTransform(), spriteRendererComponent, (int)entity);
+			auto view = m_Registry.view<SpriteRendererComponent, TransformComponent>();
+
+			for (auto entity : view)
+			{
+				auto [spriteRendererComponent, transformComponent] = view.get<SpriteRendererComponent, TransformComponent>(entity);
+
+				Renderer2D::DrawSprite(transformComponent.GetTransform(), spriteRendererComponent, (int)entity);
+			}
+		}
+
+		// Draw circles
+		{
+			// To make blending work for multiple objects we have to draw the
+			// most distant object first and the closest object last
+			m_Registry.sort<CircleRendererComponent>([&](const entt::entity lhs, const entt::entity rhs) {
+				return m_Registry.get<TransformComponent>(lhs).m_position.z < m_Registry.get<TransformComponent>(rhs).m_position.z;
+				});
+
+			auto view = m_Registry.view<CircleRendererComponent, TransformComponent>();
+
+			for (auto entity : view)
+			{
+				auto [circleRendererComponent, transformComponent] = view.get<CircleRendererComponent, TransformComponent>(entity);
+
+				Renderer2D::DrawCircle(transformComponent.GetTransform(), circleRendererComponent.m_color,
+					circleRendererComponent.m_thickness, circleRendererComponent.m_fade, (int)entity);
+			}
 		}
 
 		Renderer2D::EndScene();
@@ -283,6 +332,7 @@ namespace rhombus
 
 		CopyComponentIfExists<TransformComponent>(newEntity, entity);
 		CopyComponentIfExists<SpriteRendererComponent>(newEntity, entity);
+		CopyComponentIfExists<CircleRendererComponent>(newEntity, entity);
 		CopyComponentIfExists<CameraComponent>(newEntity, entity);
 		CopyComponentIfExists<NativeScriptComponent>(newEntity, entity);
 		CopyComponentIfExists<Rigidbody2DComponent>(newEntity, entity);
@@ -337,6 +387,11 @@ namespace rhombus
 
 	template<>
 	void Scene::OnComponentAdded<SpriteRendererComponent>(Entity entity, SpriteRendererComponent& component)
+	{
+	}
+
+	template<>
+	void Scene::OnComponentAdded<CircleRendererComponent>(Entity entity, CircleRendererComponent& component)
 	{
 	}
 

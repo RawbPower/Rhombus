@@ -245,6 +245,15 @@ namespace rhombus
 				}
 			}
 
+			if (!m_selectionContext.HasComponent<CircleRendererComponent>())
+			{
+				if (ImGui::MenuItem("Circle Renderer"))
+				{
+					m_selectionContext.AddComponent<CircleRendererComponent>();
+					ImGui::CloseCurrentPopup();
+				}
+			}
+
 			if (!m_selectionContext.HasComponent<Rigidbody2DComponent>())
 			{
 				if (ImGui::MenuItem("Rigidbody 2D"))
@@ -296,6 +305,13 @@ namespace rhombus
 				}
 				ImGui::EndDragDropTarget();
 			}
+		});
+
+		DrawComponent<CircleRendererComponent>("Circle Renderer", entity, [](auto& component)
+		{
+			ImGui::ColorEdit4("Color", glm::value_ptr(component.m_color));
+			ImGui::DragFloat("Thickness", &component.m_thickness, 0.025f, 0.0f, 1.0f);
+			ImGui::DragFloat("Fade", &component.m_fade, 0.00025f, 0.0f, 1.0f);
 		});
 
 		DrawComponent<CameraComponent>("Camera", entity, [](auto& component)

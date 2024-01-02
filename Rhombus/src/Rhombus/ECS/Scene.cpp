@@ -156,7 +156,7 @@ namespace rhombus
 
 				b2CircleShape circleShape;
 				circleShape.m_p.Set(collider.m_offset.x, collider.m_offset.y);
-				circleShape.m_radius = collider.m_radius;
+				circleShape.m_radius = transform.m_scale.x * collider.m_radius;
 
 				b2FixtureDef fixtureDef;
 				fixtureDef.shape = &circleShape;

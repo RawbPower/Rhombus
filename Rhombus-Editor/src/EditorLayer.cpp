@@ -154,6 +154,8 @@ namespace rhombus
 			m_HoveredEntity = pixelData == -1 ? Entity() : Entity((entt::entity)pixelData, m_ActiveScene.get());
 		}
 
+		OnOverlayRender();
+
 		m_Framebuffer->Unbind();
 	}
 
@@ -267,6 +269,11 @@ namespace rhombus
 		ImGui::Text("Indices: %d", stats.GetTotalIndexCount());
 		ImGui::Text("FPS: %f", stats.FPS);
 
+		ImGui::End();
+
+		ImGui::Begin("Settings");
+		ImGui::Checkbox("Show physics colliders", &m_ShowPhysicsColliders);
+		ImGui::ColorEdit4("Physics colliders color", glm::value_ptr(m_PhysicsColliderColor));
 		ImGui::End();
 
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
@@ -597,5 +604,57 @@ namespace rhombus
 		{
 			m_EditorScene->DuplicateEntity(selectedEntity);
 		}
+	}
+
+	void EditorLayer::OnOverlayRender()
+	{
+		if (m_SceneState == SceneState::Play)
+		{
+			Entity camera = m_ActiveScene->GetPrimaryCameraEntity();
+			Renderer2D::BeginScene(camera.GetComponent<CameraComponent>().GetCamera(), camera.GetComponent<TransformComponent>().GetTransform());
+		}
+		else
+		{
+			Renderer2D::BeginScene(m_EditorCamera);
+		}
+
+		if (m_ShowPhysicsColliders)
+		{
+			// Box Collider
+			{
+				auto view = m_ActiveScene->GetAllEntitiesWith<TransformComponent, BoxCollider2DComponent>();
+				for (auto entity : view)
+				{
+					auto [tc, bc2d] = view.get<TransformComponent, BoxCollider2DComponent>(entity);
+					glm::vec3 translation = tc.m_position + glm::vec3(bc2d.m_offset, 0.01f);
+					glm::vec3 scale = tc.m_scale * glm::vec3(bc2d.m_size * 2.0f, 1.0f);
+
+					glm::mat4 transform = glm::translate(glm::mat4(1.0f), translation)
+						* glm::rotate(glm::mat4(1.0f), tc.m_rotation.z, glm::vec3(0.0f, 0.0f, 1.0f))
+						* glm::scale(glm::mat4(1.0f), scale);
+
+					Renderer2D::DrawRect(transform, m_PhysicsColliderColor);
+				}
+			}
+
+			// Cifcle Collider
+			{
+				auto view = m_ActiveScene->GetAllEntitiesWith<TransformComponent, CircleCollider2DComponent>();
+				for (auto entity : view)
+				{
+					auto [tc, bc2d] = view.get<TransformComponent, CircleCollider2DComponent>(entity);
+					glm::vec3 translation = tc.m_position + glm::vec3(bc2d.m_offset, 0.01f);
+					glm::vec3 scale = tc.m_scale * bc2d.m_radius * 2.0f;
+
+					glm::mat4 transform = glm::translate(glm::mat4(1.0f), translation)
+						* glm::rotate(glm::mat4(1.0f), tc.m_rotation.z, glm::vec3(0.0f, 0.0f, 1.0f))
+						* glm::scale(glm::mat4(1.0f), scale);
+
+					Renderer2D::DrawCircle(transform, m_PhysicsColliderColor, 0.05f);
+				}
+			}
+		}
+
+		Renderer2D::EndScene();
 	}
 }

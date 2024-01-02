@@ -409,7 +409,7 @@ namespace rhombus
 
 		DrawComponent<BoxCollider2DComponent>("Box Collider 2D", entity, [](auto& component)
 		{
-			ImGui::DragFloat2("Offset", glm::value_ptr(component.m_offset));
+			ImGui::DragFloat2("Offset", glm::value_ptr(component.m_offset), 0.01f);
 			ImGui::DragFloat2("Size", glm::value_ptr(component.m_size));
 			ImGui::DragFloat("Density", &component.m_density, 0.01f, 0.0f, 1.0f);
 			ImGui::DragFloat("Friction", &component.m_friction, 0.01f, 0.0f, 1.0f);
@@ -419,7 +419,7 @@ namespace rhombus
 
 		DrawComponent<CircleCollider2DComponent>("Circle Collider 2D", entity, [](auto& component)
 		{
-			ImGui::DragFloat2("Offset", glm::value_ptr(component.m_offset));
+			ImGui::DragFloat2("Offset", glm::value_ptr(component.m_offset), 0.01f);
 			ImGui::InputFloat("Radius", &component.m_radius);
 			ImGui::DragFloat("Density", &component.m_density, 0.01f, 0.0f, 1.0f);
 			ImGui::DragFloat("Friction", &component.m_friction, 0.01f, 0.0f, 1.0f);

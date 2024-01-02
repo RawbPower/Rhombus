@@ -37,6 +37,8 @@ namespace rhombus
 
 		void DuplicateSelectedEntity();
 
+		void OnOverlayRender();
+
 		// UI Panel
 		void UI_Toolbar();
 
@@ -70,6 +72,9 @@ namespace rhombus
 		glm::vec4 m_SquareColor = { 0.2f, 0.3f, 0.8f, 1.0f };
 
 		int m_gizmoType = 7;		// ImGuizmo::OPERATION::TRANSLATE
+
+		bool m_ShowPhysicsColliders = true;
+		glm::vec4 m_PhysicsColliderColor = glm::vec4(0.0, 1.0, 0.0, 1.0);
 
 		enum SceneState
 		{

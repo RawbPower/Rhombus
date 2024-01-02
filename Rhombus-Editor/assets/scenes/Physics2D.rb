@@ -4,12 +4,12 @@ Entities:
     TagComponent:
       Tag: Circle
     TransformComponent:
-      Position: [1.7826004, 0.721580505, 0.5]
+      Position: [1.7826004, 0.721580505, 0]
       Rotation: [0, -0, 0]
       Scale: [1, 1, 1]
     CircleRendererComponent:
-      Color: [0.165873706, 0.847006798, 0.867647052, 1]
-      Thickness: 0.075000003
+      Color: [0.163446769, 0.457448632, 0.877451003, 1]
+      Thickness: 1
       Fade: 0
     Rigidbody2DComponent:
       BodyType: Dynamic
@@ -63,12 +63,12 @@ Entities:
     TagComponent:
       Tag: Camera
     TransformComponent:
-      Position: [0, 0, 10]
+      Position: [0, 0, 1]
       Rotation: [0, -0, 0]
       Scale: [1, 1, 1]
     CameraComponent:
       Camera:
-        ProjectionType: 1
+        ProjectionType: 0
         PerspectiveFOV: 0.785398185
         PerspectiveNear: 0.00999999978
         PerspectiveFar: 1000

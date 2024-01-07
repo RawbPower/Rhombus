@@ -36,7 +36,7 @@ namespace rhombus
 
 	Scene::~Scene()
 	{
-
+		delete m_PhysicsWorld;		// just incase
 	}
 
 	template<typename Component>

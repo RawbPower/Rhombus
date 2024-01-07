@@ -73,7 +73,7 @@ namespace rhombus
 
 		int m_gizmoType = 7;		// ImGuizmo::OPERATION::TRANSLATE
 
-		bool m_ShowPhysicsColliders = true;
+		bool m_ShowPhysicsColliders = false;
 		glm::vec4 m_PhysicsColliderColor = glm::vec4(0.0, 1.0, 0.0, 1.0);
 
 		enum SceneState

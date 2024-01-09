@@ -9,6 +9,11 @@
 
 namespace rhombus
 {
+	float Time::GetTime()
+	{
+		return (float)SDL_GetTicks64() / 1000.0f;
+	}
+
 	std::string FileDialogs::OpenFile(const char* filter)
 	{
 		OPENFILENAMEA ofn;

@@ -4,10 +4,9 @@
 #include "Rhombus/Core/Log.h"
 
 #include "Rhombus/Renderer/Renderer.h"
+#include "Rhombus/Utils/PlatformUtils.h"
 
 #include "Input.h"
-
-#include <SDL.h>
 
 namespace rhombus {
 
@@ -101,7 +100,7 @@ namespace rhombus {
 		{
 			RB_PROFILE_SCOPE("Run Loop");
 
-			float time = (float)SDL_GetTicks64()/1000.0f;			// Will be in Platform GetTime() in the future
+			float time = Time::GetTime();
 			DeltaTime deltaTime = time - m_LastFrameTime;
 			m_LastFrameTime = time;
 

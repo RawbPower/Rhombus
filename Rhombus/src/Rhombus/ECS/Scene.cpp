@@ -39,25 +39,43 @@ namespace rhombus
 		delete m_PhysicsWorld;		// just incase
 	}
 
-	template<typename Component>
+	template<typename... Component>
 	static void CopyComponent(entt::registry& dest, const entt::registry& src, const	std::unordered_map<UUID, entt::entity>& enttMap)
 	{
-		auto view = src.view<Component>();
-		for (auto e : view)
+		([&]()
 		{
-			UUID uuid = src.get<IDComponent>(e).m_id;
-			entt::entity destEntityID = enttMap.at(uuid);
+			auto view = src.view<Component>();
+			for (auto e : view)
+			{
+				UUID uuid = src.get<IDComponent>(e).m_id;
+				entt::entity destEntityID = enttMap.at(uuid);
 
-			auto& component = src.get<Component>(e);
-			dest.emplace_or_replace<Component>(destEntityID, component);
-		}
+				auto& component = src.get<Component>(e);
+				dest.emplace_or_replace<Component>(destEntityID, component);
+			}
+		}(), ...);
 	}
 
-	template<typename Component>
+	template<typename... Component>
+	static void CopyComponent(ComponentGroup<Component...>, entt::registry& dst, entt::registry& src, const std::unordered_map<UUID, entt::entity>& enttMap)
+	{
+		CopyComponent<Component...>(dst, src, enttMap);
+	}
+
+	template<typename... Component>
 	static void CopyComponentIfExists(Entity dest, Entity src)
 	{
-		if (src.HasComponent<Component>())
-			dest.AddOrReplaceComponent<Component>(src.GetComponent<Component>());
+		([&]()
+		{
+			if (src.HasComponent<Component>())
+				dest.AddOrReplaceComponent<Component>(src.GetComponent<Component>());
+		}(), ...);
+	}
+
+	template<typename... Component>
+	static void CopyComponentIfExists(ComponentGroup<Component...>, Entity dst, Entity src)
+	{
+		CopyComponentIfExists<Component...>(dst, src);
 	}
 
 	Ref<Scene> Scene::Copy(Ref<Scene> srcScene)
@@ -82,14 +100,7 @@ namespace rhombus
 		}
 
 		// Copy components (except IDComponent and TagComponent)
-		CopyComponent<TransformComponent>(destSceneRegistry, srcSceneRegistry, enttMap);
-		CopyComponent<SpriteRendererComponent>(destSceneRegistry, srcSceneRegistry, enttMap);
-		CopyComponent<CircleRendererComponent>(destSceneRegistry, srcSceneRegistry, enttMap);
-		CopyComponent<CameraComponent>(destSceneRegistry, srcSceneRegistry, enttMap);
-		CopyComponent<NativeScriptComponent>(destSceneRegistry, srcSceneRegistry, enttMap);
-		CopyComponent<Rigidbody2DComponent>(destSceneRegistry, srcSceneRegistry, enttMap);
-		CopyComponent<BoxCollider2DComponent>(destSceneRegistry, srcSceneRegistry, enttMap);
-		CopyComponent<CircleCollider2DComponent>(destSceneRegistry, srcSceneRegistry, enttMap);
+		CopyComponent(AllComponents{}, destSceneRegistry, srcSceneRegistry, enttMap);
 
 		return destScene;
 	}
@@ -349,14 +360,7 @@ namespace rhombus
 		std::string name = entity.GetName();
 		Entity newEntity = CreateEntity(name);
 
-		CopyComponentIfExists<TransformComponent>(newEntity, entity);
-		CopyComponentIfExists<SpriteRendererComponent>(newEntity, entity);
-		CopyComponentIfExists<CircleRendererComponent>(newEntity, entity);
-		CopyComponentIfExists<CameraComponent>(newEntity, entity);
-		CopyComponentIfExists<NativeScriptComponent>(newEntity, entity);
-		CopyComponentIfExists<Rigidbody2DComponent>(newEntity, entity);
-		CopyComponentIfExists<BoxCollider2DComponent>(newEntity, entity);
-		CopyComponentIfExists<CircleCollider2DComponent>(newEntity, entity);
+		CopyComponentIfExists(AllComponents{}, newEntity, entity);
 	}
 
 	Entity Scene::GetPrimaryCameraEntity()

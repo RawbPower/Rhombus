@@ -190,7 +190,7 @@ namespace rhombus {
 				}
 				case SDL_KEYDOWN:
 				{
-					KeyPressedEvent event(e.key.keysym.sym, 0);
+					KeyPressedEvent event(e.key.keysym.sym);
 					m_Data.EventCallback(event);
 					break;
 				}

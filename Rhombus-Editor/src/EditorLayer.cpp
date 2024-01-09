@@ -416,7 +416,7 @@ namespace rhombus
 	bool EditorLayer::OnKeyPressed(KeyPressedEvent& e)
 	{
 		// Shortcuts
-		if (e.IsRepeat() > 0)
+		if (e.IsRepeat())
 			return false;
 
 		bool ctrl = Input::IsKeyPressed(RB_KEY_LEFT_CONTROL) || Input::IsKeyPressed(RB_KEY_RIGHT_CONTROL);

@@ -1,7 +1,5 @@
 #pragma once
 
-#include <xhash>
-
 namespace rhombus
 {
 	class UUID
@@ -20,12 +18,14 @@ namespace rhombus
 
 namespace std
 {
+	template <typename T> struct hash;
+
 	template<>
 	struct hash<rhombus::UUID>
 	{
 		std::size_t operator()(const rhombus::UUID& uuid) const
 		{
-			return hash<uint64_t>()((uint64_t)uuid);
+			return (uint64_t)uuid;
 		}
 	};
 }

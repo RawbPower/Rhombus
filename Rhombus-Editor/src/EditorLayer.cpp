@@ -233,7 +233,7 @@ namespace rhombus
 					OpenScene();
 				}
 
-				if (ImGui::MenuItem("Save...", "Ctrl+S"))
+				if (ImGui::MenuItem("Save", "Ctrl+S"))
 				{
 					SaveScene();
 				}
@@ -656,6 +656,15 @@ namespace rhombus
 					Renderer2D::DrawCircle(transform, m_PhysicsColliderColor, 0.05f);
 				}
 			}
+		}
+
+		// Draw selected entity outline 
+		if (Entity selectedEntity = m_sceneHierarchyPanel.GetSelectedEntity()) 
+		{
+			TransformComponent transform = selectedEntity.GetComponent<TransformComponent>();
+
+			//Red
+			Renderer2D::DrawRect(transform.GetTransform(), glm::vec4(0.9, 0.9, 0.9, 1));
 		}
 
 		Renderer2D::EndScene();

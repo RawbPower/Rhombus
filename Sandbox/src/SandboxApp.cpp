@@ -11,7 +11,9 @@
 class Sandbox : public rhombus::Application
 {
 public:
-	Sandbox() {
+	Sandbox(const rhombus::ApplicationSpecification& specification)
+		: rhombus::Application(specification) 
+	{
 		//PushLayer(new ExampleLayer());
 		PushLayer(new Sandbox2D());
 	}
@@ -23,5 +25,9 @@ public:
 
 rhombus::Application* rhombus::CreateApplication() {
 
-	return new Sandbox();
+	ApplicationSpecification spec;
+	spec.name = "Sandbox";
+	spec.workingDirectory = "../Rhombus-Editor";
+
+	return new Sandbox(spec);
 }

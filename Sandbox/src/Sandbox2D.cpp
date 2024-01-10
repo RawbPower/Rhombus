@@ -32,8 +32,8 @@ void Sandbox2D::OnAttach()
 
 	m_CheckerboardTexture = rhombus::Texture2D::Create("assets/textures/Checkerboard.png");
 	m_LogoTexture = rhombus::Texture2D::Create("assets/textures/ChernoLogo.png");
-	m_SpriteSheetIndoor = rhombus::Texture2D::Create("assets/PocketRPG/Pocket_RPG_v5/Pocket_RPG_v3/Indoors_misc.png");
-	m_SpriteSheetOutdoor = rhombus::Texture2D::Create("assets/PocketRPG/Pocket_RPG_v5/Pocket_RPG_v3/Outdoors_misc.png");
+	m_SpriteSheetIndoor = rhombus::Texture2D::Create("assets/packs/PocketRPG/Pocket_RPG_v5/Pocket_RPG_v3/Indoors_misc.png");
+	m_SpriteSheetOutdoor = rhombus::Texture2D::Create("assets/packs/PocketRPG/Pocket_RPG_v5/Pocket_RPG_v3/Outdoors_misc.png");
 
 	m_TextureStairs = rhombus::SubTexture2D::CreateFromCoords(m_SpriteSheetIndoor, { 7, 2 }, { 16, 16 });
 	m_TextureDoor = rhombus::SubTexture2D::CreateFromCoords(m_SpriteSheetIndoor, { 4, 0 }, { 16, 16 });
@@ -86,8 +86,8 @@ void Sandbox2D::OnUpdate(rhombus::DeltaTime dt)
 
 		rhombus::Renderer2D::BeginScene(m_CameraController.GetCamera());
 		rhombus::Renderer2D::DrawQuad({ 0.5f, -0.5f }, 3.14f / 3.0f, { 0.5, 0.75 }, { 0.3f, 0.1f, 0.8f, 1.0f });
-		rhombus::Renderer2D::DrawQuad({ 0.0f, 0.0f, 0.1f }, glm::radians(rotation), { 1.0, 1.0 }, m_CheckerboardTexture, 20.0f);
 		rhombus::Renderer2D::DrawQuad({ 0.0f, 0.0f, -0.1f }, 0.0f, { 10.0, 10.0 }, m_CheckerboardTexture, 10.0f);
+		rhombus::Renderer2D::DrawQuad({ 0.0f, 0.0f, 1.0f }, glm::radians(rotation), { 1.0, 1.0 }, m_CheckerboardTexture, 20.0f);
 		rhombus::Renderer2D::DrawQuad({ -1.0f, 0.0f }, 0.0f, { 0.8, 0.8 }, { 0.8f, 0.2f, 0.3f, 1.0f });
 		rhombus::Renderer2D::SetFPDStat(dt);
 		rhombus::Renderer2D::EndScene();

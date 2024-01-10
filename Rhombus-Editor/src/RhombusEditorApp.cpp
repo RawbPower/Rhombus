@@ -13,7 +13,8 @@ namespace rhombus
 	class RhombusEditor : public Application
 	{
 	public:
-		RhombusEditor() : Application("Rhombus Editor")
+		RhombusEditor(const ApplicationSpecification& specification)
+			: Application(specification)
 		{
 			PushLayer(new EditorLayer());
 		}
@@ -25,6 +26,9 @@ namespace rhombus
 
 	Application* CreateApplication() {
 
-		return new RhombusEditor();
+		ApplicationSpecification spec;
+		spec.name = "Rhombus Editor";
+
+		return new RhombusEditor(spec);
 	}
 }

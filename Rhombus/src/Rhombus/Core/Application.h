@@ -15,10 +15,16 @@ int main(int argc, char** argv);
 
 namespace rhombus {
 
+	struct ApplicationSpecification
+	{
+		std::string name = "Rhombus Application";
+		std::string workingDirectory;
+	};
+
 	class Application
 	{
 	public:
-		Application(const std::string& name = "Rhombus Application");
+		Application(const ApplicationSpecification& specification);
 		virtual ~Application() = default;
 
 		void OnEvent(Event& e);
@@ -33,6 +39,8 @@ namespace rhombus {
 		ImGuiLayer* GetImGuiLayer() { return m_ImGuiLayer; }
 
 		inline static Application& Get() { return *s_Instance; }
+
+		const ApplicationSpecification& GetSpecification() const { return m_Specification; }
 	private:
 		void Run();
 
@@ -49,6 +57,7 @@ namespace rhombus {
 		bool OnMouseMoved(MouseMovedEvent& e);
 
 	private:
+		ApplicationSpecification m_Specification;
 		Scope<Window> m_Window;
 		ImGuiLayer* m_ImGuiLayer;
 		bool m_Running = true;

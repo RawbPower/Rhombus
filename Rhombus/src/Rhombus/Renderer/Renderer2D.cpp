@@ -164,6 +164,9 @@ namespace rhombus
 			samplers[i] = i;
 
 		s_Data.QuadShader = Shader::Create("assets/shaders/Renderer2D_Quad.glsl");
+		s_Data.QuadShader->Bind();
+		s_Data.QuadShader->SetIntArray("u_Textures", samplers, s_Data.MaxTextureSlots);
+
 		s_Data.CircleShader = Shader::Create("assets/shaders/Renderer2D_Circle.glsl");
 		s_Data.LineShader = Shader::Create("assets/shaders/Renderer2D_Line.glsl");
 

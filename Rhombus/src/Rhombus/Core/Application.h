@@ -15,10 +15,23 @@ int main(int argc, char** argv);
 
 namespace rhombus {
 
+	struct ApplicationCommandLineArgs
+	{
+		int count = 0;
+		char** args = nullptr;
+
+		const char* operator[](int index) const
+		{
+			RB_CORE_ASSERT(index < count, "Index out of range");
+			return args[index];
+		}
+	};
+
 	struct ApplicationSpecification
 	{
 		std::string name = "Rhombus Application";
 		std::string workingDirectory;
+		ApplicationCommandLineArgs commandLineArgs;
 	};
 
 	class Application
@@ -70,7 +83,7 @@ namespace rhombus {
 	};
 
 	// To be defined in CLIENT
-	Application* CreateApplication();
+	Application* CreateApplication(ApplicationCommandLineArgs args);
 
 }
 

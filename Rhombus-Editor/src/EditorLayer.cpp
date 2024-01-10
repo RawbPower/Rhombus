@@ -38,6 +38,14 @@ namespace rhombus
 
 		m_ActiveScene = CreateRef<Scene>();
 
+		auto commandLineArgs = Application::Get().GetSpecification().commandLineArgs;
+		if (commandLineArgs.count > 1)
+		{
+			auto sceneFilePath = commandLineArgs[1];
+			SceneSerializer serializer(m_ActiveScene);
+			serializer.Deserialize(sceneFilePath);
+		}
+
 		m_EditorCamera = EditorCamera(30.0f, 1.778f, 0.1f, 1000.0f);	// 1.778 = 16/9
 
 #if 0

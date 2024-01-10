@@ -24,10 +24,11 @@ namespace rhombus
 		}
 	};
 
-	Application* CreateApplication() {
-
+	Application* CreateApplication(ApplicationCommandLineArgs args) 
+	{
 		ApplicationSpecification spec;
 		spec.name = "Rhombus Editor";
+		spec.commandLineArgs = args;
 
 		return new RhombusEditor(spec);
 	}

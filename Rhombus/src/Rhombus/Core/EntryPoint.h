@@ -1,8 +1,10 @@
 #pragma once
 
+#include "Rhombus/Core/Application.h"
+
 #ifdef RB_PLATFORM_WINDOWS
 
-extern rhombus::Application* rhombus::CreateApplication();
+extern rhombus::Application* rhombus::CreateApplication(ApplicationCommandLineArgs args);
 	
 int main(int argc, char** argv) {
 
@@ -11,7 +13,7 @@ int main(int argc, char** argv) {
 	std::string versionName = "";
 
 	RB_PROFILE_BEGIN_SESSION("Startup", "RhombusProfile-Startup.json");
-	auto app = rhombus::CreateApplication();
+	auto app = rhombus::CreateApplication({ argc, argv });
 	RB_PROFILE_END_SESSION();
 
 	RB_PROFILE_BEGIN_SESSION("Runtime", "RhombusProfile-Runtime.json");

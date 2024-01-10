@@ -23,11 +23,12 @@ public:
 	}
 };
 
-rhombus::Application* rhombus::CreateApplication() {
-
+rhombus::Application* rhombus::CreateApplication(ApplicationCommandLineArgs args) 
+{
 	ApplicationSpecification spec;
 	spec.name = "Sandbox";
 	spec.workingDirectory = "../Rhombus-Editor";
+	spec.commandLineArgs = args;
 
 	return new Sandbox(spec);
 }

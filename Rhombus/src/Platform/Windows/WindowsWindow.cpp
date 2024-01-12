@@ -94,10 +94,10 @@ namespace rhombus {
 			}
 			else
 			{
-				m_IconSurface = SDL_LoadBMP("../Rhombus/assets/RhombusIconBlueLarge.bmp");	
+				m_IconSurface = SDL_LoadBMP("Resources/Icons/RhombusIconBlueLarge.bmp");	
 				if (m_IconSurface == NULL)
 				{
-					RB_CORE_ERROR("Unable to load image {0}! SDL Error: {1}\n", "assets/RhombusIconBlueLarge.bmp", SDL_GetError());
+					RB_CORE_ERROR("Unable to load image {0}! SDL Error: {1}\n", "Resourcse/Icons/RhombusIconBlueLarge.bmp", SDL_GetError());
 				}
 				else
 				{

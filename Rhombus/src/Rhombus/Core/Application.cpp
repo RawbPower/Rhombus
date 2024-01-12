@@ -4,6 +4,7 @@
 #include "Rhombus/Core/Log.h"
 
 #include "Rhombus/Renderer/Renderer.h"
+#include "Rhombus/Scripting/ScriptEngine.h"
 #include "Rhombus/Utils/PlatformUtils.h"
 
 #include "Input.h"
@@ -33,6 +34,7 @@ namespace rhombus {
 		m_Window->SetEventCallback(BIND_EVENT_FN(OnEvent));
 
 		Renderer::Init();
+		ScriptEngine::Init();
 
 		m_ImGuiLayer = new ImGuiLayer();
 		PushOverlay(m_ImGuiLayer);

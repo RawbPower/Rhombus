@@ -40,12 +40,14 @@ project "Rhombus"
 		"%{IncludeDir.EnTT}",
 		"%{IncludeDir.yaml_cpp}",
 		"%{IncludeDir.ImGuizmo}",
-		"%{IncludeDir.Box2d}"
+		"%{IncludeDir.Box2d}",
+		"%{IncludeDir.Lua}"
 	}
 	
 	libdirs
 	{
 		"vendor/SDL2/lib/x64"
+		"vendor/Lua"
 	}
 
 	links
@@ -56,7 +58,8 @@ project "Rhombus"
 		"opengl32.lib",
 		"SDL2",
 		"SDL2main",
-		"box2d"
+		"Box2d",
+		"lua54.lib"
 	}
 	
 	filter "files:vendor/ImGuizmo/**.cpp"

@@ -1,6 +1,9 @@
 #pragma once
 
-class lua_State;
+extern "C"
+{
+	class lua_State;
+}
 
 namespace rhombus
 {

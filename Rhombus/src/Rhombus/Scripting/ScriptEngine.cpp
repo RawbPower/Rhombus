@@ -1,5 +1,6 @@
 #include "rbpch.h"
 #include "ScriptEngine.h"
+#include "ScriptRegistry.h"
 
 extern "C"
 {
@@ -23,17 +24,6 @@ namespace rhombus
 		return true;
 	}
 
-	int commandHostFunction(lua_State* state)
-	{
-		RB_CORE_ASSERT(lua_gettop(state) == 2, "Invalid number of arguments passed to function");
-
-		float a = (float)lua_tonumber(L, 1);		// indexed as if this is a fresh stack
-		float b = (float)lua_tonumber(L, 2);		// indexed as if this is a fresh stack
-		float c = a * b;
-		lua_pushnumber(state, c);		// Push result onto lua stack
-		return 1;						// Number of return values that lua is expecting
-	}
-
 	void ScriptEngine::Init()
 	{
 		InitLua();
@@ -49,6 +39,8 @@ namespace rhombus
 	{
 		L = luaL_newstate();
 		luaL_openlibs(L);
+
+		ScriptRegistry::RegisterFunctions(L);
 
 		int r = luaL_dofile(L, "Resources/Scripts/Main.lua");
 
@@ -106,7 +98,6 @@ namespace rhombus
 				}
 			}
 
-			lua_register(L, "HostFunction", commandHostFunction);
 			lua_getglobal(L, "CallHostFunction");
 			if (lua_isfunction(L, -1))
 			{

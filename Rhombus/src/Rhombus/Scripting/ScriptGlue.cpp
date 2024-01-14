@@ -1,5 +1,5 @@
 #include "rbpch.h"
-#include "ScriptRegistry.h"
+#include "ScriptGlue.h"
 
 extern "C"
 {
@@ -23,7 +23,7 @@ namespace rhombus
 		return 1;						// Number of return values that lua is expecting
 	}
 
-	void ScriptRegistry::RegisterFunctions(lua_State* L)
+	void ScriptGlue::RegisterFunctions(lua_State* L)
 	{
 		ADD_INTERNAL_CALL(L, HostFunction);
 	}

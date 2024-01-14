@@ -7,7 +7,7 @@ extern "C"
 
 namespace rhombus
 {
-	class ScriptRegistry
+	class ScriptGlue
 	{
 	public:
 		static void RegisterFunctions(lua_State* L);

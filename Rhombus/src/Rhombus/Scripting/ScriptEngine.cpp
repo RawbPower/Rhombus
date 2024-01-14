@@ -1,6 +1,6 @@
 #include "rbpch.h"
 #include "ScriptEngine.h"
-#include "ScriptRegistry.h"
+#include "ScriptGlue.h"
 
 extern "C"
 {
@@ -18,7 +18,7 @@ namespace rhombus
 		if (r != LUA_OK)
 		{
 			std::string errormsg = lua_tostring(state, -1);
-			RB_CORE_ERROR(errormsg);
+			RB_CORE_ERROR("[Lua Error] {0}", errormsg);
 			return false;
 		}
 		return true;
@@ -40,7 +40,7 @@ namespace rhombus
 		L = luaL_newstate();
 		luaL_openlibs(L);
 
-		ScriptRegistry::RegisterFunctions(L);
+		ScriptGlue::RegisterFunctions(L);
 
 		int r = luaL_dofile(L, "Resources/Scripts/Main.lua");
 

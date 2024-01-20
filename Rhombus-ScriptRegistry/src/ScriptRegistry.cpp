@@ -37,16 +37,12 @@ namespace rhombus
 	{
 		{ "Multiply", Multiply },
 		{ "Add", Add },
-		{ 0, 0 }
+		{ NULL, NULL }
 	};
 
 	extern "C" int luaopen_rhombus(lua_State * L)
 	{
-		lua_newtable(L);
-
-		luaL_setfuncs(L, functions, 0);
-		lua_pushvalue(L, -1);
-		lua_setglobal(L, "test");
+		luaL_newlib(L, functions);
 
 		return 1;
 	}

@@ -1,4 +1,4 @@
-rhombus = require "rhombus"
+local rhombus = require "rhombus"
 
 function PrintMessage()
 	return "Hello World from Lua!"
@@ -18,6 +18,6 @@ end
 
 function CallHostFunction(a, b)
 	c = HostFunction(a + 10, b * 3)
-	c = test.Add(4,3)
+	c = rhombus.Add(4,3)
 	return c
 end

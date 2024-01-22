@@ -195,6 +195,16 @@ namespace rhombus
 			out << YAML::EndMap; // CameraComponent
 		}
 
+		if (entity.HasComponent<ScriptComponent>())
+		{
+			auto& scriptComponent = entity.GetComponent<ScriptComponent>();
+
+			out << YAML::Key << "ScriptComponent";
+			out << YAML::BeginMap;	// ScriptComponent
+			out << YAML::Key << "ScriptName" << YAML::Value << scriptComponent.m_scriptName;
+			out << YAML::EndMap;	// ScriptComponent
+		}
+
 		if (entity.HasComponent<SpriteRendererComponent>())
 		{
 			out << YAML::Key << "SpriteRendererComponent";
@@ -360,6 +370,13 @@ namespace rhombus
 
 					cc.SetIsPrimaryCamera(cameraComponent["Primary"].as<bool>());
 					cc.SetHasFixedAspectRatio(cameraComponent["FixedAspectRatio"].as<bool>());
+				}
+
+				auto scriptComponent = entity["ScriptComponent"];
+				if (scriptComponent)
+				{
+					auto& sc = deserializedEntity.AddComponent<ScriptComponent>();
+					sc.m_scriptName = scriptComponent["ScriptName"].as<std::string>();
 				}
 
 				auto spriteRendererComponent = entity["SpriteRendererComponent"];

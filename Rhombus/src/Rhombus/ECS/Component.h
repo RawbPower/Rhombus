@@ -105,6 +105,15 @@ namespace rhombus
 		bool m_fixedAspectRatio = false;
 	};
 
+	class ScriptComponent
+	{
+	public:
+		ScriptComponent() = default;
+		ScriptComponent(const ScriptComponent&) = default;
+
+		std::string m_scriptName;
+	};
+
 	// Forward declaration
 	class ScriptableEntity;
 
@@ -186,6 +195,6 @@ namespace rhombus
 
 	using AllComponents =
 		ComponentGroup<TransformComponent, SpriteRendererComponent,
-		CircleRendererComponent, CameraComponent, NativeScriptComponent,
+		CircleRendererComponent, CameraComponent, ScriptComponent, NativeScriptComponent,
 		Rigidbody2DComponent, BoxCollider2DComponent, CircleCollider2DComponent>;
 }

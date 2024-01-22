@@ -1,10 +1,12 @@
 #include "SceneHierarchyPanel.h"
 
+#include "Rhombus/ECS/Component.h"
+#include "Rhombus/Scripting/ScriptEngine.h"
+
 #include <imgui/imgui.h>
 #include <imgui/imgui_internal.h>
 #include <glm/gtc/type_ptr.hpp>
 
-#include "Rhombus/ECS/Component.h"
 #include <filesystem>
 
 namespace rhombus
@@ -228,6 +230,7 @@ namespace rhombus
 		if (ImGui::BeginPopup("AddComponent"))
 		{
 			DisplayAddComponentEntry<CameraComponent>("Camera");
+			DisplayAddComponentEntry<ScriptComponent>("Script");
 			DisplayAddComponentEntry<SpriteRendererComponent>("Sprite Renderer");
 			DisplayAddComponentEntry<CircleRendererComponent>("Circle Renderer");
 			DisplayAddComponentEntry<Rigidbody2DComponent>("Rigidbody 2D");
@@ -246,6 +249,15 @@ namespace rhombus
 				DrawVec3Control("Rotation", rotation);
 				component.m_rotation = glm::radians(rotation);
 				DrawVec3Control("Scale", component.m_scale, 1.0f);
+		});
+
+		DrawComponent<ScriptComponent>("Script", entity, [](auto& component)
+		{
+			static char buffer[64];
+			strcpy(buffer, component.m_scriptName.c_str());
+
+			if (ImGui::InputText("Script", buffer, sizeof(buffer)))
+				component.m_scriptName = buffer;
 		});
 
 		DrawComponent<SpriteRendererComponent>("Sprite Renderer", entity, [](auto& component)

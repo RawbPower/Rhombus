@@ -31,7 +31,11 @@ namespace rhombus
 		void OnUpdateEditor(DeltaTime dt, EditorCamera& camera);
 		void OnViewportResize(uint32_t width, uint32_t height);
 
+		void InitPhyics2D();
+
 		void DuplicateEntity(Entity entity);
+
+		Entity GetEntityByUUID(UUID uuid);
 
 		Entity GetPrimaryCameraEntity();
 
@@ -49,6 +53,8 @@ namespace rhombus
 		uint32_t m_ViewportWidth = 0, m_ViewportHeight = 0;
 
 		b2World* m_PhysicsWorld = nullptr;
+
+		std::unordered_map<UUID, entt::entity> m_EntityMap;
 
 		friend class Entity;
 		friend class SceneSerializer;

@@ -12,6 +12,7 @@ extern "C"
 namespace rhombus
 {
 	static lua_State* L = nullptr;
+	static Scene* sceneContext = nullptr;
 
 	bool CheckLua(lua_State* state, int r)
 	{
@@ -42,6 +43,7 @@ namespace rhombus
 
 		ScriptGlue::RegisterFunctions(L);
 
+#if 0
 		int r = luaL_dofile(L, "Resources/Scripts/Main.lua");
 
 		if (CheckLua(L, r))
@@ -112,11 +114,78 @@ namespace rhombus
 				}
 			}
 		}
+#endif
 	}
 
 	void ScriptEngine::ShutdownLua()
 	{
 		lua_close(L);
 		L = nullptr;
+	}
+
+	void ScriptEngine::OnRuntimeStart(Scene* scene)
+	{
+		sceneContext = scene;
+	}
+
+	void ScriptEngine::OnRuntimeStop()
+	{
+		sceneContext = nullptr;
+	}
+
+	void ScriptEngine::OnInitEntity(Entity entity)
+	{
+		const auto& scriptComponent = entity.GetComponent<ScriptComponent>();
+		
+		// Todo set path in component
+		std::string sciptPath = "assets/scripts/" + scriptComponent.m_scriptName + ".lua";
+		int r = luaL_dofile(L, sciptPath.c_str());
+
+		if (CheckLua(L, r))
+		{
+			lua_getglobal(L, "Init");
+			if (lua_isfunction(L, -1))
+			{
+				if (CheckLua(L, lua_pcall(L, 0, 1, 0)))
+				{
+					if (lua_isstring(L, -1))
+					{
+						RB_CORE_INFO("[LUA] {0}", lua_tostring(L, -1));
+					}
+				}
+			}
+		}
+	}
+
+	void ScriptEngine::OnUpdateEntity(Entity entity, DeltaTime dt)
+	{
+		const auto& scriptComponent = entity.GetComponent<ScriptComponent>();
+
+		// Todo set path in component
+		std::string sciptPath = "assets/scripts/" + scriptComponent.m_scriptName + ".lua";
+		int r = luaL_dofile(L, sciptPath.c_str());
+
+		if (CheckLua(L, r))
+		{
+			lua_getglobal(L, "Update");
+			if (lua_isfunction(L, -1))
+			{
+				UUID entityID = entity.GetUUID();
+				lua_pushnumber(L, (int)entityID);
+				lua_pushnumber(L, (float)dt);
+				if (CheckLua(L, lua_pcall(L, 2, 1, 0)))
+				{
+					if (lua_isstring(L, -1))
+					{
+						RB_CORE_INFO("[LUA] {0}", lua_tostring(L, -1));
+					}
+				}
+			}
+		}
+	}
+
+	Scene* ScriptEngine::GetSceneContext()
+	{
+		return sceneContext;
 	}
 }

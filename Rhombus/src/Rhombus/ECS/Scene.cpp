@@ -4,6 +4,7 @@
 #include "Entity.h"
 #include "ScriptableEntity.h"
 #include "Rhombus/Renderer/Renderer2D.h"
+#include "Rhombus/Scripting/ScriptEngine.h"
 
 #include <glm/glm.hpp>
 
@@ -117,66 +118,31 @@ namespace rhombus
 		entity.AddComponent<TransformComponent>();
 		auto& tag = entity.AddComponent<TagComponent>();
 		tag.m_tag = name.empty() ? "Entity" : name;
+
+		m_EntityMap[uuid] = entity;
+
 		return entity;
 	}
 
 	void Scene::DestroyEntity(Entity entity)
 	{
 		m_Registry.destroy(entity);
+		m_EntityMap.erase(entity.GetUUID());
 	}
 
 	void Scene::OnRuntimeStart()
 	{
-		m_PhysicsWorld = new b2World({ 0.0f, -9.8f });
+		InitPhyics2D();
 
-		auto view = m_Registry.view<Rigidbody2DComponent>();
+		// Scripting
+		ScriptEngine::OnRuntimeStart(this);
+
+		// Instantiate all the script components
+		auto view = m_Registry.view<ScriptComponent>();
 		for (auto e : view)
 		{
 			Entity entity = { e, this };
-			auto& transform = entity.GetComponent<TransformComponent>();
-			auto& rb = entity.GetComponent<Rigidbody2DComponent>();
-
-			b2BodyDef bodyDef;
-			bodyDef.type = Rigidbody2DTypetoBox2DType(rb.m_type);
-			bodyDef.position.Set(transform.m_position.x, transform.m_position.y);
-			bodyDef.angle = transform.m_rotation.z;
-
-			b2Body* body = m_PhysicsWorld->CreateBody(&bodyDef);
-			body->SetFixedRotation(rb.m_fixedRotation);
-			rb.m_runtimeBody = body;
-
-			if (entity.HasComponent<BoxCollider2DComponent>())
-			{
-				auto& collider = entity.GetComponent<BoxCollider2DComponent>();
-
-				b2PolygonShape boxShape;
-				boxShape.SetAsBox(collider.m_size.x * transform.m_scale.x, collider.m_size.y * transform.m_scale.y);
-
-				b2FixtureDef fixtureDef;
-				fixtureDef.shape = &boxShape;
-				fixtureDef.density = collider.m_density;
-				fixtureDef.friction = collider.m_friction;
-				fixtureDef.restitution = collider.m_restitution;
-				fixtureDef.restitutionThreshold = collider.m_restitutionThreshold;
-				body->CreateFixture(&	fixtureDef);
-			}
-
-			if (entity.HasComponent<CircleCollider2DComponent>())
-			{
-				auto& collider = entity.GetComponent<CircleCollider2DComponent>();
-
-				b2CircleShape circleShape;
-				circleShape.m_p.Set(collider.m_offset.x, collider.m_offset.y);
-				circleShape.m_radius = transform.m_scale.x * collider.m_radius;
-
-				b2FixtureDef fixtureDef;
-				fixtureDef.shape = &circleShape;
-				fixtureDef.density = collider.m_density;
-				fixtureDef.friction = collider.m_friction;
-				fixtureDef.restitution = collider.m_restitution;
-				fixtureDef.restitutionThreshold = collider.m_restitutionThreshold;
-				body->CreateFixture(&fixtureDef);
-			}
+			ScriptEngine::OnInitEntity(entity);
 		}
 	}
 
@@ -184,12 +150,23 @@ namespace rhombus
 	{
 		delete m_PhysicsWorld;
 		m_PhysicsWorld = nullptr;
+
+		ScriptEngine::OnRuntimeStop();
 	}
 
 	void Scene::OnUpdateRuntime(DeltaTime dt)
 	{
 		// Update Scripts
 		{
+			// Lua
+			auto view = m_Registry.view<ScriptComponent>();
+			for (auto e : view)
+			{
+				Entity entity = { e, this };
+				ScriptEngine::OnUpdateEntity(entity, dt);
+			}
+
+			// Native
 			m_Registry.view<NativeScriptComponent>().each([=](auto entity, auto& nsc)
 			{
 					// TODO: Move on Scene::OnScenePlay
@@ -355,12 +332,76 @@ namespace rhombus
 		}
 	}
 
+	void Scene::InitPhyics2D()
+	{
+		m_PhysicsWorld = new b2World({ 0.0f, -9.8f });
+
+		auto view = m_Registry.view<Rigidbody2DComponent>();
+		for (auto e : view)
+		{
+			Entity entity = { e, this };
+			auto& transform = entity.GetComponent<TransformComponent>();
+			auto& rb = entity.GetComponent<Rigidbody2DComponent>();
+
+			b2BodyDef bodyDef;
+			bodyDef.type = Rigidbody2DTypetoBox2DType(rb.m_type);
+			bodyDef.position.Set(transform.m_position.x, transform.m_position.y);
+			bodyDef.angle = transform.m_rotation.z;
+
+			b2Body* body = m_PhysicsWorld->CreateBody(&bodyDef);
+			body->SetFixedRotation(rb.m_fixedRotation);
+			rb.m_runtimeBody = body;
+
+			if (entity.HasComponent<BoxCollider2DComponent>())
+			{
+				auto& collider = entity.GetComponent<BoxCollider2DComponent>();
+
+				b2PolygonShape boxShape;
+				boxShape.SetAsBox(collider.m_size.x * transform.m_scale.x, collider.m_size.y * transform.m_scale.y);
+
+				b2FixtureDef fixtureDef;
+				fixtureDef.shape = &boxShape;
+				fixtureDef.density = collider.m_density;
+				fixtureDef.friction = collider.m_friction;
+				fixtureDef.restitution = collider.m_restitution;
+				fixtureDef.restitutionThreshold = collider.m_restitutionThreshold;
+				body->CreateFixture(&fixtureDef);
+			}
+
+			if (entity.HasComponent<CircleCollider2DComponent>())
+			{
+				auto& collider = entity.GetComponent<CircleCollider2DComponent>();
+
+				b2CircleShape circleShape;
+				circleShape.m_p.Set(collider.m_offset.x, collider.m_offset.y);
+				circleShape.m_radius = transform.m_scale.x * collider.m_radius;
+
+				b2FixtureDef fixtureDef;
+				fixtureDef.shape = &circleShape;
+				fixtureDef.density = collider.m_density;
+				fixtureDef.friction = collider.m_friction;
+				fixtureDef.restitution = collider.m_restitution;
+				fixtureDef.restitutionThreshold = collider.m_restitutionThreshold;
+				body->CreateFixture(&fixtureDef);
+			}
+		}
+	}
+
 	void Scene::DuplicateEntity(Entity entity)
 	{
 		std::string name = entity.GetName();
 		Entity newEntity = CreateEntity(name);
 
 		CopyComponentIfExists(AllComponents{}, newEntity, entity);
+	}
+
+	Entity Scene::GetEntityByUUID(UUID uuid)
+	{
+		// TODO(Yan): Maybe should be assert
+		if (m_EntityMap.find(uuid) != m_EntityMap.end())
+			return { m_EntityMap.at(uuid), this };
+
+		return {};
 	}
 
 	Entity Scene::GetPrimaryCameraEntity()

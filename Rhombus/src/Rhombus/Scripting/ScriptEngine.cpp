@@ -143,16 +143,17 @@ namespace rhombus
 
 		if (CheckLua(L, r))
 		{
-			lua_getglobal(L, "Init");
+			lua_getglobal(L, scriptComponent.m_scriptName.c_str());
+			UUID entityID = entity.GetUUID();
+			lua_pushnumber(L, (int)entityID);
+			lua_setfield(L, -2, "entityID");
+
+			lua_getglobal(L, scriptComponent.m_scriptName.c_str());
+			lua_getfield(L, -1, "Init");
 			if (lua_isfunction(L, -1))
 			{
-				if (CheckLua(L, lua_pcall(L, 0, 1, 0)))
-				{
-					if (lua_isstring(L, -1))
-					{
-						RB_CORE_INFO("[LUA] {0}", lua_tostring(L, -1));
-					}
-				}
+				lua_pushvalue(L, -2);
+				CheckLua(L, lua_pcall(L, 1, 0, 0));
 			}
 		}
 	}
@@ -163,23 +164,17 @@ namespace rhombus
 
 		// Todo set path in component
 		std::string sciptPath = "assets/scripts/" + scriptComponent.m_scriptName + ".lua";
-		int r = luaL_dofile(L, sciptPath.c_str());
+		int r = luaL_loadfile(L, sciptPath.c_str());
 
 		if (CheckLua(L, r))
 		{
-			lua_getglobal(L, "Update");
+			lua_getglobal(L, scriptComponent.m_scriptName.c_str());
+			lua_getfield(L, -1, "Update");
 			if (lua_isfunction(L, -1))
 			{
-				UUID entityID = entity.GetUUID();
-				lua_pushnumber(L, (int)entityID);
+				lua_pushvalue(L, -2);
 				lua_pushnumber(L, (float)dt);
-				if (CheckLua(L, lua_pcall(L, 2, 1, 0)))
-				{
-					if (lua_isstring(L, -1))
-					{
-						RB_CORE_INFO("[LUA] {0}", lua_tostring(L, -1));
-					}
-				}
+				CheckLua(L, lua_pcall(L, 2, 0, 0));
 			}
 		}
 	}

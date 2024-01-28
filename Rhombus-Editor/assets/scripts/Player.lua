@@ -1,4 +1,4 @@
-local rhombus = require "rhombus"
+Player = {}
 
 KEY_SPACE = 32
 KEY_A = 97
@@ -6,16 +6,12 @@ KEY_D = 100
 KEY_S = 115
 KEY_W = 119
 
-function Init()
-	Log("Player Start using Log ")
-	return "Player Start "
+function Player:Init()
+	rhombus.Log("Lua Init")
 end
 
-function Update(entityID, dt)
-
-	returnString = "Player Update: ".. entityID
-
-	Log(returnString)
+function Player:Update(dt)
+	rhombus.Log("Lua Update")
 
 	speed = 0.03
 	velX = 0
@@ -32,7 +28,7 @@ function Update(entityID, dt)
 	velX = velX * speed
 	velY = velY * speed
 
-	ApplyLinearImpulse(entityID, velX, velY)
+	rhombus.ApplyLinearImpulse(self, velX, velY)
 
 	jump = false
 	jumpStrength = 0.1
@@ -42,8 +38,6 @@ function Update(entityID, dt)
 	end
 
 	if jump then
-		ApplyLinearImpulse(entityID, 0, jumpStrength)
+		rhombus.ApplyLinearImpulse(self, 0, jumpStrength)
 	end
-
-	return returnString
 end

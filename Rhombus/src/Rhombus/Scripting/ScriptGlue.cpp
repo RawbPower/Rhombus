@@ -19,6 +19,20 @@ namespace rhombus
 {
 #define ADD_INTERNAL_CALL(L, Name) lua_register(L, #Name, Name)
 
+	UUID GetEntityUUIDFromLua(lua_State * state)
+	{
+		lua_getfield(state, 1, "entityIDa");		// indexed as if this is a fresh stack
+		uint32_t entityID32a = (uint32_t)lua_tonumber(state, -1);		// indexed as if this is a fresh stack
+
+		lua_getfield(state, 1, "entityIDb");		// indexed as if this is a fresh stack
+		uint32_t entityID32b = (uint32_t)lua_tonumber(state, -1);		// indexed as if this is a fresh stack
+
+
+		uint64_t entityID64 = ((uint64_t)entityID32a) << 32 | entityID32b;
+
+		return (UUID)entityID64;
+	}
+
 	int HostFunction(lua_State* state)
 	{
 		RB_CORE_ASSERT(lua_gettop(state) == 2, "Invalid number of arguments passed to function");
@@ -52,8 +66,7 @@ namespace rhombus
 	{
 		RB_CORE_ASSERT(lua_gettop(state) == 3, "Invalid number of arguments passed to function");
 
-		lua_getfield(state, 1, "entityID");		// indexed as if this is a fresh stack
-		uint32_t entityID = (uint32_t)lua_tonumber(state, -1);		// indexed as if this is a fresh stack
+		UUID entityID = GetEntityUUIDFromLua(state);
 		float impulseX = (float)lua_tonumber(state, 2);		// indexed as if this is a fresh stack
 		float impulseY = (float)lua_tonumber(state, 3);		// indexed as if this is a fresh stack
 		Scene* scene = ScriptEngine::GetSceneContext();

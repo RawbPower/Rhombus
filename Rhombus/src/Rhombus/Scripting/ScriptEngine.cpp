@@ -145,8 +145,14 @@ namespace rhombus
 		{
 			lua_getglobal(L, scriptComponent.m_scriptName.c_str());
 			UUID entityID = entity.GetUUID();
-			lua_pushnumber(L, (int)entityID);
-			lua_setfield(L, -2, "entityID");
+			uint32_t entityID32a = (uint32_t)((entityID & 0xFFFFFFFF00000000LL) >> 32);
+			uint32_t entityID32b = (uint32_t)(entityID & 0xFFFFFFFFLL);
+
+			lua_pushnumber(L, (int)entityID32a);
+			lua_setfield(L, -2, "entityIDa");
+
+			lua_pushnumber(L, (int)entityID32b);
+			lua_setfield(L, -2, "entityIDb");
 
 			lua_getglobal(L, scriptComponent.m_scriptName.c_str());
 			lua_getfield(L, -1, "Init");

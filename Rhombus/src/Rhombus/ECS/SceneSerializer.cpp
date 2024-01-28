@@ -331,7 +331,7 @@ namespace rhombus
 		{
 			for (auto entity : entities)
 			{
-				uint32_t uuid = entity["Entity"].as<uint32_t>();
+				uint64_t uuid = entity["Entity"].as<uint64_t>();
 
 				std::string name;
 				auto tagComponent = entity["TagComponent"];

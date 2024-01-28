@@ -1,42 +1,6 @@
 Scene: Untitled
 Entities:
-  - Entity: 3284140195
-    TagComponent:
-      Tag: Green Square
-    TransformComponent:
-      Position: [0, 0, -4.80000019]
-      Rotation: [0, 0, 0]
-      Scale: [1, 1, 1]
-    SpriteRendererComponent:
-      Color: [0, 1, 0, 1]
-  - Entity: 2732581695
-    TagComponent:
-      Tag: Red Square
-    TransformComponent:
-      Position: [1.70000005, 0, 1.10000002]
-      Rotation: [0, 0, 0]
-      Scale: [1, 1, 1]
-    SpriteRendererComponent:
-      Color: [1, 0, 0, 1]
-  - Entity: 2290435736
-    TagComponent:
-      Tag: Camera
-    TransformComponent:
-      Position: [0, 0, 0]
-      Rotation: [0, 0, 0]
-      Scale: [1, 1, 1]
-    CameraComponent:
-      Camera:
-        ProjectionType: 0
-        PerspectiveFOV: 0.785398185
-        PerspectiveNear: 0.00999999978
-        PerspectiveFar: 1000
-        OrthographicSize: 10
-        OrthographicNear: -1
-        OrthographicFar: 1
-      Primary: false
-      FixedAspectRatio: false
-  - Entity: 1592343611
+  - Entity: 13494926272664625122
     TagComponent:
       Tag: Secondary Camera
     TransformComponent:
@@ -54,3 +18,39 @@ Entities:
         OrthographicFar: 1
       Primary: true
       FixedAspectRatio: false
+  - Entity: 13814012017252038781
+    TagComponent:
+      Tag: Camera
+    TransformComponent:
+      Position: [0, 0, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    CameraComponent:
+      Camera:
+        ProjectionType: 0
+        PerspectiveFOV: 0.785398185
+        PerspectiveNear: 0.00999999978
+        PerspectiveFar: 1000
+        OrthographicSize: 10
+        OrthographicNear: -1
+        OrthographicFar: 1
+      Primary: false
+      FixedAspectRatio: false
+  - Entity: 6051624653485210599
+    TagComponent:
+      Tag: Red Square
+    TransformComponent:
+      Position: [1.70000005, 0, 1.10000002]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    SpriteRendererComponent:
+      Color: [1, 0, 0, 1]
+  - Entity: 4927923806278384650
+    TagComponent:
+      Tag: Green Square
+    TransformComponent:
+      Position: [0, 0, -4.80000019]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    SpriteRendererComponent:
+      Color: [0, 1, 0, 1]

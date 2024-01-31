@@ -45,4 +45,4 @@ Entities:
       Scale: [1, 1, 1]
     SpriteRendererComponent:
       Color: [1, 1, 1, 1]
-      Texture: assets\textures\Checkerboard.png
+      Texture: TestProject\Assets\textures\Checkerboard.png

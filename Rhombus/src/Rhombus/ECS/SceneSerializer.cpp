@@ -4,6 +4,8 @@
 #include "Entity.h"
 #include "Component.h"
 
+#include "Rhombus/Project/Project.h"
+
 #include <fstream>
 
 #define YAML_CPP_STATIC_DEFINE		// Needed for yaml static library to work for some reason
@@ -214,7 +216,7 @@ namespace rhombus
 			out << YAML::Key << "Color" << YAML::Value << spriteRendererComponent.GetColor();
 			if (spriteRendererComponent.m_texture)
 			{
-				out << YAML::Key << "Texture" << YAML::Value << spriteRendererComponent.m_texture->GetPath();
+				out << YAML::Key << "Texture" << YAML::Value << Project::GetAssetFileLocalPath(spriteRendererComponent.m_texture->GetPath());
 			}
 
 			out << YAML::EndMap; // SpriteRendererComponent
@@ -386,7 +388,9 @@ namespace rhombus
 					src.GetColor() = spriteRendererComponent["Color"].as<glm::vec4>();
 					if (spriteRendererComponent["Texture"].Type() != YAML::NodeType::Undefined)
 					{
-						src.m_texture = Texture2D::Create(spriteRendererComponent["Texture"].as<std::string>());
+						std::string texturePath = spriteRendererComponent["Texture"].as<std::string>();
+						auto path = Project::GetAssetFileSystemPath(texturePath);
+						src.m_texture = Texture2D::Create(path.string());
 					}
 				}
 

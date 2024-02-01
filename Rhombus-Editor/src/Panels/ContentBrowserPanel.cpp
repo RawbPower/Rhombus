@@ -2,15 +2,14 @@
 
 #include "ContentBrowerPanel.h"
 
+#include "Rhombus/Project/Project.h"
+
 #include <imgui/imgui.h>
 
 namespace rhombus
 {
-	// Once we have projects, change this
-	extern const std::filesystem::path g_AssetPath = "TestProject/Assets";
-
 	ContentBrowserPanel::ContentBrowserPanel()
-		: m_currentDirectory(g_AssetPath)
+		: m_baseDirectory(Project::GetAssetDirectory()), m_currentDirectory(m_baseDirectory)
 	{
 		m_FolderIcon = Texture2D::Create("Resources/Icons/ContentBrowser/Folder.png");
 		m_FileIcon = Texture2D::Create("Resources/Icons/ContentBrowser/File.png");
@@ -20,7 +19,7 @@ namespace rhombus
 	{
 		ImGui::Begin("Content Browser");
 
-		if (m_currentDirectory != std::filesystem::path(g_AssetPath))
+		if (m_currentDirectory != std::filesystem::path(m_baseDirectory))
 		{
 			if (ImGui::Button("../"))
 			{
@@ -51,7 +50,7 @@ namespace rhombus
 
 			if (ImGui::BeginDragDropSource())
 			{
-				auto relativePath = std::filesystem::relative(path, g_AssetPath);
+				std::filesystem::path relativePath(path);
 				const wchar_t* itemPath = relativePath.c_str();
 				ImGui::SetDragDropPayload("CONTENT_BROWSER_ITEM", itemPath, (wcslen(itemPath) + 1) * sizeof(wchar_t));
 				ImGui::EndDragDropSource();

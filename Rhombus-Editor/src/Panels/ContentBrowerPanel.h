@@ -15,6 +15,7 @@ namespace rhombus
 		void OnImGuiRender();
 
 	private:
+		std::filesystem::path m_baseDirectory;
 		std::filesystem::path m_currentDirectory;
 
 		Ref<Texture2D> m_FolderIcon;

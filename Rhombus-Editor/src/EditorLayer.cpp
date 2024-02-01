@@ -13,8 +13,6 @@
 
 namespace rhombus
 {
-	extern const std::filesystem::path g_AssetPath;
-
 	EditorLayer::EditorLayer()
 		: Layer("Editor"), m_CameraController(960.0f / 540.0f, true), m_SquareColor({ 0.2f, 0.3f, 0.8f, 1.0f })
 	{
@@ -41,9 +39,13 @@ namespace rhombus
 		auto commandLineArgs = Application::Get().GetSpecification().commandLineArgs;
 		if (commandLineArgs.count > 1)
 		{
-			auto sceneFilePath = commandLineArgs[1];
-			SceneSerializer serializer(m_ActiveScene);
-			serializer.Deserialize(sceneFilePath);
+			auto projectFilePath = commandLineArgs[1];
+			OpenProject(projectFilePath);
+		}
+		else
+		{
+			// Prompt user to select directory
+			NewProject();
 		}
 
 		m_EditorCamera = EditorCamera(30.0f, 1.778f, 0.1f, 1000.0f);	// 1.778 = 16/9
@@ -264,7 +266,7 @@ namespace rhombus
 		}
 
 		m_sceneHierarchyPanel.OnImGuiRender();
-		m_contentBrowserPanel.OnImGuiRender();
+		m_contentBrowserPanel->OnImGuiRender();
 
 		ImGui::Begin("Renderer Stats");
 
@@ -318,7 +320,7 @@ namespace rhombus
 			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
 			{
 				const wchar_t* path = (const wchar_t*)payload->Data;
-				OpenScene(std::filesystem::path(g_AssetPath) / path);
+				OpenScene(path);
 			}
 			ImGui::EndDragDropTarget();
 		}
@@ -583,6 +585,26 @@ namespace rhombus
 			SerializeScene(m_ActiveScene, filepath);
 			m_EditorScenePath = filepath;
 		}
+	}
+
+	void EditorLayer::NewProject()
+	{
+		Project::New();
+	}
+
+	void EditorLayer::OpenProject(const std::filesystem::path& path)
+	{
+		if (Project::Load(path))
+		{
+			auto startScenePath = Project::GetAssetFileSystemPath(Project::GetActive()->GetConfig().StartScene);
+			OpenScene(startScenePath);
+			m_contentBrowserPanel = CreateScope<ContentBrowserPanel>();
+		}
+	}
+
+	void EditorLayer::SaveProject()
+	{
+		// Project::SaveActive();
 	}
 
 	void EditorLayer::SerializeScene(Ref<Scene> scene, const std::filesystem::path& path)

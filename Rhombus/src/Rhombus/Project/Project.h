@@ -19,7 +19,7 @@ namespace rhombus
 	class Project
 	{
 	public:
-		static const std::filesystem::path& GetProjectionDirectory()
+		static const std::filesystem::path& GetProjectDirectory()
 		{
 			RB_CORE_ASSERT(s_ActiveProject, "No valid active project");
 			return s_ActiveProject->m_ProjectDirectory;
@@ -28,7 +28,7 @@ namespace rhombus
 		static std::filesystem::path GetAssetDirectory()
 		{
 			RB_CORE_ASSERT(s_ActiveProject, "No valid active project");
-			return GetProjectionDirectory() / s_ActiveProject->m_Config.AssetDirectory;
+			return GetProjectDirectory() / s_ActiveProject->m_Config.AssetDirectory;
 		}
 
 		// TODO: move to asset manager when we have one
@@ -36,6 +36,17 @@ namespace rhombus
 		{
 			RB_CORE_ASSERT(s_ActiveProject, "No valid active project");
 			return GetAssetDirectory() / path;
+		}
+
+		static std::string GetAssetFileLocalPath(const std::string& pathString)
+		{
+			RB_CORE_ASSERT(s_ActiveProject, "No valid active project");
+			std::string assetPathString = GetAssetDirectory().string() + "\\";
+			std::string localPathString = pathString;
+
+			localPathString.erase(0, assetPathString.length());
+
+			return localPathString;
 		}
 
 		ProjectConfig& GetConfig() { return m_Config; }

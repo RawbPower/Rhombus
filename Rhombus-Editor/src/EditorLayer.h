@@ -30,6 +30,10 @@ namespace rhombus
 		void SaveScene();
 		void SaveSceneAs();
 
+		void NewProject();
+		void OpenProject(const std::filesystem::path& path);
+		void SaveProject();
+
 		void SerializeScene(Ref<Scene> scene, const std::filesystem::path& path);
 
 		void OnScenePlay();
@@ -86,7 +90,7 @@ namespace rhombus
 
 		// Panels
 		SceneHierarchyPanel m_sceneHierarchyPanel;
-		ContentBrowserPanel m_contentBrowserPanel;
+		Scope<ContentBrowserPanel> m_contentBrowserPanel;
 
 		// Editor resources
 		Ref<Texture2D> m_IconPlay, m_IconStop;

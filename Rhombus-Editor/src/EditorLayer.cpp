@@ -45,7 +45,12 @@ namespace rhombus
 		else
 		{
 			// Prompt user to select directory
-			NewProject();
+			//NewProject();
+			// Just close editor if there is no project
+			if (!OpenProject())
+			{
+				Application::Get().Close();
+			}
 		}
 
 		m_EditorCamera = EditorCamera(30.0f, 1.778f, 0.1f, 1000.0f);	// 1.778 = 16/9
@@ -233,26 +238,24 @@ namespace rhombus
 		{
 			if (ImGui::BeginMenu("File"))
 			{
-				// Disabling fullscreen would allow the window to be moved to the front of other windows,
-				// which we can't undo at the moment without finer window depth/z control.
-				//ImGui::MenuItem("Fullscreen", NULL, &opt_fullscreen_persistant);
+				if (ImGui::MenuItem("Open Project...", "Ctrl+O"))
+				{
+					OpenProject();
+				}
 
-				if (ImGui::MenuItem("New", "Ctrl+N"))
+				ImGui::Separator();
+
+				if (ImGui::MenuItem("New Scene", "Ctrl+N"))
 				{
 					NewScene();
 				}
 
-				if (ImGui::MenuItem("Open...", "Ctrl+O"))
-				{
-					OpenScene();
-				}
-
-				if (ImGui::MenuItem("Save", "Ctrl+S"))
+				if (ImGui::MenuItem("Save Scene", "Ctrl+S"))
 				{
 					SaveScene();
 				}
 
-				if (ImGui::MenuItem("Save As...", "Ctrl+Shift+S"))
+				if (ImGui::MenuItem("Save Scene As...", "Ctrl+Shift+S"))
 				{
 					SaveSceneAs();
 				}
@@ -454,7 +457,7 @@ namespace rhombus
 			{
 				if (ctrl)
 				{
-					OpenScene();
+					OpenProject();
 				}
 
 				break;
@@ -590,6 +593,18 @@ namespace rhombus
 	void EditorLayer::NewProject()
 	{
 		Project::New();
+	}
+
+	bool EditorLayer::OpenProject()
+	{
+		std::string filepath = FileDialogs::OpenFile("Rhombus Project (*.rproj)\0*.rproj\0");
+		if (filepath.empty())
+		{
+			return false;
+		}
+
+		OpenProject(filepath);
+		return true;
 	}
 
 	void EditorLayer::OpenProject(const std::filesystem::path& path)

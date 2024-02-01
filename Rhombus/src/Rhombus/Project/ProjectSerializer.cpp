@@ -2,6 +2,8 @@
 #include "ProjectSerializer.h"
 
 #include <fstream>
+
+#define YAML_CPP_STATIC_DEFINE		// Needed for yaml static library to work for some reason
 #include <yaml-cpp/yaml.h>
 
 namespace rhombus

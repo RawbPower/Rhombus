@@ -1,0 +1,5 @@
+Project:
+  Name: Test
+  StartScene: "scenes\Physics2D.rb"
+  AssetDirectory: "Assets"
+  ScriptDirectory: "scripts"

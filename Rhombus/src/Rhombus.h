@@ -20,6 +20,8 @@
 #include "Rhombus/ECS/ScriptableEntity.h"
 #include "Rhombus/ECS/Component.h"
 
+#include "Rhombus/Project/Project.h"
+
 // ---Renderer--------------------
 #include "Rhombus/Renderer/Renderer.h"
 #include "Rhombus/Renderer/Renderer2D.h"

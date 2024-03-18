@@ -5,6 +5,8 @@
 #include "Panels/ContentBrowerPanel.h";
 #include "Rhombus/Renderer/EditorCamera.h"
 
+#define RB_EDITOR 1
+
 namespace rhombus
 {
 	class EditorLayer : public Layer
@@ -24,6 +26,7 @@ namespace rhombus
 	private:
 		bool OnKeyPressed(KeyPressedEvent& e);
 		bool OnMouseButtonPressed(MouseButtonPressedEvent& e);
+		bool OnWindowResized(WindowResizeEvent& e);
 		void NewScene();
 		void OpenScene();
 		void OpenScene(const std::filesystem::path& path);
@@ -87,7 +90,11 @@ namespace rhombus
 			Play = 1
 		};
 
+#if RB_EDITOR
 		SceneState m_SceneState = SceneState::Edit;
+#else
+		SceneState m_SceneState = SceneState::Play;
+#endif
 
 		// Panels
 		SceneHierarchyPanel m_sceneHierarchyPanel;

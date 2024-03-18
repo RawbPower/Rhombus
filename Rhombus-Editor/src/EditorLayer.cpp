@@ -55,6 +55,10 @@ namespace rhombus
 
 		m_EditorCamera = EditorCamera(30.0f, 1.778f, 0.1f, 1000.0f);	// 1.778 = 16/9
 
+		m_ViewportSize = { fbSpec.Width, fbSpec.Height };
+		m_CameraController.OnResize(m_ViewportSize.x, m_ViewportSize.y);
+		m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
+
 #if 0
 		m_SquareEntity = m_ActiveScene->CreateEntity("Green Square");
 		m_SquareEntity.AddComponent<SpriteRendererComponent>(glm::vec4{ 0.0f, 1.0f, 0.0f, 1.0f });
@@ -125,12 +129,16 @@ namespace rhombus
 
 		// Render
 		Renderer2D::ResetStats();
+#if RB_EDITOR
 		m_Framebuffer->Bind();
+#endif
 		RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
 		RenderCommand::Clear();
 
 		// Clear our entity ID attachment to -1
+#if RB_EDITOR
 		m_Framebuffer->ClearAttachment(1, -1);
+#endif
 
 		// Update Scene
 		switch (m_SceneState)
@@ -155,6 +163,7 @@ namespace rhombus
 		}
 		}
 
+#if RB_EDITOR
 		auto [mx, my] = ImGui::GetMousePos();
 		mx -= m_ViewportBounds[0].x;
 		my -= m_ViewportBounds[0].y;			// Make top left (0,0)
@@ -172,14 +181,20 @@ namespace rhombus
 		{
 			m_HoveredEntity = Entity();
 		}
+#endif
 
 		OnOverlayRender();
 
+#if RB_EDITOR
 		m_Framebuffer->Unbind();
+#endif
 	}
 
 	void EditorLayer::OnImGuiRender()
 	{
+#if !RB_EDITOR
+		return;
+#endif
 		RB_PROFILE_FUNCTION();
 
 		//ImGui::ShowStyleEditor();
@@ -531,6 +546,14 @@ namespace rhombus
 		return false;
 	}
 
+	bool EditorLayer::OnWindowResized(WindowResizeEvent& e)
+	{
+#if !RB_EDITOR
+		m_ViewportSize = { e.GetWidth(), e.GetHeight() };
+#endif
+		return false;
+	}
+
 	void EditorLayer::NewScene()
 	{
 		m_ActiveScene = CreateRef<Scene>();
@@ -550,21 +573,32 @@ namespace rhombus
 
 	void EditorLayer::OpenScene(const std::filesystem::path& path)
 	{
+#if RB_EDITOR
 		if (m_SceneState != SceneState::Edit)
 		{
 			OnSceneStop();
 		}
+#endif
 
 		Ref<Scene> newScene = CreateRef<Scene>();
 		SceneSerializer serializer(newScene);
 		if (serializer.Deserialize(path.string()))
 		{
-			m_EditorScene = newScene;
-			m_EditorScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
-			m_sceneHierarchyPanel.SetContext(m_EditorScene);
+			if (m_SceneState == SceneState::Edit)
+			{
+				m_EditorScene = newScene;
+				m_EditorScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
+				m_sceneHierarchyPanel.SetContext(m_EditorScene);
 
-			m_ActiveScene = m_EditorScene;
-			m_EditorScenePath = path;
+				m_ActiveScene = m_EditorScene;
+				m_EditorScenePath = path;
+			}
+			else if (m_SceneState == SceneState::Play)
+			{
+				m_ActiveScene = newScene;
+				m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
+				m_ActiveScene->OnRuntimeStart();
+			}
 		}
 	}
 
@@ -689,7 +723,7 @@ namespace rhombus
 				}
 			}
 
-			// Cifcle Collider
+			// Circle Collider
 			{
 				auto view = m_ActiveScene->GetAllEntitiesWith<TransformComponent, CircleCollider2DComponent>();
 				for (auto entity : view)

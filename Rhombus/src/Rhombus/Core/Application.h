@@ -59,6 +59,7 @@ namespace rhombus {
 
 		bool OnWindowClose(WindowCloseEvent& e);
 		bool OnWindowResize(WindowResizeEvent& e);
+		bool OnWindowMoved(WindowMovedEvent& e);
 
 		bool OnKeyPressed(KeyPressedEvent& e);
 		bool OnKeyReleased(KeyReleasedEvent& e);

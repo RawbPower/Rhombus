@@ -81,6 +81,8 @@ namespace rhombus {
 
 		dispatcher.Dispatch<WindowResizeEvent>(BIND_EVENT_FN(OnWindowResize));
 
+		dispatcher.Dispatch<WindowMovedEvent>(BIND_EVENT_FN(OnWindowMoved));
+
 		//dispatcher.Dispatch<KeyPressedEvent>(BIND_EVENT_FN(OnKeyPressed));
 
 		//dispatcher.Dispatch<KeyReleasedEvent>(BIND_EVENT_FN(OnKeyReleased));
@@ -147,6 +149,9 @@ namespace rhombus {
 	{
 		RB_PROFILE_FUNCTION();
 
+		// Skip time spent resizing the window since the game wasn't running
+		m_LastFrameTime = Time::GetTime();
+
 		if (e.GetWidth() == 0 || e.GetHeight() == 0)
 		{
 			m_Minimised = true;
@@ -157,6 +162,14 @@ namespace rhombus {
 
 		// Tell Renderer that Frame Buffer has resized
 		Renderer::OnWindowResize(e.GetWidth(), e.GetHeight());
+
+		return false;
+	}
+
+	bool Application::OnWindowMoved(WindowMovedEvent& e)
+	{
+		// Skip time spent moving the window since the game wasn't running
+		m_LastFrameTime = Time::GetTime();
 
 		return false;
 	}

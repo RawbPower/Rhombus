@@ -186,6 +186,12 @@ namespace rhombus {
 						// Dispatch it
 						m_Data.EventCallback(event);
 					}
+					else if (e.window.event == SDL_WINDOWEVENT_MOVED)
+					{
+						WindowMovedEvent event;
+						RB_CORE_WARN("Window Moved");
+						m_Data.EventCallback(event);
+					}
 					break;
 				}
 				case SDL_KEYDOWN:

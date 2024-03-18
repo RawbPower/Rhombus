@@ -26,6 +26,15 @@ namespace rhombus {
 		unsigned int m_Width, m_Height;
 	};
 
+	class RB_API WindowMovedEvent : public Event
+	{
+	public:
+		WindowMovedEvent() {}
+
+		EVENT_CLASS_TYPE(WindowMoved)
+		EVENT_CLASS_CATEGORY(EventCategoryApplication)
+	};
+
 	class RB_API WindowCloseEvent : public Event
 	{
 	public:

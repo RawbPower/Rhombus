@@ -188,6 +188,16 @@ namespace rhombus
 		CircleCollider2DComponent(const CircleCollider2DComponent& other) = default;
 	};
 
+	class BoxArea2DComponent
+	{
+	public:
+		glm::vec2 m_offset = { 0.0f, 0.0f };
+		glm::vec2 m_size = { 0.5f, 0.5f };
+
+		BoxArea2DComponent() = default;
+		BoxArea2DComponent(const BoxArea2DComponent& other) = default;
+	};
+
 	template <typename... Component>
 	struct ComponentGroup
 	{
@@ -196,5 +206,5 @@ namespace rhombus
 	using AllComponents =
 		ComponentGroup<TransformComponent, SpriteRendererComponent,
 		CircleRendererComponent, CameraComponent, ScriptComponent, NativeScriptComponent,
-		Rigidbody2DComponent, BoxCollider2DComponent, CircleCollider2DComponent>;
+		Rigidbody2DComponent, BoxCollider2DComponent, CircleCollider2DComponent, BoxArea2DComponent>;
 }

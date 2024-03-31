@@ -71,8 +71,12 @@ namespace rhombus
 		}
 
 		bool entityDeleted = false;
+		bool entityDuplicated = false;
 		if (ImGui::BeginPopupContextItem())
 		{
+			if (ImGui::MenuItem("Duplicate"))
+				entityDuplicated = true;
+
 			if (ImGui::MenuItem("Delete"))
 				entityDeleted = true;
 
@@ -86,6 +90,12 @@ namespace rhombus
 			if (childOpened)
 				ImGui::TreePop();
 			ImGui::TreePop();
+		}
+
+		// Duplicate entity
+		if (entityDuplicated)
+		{
+			m_context->DuplicateEntity(entity);
 		}
 
 		// Deferred deletion
@@ -234,6 +244,7 @@ namespace rhombus
 			DisplayAddComponentEntry<Rigidbody2DComponent>("Rigidbody 2D");
 			DisplayAddComponentEntry<BoxCollider2DComponent>("Box Collider 2D");
 			DisplayAddComponentEntry<CircleCollider2DComponent>("Circle Collider 2D");
+			DisplayAddComponentEntry<BoxArea2DComponent>("Box Area 2D");
 
 			ImGui::EndPopup();
 		}
@@ -388,6 +399,12 @@ namespace rhombus
 			ImGui::DragFloat("Friction", &component.m_friction, 0.01f, 0.0f, 1.0f);
 			ImGui::DragFloat("Restitution", &component.m_restitution, 0.01f, 0.0f, 1.0f);
 			ImGui::DragFloat("Restitution Threshold", &component.m_restitutionThreshold, 0.01f, 0.0f);
+		});
+
+		DrawComponent<BoxArea2DComponent>("Box Area 2D", entity, [](auto& component)
+		{
+			ImGui::DragFloat2("Offset", glm::value_ptr(component.m_offset), 0.01f);
+			ImGui::DragFloat2("Size", glm::value_ptr(component.m_size));
 		});
 	}
 

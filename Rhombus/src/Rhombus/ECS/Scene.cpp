@@ -126,8 +126,9 @@ namespace rhombus
 
 	void Scene::DestroyEntity(Entity entity)
 	{
+		UUID entityUUID = entity.GetUUID();
 		m_Registry.destroy(entity);
-		m_EntityMap.erase(entity.GetUUID());
+		m_EntityMap.erase(entityUUID);
 	}
 
 	void Scene::OnRuntimeStart()
@@ -482,6 +483,11 @@ namespace rhombus
 
 	template<>
 	void Scene::OnComponentAdded<CircleCollider2DComponent>(Entity entity, CircleCollider2DComponent& component)
+	{
+	}
+
+	template<>
+	void Scene::OnComponentAdded<BoxArea2DComponent>(Entity entity, BoxArea2DComponent& component)
 	{
 	}
 }

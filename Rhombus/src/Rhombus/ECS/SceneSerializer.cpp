@@ -279,6 +279,18 @@ namespace rhombus
 			out << YAML::EndMap; // CircleCollider2DComponent
 		}
 
+		if (entity.HasComponent<BoxArea2DComponent>())
+		{
+			out << YAML::Key << "BoxArea2DComponent";
+			out << YAML::BeginMap; // BoxArea2DComponent
+
+			auto& area2DComponent = entity.GetComponent<BoxArea2DComponent>();
+			out << YAML::Key << "Offset" << YAML::Value << area2DComponent.m_offset;
+			out << YAML::Key << "Size" << YAML::Value << area2DComponent.m_size;
+
+			out << YAML::EndMap; // BoxArea2DComponent
+		}
+
 		out << YAML::EndMap; // Entity
 	}
 
@@ -433,6 +445,14 @@ namespace rhombus
 					coll.m_friction = circleCollider2DComponent["Friction"].as<float>();
 					coll.m_restitution = circleCollider2DComponent["Restitution"].as<float>();
 					coll.m_restitutionThreshold = circleCollider2DComponent["RestitutionThreshold"].as<float>();
+				}
+
+				auto boxArea2DComponent = entity["BoxArea2DComponent"];
+				if (boxArea2DComponent)
+				{
+					auto& coll = deserializedEntity.AddComponent<BoxArea2DComponent>();
+					coll.m_offset = boxArea2DComponent["Offset"].as<glm::vec2>();
+					coll.m_size = boxArea2DComponent["Size"].as<glm::vec2>();
 				}
 			}
 		}

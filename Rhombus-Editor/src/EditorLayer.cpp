@@ -306,6 +306,7 @@ namespace rhombus
 		ImGui::Begin("Settings");
 		ImGui::Checkbox("Show physics colliders", &m_ShowPhysicsColliders);
 		ImGui::ColorEdit4("Physics colliders color", glm::value_ptr(m_PhysicsColliderColor));
+		ImGui::ColorEdit4("Area color", glm::value_ptr(m_AreaColor));
 		ImGui::End();
 
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
@@ -737,6 +738,26 @@ namespace rhombus
 						* glm::scale(glm::mat4(1.0f), scale);
 
 					Renderer2D::DrawCircle(transform, m_PhysicsColliderColor, 0.05f);
+				}
+			}
+
+			// Box Area
+			{
+				auto view = m_ActiveScene->GetAllEntitiesWith<TransformComponent, BoxArea2DComponent>();
+				for (auto entity : view)
+				{
+					auto [tc, ba2d] = view.get<TransformComponent, BoxArea2DComponent>(entity);
+					glm::vec3 translation = tc.m_position + glm::vec3(ba2d.m_offset, 0.01f);
+					glm::vec3 scale = tc.m_scale * glm::vec3(ba2d.m_size * 2.0f, 1.0f);
+
+					glm::mat4 transform = glm::translate(glm::mat4(1.0f), translation)
+						* glm::rotate(glm::mat4(1.0f), tc.m_rotation.z, glm::vec3(0.0f, 0.0f, 1.0f))
+						* glm::scale(glm::mat4(1.0f), scale);
+
+					Renderer2D::DrawRect(transform, m_AreaColor);
+					glm::vec4 overlayColor = m_AreaColor;
+					overlayColor.a = 0.2f;
+					Renderer2D::DrawQuad(transform, overlayColor);
 				}
 			}
 		}

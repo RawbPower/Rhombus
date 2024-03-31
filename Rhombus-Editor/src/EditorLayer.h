@@ -83,6 +83,7 @@ namespace rhombus
 
 		bool m_ShowPhysicsColliders = false;
 		glm::vec4 m_PhysicsColliderColor = glm::vec4(0.0, 1.0, 0.0, 1.0);
+		glm::vec4 m_AreaColor = glm::vec4(0.0, 0.0, 1.0, 1.0);
 
 		enum SceneState
 		{

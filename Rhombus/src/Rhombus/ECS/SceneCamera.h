@@ -30,6 +30,9 @@ namespace rhombus
 		float GetOrthographicFarClip() const { return m_OrthographicFar; }
 		void SetOrthographicFarClip(float farClip) { m_OrthographicFar = farClip; RecalculateProjection(); }
 
+		bool GetPixelPerfect() const { return m_PixelPerfect; }
+		void SetPixelPerfect(bool value) { m_PixelPerfect = value; RecalculateProjection(); }
+		
 		// Perspective Functions
 		float GetPerspectiveVerticalFOV() const { return m_PerspectiveFOV; }
 		void SetPerspectiveVerticalFOV(float fov) { m_PerspectiveFOV = fov; RecalculateProjection(); }
@@ -54,5 +57,8 @@ namespace rhombus
 		float m_PerspectiveNear = 0.01f, m_PerspectiveFar = 1000.0f;
 
 		float m_AspectRaio = 0.0f;
+
+		bool m_PixelPerfect = false;
+		float m_PixelPerfectSize = 10.0f;
 	};
 }

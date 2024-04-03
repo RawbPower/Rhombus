@@ -337,6 +337,10 @@ namespace rhombus
 				if (ImGui::DragFloat("Far Clip", &orthoFar))
 					camera.SetOrthographicFarClip(orthoFar);
 
+				bool pixelPerfect = camera.GetPixelPerfect();
+				if (ImGui::Checkbox("Pixel Perfect", &pixelPerfect))
+					camera.SetPixelPerfect(pixelPerfect);
+
 				ImGui::Checkbox("Fixed Aspect Ratio", &component.GetHasFixedAspectRatio());
 			}
 

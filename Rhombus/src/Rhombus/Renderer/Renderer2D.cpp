@@ -406,6 +406,9 @@ namespace rhombus
 
 		constexpr size_t quadVertexCount = 4;
 		constexpr glm::vec2 textureCoords[] = { { 0.0f, 0.0f }, { 1.0f, 0.0f }, { 1.0f, 1.0f }, { 0.0f, 1.0f } };
+		
+		// TODO: Add PPU
+		glm::mat4 scaledTransform = glm::scale(transform, glm::vec3((float)texture->GetWidth(), (float)texture->GetHeight(), 1.0f));
 
 		if (s_Data.QuadIndexCount >= Renderer2DData::MaxIndices)
 		{
@@ -437,7 +440,7 @@ namespace rhombus
 
 		for (size_t i = 0; i < quadVertexCount; i++)
 		{
-			s_Data.QuadVertexBufferPtr->Position = transform * s_Data.QuadVertexPosition[i];
+			s_Data.QuadVertexBufferPtr->Position = scaledTransform * s_Data.QuadVertexPosition[i];
 			s_Data.QuadVertexBufferPtr->Color = color;
 			s_Data.QuadVertexBufferPtr->TexCoord = textureCoords[i];
 			s_Data.QuadVertexBufferPtr->TextureIndex = textureIndex;
@@ -458,6 +461,9 @@ namespace rhombus
 		constexpr size_t quadVertexCount = 4;
 		const glm::vec2* textureCoords = subTexture->GetTexCoords();
 		const Ref<Texture2D> texture = subTexture->GetTexture();
+
+		// TODO: Add PPU
+		glm::mat4 scaledTransform = glm::scale(transform, glm::vec3((float)texture->GetWidth(), (float)texture->GetHeight(), 1.0f));
 
 		if (s_Data.QuadIndexCount >= Renderer2DData::MaxIndices)
 		{

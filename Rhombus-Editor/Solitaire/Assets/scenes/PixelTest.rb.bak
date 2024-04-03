@@ -14,7 +14,7 @@ Entities:
     TagComponent:
       Tag: Pixel Test
     TransformComponent:
-      Position: [0, 0, -1]
+      Position: [0, 0, 0]
       Rotation: [0, 0, 0]
       Scale: [1, 1, 1]
     SpriteRendererComponent:
@@ -33,11 +33,9 @@ Entities:
         PerspectiveFOV: 0.785398185
         PerspectiveNear: 0.00999999978
         PerspectiveFar: 1000
-        OrthographicSize: 350
+        OrthographicSize: 10
         OrthographicNear: -1
         OrthographicFar: 1
-        PixelPerfect: true
+        PixelPerfect: false
       Primary: true
       FixedAspectRatio: false
-    ScriptComponent:
-      ScriptName: Camera

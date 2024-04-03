@@ -37,6 +37,8 @@ namespace rhombus
 	{
 		m_AspectRaio = (float)width / (float)height;
 
+		m_PixelPerfectSize = (float)height;
+
 		RecalculateProjection();
 	}
 
@@ -44,6 +46,11 @@ namespace rhombus
 	{
 		if (m_projectionType == ProjectionType::Orthographic)
 		{
+			if (m_PixelPerfect)
+			{
+				m_OrthographicSize = m_PixelPerfectSize;
+			}
+
 			float orthoLeft = -m_AspectRaio * m_OrthographicSize * 0.5f;
 			float orthoRight = m_AspectRaio * m_OrthographicSize * 0.5f;
 			float orthoBottom = -m_OrthographicSize * 0.5f;

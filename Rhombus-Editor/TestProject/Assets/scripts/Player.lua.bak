@@ -31,7 +31,7 @@ function Player:Update(dt)
 	rhombus.ApplyLinearImpulse(self, velX, velY)
 
 	jump = false
-	jumpStrength = 1
+	jumpStrength = 0.1
 
 	if rhombus.IsKeyDown(KEY_SPACE) then
 		jump = true

@@ -31,6 +31,12 @@ namespace rhombus
 			return GetProjectDirectory() / s_ActiveProject->m_Config.AssetDirectory;
 		}
 
+		static std::filesystem::path GetScriptDirectory()
+		{
+			RB_CORE_ASSERT(s_ActiveProject, "No valid active project");
+			return GetProjectDirectory() / s_ActiveProject->m_Config.AssetDirectory / s_ActiveProject->m_Config.ScriptDirectory;
+		}
+
 		// TODO: move to asset manager when we have one
 		static std::filesystem::path GetAssetFileSystemPath(const std::filesystem::path& path)
 		{

@@ -82,12 +82,31 @@ namespace rhombus
 		return 0;						// Number of return values that lua is expecting
 	}
 
+	int Translate(lua_State* state)
+	{
+		RB_CORE_ASSERT(lua_gettop(state) == 3, "Invalid number of arguments passed to function");
+
+		UUID entityID = GetEntityUUIDFromLua(state);
+		float translateX = (float)lua_tonumber(state, 2);		// indexed as if this is a fresh stack
+		float translateY = (float)lua_tonumber(state, 3);		// indexed as if this is a fresh stack
+		Scene* scene = ScriptEngine::GetSceneContext();
+		RB_CORE_ASSERT(scene, "Invalid Scene in Translate");
+		Entity entity = scene->GetEntityByUUID(entityID);
+		std::string name = entity.GetComponent<TagComponent>().m_tag;
+		//RB_CORE_ASSERT(entity, "Invalid Entity in ApplyLinearImpulse");
+
+		auto& transformComponent = entity.GetComponent<TransformComponent>();
+		transformComponent.m_position += glm::vec3(translateX, translateY, 0.0f);
+		return 0;						// Number of return values that lua is expecting
+	}
+
 	static const luaL_Reg rhombus_funcs[] =
 	{
 		{ "HostFunction", HostFunction},
 		{ "Log", Log},
 		{ "IsKeyDown", IsKeyDown},
 		{ "ApplyLinearImpulse", ApplyLinearImpulse},
+		{ "Translate", Translate},
 		{ NULL, NULL }
 	};
 

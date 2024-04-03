@@ -2,6 +2,8 @@
 #include "ScriptEngine.h"
 #include "ScriptGlue.h"
 
+#include "Rhombus/Project/Project.h"
+
 extern "C"
 {
 #include <lua.h>
@@ -138,7 +140,7 @@ namespace rhombus
 		const auto& scriptComponent = entity.GetComponent<ScriptComponent>();
 		
 		// Todo set path in component
-		std::string sciptPath = "TestProject/Assets/scripts/" + scriptComponent.m_scriptName + ".lua";
+		std::string sciptPath = Project::GetScriptDirectory().string() + "\\" + scriptComponent.m_scriptName + ".lua";
 		int r = luaL_dofile(L, sciptPath.c_str());
 
 		if (CheckLua(L, r))
@@ -169,7 +171,7 @@ namespace rhombus
 		const auto& scriptComponent = entity.GetComponent<ScriptComponent>();
 
 		// Todo set path in component
-		std::string sciptPath = "TestProject/Assets/scripts/" + scriptComponent.m_scriptName + ".lua";
+		std::string sciptPath = Project::GetScriptDirectory().string() + "\\" + scriptComponent.m_scriptName + ".lua";
 		int r = luaL_loadfile(L, sciptPath.c_str());
 
 		if (CheckLua(L, r))

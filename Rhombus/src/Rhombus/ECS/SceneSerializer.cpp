@@ -189,6 +189,7 @@ namespace rhombus
 			out << YAML::Key << "OrthographicSize" << YAML::Value << camera.GetOrthographicSize();
 			out << YAML::Key << "OrthographicNear" << YAML::Value << camera.GetOrthographicNearClip();
 			out << YAML::Key << "OrthographicFar" << YAML::Value << camera.GetOrthographicFarClip();
+			out << YAML::Key << "PixelPerfect" << YAML::Value << camera.GetPixelPerfect();
 			out << YAML::EndMap; // Camera
 
 			out << YAML::Key << "Primary" << YAML::Value << cameraComponent.GetIsPrimaryCamera();
@@ -381,6 +382,7 @@ namespace rhombus
 					cc.GetCamera().SetOrthographicSize(cameraProps["OrthographicSize"].as<float>());
 					cc.GetCamera().SetOrthographicNearClip(cameraProps["OrthographicNear"].as<float>());
 					cc.GetCamera().SetOrthographicFarClip(cameraProps["OrthographicFar"].as<float>());
+					cc.GetCamera().SetPixelPerfect(cameraProps["PixelPerfect"].as<bool>());
 
 					cc.SetIsPrimaryCamera(cameraComponent["Primary"].as<bool>());
 					cc.SetHasFixedAspectRatio(cameraComponent["FixedAspectRatio"].as<bool>());

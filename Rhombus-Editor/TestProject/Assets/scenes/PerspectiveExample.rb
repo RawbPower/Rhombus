@@ -16,6 +16,7 @@ Entities:
         OrthographicSize: 10
         OrthographicNear: -1
         OrthographicFar: 1
+        PixelPerfect: false
       Primary: true
       FixedAspectRatio: false
   - Entity: 13814012017252038781
@@ -34,6 +35,7 @@ Entities:
         OrthographicSize: 10
         OrthographicNear: -1
         OrthographicFar: 1
+        PixelPerfect: false
       Primary: false
       FixedAspectRatio: false
   - Entity: 6051624653485210599

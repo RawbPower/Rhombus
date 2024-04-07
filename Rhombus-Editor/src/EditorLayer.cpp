@@ -197,6 +197,7 @@ namespace rhombus
 #endif
 		RB_PROFILE_FUNCTION();
 
+		//ImGui::ShowDemoWindow();
 		//ImGui::ShowStyleEditor();
 
 		static bool dockspaceOpen = true;
@@ -277,6 +278,16 @@ namespace rhombus
 
 
 				if (ImGui::MenuItem("Exit")) Application::Get().Close();
+				ImGui::EndMenu();
+			}
+
+			if (ImGui::BeginMenu("Editor"))
+			{
+				if (ImGui::MenuItem("Pixel Snapping", NULL, m_PixelSnapping)) 
+				{
+					TogglePixelSnapping();
+				}
+
 				ImGui::EndMenu();
 			}
 
@@ -369,7 +380,7 @@ namespace rhombus
 			glm::mat4 transform = transformComponent.GetTransform();
 
 			// Snapping
-			bool snap = Input::IsKeyPressed(RB_KEY_LEFT_CONTROL);
+			bool snap = Input::IsKeyPressed(RB_KEY_LEFT_CONTROL) || m_PixelSnapping;
 			float snapValue = 0.5f; // Snap to 0.5m for translation/scale
 			// Snap to 45 degrees for rotation
 			if (m_gizmoType == ImGuizmo::OPERATION::ROTATE)
@@ -623,6 +634,11 @@ namespace rhombus
 			SerializeScene(m_ActiveScene, filepath);
 			m_EditorScenePath = filepath;
 		}
+	}
+
+	void EditorLayer::TogglePixelSnapping()
+	{
+		m_PixelSnapping = !m_PixelSnapping;
 	}
 
 	void EditorLayer::NewProject()

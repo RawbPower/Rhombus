@@ -5,7 +5,7 @@
 #include "Panels/ContentBrowerPanel.h";
 #include "Rhombus/Renderer/EditorCamera.h"
 
-#define RB_EDITOR 0
+#define RB_EDITOR 1
 
 namespace rhombus
 {
@@ -32,6 +32,7 @@ namespace rhombus
 		void OpenScene(const std::filesystem::path& path);
 		void SaveScene();
 		void SaveSceneAs();
+		void TogglePixelSnapping();
 
 		void NewProject();
 		bool OpenProject();
@@ -64,6 +65,7 @@ namespace rhombus
 		Entity m_HoveredEntity;
 
 		bool m_PrimaryCamera = true;
+		bool m_PixelSnapping = true;
 
 		EditorCamera m_EditorCamera;
 

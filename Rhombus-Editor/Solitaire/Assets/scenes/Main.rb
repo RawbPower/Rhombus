@@ -4,7 +4,7 @@ Entities:
     TagComponent:
       Tag: Seven
     TransformComponent:
-      Position: [3.97370529, 0, 0]
+      Position: [206.5, 23, 0]
       Rotation: [0, -0, 0]
       Scale: [1, 1, 1]
     SpriteRendererComponent:
@@ -17,7 +17,7 @@ Entities:
     TagComponent:
       Tag: Eight
     TransformComponent:
-      Position: [2.85439682, 0, 0]
+      Position: [147.5, 23, 0]
       Rotation: [0, -0, 0]
       Scale: [1, 1, 1]
     SpriteRendererComponent:
@@ -30,7 +30,7 @@ Entities:
     TagComponent:
       Tag: Nine
     TransformComponent:
-      Position: [1.72103477, 0, 0]
+      Position: [88.5, 23, 0]
       Rotation: [0, -0, 0]
       Scale: [1, 1, 1]
     SpriteRendererComponent:
@@ -43,7 +43,7 @@ Entities:
     TagComponent:
       Tag: Ten
     TransformComponent:
-      Position: [0.615657806, 0, 0]
+      Position: [29.5, 23, 0]
       Rotation: [0, -0, 0]
       Scale: [1, 1, 1]
     SpriteRendererComponent:
@@ -56,7 +56,7 @@ Entities:
     TagComponent:
       Tag: Jack
     TransformComponent:
-      Position: [-0.503720999, 0, 0]
+      Position: [-29.5, 23, 0]
       Rotation: [0, -0, 0]
       Scale: [1, 1, 1]
     SpriteRendererComponent:
@@ -69,7 +69,7 @@ Entities:
     TagComponent:
       Tag: Queen
     TransformComponent:
-      Position: [-1.66506577, 0, 0]
+      Position: [-88.5, 23, 0]
       Rotation: [0, -0, 0]
       Scale: [1, 1, 1]
     SpriteRendererComponent:
@@ -82,7 +82,7 @@ Entities:
     TagComponent:
       Tag: King
     TransformComponent:
-      Position: [-2.77047729, 0, 0]
+      Position: [-147.5, 23, 0]
       Rotation: [0, -0, 0]
       Scale: [1, 1, 1]
     SpriteRendererComponent:
@@ -97,9 +97,10 @@ Entities:
     TransformComponent:
       Position: [0, 0, -0.100000001]
       Rotation: [0, 0, 0]
-      Scale: [50, 50, 1]
+      Scale: [1, 1, 1]
     SpriteRendererComponent:
-      Color: [0.117743157, 0.490196049, 0.194424614, 1]
+      Color: [1, 1, 1, 1]
+      Texture: textures\Background.png
   - Entity: 5398324601514621929
     TagComponent:
       Tag: Camera
@@ -113,16 +114,17 @@ Entities:
         PerspectiveFOV: 0.785398185
         PerspectiveNear: 0.00999999978
         PerspectiveFar: 1000
-        OrthographicSize: 5
+        OrthographicSize: 440
         OrthographicNear: -1
         OrthographicFar: 1
+        PixelPerfect: true
       Primary: true
       FixedAspectRatio: false
   - Entity: 5502923938386923709
     TagComponent:
       Tag: Ace
     TransformComponent:
-      Position: [-3.91776276, 0, 0]
+      Position: [-206.5, 23, 0]
       Rotation: [0, -0, 0]
       Scale: [1, 1, 1]
     SpriteRendererComponent:

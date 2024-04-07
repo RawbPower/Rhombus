@@ -14,8 +14,8 @@ namespace rhombus {
 		uint32_t Height;
 
 		WindowParams(const std::string& title = "Game Engine",
-			uint32_t width = 640,
-			uint32_t height = 576)
+			uint32_t width = 960,
+			uint32_t height = 540)
 			: Title(title), Width(width), Height(height)
 		{
 

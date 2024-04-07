@@ -373,19 +373,29 @@ namespace rhombus
 					auto& cc = deserializedEntity.AddComponent<CameraComponent>();
 
 					auto& cameraProps = cameraComponent["Camera"];
-					cc.GetCamera().SetProjectionType((SceneCamera::ProjectionType)cameraProps["ProjectionType"].as<int>());
+					if (cameraProps["ProjectionType"])
+						cc.GetCamera().SetProjectionType((SceneCamera::ProjectionType)cameraProps["ProjectionType"].as<int>());
 
-					cc.GetCamera().SetPerspectiveVerticalFOV(cameraProps["PerspectiveFOV"].as<float>());
-					cc.GetCamera().SetPerspectiveNearClip(cameraProps["PerspectiveNear"].as<float>());
-					cc.GetCamera().SetPerspectiveFarClip(cameraProps["PerspectiveFar"].as<float>());
+					if (cameraProps["PerspectiveFOV"])
+						cc.GetCamera().SetPerspectiveVerticalFOV(cameraProps["PerspectiveFOV"].as<float>());
+					if (cameraProps["PerspectiveNear"])
+						cc.GetCamera().SetPerspectiveNearClip(cameraProps["PerspectiveNear"].as<float>());
+					if (cameraProps["PerspectiveFar"])
+						cc.GetCamera().SetPerspectiveFarClip(cameraProps["PerspectiveFar"].as<float>());
 
-					cc.GetCamera().SetOrthographicSize(cameraProps["OrthographicSize"].as<float>());
-					cc.GetCamera().SetOrthographicNearClip(cameraProps["OrthographicNear"].as<float>());
-					cc.GetCamera().SetOrthographicFarClip(cameraProps["OrthographicFar"].as<float>());
-					cc.GetCamera().SetPixelPerfect(cameraProps["PixelPerfect"].as<bool>());
+					if (cameraProps["OrthographicSize"])
+						cc.GetCamera().SetOrthographicSize(cameraProps["OrthographicSize"].as<float>());
+					if (cameraProps["OrthographicNear"])
+						cc.GetCamera().SetOrthographicNearClip(cameraProps["OrthographicNear"].as<float>());
+					if (cameraProps["OrthographicFar"])
+						cc.GetCamera().SetOrthographicFarClip(cameraProps["OrthographicFar"].as<float>());
+					if (cameraProps["PixelPerfect"])
+						cc.GetCamera().SetPixelPerfect(cameraProps["PixelPerfect"].as<bool>());
 
-					cc.SetIsPrimaryCamera(cameraComponent["Primary"].as<bool>());
-					cc.SetHasFixedAspectRatio(cameraComponent["FixedAspectRatio"].as<bool>());
+					if (cameraProps["Primary"])
+						cc.SetIsPrimaryCamera(cameraComponent["Primary"].as<bool>());
+					if (cameraProps["FixedAspectRatio"])
+						cc.SetHasFixedAspectRatio(cameraComponent["FixedAspectRatio"].as<bool>());
 				}
 
 				auto scriptComponent = entity["ScriptComponent"];

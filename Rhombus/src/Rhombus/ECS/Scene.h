@@ -29,6 +29,7 @@ namespace rhombus
 
 		void OnUpdateRuntime(DeltaTime dt);
 		void OnUpdateEditor(DeltaTime dt, EditorCamera& camera);
+		void OnMouseMoved(int x, int y);
 		void OnViewportResize(uint32_t width, uint32_t height);
 
 		void InitPhyics2D();

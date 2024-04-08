@@ -457,6 +457,7 @@ namespace rhombus
 		EventDispatcher dispatcher(e);
 		dispatcher.Dispatch<KeyPressedEvent>(RB_BIND_EVENT_FN(EditorLayer::OnKeyPressed));
 		dispatcher.Dispatch<MouseButtonPressedEvent>(RB_BIND_EVENT_FN(EditorLayer::OnMouseButtonPressed));
+		dispatcher.Dispatch<MouseMovedEvent>(RB_BIND_EVENT_FN(EditorLayer::OnMouseMoved));
 	}
 
 	// Try KeyTypedEvent
@@ -554,6 +555,15 @@ namespace rhombus
 		{
 			if (m_ViewportHovered && !ImGuizmo::IsOver() && !Input::IsKeyPressed(RB_KEY_LEFT_ALT))
 				m_sceneHierarchyPanel.SetSelectedEntity(m_HoveredEntity);
+		}
+		return false;
+	}
+
+	bool EditorLayer::OnMouseMoved(MouseMovedEvent& e)
+	{
+		if (m_SceneState == SceneState::Play)
+		{
+			m_ActiveScene->OnMouseMoved(e.GetX(), e.GetY());
 		}
 		return false;
 	}

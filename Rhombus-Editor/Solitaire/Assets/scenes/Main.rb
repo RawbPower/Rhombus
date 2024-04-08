@@ -7,12 +7,14 @@ Entities:
       Position: [-206.5, 23, 0]
       Rotation: [0, -0, 0]
       Scale: [1, 1, 1]
+    ScriptComponent:
+      ScriptName: Card
     SpriteRendererComponent:
       Color: [1, 1, 1, 1]
       Texture: textures\Cards\Card3.png
     BoxArea2DComponent:
       Offset: [0, 0]
-      Size: [0.5, 0.5]
+      Size: [22.5, 32]
   - Entity: 5398324601514621929
     TagComponent:
       Tag: Camera
@@ -26,7 +28,7 @@ Entities:
         PerspectiveFOV: 0.785398185
         PerspectiveNear: 0.00999999978
         PerspectiveFar: 1000
-        OrthographicSize: 314
+        OrthographicSize: 296
         OrthographicNear: -1
         OrthographicFar: 1
         PixelPerfect: true
@@ -49,12 +51,14 @@ Entities:
       Position: [-147.5, 23, 0]
       Rotation: [0, -0, 0]
       Scale: [1, 1, 1]
+    ScriptComponent:
+      ScriptName: Card
     SpriteRendererComponent:
       Color: [1, 1, 1, 1]
       Texture: textures\Cards\Card49.png
     BoxArea2DComponent:
       Offset: [0, 0]
-      Size: [0.5, 0.5]
+      Size: [22.5, 32]
   - Entity: 1262884115084354049
     TagComponent:
       Tag: Queen
@@ -62,12 +66,14 @@ Entities:
       Position: [-88.5, 23, 0]
       Rotation: [0, -0, 0]
       Scale: [1, 1, 1]
+    ScriptComponent:
+      ScriptName: Card
     SpriteRendererComponent:
       Color: [1, 1, 1, 1]
       Texture: textures\Cards\Card48.png
     BoxArea2DComponent:
       Offset: [0, 0]
-      Size: [0.5, 0.5]
+      Size: [22.5, 32]
   - Entity: 11186538063254210807
     TagComponent:
       Tag: Jack
@@ -75,12 +81,14 @@ Entities:
       Position: [-29.5, 23, 0]
       Rotation: [0, -0, 0]
       Scale: [1, 1, 1]
+    ScriptComponent:
+      ScriptName: Card
     SpriteRendererComponent:
       Color: [1, 1, 1, 1]
       Texture: textures\Cards\Card42.png
     BoxArea2DComponent:
       Offset: [0, 0]
-      Size: [0.5, 0.5]
+      Size: [22.5, 32]
   - Entity: 231392612724665153
     TagComponent:
       Tag: Ten
@@ -88,12 +96,14 @@ Entities:
       Position: [29.5, 23, 0]
       Rotation: [0, -0, 0]
       Scale: [1, 1, 1]
+    ScriptComponent:
+      ScriptName: Card
     SpriteRendererComponent:
       Color: [1, 1, 1, 1]
       Texture: textures\Cards\Card39.png
     BoxArea2DComponent:
       Offset: [0, 0]
-      Size: [0.5, 0.5]
+      Size: [22.5, 32]
   - Entity: 6025400423112123673
     TagComponent:
       Tag: Nine
@@ -101,12 +111,14 @@ Entities:
       Position: [88.5, 23, 0]
       Rotation: [0, -0, 0]
       Scale: [1, 1, 1]
+    ScriptComponent:
+      ScriptName: Card
     SpriteRendererComponent:
       Color: [1, 1, 1, 1]
       Texture: textures\Cards\Card33.png
     BoxArea2DComponent:
       Offset: [0, 0]
-      Size: [0.5, 0.5]
+      Size: [22.5, 32]
   - Entity: 12637329016410339047
     TagComponent:
       Tag: Eight
@@ -114,12 +126,14 @@ Entities:
       Position: [147.5, 23, 0]
       Rotation: [0, -0, 0]
       Scale: [1, 1, 1]
+    ScriptComponent:
+      ScriptName: Card
     SpriteRendererComponent:
       Color: [1, 1, 1, 1]
       Texture: textures\Cards\Card32.png
     BoxArea2DComponent:
       Offset: [0, 0]
-      Size: [0.5, 0.5]
+      Size: [22.5, 32]
   - Entity: 10363998413096584130
     TagComponent:
       Tag: Seven
@@ -127,9 +141,11 @@ Entities:
       Position: [206.5, 23, 0]
       Rotation: [0, -0, 0]
       Scale: [1, 1, 1]
+    ScriptComponent:
+      ScriptName: Card
     SpriteRendererComponent:
       Color: [1, 1, 1, 1]
       Texture: textures\Cards\Card26.png
     BoxArea2DComponent:
       Offset: [0, 0]
-      Size: [0.5, 0.5]
+      Size: [22.5, 32]

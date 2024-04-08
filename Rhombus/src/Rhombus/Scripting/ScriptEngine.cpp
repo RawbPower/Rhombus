@@ -191,4 +191,50 @@ namespace rhombus
 	{
 		return sceneContext;
 	}
+
+	void ScriptEngine::OnMouseEnterArea(Entity entity)
+	{
+		if (entity.HasComponent<ScriptComponent>())
+		{
+			const auto& scriptComponent = entity.GetComponent<ScriptComponent>();
+
+			// Todo set path in component
+			std::string sciptPath = Project::GetScriptDirectory().string() + "\\" + scriptComponent.m_scriptName + ".lua";
+			int r = luaL_loadfile(L, sciptPath.c_str());
+
+			if (CheckLua(L, r))
+			{
+				lua_getglobal(L, scriptComponent.m_scriptName.c_str());
+				lua_getfield(L, -1, "OnMouseEnterArea");
+				if (lua_isfunction(L, -1))
+				{
+					lua_pushvalue(L, -2);
+					CheckLua(L, lua_pcall(L, 1, 0, 0));
+				}
+			}
+		}
+	}
+
+	void ScriptEngine::OnMouseExitArea(Entity entity)
+	{
+		if (entity.HasComponent<ScriptComponent>())
+		{
+			const auto& scriptComponent = entity.GetComponent<ScriptComponent>();
+
+			// Todo set path in component
+			std::string sciptPath = Project::GetScriptDirectory().string() + "\\" + scriptComponent.m_scriptName + ".lua";
+			int r = luaL_loadfile(L, sciptPath.c_str());
+
+			if (CheckLua(L, r))
+			{
+				lua_getglobal(L, scriptComponent.m_scriptName.c_str());
+				lua_getfield(L, -1, "OnMouseExitArea");
+				if (lua_isfunction(L, -1))
+				{
+					lua_pushvalue(L, -2);
+					CheckLua(L, lua_pcall(L, 1, 0, 0));
+				}
+			}
+		}
+	}
 }

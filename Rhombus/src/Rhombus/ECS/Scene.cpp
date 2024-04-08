@@ -5,6 +5,7 @@
 #include "ScriptableEntity.h"
 #include "Rhombus/Renderer/Renderer2D.h"
 #include "Rhombus/Scripting/ScriptEngine.h"
+#include "Rhombus/Core/Application.h"
 
 #include <glm/glm.hpp>
 
@@ -314,6 +315,39 @@ namespace rhombus
 		}
 
 		Renderer2D::EndScene();
+	}
+
+	void Scene::OnMouseMoved(int x, int y)
+	{
+		glm::vec3 cursorCoords = Renderer2D::ConvertScreenToWorldSpace(x, y);
+		// Area 2D
+		{
+			auto view = m_Registry.view<BoxArea2DComponent>();
+			for (auto e : view)
+			{
+				Entity entity = { e, this };
+				auto& transform = entity.GetComponent<TransformComponent>();
+				auto& ba2D = entity.GetComponent<BoxArea2DComponent>();
+
+				glm::vec2 offsetPosition = glm::vec2(transform.m_position) + ba2D.m_offset;
+				bool withinXLimit = (cursorCoords.x < offsetPosition.x + ba2D.m_size.x) && (cursorCoords.x > offsetPosition.x - ba2D.m_size.x);
+				bool withinYLimit = (cursorCoords.y < offsetPosition.y + ba2D.m_size.y) && (cursorCoords.y > offsetPosition.y - ba2D.m_size.y);
+				if (withinXLimit && withinYLimit)
+				{
+					RB_CORE_INFO("Cursor is overlapping with {0}", entity.GetName());
+					if (!ba2D.m_isMouseInArea)
+					{
+						ba2D.m_isMouseInArea = true;
+						ScriptEngine::OnMouseEnterArea(entity);
+					}
+				}
+				else if (ba2D.m_isMouseInArea)
+				{
+					ba2D.m_isMouseInArea = false;
+					ScriptEngine::OnMouseExitArea(entity);
+				}
+			}
+		}
 	}
 
 	void Scene::OnViewportResize(uint32_t width, uint32_t height)

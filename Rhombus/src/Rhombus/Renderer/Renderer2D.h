@@ -49,6 +49,9 @@ namespace rhombus
 		static float GetLineWidth();
 		static void SetLineWidth(float width);
 
+		static glm::mat4 GetViewProjectionMatrix();
+		static glm::vec3 ConvertScreenToWorldSpace(int x, int y);
+
 		struct Statistics
 		{
 			uint32_t DrawCalls = 0;

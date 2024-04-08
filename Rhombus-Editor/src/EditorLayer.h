@@ -26,6 +26,7 @@ namespace rhombus
 	private:
 		bool OnKeyPressed(KeyPressedEvent& e);
 		bool OnMouseButtonPressed(MouseButtonPressedEvent& e);
+		bool OnMouseMoved(MouseMovedEvent& e);
 		bool OnWindowResized(WindowResizeEvent& e);
 		void NewScene();
 		void OpenScene();

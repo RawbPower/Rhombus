@@ -4,6 +4,7 @@
 #include "VertexArray.h"
 #include "Shader.h"
 #include "RenderCommand.h"
+#include "Rhombus/Core/Application.h"
 
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -80,6 +81,7 @@ namespace rhombus
 		uint32_t TextureSlotIndex = 1;		// 0 is white texture
 
 		glm::vec4 QuadVertexPosition[4];
+		glm::mat4 ViewProjectionMatrix;
 
 		Renderer2D::Statistics Stats;
 	};
@@ -188,6 +190,7 @@ namespace rhombus
 	// TODO: Manage multiple shaders better
 	void SetShaderViewProjection(glm::mat4 viewProjection)
 	{
+		s_Data.ViewProjectionMatrix = viewProjection;
 		s_Data.QuadShader->Bind();
 		s_Data.QuadShader->SetMat4("u_ViewProjection", viewProjection);
 		s_Data.CircleShader->Bind();
@@ -589,6 +592,20 @@ namespace rhombus
 	void Renderer2D::SetLineWidth(float width)
 	{
 		s_Data.LineWidth = width;
+	}
+
+	glm::mat4 Renderer2D::GetViewProjectionMatrix()
+	{ 
+		return s_Data.ViewProjectionMatrix; 
+	}
+
+	glm::vec3 Renderer2D::ConvertScreenToWorldSpace(int x, int y)
+	{
+		glm::mat4 viewProjection = Renderer2D::GetViewProjectionMatrix();
+		glm::vec3 fC = glm::vec3(x, y, 0.0f);
+		glm::vec3 ndc = glm::vec3(fC.x / Application::Get().GetWindow().GetWidth(), 1.0 - fC.y / Application::Get().GetWindow().GetHeight(), fC.z) * 2.0f - 1.0f;
+		glm::vec4 worldCoords = glm::vec4(ndc, 1.0f) * glm::inverse(viewProjection);
+		return glm::vec3(worldCoords);
 	}
 
 	void Renderer2D::ResetStats()

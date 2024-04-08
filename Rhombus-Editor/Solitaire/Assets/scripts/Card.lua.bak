@@ -5,9 +5,9 @@ function Card:Init()
 end
 
 function Card:OnMouseEnterArea()
-	rhombus.Log("Mouse entered " .. rhombus.GetName(self) .. " card area!")
+	rhombus.Log("Mouse entered " .. rhombus.GetName() .. " card area!")
 end
 
 function Card:OnMouseExitArea()
-	rhombus.Log("Mouse exited " .. rhombus.GetName(self) .. " card area!")
+	rhombus.Log("Mouse exited " .. rhombus.GetName() .. " card area!")
 end

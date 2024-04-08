@@ -135,6 +135,22 @@ namespace rhombus
 		sceneContext = nullptr;
 	}
 
+	void ScriptEngine::SetupEntity(Entity entity)
+	{
+		const auto& scriptComponent = entity.GetComponent<ScriptComponent>();
+
+		lua_getglobal(L, scriptComponent.m_scriptName.c_str());
+		UUID entityID = entity.GetUUID();
+		uint32_t entityID32a = (uint32_t)((entityID & 0xFFFFFFFF00000000LL) >> 32);
+		uint32_t entityID32b = (uint32_t)(entityID & 0xFFFFFFFFLL);
+
+		lua_pushnumber(L, (int)entityID32a);
+		lua_setfield(L, -2, "entityIDa");
+
+		lua_pushnumber(L, (int)entityID32b);
+		lua_setfield(L, -2, "entityIDb");
+	}
+
 	void ScriptEngine::OnInitEntity(Entity entity)
 	{
 		const auto& scriptComponent = entity.GetComponent<ScriptComponent>();
@@ -145,16 +161,7 @@ namespace rhombus
 
 		if (CheckLua(L, r))
 		{
-			lua_getglobal(L, scriptComponent.m_scriptName.c_str());
-			UUID entityID = entity.GetUUID();
-			uint32_t entityID32a = (uint32_t)((entityID & 0xFFFFFFFF00000000LL) >> 32);
-			uint32_t entityID32b = (uint32_t)(entityID & 0xFFFFFFFFLL);
-
-			lua_pushnumber(L, (int)entityID32a);
-			lua_setfield(L, -2, "entityIDa");
-
-			lua_pushnumber(L, (int)entityID32b);
-			lua_setfield(L, -2, "entityIDb");
+			SetupEntity(entity);
 
 			lua_getglobal(L, scriptComponent.m_scriptName.c_str());
 			lua_getfield(L, -1, "Init");
@@ -176,6 +183,8 @@ namespace rhombus
 
 		if (CheckLua(L, r))
 		{
+			SetupEntity(entity);
+
 			lua_getglobal(L, scriptComponent.m_scriptName.c_str());
 			lua_getfield(L, -1, "Update");
 			if (lua_isfunction(L, -1))
@@ -204,6 +213,8 @@ namespace rhombus
 
 			if (CheckLua(L, r))
 			{
+				SetupEntity(entity);
+
 				lua_getglobal(L, scriptComponent.m_scriptName.c_str());
 				lua_getfield(L, -1, "OnMouseEnterArea");
 				if (lua_isfunction(L, -1))
@@ -227,6 +238,8 @@ namespace rhombus
 
 			if (CheckLua(L, r))
 			{
+				SetupEntity(entity);
+
 				lua_getglobal(L, scriptComponent.m_scriptName.c_str());
 				lua_getfield(L, -1, "OnMouseExitArea");
 				if (lua_isfunction(L, -1))

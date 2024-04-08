@@ -334,7 +334,6 @@ namespace rhombus
 				bool withinYLimit = (cursorCoords.y < offsetPosition.y + ba2D.m_size.y) && (cursorCoords.y > offsetPosition.y - ba2D.m_size.y);
 				if (withinXLimit && withinYLimit)
 				{
-					RB_CORE_INFO("Cursor is overlapping with {0}", entity.GetName());
 					if (!ba2D.m_isMouseInArea)
 					{
 						ba2D.m_isMouseInArea = true;

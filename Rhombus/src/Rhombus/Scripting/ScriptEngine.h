@@ -14,6 +14,8 @@ namespace rhombus {
 		static void OnRuntimeStart(Scene* scene);
 		static void OnRuntimeStop();
 
+		static void SetupEntity(Entity entity);
+
 		static void OnInitEntity(Entity entity);
 		static void OnUpdateEntity(Entity entity, DeltaTime dt);
 

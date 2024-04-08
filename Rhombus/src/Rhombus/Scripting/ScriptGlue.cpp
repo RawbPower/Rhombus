@@ -52,6 +52,16 @@ namespace rhombus
 		return 0;
 	}
 
+	int GetName(lua_State* state)
+	{
+		UUID entityID = GetEntityUUIDFromLua(state);
+		Scene* scene = ScriptEngine::GetSceneContext();
+		Entity entity = scene->GetEntityByUUID(entityID);
+
+		lua_pushstring(state, entity.GetName().c_str());		// Push result onto lua stack
+		return 1;						// Number of return values that lua is expecting
+	}
+
 	int IsKeyDown(lua_State* state)
 	{
 		RB_CORE_ASSERT(lua_gettop(state) == 1, "Invalid number of arguments passed to function");
@@ -104,6 +114,7 @@ namespace rhombus
 	{
 		{ "HostFunction", HostFunction},
 		{ "Log", Log},
+		{ "GetName", GetName},
 		{ "IsKeyDown", IsKeyDown},
 		{ "ApplyLinearImpulse", ApplyLinearImpulse},
 		{ "Translate", Translate},

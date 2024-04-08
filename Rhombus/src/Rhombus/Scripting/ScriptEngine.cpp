@@ -179,7 +179,7 @@ namespace rhombus
 
 		// Todo set path in component
 		std::string sciptPath = Project::GetScriptDirectory().string() + "\\" + scriptComponent.m_scriptName + ".lua";
-		int r = luaL_loadfile(L, sciptPath.c_str());
+		int r = luaL_dofile(L, sciptPath.c_str());
 
 		if (CheckLua(L, r))
 		{
@@ -209,7 +209,7 @@ namespace rhombus
 
 			// Todo set path in component
 			std::string sciptPath = Project::GetScriptDirectory().string() + "\\" + scriptComponent.m_scriptName + ".lua";
-			int r = luaL_loadfile(L, sciptPath.c_str());
+			int r = luaL_dofile(L, sciptPath.c_str());
 
 			if (CheckLua(L, r))
 			{
@@ -234,7 +234,7 @@ namespace rhombus
 
 			// Todo set path in component
 			std::string sciptPath = Project::GetScriptDirectory().string() + "\\" + scriptComponent.m_scriptName + ".lua";
-			int r = luaL_loadfile(L, sciptPath.c_str());
+			int r = luaL_dofile(L, sciptPath.c_str());
 
 			if (CheckLua(L, r))
 			{

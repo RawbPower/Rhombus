@@ -5,6 +5,7 @@
 #include "Rhombus/Core/KeyCodes.h"
 #include "Rhombus/ECS/Scene.h"
 #include "Rhombus/Scripting/ScriptEngine.h"
+#include "Rhombus/Renderer/Renderer2D.h"
 
 #include "box2d/b2_body.h"
 
@@ -103,11 +104,74 @@ namespace rhombus
 		RB_CORE_ASSERT(scene, "Invalid Scene in Translate");
 		Entity entity = scene->GetEntityByUUID(entityID);
 		std::string name = entity.GetComponent<TagComponent>().m_tag;
-		//RB_CORE_ASSERT(entity, "Invalid Entity in ApplyLinearImpulse");
 
 		auto& transformComponent = entity.GetComponent<TransformComponent>();
 		transformComponent.m_position += glm::vec3(translateX, translateY, 0.0f);
+
 		return 0;						// Number of return values that lua is expecting
+	}
+
+	int SetPosition(lua_State* state)
+	{
+		RB_CORE_ASSERT(lua_gettop(state) == 4, "Invalid number of arguments passed to function");
+
+		UUID entityID = GetEntityUUIDFromLua(state);
+		float positionX = (float)lua_tonumber(state, 2);		// indexed as if this is a fresh stack
+		float positionY = (float)lua_tonumber(state, 3);		// indexed as if this is a fresh stack
+		float positionZ = (float)lua_tonumber(state, 4);		// indexed as if this is a fresh stack
+		Scene* scene = ScriptEngine::GetSceneContext();
+		RB_CORE_ASSERT(scene, "Invalid Scene in Translate");
+		Entity entity = scene->GetEntityByUUID(entityID);
+		std::string name = entity.GetComponent<TagComponent>().m_tag;
+
+		auto& transformComponent = entity.GetComponent<TransformComponent>();
+		transformComponent.m_position = glm::vec3(positionX, positionY, positionZ);
+
+		return 0;						// Number of return values that lua is expecting
+	}
+
+	int GetPosition(lua_State* state)
+	{
+		RB_CORE_ASSERT(lua_gettop(state) == 1, "Invalid number of arguments passed to function");
+
+		UUID entityID = GetEntityUUIDFromLua(state);
+		Scene* scene = ScriptEngine::GetSceneContext();
+		RB_CORE_ASSERT(scene, "Invalid Scene in Translate");
+		Entity entity = scene->GetEntityByUUID(entityID);
+		std::string name = entity.GetComponent<TagComponent>().m_tag;
+
+		auto& transformComponent = entity.GetComponent<TransformComponent>();
+		lua_pushnumber(state, transformComponent.m_position.x);
+		lua_pushnumber(state, transformComponent.m_position.y);
+		lua_pushnumber(state, transformComponent.m_position.z);
+
+		return 3;
+	}
+
+	int GetMousePosition(lua_State* state)
+	{
+		RB_CORE_ASSERT(lua_gettop(state) == 0, "Invalid number of arguments passed to function");
+
+		glm::vec3 mousePosition = Renderer2D::ConvertScreenToWorldSpace(Input::GetMouseX(), Input::GetMouseY());
+		lua_pushnumber(state, mousePosition.x);
+		lua_pushnumber(state, mousePosition.y);
+
+		return 2;
+	}
+
+	int IsMouseInArea(lua_State* state)
+	{
+		RB_CORE_ASSERT(lua_gettop(state) == 1, "Invalid number of arguments passed to function");
+
+		UUID entityID = GetEntityUUIDFromLua(state);
+		Scene* scene = ScriptEngine::GetSceneContext();
+		Entity entity = scene->GetEntityByUUID(entityID);
+
+		auto& ba2d = entity.GetComponent<BoxArea2DComponent>();
+		
+		lua_pushboolean(state, ba2d.m_isMouseInArea);
+
+		return 1;
 	}
 
 	static const luaL_Reg rhombus_funcs[] =
@@ -118,6 +182,10 @@ namespace rhombus
 		{ "IsKeyDown", IsKeyDown},
 		{ "ApplyLinearImpulse", ApplyLinearImpulse},
 		{ "Translate", Translate},
+		{ "SetPosition", SetPosition},
+		{ "GetPosition", GetPosition},
+		{ "GetMousePosition", GetMousePosition},
+		{ "IsMouseInArea", IsMouseInArea},
 		{ NULL, NULL }
 	};
 

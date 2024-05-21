@@ -20,6 +20,7 @@ project "Rhombus-Editor"
 		"%{wks.location}/Rhombus/vendor",
 		"%{IncludeDir.glm}",
 		"%{IncludeDir.EnTT}",
+		"%{IncludeDir.yaml_cpp}",
 		"%{IncludeDir.ImGuizmo}"
 	}
 

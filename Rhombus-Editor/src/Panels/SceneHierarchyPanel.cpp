@@ -2,6 +2,7 @@
 
 #include "Rhombus/ECS/Component.h"
 #include "Rhombus/Scripting/ScriptEngine.h"
+#include "../Solitaire/Components/CardComponent.h"
 
 #include <imgui/imgui.h>
 #include <imgui/imgui_internal.h>
@@ -237,6 +238,7 @@ namespace rhombus
 
 		if (ImGui::BeginPopup("AddComponent"))
 		{
+			// Engine
 			DisplayAddComponentEntry<CameraComponent>("Camera");
 			DisplayAddComponentEntry<ScriptComponent>("Script");
 			DisplayAddComponentEntry<SpriteRendererComponent>("Sprite Renderer");
@@ -245,6 +247,9 @@ namespace rhombus
 			DisplayAddComponentEntry<BoxCollider2DComponent>("Box Collider 2D");
 			DisplayAddComponentEntry<CircleCollider2DComponent>("Circle Collider 2D");
 			DisplayAddComponentEntry<BoxArea2DComponent>("Box Area 2D");
+
+			// Game
+			DisplayAddComponentEntry<CardComponent>("Card");
 
 			ImGui::EndPopup();
 		}
@@ -409,6 +414,12 @@ namespace rhombus
 		{
 			ImGui::DragFloat2("Offset", glm::value_ptr(component.m_offset), 0.01f);
 			ImGui::DragFloat2("Size", glm::value_ptr(component.m_size));
+		});
+
+		DrawComponent<CardComponent>("Card", entity, [](auto& component)
+		{
+			ImGui::InputInt("Rank", &component.m_rank);
+			ImGui::InputInt("Suit", &component.m_suit);
 		});
 	}
 

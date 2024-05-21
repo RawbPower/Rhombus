@@ -22,6 +22,9 @@ namespace rhombus {
 		static void OnMouseEnterArea(Entity entity);
 		static void OnMouseExitArea(Entity entity);
 
+		static void OnMouseButtonPressed(Entity entity, int button);
+		static void OnMouseButtonReleased(Entity entity, int button);
+
 		static Scene* GetSceneContext();
 	private:
 		static void InitLua();

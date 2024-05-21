@@ -24,13 +24,18 @@ namespace rhombus
 		Entity CreateEntityWithUUID(UUID uuid, const std::string& name = std::string());
 		void DestroyEntity(Entity entity);
 
-		void OnRuntimeStart();
-		void OnRuntimeStop();
+		virtual void OnRuntimeStart();
+		virtual void OnRuntimeStop();
 
-		void OnUpdateRuntime(DeltaTime dt);
+		virtual void OnUpdateRuntime(DeltaTime dt);
 		void OnUpdateEditor(DeltaTime dt, EditorCamera& camera);
-		void OnMouseMoved(int x, int y);
+		virtual void OnMouseMoved(int x, int y);
+		virtual void OnMouseButtonPressed(int button);
+		virtual void OnMouseButtonReleased(int button);
 		void OnViewportResize(uint32_t width, uint32_t height);
+
+		virtual void SerializeEntity(void* yamlEmitter, Entity entity);
+		virtual void DeserializeEntity(void* yamlEntity, Entity entity);
 
 		void InitPhyics2D();
 
@@ -46,10 +51,10 @@ namespace rhombus
 			return m_Registry.view<Components...>();
 		}
 
-	private:
+	protected:
 		template<typename T>
 		void OnComponentAdded(Entity entity, T& component);
-	private:
+	protected:
 		entt::registry m_Registry;
 		uint32_t m_ViewportWidth = 0, m_ViewportHeight = 0;
 

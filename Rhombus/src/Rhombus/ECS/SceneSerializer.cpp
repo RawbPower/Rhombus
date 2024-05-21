@@ -141,7 +141,7 @@ namespace rhombus
 	{
 	}
 
-	static void SerializeEntity(YAML::Emitter& out, Entity entity)
+	static void SerializeEntity(YAML::Emitter& out, Entity entity, Ref<Scene>& scene)
 	{
 		RB_CORE_ASSERT(entity.HasComponent<IDComponent>(), "Entity does not have a UUID");
 
@@ -292,6 +292,8 @@ namespace rhombus
 			out << YAML::EndMap; // BoxArea2DComponent
 		}
 
+		scene->SerializeEntity(&out, entity);
+
 		out << YAML::EndMap; // Entity
 	}
 
@@ -307,7 +309,7 @@ namespace rhombus
 			if (!entity)
 				return;
 
-			SerializeEntity(out, entity);
+			SerializeEntity(out, entity, m_scene);
 		});
 		out << YAML::EndSeq;
 		out << YAML::EndMap;
@@ -466,6 +468,8 @@ namespace rhombus
 					coll.m_offset = boxArea2DComponent["Offset"].as<glm::vec2>();
 					coll.m_size = boxArea2DComponent["Size"].as<glm::vec2>();
 				}
+
+				m_scene->DeserializeEntity(&entity, deserializedEntity);
 			}
 		}
 

@@ -5,6 +5,8 @@
 #include "Panels/ContentBrowerPanel.h";
 #include "Rhombus/Renderer/EditorCamera.h"
 
+#include "Solitaire/SolitaireScene.h"
+
 #define RB_EDITOR 0
 
 namespace rhombus
@@ -26,6 +28,7 @@ namespace rhombus
 	private:
 		bool OnKeyPressed(KeyPressedEvent& e);
 		bool OnMouseButtonPressed(MouseButtonPressedEvent& e);
+		bool OnMouseButtonReleased(MouseButtonReleasedEvent& e);
 		bool OnMouseMoved(MouseMovedEvent& e);
 		bool OnWindowResized(WindowResizeEvent& e);
 		void NewScene();

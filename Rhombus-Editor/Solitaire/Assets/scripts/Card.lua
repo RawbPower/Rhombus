@@ -11,17 +11,22 @@ function Card:Init()
 end
 
 function Card:Update(dt)
-	if rhombus.IsMouseInArea(self) then
+	if isCardPickedUp then 
 		mousePosX, mousePosY = rhombus.GetMousePosition()
 		rhombus.SetPosition(self, mousePosX, mousePosY, 0)
 	end
 end
 
-function Card:OnMouseEnterArea()
-	rhombus.Log("Mouse entered " .. rhombus.GetName(self) .. " card area!")
-	isCardPickedUp = true
+function Card:OnMouseButtonPressed(button)
+	rhombus.Log(rhombus.GetName(self) .. ": Mouse button " .. button .. " pressed!")
+	if rhombus.IsMouseInArea(self) then
+		isCardPickedUp = true
+	end
 end
 
-function Card:OnMouseExitArea()
-	rhombus.Log("Mouse exited " .. rhombus.GetName(self) .. " card area!")
+function Card:OnMouseButtonReleased(button)
+	rhombus.Log(rhombus.GetName(self) .. ": Mouse button " .. button .. " released!")
+	if isCardPickedUp then 
+		isCardPickedUp = false
+	end
 end

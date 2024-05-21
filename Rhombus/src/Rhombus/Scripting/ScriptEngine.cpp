@@ -250,4 +250,56 @@ namespace rhombus
 			}
 		}
 	}
+
+	void ScriptEngine::OnMouseButtonPressed(Entity entity, int button)
+	{
+		if (entity.HasComponent<ScriptComponent>())
+		{
+			const auto& scriptComponent = entity.GetComponent<ScriptComponent>();
+
+			// Todo set path in component
+			std::string sciptPath = Project::GetScriptDirectory().string() + "\\" + scriptComponent.m_scriptName + ".lua";
+			int r = luaL_dofile(L, sciptPath.c_str());
+
+			if (CheckLua(L, r))
+			{
+				SetupEntity(entity);
+
+				lua_getglobal(L, scriptComponent.m_scriptName.c_str());
+				lua_getfield(L, -1, "OnMouseButtonPressed");
+				if (lua_isfunction(L, -1))
+				{
+					lua_pushvalue(L, -2);
+					lua_pushnumber(L, button);
+					CheckLua(L, lua_pcall(L, 2, 0, 0));
+				}
+			}
+		}
+	}
+
+	void ScriptEngine::OnMouseButtonReleased(Entity entity, int button)
+	{
+		if (entity.HasComponent<ScriptComponent>())
+		{
+			const auto& scriptComponent = entity.GetComponent<ScriptComponent>();
+
+			// Todo set path in component
+			std::string sciptPath = Project::GetScriptDirectory().string() + "\\" + scriptComponent.m_scriptName + ".lua";
+			int r = luaL_dofile(L, sciptPath.c_str());
+
+			if (CheckLua(L, r))
+			{
+				SetupEntity(entity);
+
+				lua_getglobal(L, scriptComponent.m_scriptName.c_str());
+				lua_getfield(L, -1, "OnMouseButtonReleased");
+				if (lua_isfunction(L, -1))
+				{
+					lua_pushvalue(L, -2);
+					lua_pushnumber(L, button);
+					CheckLua(L, lua_pcall(L, 2, 0, 0));
+				}
+			}
+		}
+	}
 }

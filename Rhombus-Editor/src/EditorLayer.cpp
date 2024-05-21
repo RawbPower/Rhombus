@@ -457,6 +457,7 @@ namespace rhombus
 		EventDispatcher dispatcher(e);
 		dispatcher.Dispatch<KeyPressedEvent>(RB_BIND_EVENT_FN(EditorLayer::OnKeyPressed));
 		dispatcher.Dispatch<MouseButtonPressedEvent>(RB_BIND_EVENT_FN(EditorLayer::OnMouseButtonPressed));
+		dispatcher.Dispatch<MouseButtonReleasedEvent>(RB_BIND_EVENT_FN(EditorLayer::OnMouseButtonReleased));
 		dispatcher.Dispatch<MouseMovedEvent>(RB_BIND_EVENT_FN(EditorLayer::OnMouseMoved));
 	}
 
@@ -556,6 +557,22 @@ namespace rhombus
 			if (m_ViewportHovered && !ImGuizmo::IsOver() && !Input::IsKeyPressed(RB_KEY_LEFT_ALT))
 				m_sceneHierarchyPanel.SetSelectedEntity(m_HoveredEntity);
 		}
+
+		if (m_SceneState == SceneState::Play)
+		{
+			m_ActiveScene->OnMouseButtonPressed(e.GetMouseButton());
+		}
+
+		return false;
+	}
+
+	bool EditorLayer::OnMouseButtonReleased(MouseButtonReleasedEvent& e)
+	{
+		if (m_SceneState == SceneState::Play)
+		{
+			m_ActiveScene->OnMouseButtonReleased(e.GetMouseButton());
+		}
+
 		return false;
 	}
 
@@ -602,7 +619,7 @@ namespace rhombus
 		}
 #endif
 
-		Ref<Scene> newScene = CreateRef<Scene>();
+		Ref<Scene> newScene = CreateRef<SolitaireScene>();
 		SceneSerializer serializer(newScene);
 		if (serializer.Deserialize(path.string()))
 		{

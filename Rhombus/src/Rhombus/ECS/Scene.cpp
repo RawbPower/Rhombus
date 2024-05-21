@@ -349,6 +349,30 @@ namespace rhombus
 		}
 	}
 
+	void Scene::OnMouseButtonPressed(int button)
+	{
+		{
+			auto view = m_Registry.view<BoxArea2DComponent>();
+			for (auto e : view)
+			{
+				Entity entity = { e, this };
+				ScriptEngine::OnMouseButtonPressed(entity, button);
+			}
+		}
+	}
+
+	void Scene::OnMouseButtonReleased(int button)
+	{
+		{
+			auto view = m_Registry.view<BoxArea2DComponent>();
+			for (auto e : view)
+			{
+				Entity entity = { e, this };
+				ScriptEngine::OnMouseButtonReleased(entity, button);
+			}
+		}
+	}
+
 	void Scene::OnViewportResize(uint32_t width, uint32_t height)
 	{
 		m_ViewportWidth = width;
@@ -364,6 +388,16 @@ namespace rhombus
 				cameraComponent.GetCamera().SetViewportResize(width, height);
 			}
 		}
+	}
+
+	void Scene::SerializeEntity(void* yamlEmitter, Entity entity)
+	{
+
+	}
+
+	void Scene::DeserializeEntity(void* yamlEntity, Entity entity)
+	{
+
 	}
 
 	void Scene::InitPhyics2D()

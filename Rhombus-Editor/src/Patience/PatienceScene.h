@@ -6,10 +6,10 @@ namespace rhombus
 {
 	class Entity;
 
-	class SolitaireScene : public Scene
+	class PatienceScene : public Scene
 	{
 	public:
-		SolitaireScene();
+		PatienceScene();
 
 		virtual void OnUpdateRuntime(DeltaTime dt) override;
 

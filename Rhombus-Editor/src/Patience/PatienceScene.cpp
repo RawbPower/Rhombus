@@ -1,4 +1,4 @@
-#include "SolitaireScene.h"
+#include "PatienceScene.h"
 
 #include "Components/CardComponent.h"
 
@@ -9,17 +9,17 @@
 
 namespace rhombus
 {
-	SolitaireScene::SolitaireScene()
+	PatienceScene::PatienceScene()
 	{
 
 	}
 
-	void SolitaireScene::OnUpdateRuntime(DeltaTime dt)
+	void PatienceScene::OnUpdateRuntime(DeltaTime dt)
 	{
 		Scene::OnUpdateRuntime(dt);
 	}
 
-	void SolitaireScene::SerializeEntity(void* yamlEmitter, Entity entity)
+	void PatienceScene::SerializeEntity(void* yamlEmitter, Entity entity)
 	{
 		YAML::Emitter& out = *(YAML::Emitter*)yamlEmitter;
 		if (entity.HasComponent<CardComponent>())
@@ -35,7 +35,7 @@ namespace rhombus
 		}
 	}
 
-	void SolitaireScene::DeserializeEntity(void* yamlEntity, Entity entity)
+	void PatienceScene::DeserializeEntity(void* yamlEntity, Entity entity)
 	{
 		YAML::Node node = *(YAML::Node*)yamlEntity;
 
@@ -48,7 +48,7 @@ namespace rhombus
 		}
 	}
 
-	void SolitaireScene::OnMouseMoved(int x, int y)
+	void PatienceScene::OnMouseMoved(int x, int y)
 	{
 		Scene::OnMouseMoved(x, y);
 		glm::vec3 cursorCoords = Renderer2D::ConvertScreenToWorldSpace(x, y);
@@ -69,7 +69,7 @@ namespace rhombus
 		}
 	}
 
-	void SolitaireScene::OnMouseButtonPressed(int button)
+	void PatienceScene::OnMouseButtonPressed(int button)
 	{
 		Scene::OnMouseButtonPressed(button);
 
@@ -93,7 +93,7 @@ namespace rhombus
 		}
 	}
 
-	void SolitaireScene::OnMouseButtonReleased(int button)
+	void PatienceScene::OnMouseButtonReleased(int button)
 	{
 		Scene::OnMouseButtonReleased(button);
 

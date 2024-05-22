@@ -2,7 +2,7 @@
 
 #include "Rhombus/ECS/Component.h"
 #include "Rhombus/Scripting/ScriptEngine.h"
-#include "../Solitaire/Components/CardComponent.h"
+#include "../Patience/Components/CardComponent.h"
 
 #include <imgui/imgui.h>
 #include <imgui/imgui_internal.h>

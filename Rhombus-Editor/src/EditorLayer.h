@@ -5,7 +5,7 @@
 #include "Panels/ContentBrowerPanel.h";
 #include "Rhombus/Renderer/EditorCamera.h"
 
-#include "Solitaire/SolitaireScene.h"
+#include "Patience/PatienceScene.h"
 
 #define RB_EDITOR 0
 

@@ -619,7 +619,7 @@ namespace rhombus
 		}
 #endif
 
-		Ref<Scene> newScene = CreateRef<SolitaireScene>();
+		Ref<Scene> newScene = CreateRef<PatienceScene>();
 		SceneSerializer serializer(newScene);
 		if (serializer.Deserialize(path.string()))
 		{

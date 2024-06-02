@@ -1,6 +1,5 @@
 #include "SceneHierarchyPanel.h"
 
-#include "Rhombus/ECS/Component.h"
 #include "Rhombus/Scripting/ScriptEngine.h"
 #include "../Patience/Components/CardComponent.h"
 

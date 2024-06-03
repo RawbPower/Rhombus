@@ -1,11 +1,21 @@
 #include "rbpch.h"
 #include "Scene.h"
-#include "Component.h"
+#include "Components/Component.h"
+#include "Components/Rigidbody2DComponent.h"
 #include "Entity.h"
 #include "ScriptableEntity.h"
 #include "Rhombus/Renderer/Renderer2D.h"
 #include "Rhombus/Scripting/ScriptEngine.h"
 #include "Rhombus/Core/Application.h"
+
+// To Remove
+#include "Rhombus/ECS/Components/Area2DComponent.h"
+#include "Rhombus/ECS/Components/CameraComponent.h"
+#include "Rhombus/ECS/Components/CircleRendererComponent.h"
+#include "Rhombus/ECS/Components/Collider2DComponent.h"
+//#include "Rhombus/ECS/Components/Rigidbody2DComponent.h"
+#include "Rhombus/ECS/Components/ScriptComponent.h"
+#include "Rhombus/ECS/Components/SpriteRendererComponent.h"
 
 #include <glm/glm.hpp>
 
@@ -18,6 +28,22 @@
 
 namespace rhombus
 {
+	// TODO: Remove this shit once the new ECS is working like 
+	// the old one (to make sure there is no bugs from the switch)
+	// -----------------------------------------------------
+	// Make some component copying system or 
+	// add a fuction for copying the component mananger/array to a new registry
+	template <typename... Component>
+	struct ComponentGroup
+	{
+	};
+
+	using AllComponents =
+		ComponentGroup<TransformComponent, SpriteRendererComponent,
+		CircleRendererComponent, CameraComponent, ScriptComponent, NativeScriptComponent,
+		Rigidbody2DComponent, BoxCollider2DComponent, CircleCollider2DComponent, BoxArea2DComponent>;\
+	// -----------------------------------------------------
+
 	static b2BodyType Rigidbody2DTypetoBox2DType(Rigidbody2DComponent::BodyType bodyType)
 	{
 		switch (bodyType)
@@ -33,7 +59,7 @@ namespace rhombus
 
 	Scene::Scene()
 	{
-
+		InitScene();
 	}
 
 	Scene::~Scene()
@@ -41,27 +67,46 @@ namespace rhombus
 		delete m_PhysicsWorld;		// just incase
 	}
 
+	void Scene::InitScene()
+	{
+		m_Registry.Init();
+
+		m_Registry.RegisterComponent<IDComponent>();
+		m_Registry.RegisterComponent<TagComponent>();
+		m_Registry.RegisterComponent<TransformComponent>();
+		m_Registry.RegisterComponent<BoxArea2DComponent>();
+		m_Registry.RegisterComponent<CameraComponent>();
+		m_Registry.RegisterComponent<CircleRendererComponent>();
+		m_Registry.RegisterComponent<BoxCollider2DComponent>();
+		m_Registry.RegisterComponent<CircleCollider2DComponent>();
+		m_Registry.RegisterComponent<Rigidbody2DComponent>();
+		m_Registry.RegisterComponent<ScriptComponent>();
+		m_Registry.RegisterComponent<NativeScriptComponent>();
+		m_Registry.RegisterComponent<SpriteRendererComponent>();
+	}
+
 	template<typename... Component>
-	static void CopyComponent(entt::registry& dest, const entt::registry& src, const	std::unordered_map<UUID, entt::entity>& enttMap)
+	static void CopyComponent(Registry& dest, const Registry& src, const	std::unordered_map<UUID, EntityID>& entityMap)
 	{
 		([&]()
 		{
-			auto view = src.view<Component>();
+			std::vector<EntityID> view = src.GetEntityList<Component>();
 			for (auto e : view)
 			{
-				UUID uuid = src.get<IDComponent>(e).m_id;
-				entt::entity destEntityID = enttMap.at(uuid);
+				UUID uuid = src.GetComponent<IDComponent>(e).m_id;
+				EntityID destEntityID = entityMap.at(uuid);
 
-				auto& component = src.get<Component>(e);
-				dest.emplace_or_replace<Component>(destEntityID, component);
+				auto& component = src.GetComponent<Component>(e);
+				//dest.emplace_or_replace<Component>(destEntityID, component);
+				dest.AddOrReplaceComponent<Component>(destEntityID, component);
 			}
 		}(), ...);
 	}
 
 	template<typename... Component>
-	static void CopyComponent(ComponentGroup<Component...>, entt::registry& dst, entt::registry& src, const std::unordered_map<UUID, entt::entity>& enttMap)
+	static void CopyComponent(ComponentGroup<Component...>, Registry& dst, Registry& src, const std::unordered_map<UUID, EntityID>& entityMap)
 	{
-		CopyComponent<Component...>(dst, src, enttMap);
+		CopyComponent<Component...>(dst, src, entityMap);
 	}
 
 	template<typename... Component>
@@ -89,20 +134,20 @@ namespace rhombus
 
 		auto& srcSceneRegistry = srcScene->m_Registry;
 		auto& destSceneRegistry = destScene->m_Registry;
-		std::unordered_map<UUID, entt::entity> enttMap;
+		std::unordered_map<UUID, EntityID> entityMap;
 
 		// Create new entities for scene
-		auto idView = srcSceneRegistry.view<IDComponent>();		// Every entity
-		for (auto e : idView)
+		std::vector<EntityID> idView = srcSceneRegistry.GetEntityList<IDComponent>();		// Every entity
+		for (EntityID e : idView)
 		{
-			UUID uuid = srcSceneRegistry.get<IDComponent>(e).m_id;
-			const auto& name = srcSceneRegistry.get<TagComponent>(e).m_tag;
+			UUID uuid = srcSceneRegistry.GetComponent<IDComponent>(e).m_id;
+			const auto& name = srcSceneRegistry.GetComponent<TagComponent>(e).m_tag;
 			Entity newEntity = destScene->CreateEntityWithUUID(uuid, name);
-			enttMap[uuid] = (entt::entity)newEntity;
+			entityMap[uuid] = (EntityID)newEntity;
 		}
 
 		// Copy components (except IDComponent and TagComponent)
-		CopyComponent(AllComponents{}, destSceneRegistry, srcSceneRegistry, enttMap);
+		CopyComponent(AllComponents{}, destSceneRegistry, srcSceneRegistry, entityMap);
 
 		return destScene;
 	}
@@ -114,8 +159,10 @@ namespace rhombus
 
 	Entity Scene::CreateEntityWithUUID(UUID uuid, const std::string& name)
 	{
-		Entity entity(m_Registry.create(), this);
-		entity.AddComponent<IDComponent>(uuid);
+		Entity entity(m_Registry.CreateEntity(), this);
+		IDComponent& idComponent = entity.AddComponent(IDComponent(uuid));
+		//IDComponent& idComponent = entity.AddComponent<IDComponent>();
+		//idComponent.m_id = uuid;
 		entity.AddComponent<TransformComponent>();
 		auto& tag = entity.AddComponent<TagComponent>();
 		tag.m_tag = name.empty() ? "Entity" : name;
@@ -128,7 +175,7 @@ namespace rhombus
 	void Scene::DestroyEntity(Entity entity)
 	{
 		UUID entityUUID = entity.GetUUID();
-		m_Registry.destroy(entity);
+		m_Registry.DestroyEntity(entity);
 		m_EntityMap.erase(entityUUID);
 	}
 
@@ -140,7 +187,7 @@ namespace rhombus
 		ScriptEngine::OnRuntimeStart(this);
 
 		// Instantiate all the script components
-		auto view = m_Registry.view<ScriptComponent>();
+		std::vector<EntityID> view = m_Registry.GetEntityList<ScriptComponent>();
 		for (auto e : view)
 		{
 			Entity entity = { e, this };
@@ -161,7 +208,7 @@ namespace rhombus
 		// Update Scripts
 		{
 			// Lua
-			auto view = m_Registry.view<ScriptComponent>();
+			std::vector<EntityID> view = m_Registry.GetEntityList<ScriptComponent>();
 			for (auto e : view)
 			{
 				Entity entity = { e, this };
@@ -169,19 +216,21 @@ namespace rhombus
 			}
 
 			// Native
-			m_Registry.view<NativeScriptComponent>().each([=](auto entity, auto& nsc)
+			std::vector<EntityID> nativeView = m_Registry.GetEntityList<NativeScriptComponent>();
+			for (auto e : nativeView)
 			{
-					// TODO: Move on Scene::OnScenePlay
+				NativeScriptComponent& nsc = m_Registry.GetComponent<NativeScriptComponent>(e);
+				// TODO: Move on Scene::OnScenePlay
 				if (!nsc.m_instance)
 				{
 					nsc.m_instance = nsc.InstantiateScript();
-					nsc.m_instance->m_entity = Entity(entity, this);
+					nsc.m_instance->m_entity = Entity(e, this);
 					//nsc.m_instance->m_entity = Entity{entity, this}; ?????
 					nsc.m_instance->OnReady();
 				}
 
 				nsc.m_instance->OnUpdate(dt);
-			});
+			}
 		}
 
 		// Physics
@@ -191,7 +240,7 @@ namespace rhombus
 			m_PhysicsWorld->Step(dt, velocityIterations, positionIterations);
 
 			// Retrieve transform post physics step
-			auto view = m_Registry.view<Rigidbody2DComponent>();
+			std::vector<EntityID> view = m_Registry.GetEntityList<Rigidbody2DComponent>();
 			for (auto e : view)
 			{
 				Entity entity = { e, this };
@@ -209,10 +258,11 @@ namespace rhombus
 		Camera* mainCamera = nullptr;
 		glm::mat4 cameraTransform;
 		{
-			auto view = m_Registry.view<TransformComponent, CameraComponent>();
+			std::vector<EntityID> view = m_Registry.GetEntityList<CameraComponent>();
 			for (auto entity : view)
 			{
-				auto [transformComponent, cameraComponent] = view.get<TransformComponent, CameraComponent>(entity);
+				auto& transformComponent = m_Registry.GetComponent<TransformComponent>(entity);
+				auto& cameraComponent = m_Registry.GetComponent<CameraComponent>(entity);
 
 				if (cameraComponent.GetIsPrimaryCamera())
 				{
@@ -234,15 +284,15 @@ namespace rhombus
 			{
 				// To make blending work for multiple objects we have to draw the
 				// most distant object first and the closest object last
-				m_Registry.sort<SpriteRendererComponent>([&](const entt::entity lhs, const entt::entity rhs) {
-					return m_Registry.get<TransformComponent>(lhs).m_position.z < m_Registry.get<TransformComponent>(rhs).m_position.z;
-					});
-
-				auto view = m_Registry.view<SpriteRendererComponent, TransformComponent>();
+				std::vector<EntityID> view = m_Registry.GetEntityList<SpriteRendererComponent>();
+				std::sort(view.begin(), view.end(), [&](const EntityID lhs, const EntityID rhs) {
+					return m_Registry.GetComponent<TransformComponent>(lhs).m_position.z < m_Registry.GetComponent<TransformComponent>(rhs).m_position.z;
+				});
 
 				for (auto entity : view)
 				{
-					auto [spriteRendererComponent, transformComponent] = view.get<SpriteRendererComponent, TransformComponent>(entity);
+					auto spriteRendererComponent = m_Registry.GetComponent<SpriteRendererComponent>(entity);
+					auto transformComponent = m_Registry.GetComponent<TransformComponent>(entity);
 
 					Renderer2D::DrawSprite(transformComponent.GetTransform(), spriteRendererComponent, (int)entity);
 				}
@@ -252,15 +302,15 @@ namespace rhombus
 			{
 				// To make blending work for multiple objects we have to draw the
 				// most distant object first and the closest object last
-				m_Registry.sort<CircleRendererComponent>([&](const entt::entity lhs, const entt::entity rhs) {
-					return m_Registry.get<TransformComponent>(lhs).m_position.z < m_Registry.get<TransformComponent>(rhs).m_position.z;
+				std::vector<EntityID> view = m_Registry.GetEntityList<CircleRendererComponent>();
+				std::sort(view.begin(), view.end(), [&](const EntityID lhs, const EntityID rhs) {
+					return m_Registry.GetComponent<TransformComponent>(lhs).m_position.z < m_Registry.GetComponent<TransformComponent>(rhs).m_position.z;
 				});
-
-				auto view = m_Registry.view<CircleRendererComponent, TransformComponent>();
 
 				for (auto entity : view)
 				{
-					auto [circleRendererComponent, transformComponent] = view.get<CircleRendererComponent, TransformComponent>(entity);
+					auto circleRendererComponent = m_Registry.GetComponent<CircleRendererComponent>(entity);
+					auto transformComponent = m_Registry.GetComponent<TransformComponent>(entity);
 
 					Renderer2D::DrawCircle(transformComponent.GetTransform(), circleRendererComponent.m_color,
 						circleRendererComponent.m_thickness, circleRendererComponent.m_fade, (int)entity);
@@ -281,15 +331,15 @@ namespace rhombus
 		{
 			// To make blending work for multiple objects we have to draw the
 			// most distant object first and the closest object last
-			m_Registry.sort<SpriteRendererComponent>([&](const entt::entity lhs, const entt::entity rhs) {
-				return m_Registry.get<TransformComponent>(lhs).m_position.z < m_Registry.get<TransformComponent>(rhs).m_position.z;
-				});
-
-			auto view = m_Registry.view<SpriteRendererComponent, TransformComponent>();
+			std::vector<EntityID> view = m_Registry.GetEntityList<SpriteRendererComponent>();
+			std::sort(view.begin(), view.end(), [&](const EntityID lhs, const EntityID rhs) {
+				return m_Registry.GetComponent<TransformComponent>(lhs).m_position.z < m_Registry.GetComponent<TransformComponent>(rhs).m_position.z;
+			});
 
 			for (auto entity : view)
 			{
-				auto [spriteRendererComponent, transformComponent] = view.get<SpriteRendererComponent, TransformComponent>(entity);
+				auto spriteRendererComponent = m_Registry.GetComponent<SpriteRendererComponent>(entity);
+				auto transformComponent = m_Registry.GetComponent<TransformComponent>(entity);
 
 				Renderer2D::DrawSprite(transformComponent.GetTransform(), spriteRendererComponent, (int)entity);
 			}
@@ -299,15 +349,15 @@ namespace rhombus
 		{
 			// To make blending work for multiple objects we have to draw the
 			// most distant object first and the closest object last
-			m_Registry.sort<CircleRendererComponent>([&](const entt::entity lhs, const entt::entity rhs) {
-				return m_Registry.get<TransformComponent>(lhs).m_position.z < m_Registry.get<TransformComponent>(rhs).m_position.z;
-				});
-
-			auto view = m_Registry.view<CircleRendererComponent, TransformComponent>();
+			std::vector<EntityID> view = m_Registry.GetEntityList<CircleRendererComponent>();
+			std::sort(view.begin(), view.end(), [&](const EntityID lhs, const EntityID rhs) {
+				return m_Registry.GetComponent<TransformComponent>(lhs).m_position.z < m_Registry.GetComponent<TransformComponent>(rhs).m_position.z;
+			});
 
 			for (auto entity : view)
 			{
-				auto [circleRendererComponent, transformComponent] = view.get<CircleRendererComponent, TransformComponent>(entity);
+				auto circleRendererComponent = m_Registry.GetComponent<CircleRendererComponent>(entity);
+				auto transformComponent = m_Registry.GetComponent<TransformComponent>(entity);
 
 				Renderer2D::DrawCircle(transformComponent.GetTransform(), circleRendererComponent.m_color,
 					circleRendererComponent.m_thickness, circleRendererComponent.m_fade, (int)entity);
@@ -322,7 +372,7 @@ namespace rhombus
 		glm::vec3 cursorCoords = Renderer2D::ConvertScreenToWorldSpace(x, y);
 		// Area 2D
 		{
-			auto view = m_Registry.view<BoxArea2DComponent>();
+			std::vector<EntityID> view = m_Registry.GetEntityList<BoxArea2DComponent>();
 			for (auto e : view)
 			{
 				Entity entity = { e, this };
@@ -352,7 +402,7 @@ namespace rhombus
 	void Scene::OnMouseButtonPressed(int button)
 	{
 		{
-			auto view = m_Registry.view<BoxArea2DComponent>();
+			std::vector<EntityID> view = m_Registry.GetEntityList<BoxArea2DComponent>();
 			for (auto e : view)
 			{
 				Entity entity = { e, this };
@@ -364,7 +414,7 @@ namespace rhombus
 	void Scene::OnMouseButtonReleased(int button)
 	{
 		{
-			auto view = m_Registry.view<BoxArea2DComponent>();
+			std::vector<EntityID> view = m_Registry.GetEntityList<BoxArea2DComponent>();
 			for (auto e : view)
 			{
 				Entity entity = { e, this };
@@ -379,10 +429,10 @@ namespace rhombus
 		m_ViewportHeight = height;
 
 		// Resize our non-fixed aspect ratio cameras
-		auto view = m_Registry.view<CameraComponent>();
+		std::vector<EntityID> view = m_Registry.GetEntityList<CameraComponent>();
 		for (auto entity : view)
 		{
-			auto& cameraComponent = view.get<CameraComponent>(entity);
+			auto& cameraComponent = m_Registry.GetComponent<CameraComponent>(entity);
 			if (!cameraComponent.GetHasFixedAspectRatio())
 			{
 				cameraComponent.GetCamera().SetViewportResize(width, height);
@@ -404,7 +454,7 @@ namespace rhombus
 	{
 		m_PhysicsWorld = new b2World({ 0.0f, -9.8f });
 
-		auto view = m_Registry.view<Rigidbody2DComponent>();
+		std::vector<EntityID> view = m_Registry.GetEntityList<Rigidbody2DComponent>();
 		for (auto e : view)
 		{
 			Entity entity = { e, this };
@@ -472,12 +522,17 @@ namespace rhombus
 		return {};
 	}
 
+	std::vector<EntityID> Scene::GetAllEntities()
+	{
+		return m_Registry.GetEntityList<IDComponent>();
+	}
+
 	Entity Scene::GetPrimaryCameraEntity()
 	{
-		auto view = m_Registry.view<CameraComponent>();
+		std::vector<EntityID> view = m_Registry.GetEntityList<CameraComponent>();
 		for (auto entity : view)
 		{
-			auto& camera = view.get<CameraComponent>(entity);
+			auto& camera = m_Registry.GetComponent<CameraComponent>(entity);
 			if (camera.GetIsPrimaryCamera())
 			{
 				return Entity{ entity, this };
@@ -488,6 +543,7 @@ namespace rhombus
 	}
 
 	// Not sure about this template specialization stuff :/
+	// TODO: Move all this to a virtual OnComponentAdded function in ComponentBase
 	template<typename T>
 	void Scene::OnComponentAdded(Entity entity, T& component)
 	{

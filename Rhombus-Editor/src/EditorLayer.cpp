@@ -175,7 +175,7 @@ namespace rhombus
 		if (mouseX >= 0 && mouseY >= 0 && mouseX < (int)viewportSize.x && mouseY < (int)viewportSize.y)
 		{
 			int pixelData = m_Framebuffer->ReadPixel(1, mouseX, mouseY);
-			m_HoveredEntity = pixelData == -1 ? Entity() : Entity((entt::entity)pixelData, m_ActiveScene.get());
+			m_HoveredEntity = pixelData == -1 ? Entity() : Entity((EntityID)pixelData, m_ActiveScene.get());
 		}
 		else
 		{
@@ -754,10 +754,12 @@ namespace rhombus
 		{
 			// Box Collider
 			{
-				auto view = m_ActiveScene->GetAllEntitiesWith<TransformComponent, BoxCollider2DComponent>();
-				for (auto entity : view)
+				std::vector<EntityID> view = m_ActiveScene->GetAllEntitiesWith<BoxCollider2DComponent>();
+				for (EntityID e : view)
 				{
-					auto [tc, bc2d] = view.get<TransformComponent, BoxCollider2DComponent>(entity);
+					Entity entity = { e, m_ActiveScene.get()};
+					TransformComponent& tc = entity.GetComponent<TransformComponent>();
+					BoxCollider2DComponent& bc2d = entity.GetComponent<BoxCollider2DComponent>();
 					glm::vec3 translation = tc.m_position + glm::vec3(bc2d.m_offset, 0.01f);
 					glm::vec3 scale = tc.m_scale * glm::vec3(bc2d.m_size * 2.0f, 1.0f);
 
@@ -771,10 +773,12 @@ namespace rhombus
 
 			// Circle Collider
 			{
-				auto view = m_ActiveScene->GetAllEntitiesWith<TransformComponent, CircleCollider2DComponent>();
-				for (auto entity : view)
+				std::vector<EntityID> view = m_ActiveScene->GetAllEntitiesWith<CircleCollider2DComponent>();
+				for (EntityID e : view)
 				{
-					auto [tc, bc2d] = view.get<TransformComponent, CircleCollider2DComponent>(entity);
+					Entity entity = { e, m_ActiveScene.get() };
+					TransformComponent& tc = entity.GetComponent<TransformComponent>();
+					CircleCollider2DComponent& bc2d = entity.GetComponent<CircleCollider2DComponent>();
 					glm::vec3 translation = tc.m_position + glm::vec3(bc2d.m_offset, 0.01f);
 					glm::vec3 scale = tc.m_scale * bc2d.m_radius * 2.0f;
 
@@ -788,10 +792,12 @@ namespace rhombus
 
 			// Box Area
 			{
-				auto view = m_ActiveScene->GetAllEntitiesWith<TransformComponent, BoxArea2DComponent>();
-				for (auto entity : view)
+				std::vector<EntityID> view = m_ActiveScene->GetAllEntitiesWith<BoxArea2DComponent>();
+				for (EntityID e : view)
 				{
-					auto [tc, ba2d] = view.get<TransformComponent, BoxArea2DComponent>(entity);
+					Entity entity = { e, m_ActiveScene.get() };
+					TransformComponent& tc = entity.GetComponent<TransformComponent>();
+					BoxArea2DComponent& ba2d = entity.GetComponent<BoxArea2DComponent>();
 					glm::vec3 translation = tc.m_position + glm::vec3(ba2d.m_offset, 0.01f);
 					glm::vec3 scale = tc.m_scale * glm::vec3(ba2d.m_size * 2.0f, 1.0f);
 

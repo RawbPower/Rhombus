@@ -2,9 +2,16 @@
 #include "SceneSerializer.h"
 
 #include "Entity.h"
-#include "Component.h"
 
 #include "Rhombus/Project/Project.h"
+
+#include "Rhombus/ECS/Components/Area2DComponent.h"
+#include "Rhombus/ECS/Components/CameraComponent.h"
+#include "Rhombus/ECS/Components/CircleRendererComponent.h"
+#include "Rhombus/ECS/Components/Collider2DComponent.h"
+#include "Rhombus/ECS/Components/Rigidbody2DComponent.h"
+#include "Rhombus/ECS/Components/ScriptComponent.h"
+#include "Rhombus/ECS/Components/SpriteRendererComponent.h"
 
 #include <fstream>
 
@@ -303,14 +310,15 @@ namespace rhombus
 		out << YAML::BeginMap;
 		out << YAML::Key << "Scene" << YAML::Value << "Untitled";
 		out << YAML::Key << "Entities" << YAML::Value << YAML::BeginSeq;
-		m_scene->m_Registry.each([&](auto entityID)
+		std::vector<EntityID> entityList = m_scene->GetAllEntities();
+		for (EntityID e : entityList)
 		{
-			Entity entity = { entityID, m_scene.get() };
+			Entity entity = { e, m_scene.get() };
 			if (!entity)
 				return;
 
 			SerializeEntity(out, entity, m_scene);
-		});
+		}
 		out << YAML::EndSeq;
 		out << YAML::EndMap;
 

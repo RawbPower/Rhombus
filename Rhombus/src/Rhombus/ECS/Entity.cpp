@@ -3,7 +3,7 @@
 
 namespace rhombus
 {
-	Entity::Entity(entt::entity id, Scene* scene)
+	Entity::Entity(EntityID id, Scene* scene)
 		: m_entityId(id), m_scene(scene)
 	{
 

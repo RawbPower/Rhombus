@@ -18,8 +18,7 @@ project "Sandbox"
 		"%{wks.location}/Rhombus/vendor/spdlog/include",
 		"%{wks.location}/Rhombus/src",
 		"%{wks.location}/Rhombus/vendor",
-		"%{IncludeDir.glm}",
-		"%{IncludeDir.EnTT}"
+		"%{IncludeDir.glm}"
 	}
 
 	links

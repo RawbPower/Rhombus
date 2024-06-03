@@ -1,10 +1,11 @@
 #pragma once
 
+#include "ECSTypes.h"
+#include "Registry.h"
+
 #include "Rhombus/Core/DeltaTime.h"
 #include "Rhombus/Core/UUID.h"
 #include "Rhombus/Renderer/EditorCamera.h"
-
-#include <entt.hpp>
 
 class b2World;
 
@@ -17,6 +18,8 @@ namespace rhombus
 	public:
 		Scene();
 		~Scene();
+
+		virtual void InitScene();
 
 		static Ref<Scene> Copy(Ref<Scene> srcScene);
 
@@ -45,22 +48,24 @@ namespace rhombus
 
 		Entity GetPrimaryCameraEntity();
 
-		template<typename... Components>
-		auto GetAllEntitiesWith()
+		std::vector<EntityID> GetAllEntities();
+
+		template<typename T>
+		std::vector<EntityID> GetAllEntitiesWith()
 		{
-			return m_Registry.view<Components...>();
+			return m_Registry.GetEntityList<T>();
 		}
 
 	protected:
 		template<typename T>
 		void OnComponentAdded(Entity entity, T& component);
 	protected:
-		entt::registry m_Registry;
+		Registry m_Registry;
 		uint32_t m_ViewportWidth = 0, m_ViewportHeight = 0;
 
 		b2World* m_PhysicsWorld = nullptr;
 
-		std::unordered_map<UUID, entt::entity> m_EntityMap;
+		std::unordered_map<UUID, EntityID> m_EntityMap;
 
 		friend class Entity;
 		friend class SceneSerializer;

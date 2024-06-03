@@ -11,6 +11,8 @@ namespace rhombus
 	public:
 		PatienceScene();
 
+		virtual void InitScene() override;
+
 		virtual void OnUpdateRuntime(DeltaTime dt) override;
 
 		virtual void SerializeEntity(void* yamlEmitter, Entity entity) override;

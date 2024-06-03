@@ -11,7 +11,13 @@ namespace rhombus
 {
 	PatienceScene::PatienceScene()
 	{
+		InitScene();
+	}
 
+	void PatienceScene::InitScene()
+	{
+		Scene::InitScene();
+		m_Registry.RegisterComponent<CardComponent>();
 	}
 
 	void PatienceScene::OnUpdateRuntime(DeltaTime dt)
@@ -54,8 +60,8 @@ namespace rhombus
 		glm::vec3 cursorCoords = Renderer2D::ConvertScreenToWorldSpace(x, y);
 
 		{
-			auto view = m_Registry.view<CardComponent>();
-			for (auto e : view)
+			std::vector<EntityID> view = m_Registry.GetEntityList<CardComponent>();
+			for (EntityID e : view)
 			{
 				Entity entity = { e, this };
 				auto& transform = entity.GetComponent<TransformComponent>();
@@ -74,8 +80,8 @@ namespace rhombus
 		Scene::OnMouseButtonPressed(button);
 
 		{
-			auto view = m_Registry.view<CardComponent>();
-			for (auto e : view)
+			std::vector<EntityID> view = m_Registry.GetEntityList<CardComponent>();
+			for (EntityID e : view)
 			{
 				Entity entity = { e, this };
 				auto& card = entity.GetComponent<CardComponent>();
@@ -98,8 +104,8 @@ namespace rhombus
 		Scene::OnMouseButtonReleased(button);
 
 		{
-			auto view = m_Registry.view<CardComponent>();
-			for (auto e : view)
+			std::vector<EntityID> view = m_Registry.GetEntityList<CardComponent>();
+			for (EntityID e : view)
 			{
 				Entity entity = { e, this };
 				auto& card = entity.GetComponent<CardComponent>();

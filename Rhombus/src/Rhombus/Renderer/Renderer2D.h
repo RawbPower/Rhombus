@@ -6,7 +6,7 @@
 #include "Camera.h"
 #include "EditorCamera.h"
 
-#include "Rhombus/ECS/Component.h"
+#include "Rhombus/ECS/Components/SpriteRendererComponent.h"
 
 namespace rhombus
 {

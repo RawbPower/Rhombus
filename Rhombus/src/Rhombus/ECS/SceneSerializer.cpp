@@ -5,6 +5,14 @@
 
 #include "Rhombus/Project/Project.h"
 
+#include "Rhombus/ECS/Components/Area2DComponent.h"
+#include "Rhombus/ECS/Components/CameraComponent.h"
+#include "Rhombus/ECS/Components/CircleRendererComponent.h"
+#include "Rhombus/ECS/Components/Collider2DComponent.h"
+#include "Rhombus/ECS/Components/Rigidbody2DComponent.h"
+#include "Rhombus/ECS/Components/ScriptComponent.h"
+#include "Rhombus/ECS/Components/SpriteRendererComponent.h"
+
 #include <fstream>
 
 #define YAML_CPP_STATIC_DEFINE		// Needed for yaml static library to work for some reason

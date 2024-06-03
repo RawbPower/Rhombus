@@ -26,11 +26,12 @@ namespace rhombus
 	{
 		ImGui::Begin("Scene Hierarchy");
 
-		m_context->m_Registry.each([&](auto entityID)
+		std::vector<EntityID> entities = m_context->GetAllEntities();
+		for (EntityID entityID : entities)
 		{
 			Entity entity(entityID, m_context.get());
 			DrawEntityNode(entity);
-		});
+		}
 
 		if (ImGui::IsMouseDown(0) && ImGui::IsWindowHovered())
 		{

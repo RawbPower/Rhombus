@@ -59,12 +59,28 @@ namespace rhombus
 
 	Scene::Scene()
 	{
-
+		InitScene();
 	}
 
 	Scene::~Scene()
 	{
 		delete m_PhysicsWorld;		// just incase
+	}
+
+	void Scene::InitScene()
+	{
+		m_Registry.Init();
+
+		m_Registry.RegisterComponent<IDComponent>();
+		m_Registry.RegisterComponent<TagComponent>();
+		m_Registry.RegisterComponent<TransformComponent>();
+		m_Registry.RegisterComponent<BoxArea2DComponent>();
+		m_Registry.RegisterComponent<CameraComponent>();
+		m_Registry.RegisterComponent<CircleRendererComponent>();
+		m_Registry.RegisterComponent<Rigidbody2DComponent>();
+		m_Registry.RegisterComponent<ScriptComponent>();
+		m_Registry.RegisterComponent<NativeScriptComponent>();
+		m_Registry.RegisterComponent<SpriteRendererComponent>();
 	}
 
 	template<typename... Component>

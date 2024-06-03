@@ -22,7 +22,6 @@ project "Rhombus-ScriptRegistry"
 		"%{IncludeDir.glm}",
 		"%{IncludeDir.stb_image}",
 		"%{IncludeDir.SDL2}",
-		"%{IncludeDir.EnTT}",
 		"%{IncludeDir.Box2d}",
 		"%{IncludeDir.Lua}"
 	}

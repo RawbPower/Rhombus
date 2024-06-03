@@ -8,7 +8,6 @@
 #include "Rhombus/Core/Log.h"
 #include "Rhombus/ECS/Scene.h"
 #include "Rhombus/ECS/Entity.h"
-#include "Rhombus/ECS/Component.h"
 
 extern "C"
 {

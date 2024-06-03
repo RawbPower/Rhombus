@@ -7,7 +7,7 @@
 
 #include "Patience/PatienceScene.h"
 
-#define RB_EDITOR 1
+#define RB_EDITOR 0
 
 namespace rhombus
 {

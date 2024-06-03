@@ -3,6 +3,7 @@
 #include "ScriptGlue.h"
 
 #include "Rhombus/Project/Project.h"
+#include "Rhombus/ECS/Components/ScriptComponent.h"
 
 extern "C"
 {

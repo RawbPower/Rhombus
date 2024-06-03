@@ -19,6 +19,8 @@ namespace rhombus
 		Scene();
 		~Scene();
 
+		virtual void InitScene();
+
 		static Ref<Scene> Copy(Ref<Scene> srcScene);
 
 		Entity CreateEntity(const std::string& name = std::string());

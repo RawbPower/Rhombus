@@ -77,6 +77,8 @@ namespace rhombus
 		m_Registry.RegisterComponent<BoxArea2DComponent>();
 		m_Registry.RegisterComponent<CameraComponent>();
 		m_Registry.RegisterComponent<CircleRendererComponent>();
+		m_Registry.RegisterComponent<BoxCollider2DComponent>();
+		m_Registry.RegisterComponent<CircleCollider2DComponent>();
 		m_Registry.RegisterComponent<Rigidbody2DComponent>();
 		m_Registry.RegisterComponent<ScriptComponent>();
 		m_Registry.RegisterComponent<NativeScriptComponent>();

@@ -11,6 +11,7 @@ namespace rhombus
 	class ComponentManager
 	{
 	public:
+
 		template<typename T>
 		void RegisterComponent()
 		{
@@ -87,6 +88,17 @@ namespace rhombus
 			return GetComponentArray<T>()->GetEntityList();
 		}
 
+		void CopyComponents(std::unordered_map<const char*, Ref<ComponentArrayBase>> src)
+		{
+			for (auto pair : src)
+			{
+				Ref<ComponentArrayBase> srcArrayBase = pair.second;
+				//m_componentArrays[pair.first] = CreateRef<decltype(pair.second)>(pair.second);
+				//m_componentArrays[pair.first]->CopyComponents(pair.second);
+				m_componentArrays[pair.first] = pair.second;
+			}
+		}
+
 		void OnEntityDestroyed(EntityID entity)
 		{
 			// Notify each component array that an entity has been destoryed
@@ -97,6 +109,11 @@ namespace rhombus
 
 				component->OnEntityDestroyed(entity);
 			}
+		}
+
+		std::unordered_map<const char*, Ref<ComponentArrayBase>> GetComponentArrays()
+		{
+			return m_componentArrays;
 		}
 
 	private:

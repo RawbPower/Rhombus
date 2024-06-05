@@ -125,10 +125,8 @@ namespace rhombus
 		CopyComponentIfExists<Component...>(dst, src);
 	}
 
-	Ref<Scene> Scene::Copy(Ref<Scene> srcScene)
+	void Scene::Copy(Ref<Scene> destScene, Ref<Scene> srcScene)
 	{
-		Ref<Scene> destScene = CreateRef<Scene>();
-
 		destScene->m_ViewportHeight = srcScene->m_ViewportHeight;
 		destScene->m_ViewportWidth = srcScene->m_ViewportWidth;
 
@@ -146,10 +144,8 @@ namespace rhombus
 			entityMap[uuid] = (EntityID)newEntity;
 		}
 
-		// Copy components (except IDComponent and TagComponent)
-		CopyComponent(AllComponents{}, destSceneRegistry, srcSceneRegistry, entityMap);
-
-		return destScene;
+		// Copy components (TODO: Skip ID Component?)
+		destScene->m_Registry.CopyComponents(srcScene->m_Registry);
 	}
 
 	Entity Scene::CreateEntity(const std::string& name)

@@ -711,7 +711,8 @@ namespace rhombus
 	void EditorLayer::OnScenePlay()
 	{
 		m_SceneState = SceneState::Play;
-		m_ActiveScene = Scene::Copy(m_EditorScene);
+		m_ActiveScene = CreateRef<PatienceScene>();
+		Scene::Copy(m_ActiveScene, m_EditorScene);
 		m_ActiveScene->OnRuntimeStart();
 
 		m_sceneHierarchyPanel.SetContext(m_ActiveScene);

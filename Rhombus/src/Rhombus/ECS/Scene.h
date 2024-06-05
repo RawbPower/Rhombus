@@ -21,7 +21,7 @@ namespace rhombus
 
 		virtual void InitScene();
 
-		static Ref<Scene> Copy(Ref<Scene> srcScene);
+		static void Copy(Ref<Scene> destScene, Ref<Scene> srcScene);
 
 		Entity CreateEntity(const std::string& name = std::string());
 		Entity CreateEntityWithUUID(UUID uuid, const std::string& name = std::string());

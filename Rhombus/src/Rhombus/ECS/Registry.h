@@ -18,11 +18,6 @@ namespace rhombus
 			m_systemManager = std::make_unique<SystemManager>();
 		}
 
-		void CopyComponents(const Registry& srcRegistry)
-		{
-			m_componentManager->CopyComponents(srcRegistry.m_componentManager->GetComponentArrays());
-		}
-
 		// Entity methods
 		EntityID CreateEntity()
 		{

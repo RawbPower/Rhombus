@@ -28,20 +28,12 @@
 
 namespace rhombus
 {
-	// TODO: Remove this shit once the new ECS is working like 
-	// the old one (to make sure there is no bugs from the switch)
+	// Update this list when any new components are added
 	// -----------------------------------------------------
-	// Make some component copying system or 
-	// add a fuction for copying the component mananger/array to a new registry
-	template <typename... Component>
-	struct ComponentGroup
-	{
-	};
-
-	using AllComponents =
-		ComponentGroup<TransformComponent, SpriteRendererComponent,
+	using RhombusComponents =
+		ComponentGroup<TagComponent, TransformComponent, SpriteRendererComponent,
 		CircleRendererComponent, CameraComponent, ScriptComponent, NativeScriptComponent,
-		Rigidbody2DComponent, BoxCollider2DComponent, CircleCollider2DComponent, BoxArea2DComponent>;\
+		Rigidbody2DComponent, BoxCollider2DComponent, CircleCollider2DComponent, BoxArea2DComponent>;
 	// -----------------------------------------------------
 
 	static b2BodyType Rigidbody2DTypetoBox2DType(Rigidbody2DComponent::BodyType bodyType)
@@ -70,59 +62,13 @@ namespace rhombus
 	void Scene::InitScene()
 	{
 		m_Registry.Init();
-
+		
+		// ID component is unique so shouldn't be grouped with the rest 
+		// of the components in general. It is created with the entity 
+		// and doesn't need to be copied
 		m_Registry.RegisterComponent<IDComponent>();
-		m_Registry.RegisterComponent<TagComponent>();
-		m_Registry.RegisterComponent<TransformComponent>();
-		m_Registry.RegisterComponent<BoxArea2DComponent>();
-		m_Registry.RegisterComponent<CameraComponent>();
-		m_Registry.RegisterComponent<CircleRendererComponent>();
-		m_Registry.RegisterComponent<BoxCollider2DComponent>();
-		m_Registry.RegisterComponent<CircleCollider2DComponent>();
-		m_Registry.RegisterComponent<Rigidbody2DComponent>();
-		m_Registry.RegisterComponent<ScriptComponent>();
-		m_Registry.RegisterComponent<NativeScriptComponent>();
-		m_Registry.RegisterComponent<SpriteRendererComponent>();
-	}
 
-	template<typename... Component>
-	static void CopyComponent(Registry& dest, const Registry& src, const	std::unordered_map<UUID, EntityID>& entityMap)
-	{
-		([&]()
-		{
-			std::vector<EntityID> view = src.GetEntityList<Component>();
-			for (auto e : view)
-			{
-				UUID uuid = src.GetComponent<IDComponent>(e).m_id;
-				EntityID destEntityID = entityMap.at(uuid);
-
-				auto& component = src.GetComponent<Component>(e);
-				//dest.emplace_or_replace<Component>(destEntityID, component);
-				dest.AddOrReplaceComponent<Component>(destEntityID, component);
-			}
-		}(), ...);
-	}
-
-	template<typename... Component>
-	static void CopyComponent(ComponentGroup<Component...>, Registry& dst, Registry& src, const std::unordered_map<UUID, EntityID>& entityMap)
-	{
-		CopyComponent<Component...>(dst, src, entityMap);
-	}
-
-	template<typename... Component>
-	static void CopyComponentIfExists(Entity dest, Entity src)
-	{
-		([&]()
-		{
-			if (src.HasComponent<Component>())
-				dest.AddOrReplaceComponent<Component>(src.GetComponent<Component>());
-		}(), ...);
-	}
-
-	template<typename... Component>
-	static void CopyComponentIfExists(ComponentGroup<Component...>, Entity dst, Entity src)
-	{
-		CopyComponentIfExists<Component...>(dst, src);
+		RegisterComponents(RhombusComponents{});
 	}
 
 	void Scene::Copy(Ref<Scene> destScene, Ref<Scene> srcScene)
@@ -145,7 +91,13 @@ namespace rhombus
 		}
 
 		// Copy components (TODO: Skip ID Component?)
-		destScene->m_Registry.CopyComponents(srcScene->m_Registry);
+		//destScene->m_Registry.CopyComponents(srcScene->m_Registry);
+		srcScene->CopyAllComponents(destScene, entityMap);
+	}
+
+	void Scene::CopyAllComponents(Ref<Scene> destScene, const std::unordered_map<UUID, EntityID>& entityMap)
+	{
+		CopyComponent(RhombusComponents{}, destScene->m_Registry, m_Registry, entityMap);
 	}
 
 	Entity Scene::CreateEntity(const std::string& name)
@@ -506,7 +458,7 @@ namespace rhombus
 		std::string name = entity.GetName();
 		Entity newEntity = CreateEntity(name);
 
-		CopyComponentIfExists(AllComponents{}, newEntity, entity);
+		CopyComponentIfExists(RhombusComponents{}, newEntity, entity);
 	}
 
 	Entity Scene::GetEntityByUUID(UUID uuid)

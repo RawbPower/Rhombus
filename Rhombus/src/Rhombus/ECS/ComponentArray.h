@@ -16,7 +16,6 @@ namespace rhombus
 	public:
 		virtual ~ComponentArrayBase() = default;
 		virtual void OnEntityDestroyed(EntityID entity) = 0;
-		//virtual void CopyComponents(EntityID entity) = 0;
 	};
 
 	template<typename T>

@@ -1,6 +1,7 @@
 #include "PatienceScene.h"
 
 #include "Components/CardComponent.h"
+#include "Rhombus.h"
 
 #include <fstream>
 
@@ -9,6 +10,12 @@
 
 namespace rhombus
 {
+	// Update this list when any new components are added
+	// -----------------------------------------------------
+	using PatienceComponents =
+		ComponentGroup<CardComponent>;
+	// -----------------------------------------------------
+
 	PatienceScene::PatienceScene()
 	{
 		InitScene();
@@ -17,12 +24,18 @@ namespace rhombus
 	void PatienceScene::InitScene()
 	{
 		Scene::InitScene();
-		m_Registry.RegisterComponent<CardComponent>();
+		RegisterComponents(PatienceComponents{});
 	}
 
 	void PatienceScene::OnUpdateRuntime(DeltaTime dt)
 	{
 		Scene::OnUpdateRuntime(dt);
+	}
+
+	void PatienceScene::CopyAllComponents(Ref<Scene> destScene, const std::unordered_map<UUID, EntityID>& entityMap)
+	{
+		Scene::CopyAllComponents(destScene, entityMap);
+		CopyComponent(PatienceComponents{}, destScene->GetRegistry(), m_Registry, entityMap);
 	}
 
 	void PatienceScene::SerializeEntity(void* yamlEmitter, Entity entity)

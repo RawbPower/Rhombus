@@ -4,7 +4,7 @@
 
 namespace rhombus
 {
-	class CardComponent
+	class CardComponent : public ComponentBase
 	{
 	public:
 		CardComponent() = default;

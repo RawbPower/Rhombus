@@ -56,6 +56,8 @@ namespace rhombus
 		m_EditorCamera = EditorCamera(30.0f, 1.778f, 0.1f, 1000.0f);	// 1.778 = 16/9
 
 		m_ViewportSize = { fbSpec.Width, fbSpec.Height };
+		m_ViewportBounds[0] = { 0.0f, 0.0f };
+		m_ViewportBounds[1] = m_ViewportSize;
 		m_CameraController.OnResize(m_ViewportSize.x, m_ViewportSize.y);
 		m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
 
@@ -339,6 +341,8 @@ namespace rhombus
 		ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
 
 		m_ViewportSize = { viewportPanelSize.x, viewportPanelSize.y };
+
+		Application::Get().SetViewport(m_ViewportBounds[0].x, m_ViewportBounds[0].y, viewportPanelSize.x, viewportPanelSize.y);
 
 		uint32_t textureID = m_Framebuffer->GetColorAttachmentRendererID();
 		ImGui::Image((void*)textureID, ImVec2{ m_ViewportSize.x, m_ViewportSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });

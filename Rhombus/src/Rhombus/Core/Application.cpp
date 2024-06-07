@@ -32,6 +32,7 @@ namespace rhombus {
 
 		m_Window = std::unique_ptr<Window>(Window::Create(WindowParams(m_Specification.name)));
 		m_Window->SetEventCallback(BIND_EVENT_FN(OnEvent));
+		SetViewport(0.0f, 0.0f, m_Window->GetWidth(), m_Window->GetHeight());
 
 		Renderer::Init();
 		ScriptEngine::Init();
@@ -63,6 +64,14 @@ namespace rhombus {
 
 		m_LayerStack.PushOverlay(overlay);
 		overlay->OnAttach();
+	}
+
+	void Application::SetViewport(float x, float y, float width, float height)
+	{
+		m_Viewport.x = x;
+		m_Viewport.y = y;
+		m_Viewport.width = width;
+		m_Viewport.height = height;
 	}
 
 	void Application::Close()

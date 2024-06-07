@@ -601,9 +601,15 @@ namespace rhombus
 
 	glm::vec3 Renderer2D::ConvertScreenToWorldSpace(int x, int y)
 	{
+		Viewport viewport = Application::Get().GetViewport();
+		glm::vec3 fC = glm::vec3(x - viewport.x, y - viewport.y, 0.0f);
+		glm::vec3 ndc = glm::vec3(fC.x / viewport.width, 1.0 - fC.y / viewport.height, fC.z) * 2.0f - 1.0f;
+		return ConvertScreenToWorldSpace(ndc);
+	}
+
+	glm::vec3 Renderer2D::ConvertScreenToWorldSpace(glm::vec3 ndc)
+	{
 		glm::mat4 viewProjection = Renderer2D::GetViewProjectionMatrix();
-		glm::vec3 fC = glm::vec3(x, y, 0.0f);
-		glm::vec3 ndc = glm::vec3(fC.x / Application::Get().GetWindow().GetWidth(), 1.0 - fC.y / Application::Get().GetWindow().GetHeight(), fC.z) * 2.0f - 1.0f;
 		glm::vec4 worldCoords = glm::vec4(ndc, 1.0f) * glm::inverse(viewProjection);
 		return glm::vec3(worldCoords);
 	}

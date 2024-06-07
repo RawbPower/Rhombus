@@ -34,6 +34,14 @@ namespace rhombus {
 		ApplicationCommandLineArgs commandLineArgs;
 	};
 
+	struct Viewport
+	{
+		float x = 0.0f;
+		float y = 0.0f;
+		float width = 0.0f;
+		float height = 0.0f;
+	};
+
 	class Application
 	{
 	public:
@@ -46,6 +54,9 @@ namespace rhombus {
 		void PushOverlay(Layer* overlay);
 
 		inline Window& GetWindow() { return *m_Window; }
+
+		Viewport GetViewport() const { return m_Viewport; }
+		void SetViewport(float x, float y, float width, float height);
 
 		void Close();
 
@@ -73,6 +84,7 @@ namespace rhombus {
 	private:
 		ApplicationSpecification m_Specification;
 		Scope<Window> m_Window;
+		Viewport m_Viewport;
 		ImGuiLayer* m_ImGuiLayer;
 		bool m_Running = true;
 		bool m_Minimised = false;

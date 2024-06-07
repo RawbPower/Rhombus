@@ -51,6 +51,7 @@ namespace rhombus
 
 		static glm::mat4 GetViewProjectionMatrix();
 		static glm::vec3 ConvertScreenToWorldSpace(int x, int y);
+		static glm::vec3 ConvertScreenToWorldSpace(glm::vec3 ndc);
 
 		struct Statistics
 		{

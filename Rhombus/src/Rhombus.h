@@ -28,6 +28,10 @@
 #include "Rhombus/ECS/Components/ScriptComponent.h"
 #include "Rhombus/ECS/Components/SpriteRendererComponent.h"
 
+#include "Rhombus/Math/Quat.h"
+#include "Rhombus/Math/Matrix.h"
+#include "Rhombus/Math/Vector.h"
+
 #include "Rhombus/Project/Project.h"
 
 // ---Renderer--------------------

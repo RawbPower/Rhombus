@@ -8,6 +8,8 @@
 #include "Rhombus/ECS/SceneSerializer.h"
 #include "Rhombus/Utils/PlatformUtils.h"
 #include "Rhombus/Math/Math.h"
+#include "Rhombus/Math/Vector.h"
+#include "Rhombus/Math/Matrix.h"
 
 #include "ImGuizmo.h"
 
@@ -398,8 +400,15 @@ namespace rhombus
 
 			if (ImGuizmo::IsUsing())
 			{
-				glm::vec3 translation, rotation, scale;
-				math::DecomposeTransform(transform, translation, rotation, scale);
+				math::Vec4 row0 = math::Vec4(transform[0][0], transform[0][1], transform[0][2], transform[0][3]);
+				math::Vec4 row1 = math::Vec4(transform[1][0], transform[1][1], transform[1][2], transform[1][3]);
+				math::Vec4 row2 = math::Vec4(transform[2][0], transform[2][1], transform[2][2], transform[2][3]);
+				math::Vec4 row3 = math::Vec4(transform[3][0], transform[3][1], transform[3][2], transform[3][3]);
+				math::Mat4 transformMat(row0, row1, row2, row3);
+
+				math::Vec3 translation, rotation, scale;
+
+				math::DecomposeTransform(transformMat, translation, rotation, scale);
 
 				transformComponent.m_position = translation;
 				transformComponent.m_rotation = rotation;		// TODO: Look into gimbal lock issue

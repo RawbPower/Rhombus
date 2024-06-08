@@ -1,8 +1,9 @@
 #pragma once
 
-#include <glm/glm.hpp>
+#include "Vector.h"
+#include "Matrix.h"
 
 namespace rhombus::math
 {
-	bool DecomposeTransform(const glm::mat4& transform, glm::vec3& outTranslation, glm::vec3& outRotation, glm::vec3& outScale);
+	bool DecomposeTransform(const Mat4& transform, Vec3& outTranslation, Vec3& outRotation, Vec3& outScale);
 }

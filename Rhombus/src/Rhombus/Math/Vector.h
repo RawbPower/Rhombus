@@ -6,6 +6,11 @@
 
 namespace rhombus::math
 {
+	// Forward declarations
+	class Vec2;
+	class Vec3;
+	class Vec4;
+
 	/* 
 	===============================
 	Vec2
@@ -51,6 +56,118 @@ namespace rhombus::math
 		float y;
 	};
 
+
+	/*
+	===============================
+	Vec3
+	===============================
+	*/
+	class Vec3
+	{
+	public:
+		Vec3();
+		Vec3(const float value);
+		Vec3(const Vec3& rhs);
+		Vec3(const Vec4& rhs);
+		Vec3(float X, float Y, float Z);
+		Vec3(const float* xyz);
+		Vec3& operator = (const Vec3& rhs);
+		Vec3& operator = (const float* rhs);
+
+		bool operator == (const Vec3& rhs) const;
+		bool operator != (const Vec3& rhs) const;
+		Vec3 operator + (const Vec3& rhs) const;
+		const Vec3& operator += (const Vec3& rhs);
+		const Vec3& operator -= (const Vec3& rhs);
+		Vec3 operator - (const Vec3& rhs) const;
+		Vec3 operator * (const float rhs) const;
+		Vec3 operator / (const float rhs) const;
+		const Vec3& operator *= (const float rhs);
+		const Vec3& operator /= (const float rhs);
+		float operator [] (const int idx) const;
+		float& operator [] (const int idx);
+
+		operator glm::vec3() const;
+
+		void Zero() { x = 0.0f; y = 0.0f; z = 0.0f; }
+
+		const Vec3& Normalize();
+		float GetMagnitude() const;
+		float GetMag2() const { return Dot(*this); }
+		bool IsValid() const;
+		void GetOrtho(Vec3& u, Vec3& v) const;
+
+		Vec3 Cross(const Vec3& rhs) const;
+		float Dot(const Vec3& rhs) const;
+
+		static Vec3 Cross(const Vec3& a, const Vec3& b);
+		static float Dot(const Vec3& a, const Vec3& b);
+
+		const float* ToPtr() const { return &x; }
+
+	public:
+		float x;
+		float y;
+		float z;
+	};
+
+
+	/*
+	===============================
+	Vec4
+	===============================
+	*/
+	class Vec4
+	{
+	public:
+		Vec4();
+		Vec4(const float value);
+		Vec4(const Vec4& rhs);
+		Vec4(float X, float Y, float Z, float W);
+		Vec4(const float* rhs);
+		Vec4& operator = (const Vec4& rhs);
+
+		bool operator == (const Vec4& rhs) const;
+		bool operator != (const Vec4& rhs) const;
+		Vec4 operator + (const Vec4& rhs) const;
+		const Vec4& operator += (const Vec4& rhs);
+		const Vec4& operator -= (const Vec4& rhs);
+		const Vec4& operator *= (const Vec4& rhs);
+		const Vec4& operator /= (const Vec4& rhs);
+		Vec4 operator - (const Vec4& rhs) const;
+		Vec4 operator * (const float rhs) const;
+		Vec4 operator / (const float rhs) const;
+		float operator [] (const int idx) const;
+		float& operator [] (const int idx);
+
+		Vec3 GetXYZ() { return Vec3(x, y, z); }
+
+		void Zero() { x = 0.0f; y = 0.0f; z = 0.0f; w = 0.0f; }
+
+		const Vec4& Normalize();
+		float GetMagnitude() const;
+		float GetMag2() const { return Dot(*this); }
+		bool IsValid() const;
+
+		float Dot(const Vec4& rhs) const { return x * rhs.x + y * rhs.y + z * rhs.z + w * rhs.w; }
+		static float Dot(const Vec4& a, const Vec4& b) { return a.Dot(b); }
+
+		const float* ToPtr() const { return &x; }
+		float* ToPtr() { return &x; }
+
+	public:
+		float x;
+		float y;
+		float z;
+		float w;
+	};
+
+
+	/*
+	===============================
+	Vec2
+	===============================
+	*/
 	inline Vec2::Vec2() :
 		x(0.0f),
 		y(0.0f)
@@ -224,59 +341,12 @@ namespace rhombus::math
 		return true;
 	}
 
+
 	/*
 	===============================
 	Vec3
 	===============================
 	*/
-	class Vec3
-	{
-	public:
-		Vec3();
-		Vec3(const float value);
-		Vec3(const Vec3& rhs);
-		Vec3(float X, float Y, float Z);
-		Vec3(const float* xyz);
-		Vec3& operator = (const Vec3& rhs);
-		Vec3& operator = (const float* rhs);
-
-		bool operator == (const Vec3& rhs) const;
-		bool operator != (const Vec3& rhs) const;
-		Vec3 operator + (const Vec3& rhs) const;
-		const Vec3& operator += (const Vec3& rhs);
-		const Vec3& operator -= (const Vec3& rhs);
-		Vec3 operator - (const Vec3& rhs) const;
-		Vec3 operator * (const float rhs) const;
-		Vec3 operator / (const float rhs) const;
-		const Vec3& operator *= (const float rhs);
-		const Vec3& operator /= (const float rhs);
-		float operator [] (const int idx) const;
-		float& operator [] (const int idx);
-
-		operator glm::vec3() const;
-
-		void Zero() { x = 0.0f; y = 0.0f; z = 0.0f; }
-
-		const Vec3& Normalize();
-		float GetMagnitude() const;
-		float GetMag2() const { return Dot(*this); }
-		bool IsValid() const;
-		void GetOrtho(Vec3& u, Vec3& v) const;
-
-		Vec3 Cross(const Vec3& rhs) const;
-		float Dot(const Vec3& rhs) const;
-
-		static Vec3 Cross(const Vec3& a, const Vec3& b);
-		static float Dot(const Vec3& a, const Vec3& b);
-
-		const float* ToPtr() const { return &x; }
-
-	public:
-		float x;
-		float y;
-		float z;
-	};
-
 	inline Vec3::Vec3() :
 		x(0.0f),
 		y(0.0f),
@@ -292,6 +362,13 @@ namespace rhombus::math
 	}
 
 	inline Vec3::Vec3(const Vec3& rhs) :
+		x(rhs.x),
+		y(rhs.y),
+		z(rhs.z)
+	{
+	}
+
+	inline Vec3::Vec3(const Vec4& rhs) :
 		x(rhs.x),
 		y(rhs.y),
 		z(rhs.z)
@@ -534,54 +611,12 @@ namespace rhombus::math
 		return a.Dot(b);
 	}
 
+
 	/*
 	===============================
 	Vec4
 	===============================
 	*/
-	class Vec4
-	{
-	public:
-		Vec4();
-		Vec4(const float value);
-		Vec4(const Vec4& rhs);
-		Vec4(float X, float Y, float Z, float W);
-		Vec4(const float* rhs);
-		Vec4& operator = (const Vec4& rhs);
-
-		bool operator == (const Vec4& rhs) const;
-		bool operator != (const Vec4& rhs) const;
-		Vec4 operator + (const Vec4& rhs) const;
-		const Vec4& operator += (const Vec4& rhs);
-		const Vec4& operator -= (const Vec4& rhs);
-		const Vec4& operator *= (const Vec4& rhs);
-		const Vec4& operator /= (const Vec4& rhs);
-		Vec4 operator - (const Vec4& rhs) const;
-		Vec4 operator * (const float rhs) const;
-		Vec4 operator / (const float rhs) const;
-		float operator [] (const int idx) const;
-		float& operator [] (const int idx);
-
-		void Zero() { x = 0.0f; y = 0.0f; z = 0.0f; w = 0.0f; }
-
-		const Vec4& Normalize();
-		float GetMagnitude() const;
-		float GetMag2() const { return Dot(*this); }
-		bool IsValid() const;
-		
-		float Dot(const Vec4& rhs) const { return x * rhs.x + y * rhs.y + z * rhs.z + w * rhs.w; }
-		static float Dot(const Vec4& a, const Vec4& b) { return a.Dot(b); }
-
-		const float* ToPtr() const { return &x; }
-		float* ToPtr() { return &x; }
-
-	public:
-		float x;
-		float y;
-		float z;
-		float w;
-	};
-
 	inline Vec4::Vec4() :
 		x(0.0f),
 		y(0.0f),

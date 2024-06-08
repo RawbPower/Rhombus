@@ -280,7 +280,14 @@ namespace rhombus::math
 		Mat4(const float* mat);
 		Mat4(const Vec4& row0, const Vec4& row1, const Vec4& row2, const Vec4& row3);
 		Mat4& operator = (const Mat4& rhs);
+		Vec4 operator [] (const int idx) const;
+		Vec4& operator [] (const int idx);
 		~Mat4() {}
+
+		Vec3 a() { return rows[0].GetXYZ(); }
+		Vec3 b() { return rows[1].GetXYZ(); }
+		Vec3 c() { return rows[2].GetXYZ(); }
+		Vec3 d() { return rows[3].GetXYZ(); }
 
 		void Zero();
 		void Identity();
@@ -350,6 +357,18 @@ namespace rhombus::math
 		rows[2] *= rhs;
 		rows[3] *= rhs;
 		return *this;
+	}
+
+	inline Vec4 Mat4::operator [] (const int idx) const
+	{
+		RB_CORE_ASSERT(idx >= 0 && idx < 4, "Index {0} is out of bounds of Mat4", idx);
+		return rows[idx];
+	}
+
+	inline Vec4& Mat4::operator [] (const int idx)
+	{
+		RB_CORE_ASSERT(idx >= 0 && idx < 4, "Index {0} is out of bounds of Mat4", idx);
+		return rows[idx];
 	}
 
 	inline void Mat4::Zero() 

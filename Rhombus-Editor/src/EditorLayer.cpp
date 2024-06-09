@@ -2,14 +2,9 @@
 
 #include "imgui/imgui.h"
 
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
-
 #include "Rhombus/ECS/SceneSerializer.h"
 #include "Rhombus/Utils/PlatformUtils.h"
 #include "Rhombus/Math/Math.h"
-#include "Rhombus/Math/Vector.h"
-#include "Rhombus/Math/Matrix.h"
 
 #include "ImGuizmo.h"
 
@@ -57,7 +52,7 @@ namespace rhombus
 
 		m_EditorCamera = EditorCamera(30.0f, 1.778f, 0.1f, 1000.0f);	// 1.778 = 16/9
 
-		m_ViewportSize = { fbSpec.Width, fbSpec.Height };
+		m_ViewportSize = { (float)fbSpec.Width, (float)fbSpec.Height };
 		m_ViewportBounds[0] = { 0.0f, 0.0f };
 		m_ViewportBounds[1] = m_ViewportSize;
 		m_CameraController.OnResize(m_ViewportSize.x, m_ViewportSize.y);
@@ -171,7 +166,7 @@ namespace rhombus
 		auto [mx, my] = ImGui::GetMousePos();
 		mx -= m_ViewportBounds[0].x;
 		my -= m_ViewportBounds[0].y;			// Make top left (0,0)
-		glm::vec2 viewportSize = m_ViewportBounds[1] - m_ViewportBounds[0];
+		Vec2 viewportSize = m_ViewportBounds[1] - m_ViewportBounds[0];
 		my = viewportSize.y - my;	// Flip the y axis
 		int mouseX = (int)mx;
 		int mouseY = (int)my;
@@ -320,8 +315,8 @@ namespace rhombus
 
 		ImGui::Begin("Settings");
 		ImGui::Checkbox("Show physics colliders", &m_ShowPhysicsColliders);
-		ImGui::ColorEdit4("Physics colliders color", glm::value_ptr(m_PhysicsColliderColor));
-		ImGui::ColorEdit4("Area color", glm::value_ptr(m_AreaColor));
+		ImGui::ColorEdit4("Physics colliders color", m_PhysicsColliderColor.ToPtr());
+		ImGui::ColorEdit4("Area color", m_AreaColor.ToPtr());
 		ImGui::End();
 
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
@@ -378,12 +373,12 @@ namespace rhombus
 			// glm::mat4 cameraView = glm::inverse(cameraEntity.GetComponent<TransformComponent>().GetTransform());
 
 			// Editor Camera
-			const glm::mat4& cameraProjection = m_EditorCamera.GetProjection();
-			glm::mat4 cameraView = m_EditorCamera.GetViewMatrix();
+			const Mat4& cameraProjection = m_EditorCamera.GetProjection();
+			Mat4 cameraView = m_EditorCamera.GetViewMat();
 
 			// Entity transform
 			auto& transformComponent = selectedEntity.GetComponent<TransformComponent>();
-			glm::mat4 transform = transformComponent.GetTransform();
+			Mat4 transform = transformComponent.GetTransform();
 
 			// Snapping
 			bool snap = Input::IsKeyPressed(RB_KEY_LEFT_CONTROL) || m_PixelSnapping;
@@ -394,19 +389,19 @@ namespace rhombus
 
 			float snapValues[3] = { snapValue, snapValue, snapValue };
 
-			ImGuizmo::Manipulate(glm::value_ptr(cameraView), glm::value_ptr(cameraProjection),
-				(ImGuizmo::OPERATION)m_gizmoType, ImGuizmo::LOCAL, glm::value_ptr(transform),
+			ImGuizmo::Manipulate(cameraView.ToPtr(), cameraProjection.ToPtr(),
+				(ImGuizmo::OPERATION)m_gizmoType, ImGuizmo::LOCAL, transform.ToPtr(),
 				nullptr, snap ? snapValues : nullptr);
 
 			if (ImGuizmo::IsUsing())
 			{
-				math::Vec4 row0 = math::Vec4(transform[0][0], transform[0][1], transform[0][2], transform[0][3]);
-				math::Vec4 row1 = math::Vec4(transform[1][0], transform[1][1], transform[1][2], transform[1][3]);
-				math::Vec4 row2 = math::Vec4(transform[2][0], transform[2][1], transform[2][2], transform[2][3]);
-				math::Vec4 row3 = math::Vec4(transform[3][0], transform[3][1], transform[3][2], transform[3][3]);
-				math::Mat4 transformMat(row0, row1, row2, row3);
+				Vec4 row0 = Vec4(transform[0][0], transform[0][1], transform[0][2], transform[0][3]);
+				Vec4 row1 = Vec4(transform[1][0], transform[1][1], transform[1][2], transform[1][3]);
+				Vec4 row2 = Vec4(transform[2][0], transform[2][1], transform[2][2], transform[2][3]);
+				Vec4 row3 = Vec4(transform[3][0], transform[3][1], transform[3][2], transform[3][3]);
+				Mat4 transformMat(row0, row1, row2, row3);
 
-				math::Vec3 translation, rotation, scale;
+				Vec3 translation, rotation, scale;
 
 				math::DecomposeTransform(transformMat, translation, rotation, scale);
 
@@ -820,7 +815,7 @@ namespace rhombus
 						* glm::scale(glm::mat4(1.0f), scale);
 
 					Renderer2D::DrawRect(transform, m_AreaColor);
-					glm::vec4 overlayColor = m_AreaColor;
+					Color overlayColor = m_AreaColor;
 					overlayColor.a = 0.2f;
 					Renderer2D::DrawQuad(transform, overlayColor);
 				}

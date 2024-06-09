@@ -203,7 +203,7 @@ namespace rhombus
 	{
 		RB_PROFILE_FUNCTION();
 
-		glm::mat4 viewProjection = camera.GetProjection() * glm::inverse(transform);
+		glm::mat4 viewProjection = (glm::mat4)camera.GetProjection() * glm::inverse(transform);
 
 		SetShaderViewProjection(viewProjection);
 

@@ -2,7 +2,7 @@
 
 #include "Vector.h"
 
-namespace rhombus::math
+namespace rhombus
 {
 	/*
 	===============================
@@ -289,8 +289,10 @@ namespace rhombus::math
 		Vec3 c() { return rows[2].GetXYZ(); }
 		Vec3 d() { return rows[3].GetXYZ(); }
 
-		void Zero();
-		void Identity();
+		operator glm::mat4() const;
+
+		static Mat4 Zero();
+		static Mat4 Identity();
 
 		float Trace() const;
 		float Determinant() const;
@@ -371,20 +373,34 @@ namespace rhombus::math
 		return rows[idx];
 	}
 
-	inline void Mat4::Zero() 
+	inline Mat4::operator glm::mat4() const
 	{
-		rows[0].Zero();
-		rows[1].Zero();
-		rows[2].Zero();
-		rows[3].Zero();
+		glm::mat4 m;
+		m[0] = rows[0];
+		m[1] = rows[1];
+		m[2] = rows[2];
+		m[3] = rows[3];
+		return m;
 	}
 
-	inline void Mat4::Identity() 
+	inline Mat4 Mat4::Zero() 
 	{
-		rows[0] = Vec4(1, 0, 0, 0);
-		rows[1] = Vec4(0, 1, 0, 0);
-		rows[2] = Vec4(0, 0, 1, 0);
-		rows[3] = Vec4(0, 0, 0, 1);
+		Mat4 m;
+		m.rows[0] = Vec4(0, 0, 0, 0);
+		m.rows[1] = Vec4(0, 0, 0, 0);
+		m.rows[2] = Vec4(0, 0, 0, 0);
+		m.rows[3] = Vec4(0, 0, 0, 0);
+		return m;
+	}
+
+	inline Mat4 Mat4::Identity() 
+	{
+		Mat4 m;
+		m.rows[0] = Vec4(1, 0, 0, 0);
+		m.rows[1] = Vec4(0, 1, 0, 0);
+		m.rows[2] = Vec4(0, 0, 1, 0);
+		m.rows[3] = Vec4(0, 0, 0, 1);
+		return m;
 	}
 
 	inline float Mat4::Trace() const 

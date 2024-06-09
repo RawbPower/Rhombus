@@ -80,16 +80,16 @@ namespace rhombus
 		bool m_ViewportFocused = false;
 		bool m_ViewportHovered = false;
 
-		glm::vec2 m_ViewportSize = { 0.0f, 0.0f };
-		glm::vec2 m_ViewportBounds[2];
+		Vec2 m_ViewportSize = { 0.0f, 0.0f };
+		Vec2 m_ViewportBounds[2];
 
-		glm::vec4 m_SquareColor = { 0.2f, 0.3f, 0.8f, 1.0f };
+		Color m_SquareColor = { 0.2f, 0.3f, 0.8f, 1.0f };
 
 		int m_gizmoType = 7;		// ImGuizmo::OPERATION::TRANSLATE
 
 		bool m_ShowPhysicsColliders = false;
-		glm::vec4 m_PhysicsColliderColor = glm::vec4(0.0, 1.0, 0.0, 1.0);
-		glm::vec4 m_AreaColor = glm::vec4(0.0, 0.0, 1.0, 1.0);
+		Color m_PhysicsColliderColor = Vec4(0.0, 1.0, 0.0, 1.0);
+		Color m_AreaColor = Vec4(0.0, 0.0, 1.0, 1.0);
 
 		enum SceneState
 		{

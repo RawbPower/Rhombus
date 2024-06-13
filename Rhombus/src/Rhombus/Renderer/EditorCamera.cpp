@@ -5,15 +5,14 @@
 #include "Rhombus/Core/KeyCodes.h"
 #include "Rhombus/Core/MouseButtonCodes.h"
 
-#include <SDL.h>
+#include "Rhombus/Math/Math.h"
 
-#define GLM_ENABLE_EXPERIMENTAL
-#include <glm/gtx/quaternion.hpp>
+#include <SDL.h>
 
 namespace rhombus {
 
 	EditorCamera::EditorCamera(float fov, float aspectRatio, float nearClip, float farClip)
-		: m_fov(fov), m_aspectRatio(aspectRatio), m_nearClip(nearClip), m_farClip(farClip), Camera(glm::perspective(glm::radians(fov), aspectRatio, nearClip, farClip))
+		: m_fov(fov), m_aspectRatio(aspectRatio), m_nearClip(nearClip), m_farClip(farClip), Camera(Mat4::Perspective(fov * math::DegToRad, aspectRatio, nearClip, farClip))
 	{
 		UpdateView();
 	}
@@ -21,12 +20,7 @@ namespace rhombus {
 	void EditorCamera::UpdateProjection()
 	{
 		m_aspectRatio = m_viewportWidth / m_viewportHeight;
-		glm::mat4 projection = glm::perspective(glm::radians(m_fov), m_aspectRatio, m_nearClip, m_farClip);
-		Vec4 row0 = Vec4(projection[0][0], projection[0][1], projection[0][2], projection[0][3]);
-		Vec4 row1 = Vec4(projection[1][0], projection[1][1], projection[1][2], projection[1][3]);
-		Vec4 row2 = Vec4(projection[2][0], projection[2][1], projection[2][2], projection[2][3]);
-		Vec4 row3 = Vec4(projection[3][0], projection[3][1], projection[3][2], projection[3][3]);
-		m_projection = Mat4(row0, row1, row2, row3);
+		m_projection = Mat4::Perspective(m_fov * math::DegToRad, m_aspectRatio, m_nearClip, m_farClip);
 	}
 
 	void EditorCamera::UpdateView()
@@ -34,8 +28,8 @@ namespace rhombus {
 		//m_yaw = m_pitch = 0.0f; // Lock the camera's rotation
 		m_position = CalculatePosition();
 
-		glm::quat orientation = GetOrientation();
-		m_viewMatrix = glm::translate(glm::mat4(1.0f), m_position) * glm::toMat4(orientation);
+		Quat orientation = GetOrientation();
+		m_viewMatrix = math::Translate(Mat4::Identity(), m_position) * orientation.ToMat4();
 		m_viewMatrix = glm::inverse(m_viewMatrix);
 	}
 
@@ -68,8 +62,8 @@ namespace rhombus {
 	{
 		if (Input::IsKeyPressed(RB_KEY_LEFT_ALT))
 		{
-			const glm::vec2& mouse{ Input::GetMouseX(), Input::GetMouseY() };
-			glm::vec2 delta = (mouse - m_initialMousePosition) * 0.003f;
+			const Vec2& mouse{ Input::GetMouseX(), Input::GetMouseY() };
+			Vec2 delta = (mouse - m_initialMousePosition) * 0.003f;
 			m_initialMousePosition = mouse;
 
 			if (Input::IsMouseButtonPressed(RB_MOUSE_BUTTON_MIDDLE))
@@ -81,8 +75,8 @@ namespace rhombus {
 		}
 		else
 		{
-			const glm::vec2& mouse{ Input::GetMouseX(), Input::GetMouseY() };
-			glm::vec2 delta = (mouse - m_initialMousePosition) * 0.003f;
+			const Vec2& mouse{ Input::GetMouseX(), Input::GetMouseY() };
+			Vec2 delta = (mouse - m_initialMousePosition) * 0.003f;
 			m_initialMousePosition = mouse;
 			if (Input::IsMouseButtonPressed(RB_MOUSE_BUTTON_MIDDLE))
 			{
@@ -113,14 +107,14 @@ namespace rhombus {
 		return false;
 	}
 
-	void EditorCamera::MousePan(const glm::vec2& delta)
+	void EditorCamera::MousePan(const Vec2& delta)
 	{
 		auto [xSpeed, ySpeed] = PanSpeed();
 		m_focalPoint += -GetRightDirection() * delta.x * xSpeed * m_distance;
 		m_focalPoint += GetUpDirection() * delta.y * ySpeed * m_distance;
 	}
 
-	void EditorCamera::MouseRotate(const glm::vec2& delta)
+	void EditorCamera::MouseRotate(const Vec2& delta)
 	{
 		float yawSign = GetUpDirection().y < 0 ? -1.0f : 1.0f;
 		m_yaw += yawSign * delta.x * RotationSpeed();
@@ -137,29 +131,29 @@ namespace rhombus {
 		}
 	}
 
-	glm::vec3 EditorCamera::GetUpDirection() const
+	Vec3 EditorCamera::GetUpDirection() const
 	{
-		return glm::rotate(GetOrientation(), glm::vec3(0.0f, 1.0f, 0.0f));
+		return math::Rotate(GetOrientation(), Vec3(0.0f, 1.0f, 0.0f));
 	}
 
-	glm::vec3 EditorCamera::GetRightDirection() const
+	Vec3 EditorCamera::GetRightDirection() const
 	{
-		return glm::rotate(GetOrientation(), glm::vec3(1.0f, 0.0f, 0.0f));
+		return math::Rotate(GetOrientation(), Vec3(1.0f, 0.0f, 0.0f));
 	}
 
-	glm::vec3 EditorCamera::GetForwardDirection() const
+	Vec3 EditorCamera::GetForwardDirection() const
 	{
-		return glm::rotate(GetOrientation(), glm::vec3(0.0f, 0.0f, -1.0f));
+		return math::Rotate(GetOrientation(), Vec3(0.0f, 0.0f, -1.0f));
 	}
 
-	glm::vec3 EditorCamera::CalculatePosition() const
+	Vec3 EditorCamera::CalculatePosition() const
 	{
 		return m_focalPoint - GetForwardDirection() * m_distance;
 	}
 
-	glm::quat EditorCamera::GetOrientation() const
+	Quat EditorCamera::GetOrientation() const
 	{
-		return glm::quat(glm::vec3(-m_pitch, -m_yaw, 0.0f));
+		return Quat(Vec3(-m_pitch, -m_yaw, 0.0f));
 	}
 
 }

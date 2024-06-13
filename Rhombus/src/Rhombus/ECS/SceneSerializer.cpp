@@ -4,6 +4,7 @@
 #include "Entity.h"
 
 #include "Rhombus/Project/Project.h"
+#include "Rhombus/Math/Vector.h"
 
 #include "Rhombus/ECS/Components/Area2DComponent.h"
 #include "Rhombus/ECS/Components/CameraComponent.h"
@@ -13,6 +14,7 @@
 #include "Rhombus/ECS/Components/ScriptComponent.h"
 #include "Rhombus/ECS/Components/SpriteRendererComponent.h"
 
+
 #include <fstream>
 
 #define YAML_CPP_STATIC_DEFINE		// Needed for yaml static library to work for some reason
@@ -21,9 +23,9 @@
 namespace YAML {
 
 	template<>
-	struct convert<glm::vec2>
+	struct convert<rhombus::Vec2>
 	{
-		static Node encode(const glm::vec2& rhs)
+		static Node encode(const rhombus::Vec2& rhs)
 		{
 			Node node;
 			node.push_back(rhs.x);
@@ -32,7 +34,7 @@ namespace YAML {
 			return node;
 		}
 
-		static bool decode(const Node& node, glm::vec2& rhs)
+		static bool decode(const Node& node, rhombus::Vec2& rhs)
 		{
 			if (!node.IsSequence() || node.size() != 2)
 				return false;
@@ -44,9 +46,9 @@ namespace YAML {
 	};
 
 	template<>
-	struct convert<glm::vec3>
+	struct convert<rhombus::Vec3>
 	{
-		static Node encode(const glm::vec3& rhs)
+		static Node encode(const rhombus::Vec3& rhs)
 		{
 			Node node;
 			node.push_back(rhs.x);
@@ -56,7 +58,7 @@ namespace YAML {
 			return node;
 		}
 
-		static bool decode(const Node& node, glm::vec3& rhs)
+		static bool decode(const Node& node, rhombus::Vec3& rhs)
 		{
 			if (!node.IsSequence() || node.size() != 3)
 				return false;
@@ -69,9 +71,9 @@ namespace YAML {
 	};
 
 	template<>
-	struct convert<glm::vec4>
+	struct convert<rhombus::Vec4>
 	{
-		static Node encode(const glm::vec4& rhs)
+		static Node encode(const rhombus::Vec4& rhs)
 		{
 			Node node;
 			node.push_back(rhs.x);
@@ -82,7 +84,7 @@ namespace YAML {
 			return node;
 		}
 
-		static bool decode(const Node& node, glm::vec4& rhs)
+		static bool decode(const Node& node, rhombus::Vec4& rhs)
 		{
 			if (!node.IsSequence() || node.size() != 4)
 				return false;
@@ -99,21 +101,21 @@ namespace YAML {
 
 namespace rhombus
 {
-	YAML::Emitter& operator<<(YAML::Emitter& out, const glm::vec2& v)
+	YAML::Emitter& operator<<(YAML::Emitter& out, const Vec2& v)
 	{
 		out << YAML::Flow;
 		out << YAML::BeginSeq << v.x << v.y << YAML::EndSeq;
 		return out;
 	}
 
-	YAML::Emitter& operator<<(YAML::Emitter& out, const glm::vec3& v)
+	YAML::Emitter& operator<<(YAML::Emitter& out, const Vec3& v)
 	{
 		out << YAML::Flow;
 		out << YAML::BeginSeq << v.x << v.y << v.z << YAML::EndSeq;
 		return out;
 	}
 
-	YAML::Emitter& operator<<(YAML::Emitter& out, const glm::vec4& v)
+	YAML::Emitter& operator<<(YAML::Emitter& out, const Vec4& v)
 	{
 		out << YAML::Flow;
 		out << YAML::BeginSeq << v.x << v.y << v.z << v.w << YAML::EndSeq;
@@ -372,9 +374,9 @@ namespace rhombus
 				{
 					// Entities always have transforms
 					auto& tc = deserializedEntity.GetComponent<TransformComponent>();
-					tc.m_position = transformComponent["Position"].as<glm::vec3>();
-					tc.m_rotation = transformComponent["Rotation"].as<glm::vec3>();
-					tc.m_scale = transformComponent["Scale"].as<glm::vec3>();
+					tc.m_position = transformComponent["Position"].as<Vec3>();
+					tc.m_rotation = transformComponent["Rotation"].as<Vec3>();
+					tc.m_scale = transformComponent["Scale"].as<Vec3>();
 				}
 
 				auto cameraComponent = entity["CameraComponent"];
@@ -419,7 +421,7 @@ namespace rhombus
 				if (spriteRendererComponent)
 				{
 					auto& src = deserializedEntity.AddComponent<SpriteRendererComponent>();
-					src.GetColor() = spriteRendererComponent["Color"].as<glm::vec4>();
+					src.GetColor() = spriteRendererComponent["Color"].as<Vec4>();
 					if (spriteRendererComponent["Texture"].Type() != YAML::NodeType::Undefined)
 					{
 						std::string texturePath = spriteRendererComponent["Texture"].as<std::string>();
@@ -432,7 +434,7 @@ namespace rhombus
 				if (circleRendererComponent)
 				{
 					auto& crc = deserializedEntity.AddComponent<CircleRendererComponent>();
-					crc.m_color = circleRendererComponent["Color"].as<glm::vec4>();
+					crc.m_color = circleRendererComponent["Color"].as<Vec4>();
 					crc.m_thickness = circleRendererComponent["Thickness"].as<float>();
 					crc.m_fade = circleRendererComponent["Fade"].as<float>();
 				}
@@ -449,8 +451,8 @@ namespace rhombus
 				if (boxCollider2DComponent)
 				{
 					auto& coll = deserializedEntity.AddComponent<BoxCollider2DComponent>();
-					coll.m_offset = boxCollider2DComponent["Offset"].as<glm::vec2>();
-					coll.m_size = boxCollider2DComponent["Size"].as<glm::vec2>();
+					coll.m_offset = boxCollider2DComponent["Offset"].as<Vec2>();
+					coll.m_size = boxCollider2DComponent["Size"].as<Vec2>();
 					coll.m_density = boxCollider2DComponent["Density"].as<float>();
 					coll.m_friction = boxCollider2DComponent["Friction"].as<float>();
 					coll.m_restitution = boxCollider2DComponent["Restitution"].as<float>();
@@ -461,7 +463,7 @@ namespace rhombus
 				if (circleCollider2DComponent)
 				{
 					auto& coll = deserializedEntity.AddComponent<CircleCollider2DComponent>();
-					coll.m_offset = circleCollider2DComponent["Offset"].as<glm::vec2>();
+					coll.m_offset = circleCollider2DComponent["Offset"].as<Vec2>();
 					coll.m_radius = circleCollider2DComponent["Radius"].as<float>();
 					coll.m_density = circleCollider2DComponent["Density"].as<float>();
 					coll.m_friction = circleCollider2DComponent["Friction"].as<float>();
@@ -473,8 +475,8 @@ namespace rhombus
 				if (boxArea2DComponent)
 				{
 					auto& coll = deserializedEntity.AddComponent<BoxArea2DComponent>();
-					coll.m_offset = boxArea2DComponent["Offset"].as<glm::vec2>();
-					coll.m_size = boxArea2DComponent["Size"].as<glm::vec2>();
+					coll.m_offset = boxArea2DComponent["Offset"].as<Vec2>();
+					coll.m_size = boxArea2DComponent["Size"].as<Vec2>();
 				}
 
 				m_scene->DeserializeEntity(&entity, deserializedEntity);

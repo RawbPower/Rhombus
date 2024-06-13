@@ -2,9 +2,6 @@
 
 #include "imgui/imgui.h"
 
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
-
 #include "Platform/OpenGL/OpenGLShader.h"
 
 ExampleLayer::ExampleLayer()
@@ -171,7 +168,7 @@ void ExampleLayer::OnUpdate(rhombus::DeltaTime dt)
 
 	rhombus::Renderer::BeginScene(m_CameraController.GetCamera());
 
-	static glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
+	static rhombus::Mat4 scale = rhombus::math::Scale(rhombus::Mat4::Identity(), rhombus::Vec3(0.1f));
 
 	// Set up uniform
 	std::dynamic_pointer_cast<rhombus::OpenGLShader>(m_FlatColorShader)->Bind();
@@ -180,8 +177,8 @@ void ExampleLayer::OnUpdate(rhombus::DeltaTime dt)
 	// Render grid of blue squares
 	for (int x = -10; x < 11; x++) {
 		for (int y = -10; y < 11; y++) {
-			glm::vec3 pos(x * 0.11f, y * 0.11f, 0.0f);
-			glm::mat4 transform = glm::translate(glm::mat4(1.0f), pos) * scale;
+			rhombus::Vec3 pos(x * 0.11f, y * 0.11f, 0.0f);
+			rhombus::Mat4 transform = rhombus::math::Translate(rhombus::Mat4::Identity(), pos) * scale;
 			rhombus::Renderer::Submit(m_FlatColorShader, m_SquareVA, transform);
 		}
 	}
@@ -189,10 +186,10 @@ void ExampleLayer::OnUpdate(rhombus::DeltaTime dt)
 	auto textureShader = m_ShaderLibrary.Get("Texture");
 
 	m_Texture->Bind();
-	rhombus::Renderer::Submit(textureShader, m_SquareVA, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
+	rhombus::Renderer::Submit(textureShader, m_SquareVA, rhombus::math::Scale(rhombus::Mat4::Identity(), rhombus::Vec3(1.5f)));
 
 	m_BlendTexture->Bind();
-	rhombus::Renderer::Submit(textureShader, m_SquareVA, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
+	rhombus::Renderer::Submit(textureShader, m_SquareVA, rhombus::math::Scale(rhombus::Mat4::Identity(), rhombus::Vec3(1.5f)));
 
 	// Render triangle
 	//rhombus::Renderer::Submit(m_Shader, m_VertexArray);
@@ -203,7 +200,7 @@ void ExampleLayer::OnUpdate(rhombus::DeltaTime dt)
 void ExampleLayer::OnImGuiRender()
 {
 	ImGui::Begin("Settings");
-	ImGui::ColorEdit3("Square Color", glm::value_ptr(m_SquareColor));
+	ImGui::ColorEdit3("Square Color", m_SquareColor.ToPtr());
 	ImGui::End();
 }
 

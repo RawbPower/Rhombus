@@ -17,8 +17,6 @@
 #include "Rhombus/ECS/Components/ScriptComponent.h"
 #include "Rhombus/ECS/Components/SpriteRendererComponent.h"
 
-#include <glm/glm.hpp>
-
 // Box2d
 #include <box2d/b2_world.h>
 #include <box2d/b2_body.h>
@@ -204,7 +202,7 @@ namespace rhombus
 		}
 
 		Camera* mainCamera = nullptr;
-		glm::mat4 cameraTransform;
+		Mat4 cameraTransform;
 		{
 			std::vector<EntityID> view = m_Registry.GetEntityList<CameraComponent>();
 			for (auto entity : view)
@@ -317,7 +315,7 @@ namespace rhombus
 
 	void Scene::OnMouseMoved(int x, int y)
 	{
-		glm::vec3 cursorCoords = Renderer2D::ConvertScreenToWorldSpace(x, y);
+		Vec3 cursorCoords = Renderer2D::ConvertScreenToWorldSpace(x, y);
 		// Area 2D
 		{
 			std::vector<EntityID> view = m_Registry.GetEntityList<BoxArea2DComponent>();
@@ -327,7 +325,7 @@ namespace rhombus
 				auto& transform = entity.GetComponent<TransformComponent>();
 				auto& ba2D = entity.GetComponent<BoxArea2DComponent>();
 
-				glm::vec2 offsetPosition = glm::vec2(transform.m_position) + ba2D.m_offset;
+				Vec2 offsetPosition = Vec2(transform.m_position) + ba2D.m_offset;
 				bool withinXLimit = (cursorCoords.x < offsetPosition.x + ba2D.m_size.x) && (cursorCoords.x > offsetPosition.x - ba2D.m_size.x);
 				bool withinYLimit = (cursorCoords.y < offsetPosition.y + ba2D.m_size.y) && (cursorCoords.y > offsetPosition.y - ba2D.m_size.y);
 				if (withinXLimit && withinYLimit)

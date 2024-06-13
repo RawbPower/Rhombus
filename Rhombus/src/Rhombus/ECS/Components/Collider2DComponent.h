@@ -2,8 +2,6 @@
 
 #include "Component.h"
 
-#include <glm/glm.hpp>
-
 namespace rhombus
 {
 	// TODO: Add a Collider2DComponent base class
@@ -11,8 +9,8 @@ namespace rhombus
 	class BoxCollider2DComponent : public ComponentBase
 	{
 	public:
-		glm::vec2 m_offset = { 0.0f, 0.0f };
-		glm::vec2 m_size = { 0.5f, 0.5f };
+		Vec2 m_offset = { 0.0f, 0.0f };
+		Vec2 m_size = { 0.5f, 0.5f };
 
 		// TODO: Move to physics material
 		float m_density = 1.0f;
@@ -30,7 +28,7 @@ namespace rhombus
 	class CircleCollider2DComponent : public ComponentBase
 	{
 	public:
-		glm::vec2 m_offset = { 0.0f, 0.0f };
+		Vec2 m_offset = { 0.0f, 0.0f };
 		float m_radius = 0.5f;
 
 		// TODO: Move to physics material

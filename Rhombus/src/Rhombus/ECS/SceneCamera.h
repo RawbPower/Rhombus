@@ -2,6 +2,8 @@
 
 #include "Rhombus/Renderer/Camera.h"
 
+#include "Rhombus/Math/Math.h"
+
 namespace rhombus
 {
 	class SceneCamera : public Camera
@@ -53,7 +55,7 @@ namespace rhombus
 		float m_OrthographicSize = 10.0f;
 		float m_OrthographicNear = -1.0f, m_OrthographicFar = 1.0f;
 
-		float m_PerspectiveFOV = glm::radians(45.0f);
+		float m_PerspectiveFOV = 45.0f * math::DegToRad;
 		float m_PerspectiveNear = 0.01f, m_PerspectiveFar = 1000.0f;
 
 		float m_AspectRaio = 0.0f;

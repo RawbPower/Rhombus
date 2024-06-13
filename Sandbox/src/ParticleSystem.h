@@ -4,9 +4,9 @@
 
 struct ParticleParams
 {
-	glm::vec2 position;
-	glm::vec2 velocity, velocityVariation;
-	glm::vec4 colorBegin, colorEnd;
+	rhombus::Vec2 position;
+	rhombus::Vec2 velocity, velocityVariation;
+	rhombus::Color colorBegin, colorEnd;
 	float sizeBegin, sizeEnd, sizeVariation;
 	float lifetime;
 };
@@ -23,9 +23,9 @@ public:
 private:
 	struct Particle
 	{
-		glm::vec2 position;
-		glm::vec2 velocity;
-		glm::vec4 colorBegin, colorEnd;
+		rhombus::Vec2 position;
+		rhombus::Vec2 velocity;
+		rhombus::Color colorBegin, colorEnd;
 		float rotation;
 		float sizeBegin, sizeEnd;
 

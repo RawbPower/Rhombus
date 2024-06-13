@@ -3,8 +3,7 @@
 #include "Component.h"
 
 #include "Rhombus/Renderer/Texture.h"
-
-#include <glm/glm.hpp>
+#include "Rhombus/Core/Color.h"
 
 namespace rhombus
 {
@@ -14,13 +13,13 @@ namespace rhombus
 		SpriteRendererComponent() = default;
 		SpriteRendererComponent(const SpriteRendererComponent&) = default;
 
-		glm::vec4& GetColor() { return m_color; }
-		glm::vec4 GetColor() const { return m_color; }
-		void SetColor(glm::vec4 color) { m_color = color; }
+		Color& GetColor() { return m_color; }
+		Color GetColor() const { return m_color; }
+		void SetColor(Color color) { m_color = color; }
 
 		Ref<Texture2D> m_texture;
 
 	private:
-		glm::vec4 m_color{ 1.0f, 1.0f, 1.0f, 1.0f };
+		Color m_color{ 1.0f, 1.0f, 1.0f, 1.0f };
 	};
 }

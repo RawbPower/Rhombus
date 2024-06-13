@@ -5,7 +5,6 @@
 
 #include <imgui/imgui.h>
 #include <imgui/imgui_internal.h>
-#include <glm/gtc/type_ptr.hpp>
 
 #include <filesystem>
 
@@ -110,7 +109,7 @@ namespace rhombus
 		}
 	}
 
-	static void DrawVec3Control(const std::string& label, glm::vec3& values, float resetValue = 0.0f, float columnWidth = 100.0f)
+	static void DrawVec3Control(const std::string& label, Vec3& values, float resetValue = 0.0f, float columnWidth = 100.0f)
 	{
 		ImGui::PushID(label.c_str());
 
@@ -259,9 +258,9 @@ namespace rhombus
 		DrawComponent<TransformComponent>("Transform", entity, [](auto& component)
 		{
 				DrawVec3Control("Position", component.m_position);
-				glm::vec3 rotation = glm::degrees(component.m_rotation);
+				Vec3 rotation = component.m_rotation * math::RadToDeg;
 				DrawVec3Control("Rotation", rotation);
-				component.m_rotation = glm::radians(rotation);
+				component.m_rotation = rotation * math::DegToRad;
 				DrawVec3Control("Scale", component.m_scale, 1.0f);
 		});
 
@@ -276,7 +275,7 @@ namespace rhombus
 
 		DrawComponent<SpriteRendererComponent>("Sprite Renderer", entity, [](auto& component)
 		{
-			ImGui::ColorEdit4("Colour", glm::value_ptr(component.GetColor()));
+			ImGui::ColorEdit4("Colour", component.GetColor().ToPtr());
 
 			ImGui::Button("Texture", ImVec2(100.0f, 0.0f));
 			if (ImGui::BeginDragDropTarget())
@@ -297,7 +296,7 @@ namespace rhombus
 
 		DrawComponent<CircleRendererComponent>("Circle Renderer", entity, [](auto& component)
 		{
-			ImGui::ColorEdit4("Color", glm::value_ptr(component.m_color));
+			ImGui::ColorEdit4("Color", component.m_color.ToPtr());
 			ImGui::DragFloat("Thickness", &component.m_thickness, 0.025f, 0.0f, 1.0f);
 			ImGui::DragFloat("Fade", &component.m_fade, 0.00025f, 0.0f, 1.0f);
 		});
@@ -351,9 +350,9 @@ namespace rhombus
 
 			if (camera.GetProjectionType() == SceneCamera::ProjectionType::Perspective)
 			{
-				float persFOV = glm::degrees(camera.GetPerspectiveVerticalFOV());
+				float persFOV = camera.GetPerspectiveVerticalFOV() * math::RadToDeg;
 				if (ImGui::DragFloat("Vertical FOV", &persFOV))
-					camera.SetPerspectiveVerticalFOV(glm::radians(persFOV));
+					camera.SetPerspectiveVerticalFOV(persFOV * math::DegToRad);
 
 				float persNear = camera.GetPerspectiveNearClip();
 				if (ImGui::DragFloat("Near Clip", &persNear))
@@ -392,8 +391,8 @@ namespace rhombus
 
 		DrawComponent<BoxCollider2DComponent>("Box Collider 2D", entity, [](auto& component)
 		{
-			ImGui::DragFloat2("Offset", glm::value_ptr(component.m_offset), 0.01f);
-			ImGui::DragFloat2("Size", glm::value_ptr(component.m_size));
+			ImGui::DragFloat2("Offset", component.m_offset.ToPtr(), 0.01f);
+			ImGui::DragFloat2("Size", component.m_size.ToPtr());
 			ImGui::DragFloat("Density", &component.m_density, 0.01f, 0.0f, 1.0f);
 			ImGui::DragFloat("Friction", &component.m_friction, 0.01f, 0.0f, 1.0f);
 			ImGui::DragFloat("Restitution", &component.m_restitution, 0.01f, 0.0f, 1.0f);
@@ -402,7 +401,7 @@ namespace rhombus
 
 		DrawComponent<CircleCollider2DComponent>("Circle Collider 2D", entity, [](auto& component)
 		{
-			ImGui::DragFloat2("Offset", glm::value_ptr(component.m_offset), 0.01f);
+			ImGui::DragFloat2("Offset", component.m_offset.ToPtr(), 0.01f);
 			ImGui::InputFloat("Radius", &component.m_radius);
 			ImGui::DragFloat("Density", &component.m_density, 0.01f, 0.0f, 1.0f);
 			ImGui::DragFloat("Friction", &component.m_friction, 0.01f, 0.0f, 1.0f);
@@ -412,8 +411,8 @@ namespace rhombus
 
 		DrawComponent<BoxArea2DComponent>("Box Area 2D", entity, [](auto& component)
 		{
-			ImGui::DragFloat2("Offset", glm::value_ptr(component.m_offset), 0.01f);
-			ImGui::DragFloat2("Size", glm::value_ptr(component.m_size));
+			ImGui::DragFloat2("Offset", component.m_offset.ToPtr(), 0.01f);
+			ImGui::DragFloat2("Size", component.m_size.ToPtr());
 		});
 
 		DrawComponent<CardComponent>("Card", entity, [](auto& component)

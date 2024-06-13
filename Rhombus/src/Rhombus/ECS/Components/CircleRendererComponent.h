@@ -2,7 +2,7 @@
 
 #include "Component.h"
 
-#include <glm/glm.hpp>
+#include "Rhombus/Core/Color.h"
 
 namespace rhombus
 {
@@ -12,7 +12,7 @@ namespace rhombus
 		CircleRendererComponent() = default;
 		CircleRendererComponent(const CircleRendererComponent&) = default;
 
-		glm::vec4 m_color{ 1.0f, 1.0f, 1.0f, 1.0f };
+		Color m_color{ 1.0f, 1.0f, 1.0f, 1.0f };
 		float m_thickness = 1.0f;
 		float m_fade = 0.0f;
 	};

@@ -2,9 +2,6 @@
 
 #include "imgui/imgui.h"
 
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
-
 static const uint32_t s_MapWidth = 16;
 static const char* s_MapTiles =
 "BBBBBBBBBBBBBBBB"
@@ -87,7 +84,7 @@ void Sandbox2D::OnUpdate(rhombus::DeltaTime dt)
 		rhombus::Renderer2D::BeginScene(m_CameraController.GetCamera());
 		rhombus::Renderer2D::DrawQuad({ 0.5f, -0.5f }, 3.14f / 3.0f, { 0.5, 0.75 }, { 0.3f, 0.1f, 0.8f, 1.0f });
 		rhombus::Renderer2D::DrawQuad({ 0.0f, 0.0f, -0.1f }, 0.0f, { 10.0, 10.0 }, m_CheckerboardTexture, 10.0f);
-		rhombus::Renderer2D::DrawQuad({ 0.0f, 0.0f, 1.0f }, glm::radians(rotation), { 1.0, 1.0 }, m_CheckerboardTexture, 20.0f);
+		rhombus::Renderer2D::DrawQuad({ 0.0f, 0.0f, 1.0f }, rotation * rhombus::math::DegToRad, { 1.0, 1.0 }, m_CheckerboardTexture, 20.0f);
 		rhombus::Renderer2D::DrawQuad({ -1.0f, 0.0f }, 0.0f, { 0.8, 0.8 }, { 0.8f, 0.2f, 0.3f, 1.0f });
 		rhombus::Renderer2D::SetFPDStat(dt);
 		rhombus::Renderer2D::EndScene();
@@ -97,7 +94,7 @@ void Sandbox2D::OnUpdate(rhombus::DeltaTime dt)
 		{
 			for (float x = -5.0f; x < 5.0f; x += 0.5f)
 			{
-				glm::vec4 color = { (x + 5.0f) / 10.0f, 0.4f, (y + 5.0f) / 10.0f, 0.5f };
+				Color color = { (x + 5.0f) / 10.0f, 0.4f, (y + 5.0f) / 10.0f, 0.5f };
 				rhombus::Renderer2D::DrawQuad({ x, y, 0.0f }, 0.0f, { 0.45, 0.45 }, color);
 			}
 		}
@@ -153,7 +150,7 @@ void Sandbox2D::OnImGuiRender()
 	ImGui::Text("Indices: %d", stats.GetTotalIndexCount());
 	ImGui::Text("FPS: %f", stats.FPS);
 
-	ImGui::ColorEdit4("Square Color", glm::value_ptr(m_SquareColor));
+	ImGui::ColorEdit4("Square Color", m_SquareColor.ToPtr());
 
 	ImGui::End();
 }

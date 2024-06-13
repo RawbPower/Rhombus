@@ -34,7 +34,7 @@ namespace rhombus {
 	// The vertex array will be submitted into a RenderCommand queue to be evaluated later and get rendered
 	// For now it is much simpler
 	// Shader needs to be a parameter in submit because it can change for different objects in the scene
-	void Renderer::Submit(const Ref<Shader>& shader, const Ref<VertexArray>& vertexArray, const glm::mat4& transform)
+	void Renderer::Submit(const Ref<Shader>& shader, const Ref<VertexArray>& vertexArray, const Mat4& transform)
 	{
 		shader->Bind();
 		std::dynamic_pointer_cast<OpenGLShader>(shader)->UploadUniformMat4("u_ViewProjection", s_SceneData->ViewProjectionMatrix);

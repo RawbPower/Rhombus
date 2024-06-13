@@ -4,6 +4,8 @@
 #include "Rhombus/Core/Input.h"
 #include "Rhombus/Core/KeyCodes.h"
 
+#include "Rhombus/Math/Math.h"
+
 namespace rhombus {
 
 	OrthographicCameraController::OrthographicCameraController(float aspectRatio, bool rotation)
@@ -19,24 +21,24 @@ namespace rhombus {
 		// Camera Movement
 		if (Input::IsKeyPressed(RB_KEY_A) || Input::IsKeyPressed(RB_KEY_LEFT))
 		{
-			m_CameraPosition.x -= cos(glm::radians(m_CameraRotation)) * m_CameraTranslationSpeed * dt;
-			m_CameraPosition.y -= sin(glm::radians(m_CameraRotation)) * m_CameraTranslationSpeed * dt;
+			m_CameraPosition.x -= cos(m_CameraRotation * math::DegToRad) * m_CameraTranslationSpeed * dt;
+			m_CameraPosition.y -= sin(m_CameraRotation * math::DegToRad) * m_CameraTranslationSpeed * dt;
 		}
 		else if (Input::IsKeyPressed(RB_KEY_D) || Input::IsKeyPressed(RB_KEY_RIGHT))
 		{
-			m_CameraPosition.x += cos(glm::radians(m_CameraRotation)) * m_CameraTranslationSpeed * dt;
-			m_CameraPosition.y += sin(glm::radians(m_CameraRotation)) * m_CameraTranslationSpeed * dt;
+			m_CameraPosition.x += cos(m_CameraRotation * math::DegToRad) * m_CameraTranslationSpeed * dt;
+			m_CameraPosition.y += sin(m_CameraRotation * math::DegToRad) * m_CameraTranslationSpeed * dt;
 		}
 
 		if (Input::IsKeyPressed(RB_KEY_S) || Input::IsKeyPressed(RB_KEY_DOWN))
 		{
-			m_CameraPosition.x -= -sin(glm::radians(m_CameraRotation)) * m_CameraTranslationSpeed * dt;
-			m_CameraPosition.y -= cos(glm::radians(m_CameraRotation)) * m_CameraTranslationSpeed * dt;
+			m_CameraPosition.x -= -sin(m_CameraRotation * math::DegToRad) * m_CameraTranslationSpeed * dt;
+			m_CameraPosition.y -= cos(m_CameraRotation * math::DegToRad) * m_CameraTranslationSpeed * dt;
 		}
 		else if (Input::IsKeyPressed(RB_KEY_W) || Input::IsKeyPressed(RB_KEY_UP))
 		{
-			m_CameraPosition.x += -sin(glm::radians(m_CameraRotation)) * m_CameraTranslationSpeed * dt;
-			m_CameraPosition.y += cos(glm::radians(m_CameraRotation)) * m_CameraTranslationSpeed * dt;
+			m_CameraPosition.x += -sin(m_CameraRotation * math::DegToRad) * m_CameraTranslationSpeed * dt;
+			m_CameraPosition.y += cos(m_CameraRotation * math::DegToRad) * m_CameraTranslationSpeed * dt;
 		}
 
 		// Camera Rotation

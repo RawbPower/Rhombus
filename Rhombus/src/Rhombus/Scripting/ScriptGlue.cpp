@@ -108,7 +108,7 @@ namespace rhombus
 		std::string name = entity.GetComponent<TagComponent>().m_tag;
 
 		auto& transformComponent = entity.GetComponent<TransformComponent>();
-		transformComponent.m_position += glm::vec3(translateX, translateY, 0.0f);
+		transformComponent.m_position += Vec3(translateX, translateY, 0.0f);
 
 		return 0;						// Number of return values that lua is expecting
 	}
@@ -127,7 +127,7 @@ namespace rhombus
 		std::string name = entity.GetComponent<TagComponent>().m_tag;
 
 		auto& transformComponent = entity.GetComponent<TransformComponent>();
-		transformComponent.m_position = glm::vec3(positionX, positionY, positionZ);
+		transformComponent.m_position = Vec3(positionX, positionY, positionZ);
 
 		return 0;						// Number of return values that lua is expecting
 	}
@@ -154,7 +154,7 @@ namespace rhombus
 	{
 		RB_CORE_ASSERT(lua_gettop(state) == 0, "Invalid number of arguments passed to function");
 
-		glm::vec3 mousePosition = Renderer2D::ConvertScreenToWorldSpace(Input::GetMouseX(), Input::GetMouseY());
+		Vec3 mousePosition = Renderer2D::ConvertScreenToWorldSpace(Input::GetMouseX(), Input::GetMouseY());
 		lua_pushnumber(state, mousePosition.x);
 		lua_pushnumber(state, mousePosition.y);
 

@@ -70,7 +70,7 @@ namespace rhombus
 	void PatienceScene::OnMouseMoved(int x, int y)
 	{
 		Scene::OnMouseMoved(x, y);
-		glm::vec3 cursorCoords = Renderer2D::ConvertScreenToWorldSpace(x, y);
+		Vec3 cursorCoords = Renderer2D::ConvertScreenToWorldSpace(x, y);
 
 		{
 			std::vector<EntityID> view = m_Registry.GetEntityList<CardComponent>();
@@ -82,7 +82,7 @@ namespace rhombus
 
 				if (card.GetIsHeld())
 				{
-					transform.m_position = glm::vec3(cursorCoords.x, cursorCoords.y, transform.m_position.z);
+					transform.m_position = Vec3(cursorCoords.x, cursorCoords.y, transform.m_position.z);
 				}
 			}
 		}

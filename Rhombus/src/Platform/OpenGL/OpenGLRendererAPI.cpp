@@ -49,7 +49,7 @@ namespace rhombus {
 		glViewport(x, y, width, height);
 	}
 	
-	void OpenGLRendererAPI::SetClearColor(const glm::vec4& color)
+	void OpenGLRendererAPI::SetClearColor(const Color& color)
 	{
 		glClearColor(color.r, color.g, color.b, color.a);
 	}

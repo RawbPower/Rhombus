@@ -16,6 +16,7 @@ namespace rhombus
 		Quat();
 		Quat(const Quat& rhs);
 		Quat(float X, float Y, float Z, float W);
+		Quat(Vec3 v);
 		Quat(Vec3 n, const float angleRadians);
 		const Quat& operator = (const Quat& rhs);
 
@@ -34,6 +35,7 @@ namespace rhombus
 		bool	IsValid() const;
 
 		Mat3	ToMat3() const;
+		Mat4	ToMat4() const;
 		Vec4	ToVec4() const { return Vec4(w, x, y, z); }
 
 		Vec3    GetNormal() const { return GetAngle() > 0.0f ? Vec3(x, y, z) / sinf(GetAngle() / 2.0f) : Vec3(1, 0, 0); }
@@ -68,6 +70,17 @@ namespace rhombus
 		z(Z),
 		w(W) 
 	{
+	}
+
+	inline Quat::Quat(Vec3 v)
+	{
+		Vec3 c = Vec3(cos(v.x * 0.5f), cos(v.y * 0.5f), cos(v.z * 0.5f));
+		Vec3 s = Vec3(sin(v.x * 0.5f), sin(v.y * 0.5f), sin(v.z * 0.5f));
+
+		this->w = c.x * c.y * c.z + s.x * s.y * s.z;
+		this->x = s.x * c.y * c.z - c.x * s.y * s.z;
+		this->y = c.x * s.y * c.z + s.x * c.y * s.z;
+		this->z = c.x * c.y * s.z - s.x * s.y * c.z;
 	}
 
 	inline Quat::Quat(Vec3 n, const float angleRadians) 
@@ -192,23 +205,37 @@ namespace rhombus
 		return true;
 	}
 
+	// Check this!
 	inline Mat3 Quat::RotateMatrix(const Mat3& rhs) const 
 	{
 		Mat3 mat;
-		mat.rows[0] = RotatePoint(rhs.rows[0]);
-		mat.rows[1] = RotatePoint(rhs.rows[1]);
-		mat.rows[2] = RotatePoint(rhs.rows[2]);
+		mat.cols[0] = RotatePoint(rhs.cols[0]);
+		mat.cols[1] = RotatePoint(rhs.cols[1]);
+		mat.cols[2] = RotatePoint(rhs.cols[2]);
 		return mat;
 	}
 
+	// Check this!
 	inline Mat3 Quat::ToMat3() const 
 	{
 		Mat3 mat;
 		mat.Identity();
 
-		mat.rows[0] = RotatePoint(mat.rows[0]);
-		mat.rows[1] = RotatePoint(mat.rows[1]);
-		mat.rows[2] = RotatePoint(mat.rows[2]);
+		mat.cols[0] = RotatePoint(mat.cols[0]);
+		mat.cols[1] = RotatePoint(mat.cols[1]);
+		mat.cols[2] = RotatePoint(mat.cols[2]);
+		return mat;
+	}
+
+	// Check this!
+	inline Mat4 Quat::ToMat4() const
+	{
+		Mat4 mat = Mat4::Identity();
+
+		mat.cols[0] = Vec4(RotatePoint(mat.cols[0]), 0.0f);
+		mat.cols[1] = Vec4(RotatePoint(mat.cols[1]), 0.0f);
+		mat.cols[2] = Vec4(RotatePoint(mat.cols[2]), 0.0f);
+		mat.cols[3] = Vec4(0.0f, 0.0f, 0.0f, 1.0f);
 		return mat;
 	}
 }

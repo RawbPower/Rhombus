@@ -8,6 +8,9 @@
 
 #include "ImGuizmo.h"
 
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
 namespace rhombus
 {
 	EditorLayer::EditorLayer()
@@ -60,10 +63,10 @@ namespace rhombus
 
 #if 0
 		m_SquareEntity = m_ActiveScene->CreateEntity("Green Square");
-		m_SquareEntity.AddComponent<SpriteRendererComponent>(glm::vec4{ 0.0f, 1.0f, 0.0f, 1.0f });
+		m_SquareEntity.AddComponent<SpriteRendererComponent>(Color{ 0.0f, 1.0f, 0.0f, 1.0f });
 
 		auto& redSquare = m_ActiveScene->CreateEntity("Red Square");
-		redSquare.AddComponent<SpriteRendererComponent>(glm::vec4{ 1.0f, 0.0f, 0.0f, 1.0f });
+		redSquare.AddComponent<SpriteRendererComponent>(Color{ 1.0f, 0.0f, 0.0f, 1.0f });
 
 		m_CameraEntity = m_ActiveScene->CreateEntity("Camera");
 		m_CameraEntity.AddComponent<CameraComponent>();
@@ -373,8 +376,8 @@ namespace rhombus
 			// glm::mat4 cameraView = glm::inverse(cameraEntity.GetComponent<TransformComponent>().GetTransform());
 
 			// Editor Camera
-			const Mat4& cameraProjection = m_EditorCamera.GetProjection();
-			Mat4 cameraView = m_EditorCamera.GetViewMat();
+			const glm::mat4& cameraProjection = m_EditorCamera.GetProjection();
+			glm::mat4 cameraView = m_EditorCamera.GetViewMatrix();
 
 			// Entity transform
 			auto& transformComponent = selectedEntity.GetComponent<TransformComponent>();
@@ -389,9 +392,17 @@ namespace rhombus
 
 			float snapValues[3] = { snapValue, snapValue, snapValue };
 
-			ImGuizmo::Manipulate(cameraView.ToPtr(), cameraProjection.ToPtr(),
-				(ImGuizmo::OPERATION)m_gizmoType, ImGuizmo::LOCAL, transform.ToPtr(),
+			// Fix transform Mat4::ToPtr() first. Need to figure out why that is not working like glm::mat4
+			glm::mat4 transformGLM = transform;
+
+			ImGuizmo::Manipulate(glm::value_ptr(cameraView), glm::value_ptr(cameraProjection),
+				(ImGuizmo::OPERATION)m_gizmoType, ImGuizmo::LOCAL, glm::value_ptr(transformGLM),
 				nullptr, snap ? snapValues : nullptr);
+
+			transform[0] = Vec4(transformGLM[0].x, transformGLM[0].y, transformGLM[0].z, transformGLM[0].w);
+			transform[1] = Vec4(transformGLM[1].x, transformGLM[1].y, transformGLM[1].z, transformGLM[1].w);
+			transform[2] = Vec4(transformGLM[2].x, transformGLM[2].y, transformGLM[2].z, transformGLM[2].w);
+			transform[3] = Vec4(transformGLM[3].x, transformGLM[3].y, transformGLM[3].z, transformGLM[3].w);
 
 			if (ImGuizmo::IsUsing())
 			{
@@ -598,7 +609,7 @@ namespace rhombus
 	bool EditorLayer::OnWindowResized(WindowResizeEvent& e)
 	{
 #if !RB_EDITOR
-		m_ViewportSize = { e.GetWidth(), e.GetHeight() };
+		m_ViewportSize = { (float)e.GetWidth(), (float)e.GetHeight() };
 #endif
 		return false;
 	}
@@ -769,12 +780,12 @@ namespace rhombus
 					Entity entity = { e, m_ActiveScene.get()};
 					TransformComponent& tc = entity.GetComponent<TransformComponent>();
 					BoxCollider2DComponent& bc2d = entity.GetComponent<BoxCollider2DComponent>();
-					glm::vec3 translation = tc.m_position + glm::vec3(bc2d.m_offset, 0.01f);
-					glm::vec3 scale = tc.m_scale * glm::vec3(bc2d.m_size * 2.0f, 1.0f);
+					Vec3 translation = tc.m_position + Vec3(bc2d.m_offset, 0.01f);
+					Vec3 scale = tc.m_scale * Vec3(bc2d.m_size * 2.0f, 1.0f);
 
-					glm::mat4 transform = glm::translate(glm::mat4(1.0f), translation)
-						* glm::rotate(glm::mat4(1.0f), tc.m_rotation.z, glm::vec3(0.0f, 0.0f, 1.0f))
-						* glm::scale(glm::mat4(1.0f), scale);
+					Mat4 transform = math::Translate(Mat4::Identity(), translation)
+						* math::Rotate(Mat4::Identity(), tc.m_rotation.z, Vec3(0.0f, 0.0f, 1.0f))
+						* math::Scale(Mat4::Identity(), scale);
 
 					Renderer2D::DrawRect(transform, m_PhysicsColliderColor);
 				}
@@ -788,12 +799,12 @@ namespace rhombus
 					Entity entity = { e, m_ActiveScene.get() };
 					TransformComponent& tc = entity.GetComponent<TransformComponent>();
 					CircleCollider2DComponent& bc2d = entity.GetComponent<CircleCollider2DComponent>();
-					glm::vec3 translation = tc.m_position + glm::vec3(bc2d.m_offset, 0.01f);
-					glm::vec3 scale = tc.m_scale * bc2d.m_radius * 2.0f;
+					Vec3 translation = tc.m_position + Vec3(bc2d.m_offset, 0.01f);
+					Vec3 scale = tc.m_scale * bc2d.m_radius * 2.0f;
 
-					glm::mat4 transform = glm::translate(glm::mat4(1.0f), translation)
-						* glm::rotate(glm::mat4(1.0f), tc.m_rotation.z, glm::vec3(0.0f, 0.0f, 1.0f))
-						* glm::scale(glm::mat4(1.0f), scale);
+					Mat4 transform = math::Translate(Mat4::Identity(), translation)
+						* math::Rotate(Mat4::Identity(), tc.m_rotation.z, Vec3(0.0f, 0.0f, 1.0f))
+						* math::Scale(Mat4::Identity(), scale);
 
 					Renderer2D::DrawCircle(transform, m_PhysicsColliderColor, 0.05f);
 				}
@@ -807,12 +818,12 @@ namespace rhombus
 					Entity entity = { e, m_ActiveScene.get() };
 					TransformComponent& tc = entity.GetComponent<TransformComponent>();
 					BoxArea2DComponent& ba2d = entity.GetComponent<BoxArea2DComponent>();
-					glm::vec3 translation = tc.m_position + glm::vec3(ba2d.m_offset, 0.01f);
-					glm::vec3 scale = tc.m_scale * glm::vec3(ba2d.m_size * 2.0f, 1.0f);
+					Vec3 translation = tc.m_position + Vec3(ba2d.m_offset, 0.01f);
+					Vec3 scale = tc.m_scale * Vec3(ba2d.m_size * 2.0f, 1.0f);
 
-					glm::mat4 transform = glm::translate(glm::mat4(1.0f), translation)
-						* glm::rotate(glm::mat4(1.0f), tc.m_rotation.z, glm::vec3(0.0f, 0.0f, 1.0f))
-						* glm::scale(glm::mat4(1.0f), scale);
+					Mat4 transform = math::Translate(Mat4::Identity(), translation)
+						* math::Rotate(Mat4::Identity(), tc.m_rotation.z, Vec3(0.0f, 0.0f, 1.0f))
+						* math::Scale(Mat4::Identity(), scale);
 
 					Renderer2D::DrawRect(transform, m_AreaColor);
 					Color overlayColor = m_AreaColor;
@@ -828,7 +839,7 @@ namespace rhombus
 			TransformComponent transform = selectedEntity.GetComponent<TransformComponent>();
 
 			//Red
-			Renderer2D::DrawRect(transform.GetTransform(), glm::vec4(0.9, 0.9, 0.9, 1));
+			Renderer2D::DrawRect(transform.GetTransform(), Color(0.9, 0.9, 0.9, 1));
 		}
 
 		Renderer2D::EndScene();

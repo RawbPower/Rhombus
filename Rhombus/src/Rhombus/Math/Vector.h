@@ -6,6 +6,10 @@
 
 namespace rhombus
 {
+	// TODO: make function types consistent in form
+	// ie. Normalize(vec) = vec (new vector)
+	// vec.Normalize() = &vec (same vector)
+
 	// Forward declarations
 	class Vec2;
 	class Vec3;
@@ -22,6 +26,7 @@ namespace rhombus
 		Vec2();
 		Vec2(const float value);
 		Vec2(const Vec2& rhs);
+		Vec2(const Vec3& rhs);
 		Vec2(float X, float Y);
 		Vec2(const float* xy);
 		Vec2& operator = ( const Vec2& rhs );
@@ -50,6 +55,7 @@ namespace rhombus
 		static float Dot(const Vec2& a, const Vec2& b) { return a.Dot(b); }
 
 		const float* ToPtr() const { return &x; }
+		float* ToPtr() { return &x; }
 
 	public:
 		float x;
@@ -69,11 +75,13 @@ namespace rhombus
 		Vec3(const float value);
 		Vec3(const Vec3& rhs);
 		Vec3(const Vec4& rhs);
+		Vec3(const Vec2& rhs, float Z);
 		Vec3(float X, float Y, float Z);
 		Vec3(const float* xyz);
 		Vec3& operator = (const Vec3& rhs);
 		Vec3& operator = (const float* rhs);
 
+		Vec3 operator- () const;
 		bool operator == (const Vec3& rhs) const;
 		bool operator != (const Vec3& rhs) const;
 		Vec3 operator + (const Vec3& rhs) const;
@@ -81,7 +89,9 @@ namespace rhombus
 		const Vec3& operator -= (const Vec3& rhs);
 		Vec3 operator - (const Vec3& rhs) const;
 		Vec3 operator * (const float rhs) const;
+		Vec3 operator * (const Vec3 rhs) const;
 		Vec3 operator / (const float rhs) const;
+		Vec3 operator / (const Vec3 rhs) const;
 		const Vec3& operator *= (const float rhs);
 		const Vec3& operator /= (const float rhs);
 		float operator [] (const int idx) const;
@@ -92,6 +102,7 @@ namespace rhombus
 		void Zero() { x = 0.0f; y = 0.0f; z = 0.0f; }
 
 		const Vec3& Normalize();
+		static Vec3 Normalize(const Vec3& vec);
 		float GetMagnitude() const;
 		float GetMag2() const { return Dot(*this); }
 		bool IsValid() const;
@@ -104,6 +115,7 @@ namespace rhombus
 		static float Dot(const Vec3& a, const Vec3& b);
 
 		const float* ToPtr() const { return &x; }
+		float* ToPtr() { return &x; }
 
 	public:
 		float x;
@@ -124,6 +136,7 @@ namespace rhombus
 		Vec4(const float value);
 		Vec4(const Vec4& rhs);
 		Vec4(float X, float Y, float Z, float W);
+		Vec4(const Vec3& rhs, float W);
 		Vec4(const float* rhs);
 		Vec4& operator = (const Vec4& rhs);
 
@@ -183,6 +196,12 @@ namespace rhombus
 	}
 
 	inline Vec2::Vec2(const Vec2& rhs) :
+		x(rhs.x),
+		y(rhs.y)
+	{
+	}
+
+	inline Vec2::Vec2(const Vec3& rhs) :
 		x(rhs.x),
 		y(rhs.y)
 	{
@@ -377,6 +396,13 @@ namespace rhombus
 	{
 	}
 
+	inline Vec3::Vec3(const Vec2& rhs, float Z) :
+		x(rhs.x),
+		y(rhs.y),
+		z(Z)
+	{
+	}
+
 	inline Vec3::Vec3(float X, float Y, float Z) :
 		x(X),
 		y(Y),
@@ -425,6 +451,15 @@ namespace rhombus
 		}
 
 		return true;
+	}
+
+	inline Vec3 Vec3::operator - () const
+	{
+		Vec3 temp;
+		temp.x = -x;
+		temp.y = -y;
+		temp.z = -z;
+		return temp;
 	}
 
 	inline bool Vec3::operator != (const Vec3& rhs) const
@@ -480,12 +515,35 @@ namespace rhombus
 		return temp;
 	}
 
+	inline Vec3 Vec3::operator * (const Vec3 rhs) const
+	{
+		Vec3 temp;
+		temp.x = x * rhs.x;
+		temp.y = y * rhs.y;
+		temp.z = z * rhs.z;
+		return temp;
+	}
+
+	inline Vec3 operator * (const float lhs, const Vec3 rhs)
+	{
+		return rhs * lhs;
+	}
+
 	inline Vec3 Vec3::operator / (const float rhs) const
 	{
 		Vec3 temp;
 		temp.x = x / rhs;
 		temp.y = y / rhs;
 		temp.z = z / rhs;
+		return temp;
+	}
+
+	inline Vec3 Vec3::operator / (const Vec3 rhs) const
+	{
+		Vec3 temp;
+		temp.x = x / rhs.x;
+		temp.y = y / rhs.y;
+		temp.z = z / rhs.z;
 		return temp;
 	}
 
@@ -538,6 +596,12 @@ namespace rhombus
 		}
 
 		return *this;
+	}
+
+	inline Vec3 Vec3::Normalize(const Vec3& vec)
+	{
+		Vec3 result = vec;
+		return result.Normalize();
 	}
 
 	inline float Vec3::GetMagnitude() const
@@ -647,6 +711,14 @@ namespace rhombus
 		x(X),
 		y(Y),
 		z(Z),
+		w(W)
+	{
+	}
+
+	inline Vec4::Vec4(const Vec3& rhs, float W) :
+		x(rhs.x),
+		y(rhs.y),
+		z(rhs.z),
 		w(W)
 	{
 	}

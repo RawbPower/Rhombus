@@ -6,15 +6,13 @@
 #include "RenderCommand.h"
 #include "Rhombus/Core/Application.h"
 
-#include <glm/gtc/matrix_transform.hpp>
-
 namespace rhombus
 {
 	struct QuadVertex
 	{
-		glm::vec3 Position;
-		glm::vec4 Color;
-		glm::vec2 TexCoord;
+		Vec3 Position;
+		Color Color;
+		Vec2 TexCoord;
 		float TextureIndex;
 		float TilingFactor;
 
@@ -24,9 +22,9 @@ namespace rhombus
 
 	struct CircleVertex
 	{
-		glm::vec3 WorldPosition;
-		glm::vec3 LocalPosition;
-		glm::vec4 Color;
+		Vec3 WorldPosition;
+		Vec3 LocalPosition;
+		Color Color;
 		float Thickness;
 		float Fade;
 
@@ -36,8 +34,8 @@ namespace rhombus
 
 	struct LineVertex
 	{
-		glm::vec3 Position;
-		glm::vec4 Color;
+		Vec3 Position;
+		Color Color;
 
 		// Editor-only
 		int EntityID;
@@ -80,7 +78,7 @@ namespace rhombus
 		std::array<Ref<Texture2D>, MaxTextureSlots> TextureSlots;
 		uint32_t TextureSlotIndex = 1;		// 0 is white texture
 
-		glm::vec4 QuadVertexPosition[4];
+		Vec4 QuadVertexPosition[4];
 		glm::mat4 ViewProjectionMatrix;
 
 		Renderer2D::Statistics Stats;
@@ -199,11 +197,12 @@ namespace rhombus
 		s_Data.LineShader->SetMat4("u_ViewProjection", viewProjection);
 	}
 
-	void Renderer2D::BeginScene(const Camera& camera, const glm::mat4& transform)
+	void Renderer2D::BeginScene(const Camera& camera, const Mat4& transform)
 	{
 		RB_PROFILE_FUNCTION();
 
-		glm::mat4 viewProjection = (glm::mat4)camera.GetProjection() * glm::inverse(transform);
+		glm::mat4 transformGLM = transform;
+		glm::mat4 viewProjection = camera.GetProjection() * glm::inverse(transformGLM);
 
 		SetShaderViewProjection(viewProjection);
 
@@ -298,88 +297,88 @@ namespace rhombus
 		StartBatch();
 	}
 
-	void Renderer2D::DrawQuad(const glm::vec2& position, const float& angle, const glm::vec2& scale, const glm::vec4& color)
+	void Renderer2D::DrawQuad(const Vec2& position, const float& angle, const Vec2& scale, const Color& color)
 	{
 		DrawQuad({ position.x, position.y, 0.0f }, angle, scale, color);
 	}
 
-	void Renderer2D::DrawQuad(const glm::vec3& position, const float& angle, const glm::vec2& scale, const glm::vec4& color)
+	void Renderer2D::DrawQuad(const Vec3& position, const float& angle, const Vec2& scale, const Color& color)
 	{
-		glm::mat4 transform(1.0f);
+		Mat4 transform = Mat4::Identity();
 		if (abs(angle) > 0.001f)
 		{
-			transform = glm::translate(glm::mat4(1.0f), position) * glm::rotate(glm::mat4(1.0f), angle, glm::vec3(0.0f, 0.0f, 1.0f)) * glm::scale(glm::mat4(1.0f), { scale.x, scale.y, 1.0f });
+			transform = math::Translate(Mat4::Identity(), position) * math::Rotate(Mat4::Identity(), angle, Vec3(0.0f, 0.0f, 1.0f)) * math::Scale(Mat4::Identity(), {scale.x, scale.y, 1.0f});
 		}
 		else
 		{
-			transform = glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), { scale.x, scale.y, 1.0f });
+			transform = math::Translate(Mat4::Identity(), position) * math::Scale(Mat4::Identity(), {scale.x, scale.y, 1.0f});
 		}
 
 		DrawQuad(transform, color);
 	}
 
-	void Renderer2D::DrawQuad(const glm::vec2& position, const float& angle, const glm::vec2& scale, const Ref<Texture2D>& texture, float tilingFactor)
+	void Renderer2D::DrawQuad(const Vec2& position, const float& angle, const Vec2& scale, const Ref<Texture2D>& texture, float tilingFactor)
 	{
 		DrawQuad({ position.x, position.y, 0.0f }, angle, scale, texture, tilingFactor);
 	}
 
-	void Renderer2D::DrawQuad(const glm::vec2& position, const float& angle, const glm::vec2& scale, const Ref<Texture2D>& texture, const glm::vec4& color, float tilingFactor)
+	void Renderer2D::DrawQuad(const Vec2& position, const float& angle, const Vec2& scale, const Ref<Texture2D>& texture, const Color& color, float tilingFactor)
 	{
 		DrawQuad({ position.x, position.y, 0.0f }, angle, scale, texture, color, tilingFactor);
 	}
 
-	void Renderer2D::DrawQuad(const glm::vec2& position, const float& angle, const glm::vec2& scale, const Ref<SubTexture2D>& subTexture, const glm::vec4& color, float tilingFactor)
+	void Renderer2D::DrawQuad(const Vec2& position, const float& angle, const Vec2& scale, const Ref<SubTexture2D>& subTexture, const Color& color, float tilingFactor)
 	{
 		DrawQuad({ position.x, position.y, 0.0f }, angle, scale, subTexture, color, tilingFactor);
 	}
 
-	void Renderer2D::DrawQuad(const glm::vec3& position, const float& angle, const glm::vec2& scale, const Ref<Texture2D>& texture, float tilingFactor)
+	void Renderer2D::DrawQuad(const Vec3& position, const float& angle, const Vec2& scale, const Ref<Texture2D>& texture, float tilingFactor)
 	{
-		DrawQuad(position, angle, scale, texture, glm::vec4(1.0f), tilingFactor);
+		DrawQuad(position, angle, scale, texture, Color(1.0f), tilingFactor);
 	}
 
-	void Renderer2D::DrawQuad(const glm::vec3& position, const float& angle, const glm::vec2& scale, const Ref<SubTexture2D>& subTexture, float tilingFactor)
+	void Renderer2D::DrawQuad(const Vec3& position, const float& angle, const Vec2& scale, const Ref<SubTexture2D>& subTexture, float tilingFactor)
 	{
-		DrawQuad(position, angle, scale, subTexture, glm::vec4(1.0f), tilingFactor);
+		DrawQuad(position, angle, scale, subTexture, Color(1.0f), tilingFactor);
 	}
 
-	void Renderer2D::DrawQuad(const glm::vec3& position, const float& angle, const glm::vec2& scale, const Ref<Texture2D>& texture, const glm::vec4& color, float tilingFactor)
+	void Renderer2D::DrawQuad(const Vec3& position, const float& angle, const Vec2& scale, const Ref<Texture2D>& texture, const Color& color, float tilingFactor)
 	{
-		glm::mat4 transform(1.0f);
+		Mat4 transform = Mat4::Identity();
 		if (abs(angle) > 0.001f)
 		{
-			transform = glm::translate(glm::mat4(1.0f), position) * glm::rotate(glm::mat4(1.0f), angle, glm::vec3(0.0f, 0.0f, 1.0f)) * glm::scale(glm::mat4(1.0f), { scale.x, scale.y, 1.0f });
+			transform = math::Translate(Mat4::Identity(), position) * math::Rotate(Mat4::Identity(), angle, Vec3(0.0f, 0.0f, 1.0f)) * math::Scale(Mat4::Identity(), {scale.x, scale.y, 1.0f});
 		}
 		else
 		{
-			transform = glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), { scale.x, scale.y, 1.0f });
+			transform = math::Translate(Mat4::Identity(), position) * math::Scale(Mat4::Identity(), {scale.x, scale.y, 1.0f});
 		}
 
 		DrawQuad(transform, texture, color, tilingFactor);
 	}
 
-	void Renderer2D::DrawQuad(const glm::vec3& position, const float& angle, const glm::vec2& scale, const Ref<SubTexture2D>& subTexture, const glm::vec4& color, float tilingFactor)
+	void Renderer2D::DrawQuad(const Vec3& position, const float& angle, const Vec2& scale, const Ref<SubTexture2D>& subTexture, const Color& color, float tilingFactor)
 	{
-		glm::mat4 transform(1.0f);
+		Mat4 transform = Mat4::Identity();
 		if (abs(angle) > 0.001f)
 		{
-			transform = glm::translate(glm::mat4(1.0f), position) * glm::rotate(glm::mat4(1.0f), angle, glm::vec3(0.0f, 0.0f, 1.0f)) * glm::scale(glm::mat4(1.0f), { scale.x, scale.y, 1.0f });
+			transform = math::Translate(Mat4::Identity(), position) * math::Rotate(Mat4::Identity(), angle, Vec3(0.0f, 0.0f, 1.0f)) * math::Scale(Mat4::Identity(), {scale.x, scale.y, 1.0f});
 		}
 		else
 		{
-			transform = glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), { scale.x, scale.y, 1.0f });
+			transform = math::Translate(Mat4::Identity(), position) * math::Scale(Mat4::Identity(), {scale.x, scale.y, 1.0f});
 		}
 
 		DrawQuad(transform, subTexture, color, tilingFactor);
 	}
 
-	void Renderer2D::DrawQuad(const glm::mat4& transform, const glm::vec4& color, int entityID)
+	void Renderer2D::DrawQuad(const Mat4& transform, const Color& color, int entityID)
 	{
 		RB_PROFILE_FUNCTION();
 
 		constexpr size_t quadVertexCount = 4;
 		constexpr float textureIndex = 0.0f;		// Blank texture
-		constexpr glm::vec2 textureCoords[] = { { 0.0f, 0.0f }, { 1.0f, 0.0f }, { 1.0f, 1.0f }, { 0.0f, 1.0f } };
+		const Vec2 textureCoords[] = { { 0.0f, 0.0f }, { 1.0f, 0.0f }, { 1.0f, 1.0f }, { 0.0f, 1.0f } };
 		constexpr float tilingFactor = 1.0f;
 
 		if (s_Data.QuadIndexCount >= Renderer2DData::MaxIndices)
@@ -403,15 +402,15 @@ namespace rhombus
 		s_Data.Stats.QuadCount++;
 	}
 
-	void Renderer2D::DrawQuad(const glm::mat4& transform, const Ref<Texture2D>& texture, const glm::vec4& color, float tilingFactor, int entityID)
+	void Renderer2D::DrawQuad(const Mat4& transform, const Ref<Texture2D>& texture, const Color& color, float tilingFactor, int entityID)
 	{
 		RB_PROFILE_FUNCTION();
 
 		constexpr size_t quadVertexCount = 4;
-		constexpr glm::vec2 textureCoords[] = { { 0.0f, 0.0f }, { 1.0f, 0.0f }, { 1.0f, 1.0f }, { 0.0f, 1.0f } };
+		const Vec2 textureCoords[] = { { 0.0f, 0.0f }, { 1.0f, 0.0f }, { 1.0f, 1.0f }, { 0.0f, 1.0f } };
 		
 		// TODO: Add PPU
-		glm::mat4 scaledTransform = glm::scale(transform, glm::vec3((float)texture->GetWidth(), (float)texture->GetHeight(), 1.0f));
+		Mat4 scaledTransform = math::Scale(transform, Vec3((float)texture->GetWidth(), (float)texture->GetHeight(), 1.0f));
 
 		if (s_Data.QuadIndexCount >= Renderer2DData::MaxIndices)
 		{
@@ -443,6 +442,14 @@ namespace rhombus
 
 		for (size_t i = 0; i < quadVertexCount; i++)
 		{
+			/*glm::mat4 scaledTransformGLM = glm::mat4({scaledTransform[0][0], scaledTransform[0][1], scaledTransform[0][2], scaledTransform[0][3]},
+				{ scaledTransform[1][0], scaledTransform[1][1], scaledTransform[1][2], scaledTransform[1][3] },
+				{ scaledTransform[2][0], scaledTransform[2][1], scaledTransform[2][2], scaledTransform[2][3] },
+				{ scaledTransform[3][0], scaledTransform[3][1], scaledTransform[3][2], scaledTransform[3][3] });
+			glm::vec4 qvpGLM = glm::vec4(s_Data.QuadVertexPosition[i]);
+			Vec4 qvp = s_Data.QuadVertexPosition[i];
+			Vec4 result = scaledTransform * qvp;
+			glm::vec4 resultGLM = scaledTransformGLM * qvpGLM;*/
 			s_Data.QuadVertexBufferPtr->Position = scaledTransform * s_Data.QuadVertexPosition[i];
 			s_Data.QuadVertexBufferPtr->Color = color;
 			s_Data.QuadVertexBufferPtr->TexCoord = textureCoords[i];
@@ -457,16 +464,16 @@ namespace rhombus
 		s_Data.Stats.QuadCount++;
 	}
 
-	void Renderer2D::DrawQuad(const glm::mat4& transform, const Ref<SubTexture2D>& subTexture, const glm::vec4& color, float tilingFactor, int entityID)
+	void Renderer2D::DrawQuad(const Mat4& transform, const Ref<SubTexture2D>& subTexture, const Color& color, float tilingFactor, int entityID)
 	{
 		RB_PROFILE_FUNCTION();
 
 		constexpr size_t quadVertexCount = 4;
-		const glm::vec2* textureCoords = subTexture->GetTexCoords();
+		const Vec2* textureCoords = subTexture->GetTexCoords();
 		const Ref<Texture2D> texture = subTexture->GetTexture();
 
 		// TODO: Add PPU
-		glm::mat4 scaledTransform = glm::scale(transform, glm::vec3((float)texture->GetWidth(), (float)texture->GetHeight(), 1.0f));
+		Mat4 scaledTransform = math::Scale(transform, Vec3((float)texture->GetWidth(), (float)texture->GetHeight(), 1.0f));
 
 		if (s_Data.QuadIndexCount >= Renderer2DData::MaxIndices)
 		{
@@ -512,7 +519,7 @@ namespace rhombus
 		s_Data.Stats.QuadCount++;
 	}
 
-	void Renderer2D::DrawLine(const glm::vec3& p0, glm::vec3& p1, const glm::vec4& color, int entityID)
+	void Renderer2D::DrawLine(const Vec3& p0, Vec3& p1, const Color& color, int entityID)
 	{
 		s_Data.LineVertexBufferPtr->Position = p0;
 		s_Data.LineVertexBufferPtr->Color = color;
@@ -527,12 +534,12 @@ namespace rhombus
 		s_Data.LineVertexCount += 2;
 	}
 
-	void Renderer2D::DrawRect(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color, int entityID)
+	void Renderer2D::DrawRect(const Vec3& position, const Vec2& size, const Color& color, int entityID)
 	{
-		glm::vec3 p0 = glm::vec3(position.x - size.x * 0.5f, position.y - size.y * 0.5f, position.z);
-		glm::vec3 p1 = glm::vec3(position.x + size.x * 0.5f, position.y - size.y * 0.5f, position.z);
-		glm::vec3 p2 = glm::vec3(position.x + size.x * 0.5f, position.y + size.y * 0.5f, position.z);
-		glm::vec3 p3 = glm::vec3(position.x - size.x * 0.5f, position.y + size.y * 0.5f, position.z);
+		Vec3 p0 = Vec3(position.x - size.x * 0.5f, position.y - size.y * 0.5f, position.z);
+		Vec3 p1 = Vec3(position.x + size.x * 0.5f, position.y - size.y * 0.5f, position.z);
+		Vec3 p2 = Vec3(position.x + size.x * 0.5f, position.y + size.y * 0.5f, position.z);
+		Vec3 p3 = Vec3(position.x - size.x * 0.5f, position.y + size.y * 0.5f, position.z);
 
 		DrawLine(p0, p1, color, entityID);
 		DrawLine(p1, p2, color, entityID);
@@ -540,9 +547,9 @@ namespace rhombus
 		DrawLine(p3, p0, color, entityID);
 	}
 
-	void Renderer2D::DrawRect(const glm::mat4& transform, const glm::vec4& color, int entityID)
+	void Renderer2D::DrawRect(const Mat4& transform, const Color& color, int entityID)
 	{
-		glm::vec3 lineVertices[4];
+		Vec3 lineVertices[4];
 		for (size_t i = 0; i < 4; i++)
 			lineVertices[i] = transform * s_Data.QuadVertexPosition[i];
 
@@ -552,7 +559,7 @@ namespace rhombus
 		DrawLine(lineVertices[3], lineVertices[0], color, entityID);
 	}
 
-	void Renderer2D::DrawCircle(const glm::mat4& transform, const glm::vec4& color, float thickness, float fade, int entityID)
+	void Renderer2D::DrawCircle(const Mat4& transform, const Color& color, float thickness, float fade, int entityID)
 	{
 		RB_PROFILE_FUNCTION();
 
@@ -576,7 +583,7 @@ namespace rhombus
 		s_Data.Stats.QuadCount++;
 	}
 
-	void Renderer2D::DrawSprite(const glm::mat4& transform, const SpriteRendererComponent& src, int entityID)
+	void Renderer2D::DrawSprite(const Mat4& transform, const SpriteRendererComponent& src, int entityID)
 	{
 		if (src.m_texture)
 			DrawQuad(transform, src.m_texture, src.GetColor(), 1.0f, entityID);
@@ -599,19 +606,19 @@ namespace rhombus
 		return s_Data.ViewProjectionMatrix; 
 	}
 
-	glm::vec3 Renderer2D::ConvertScreenToWorldSpace(int x, int y)
+	Vec3 Renderer2D::ConvertScreenToWorldSpace(int x, int y)
 	{
 		Viewport viewport = Application::Get().GetViewport();
-		glm::vec3 fC = glm::vec3(x - viewport.x, y - viewport.y, 0.0f);
-		glm::vec3 ndc = glm::vec3(fC.x / viewport.width, 1.0 - fC.y / viewport.height, fC.z) * 2.0f - 1.0f;
+		Vec3 fC = Vec3(x - viewport.x, y - viewport.y, 0.0f);
+		Vec3 ndc = Vec3(fC.x / viewport.width, 1.0 - fC.y / viewport.height, fC.z) * 2.0f - 1.0f;
 		return ConvertScreenToWorldSpace(ndc);
 	}
 
-	glm::vec3 Renderer2D::ConvertScreenToWorldSpace(glm::vec3 ndc)
+	Vec3 Renderer2D::ConvertScreenToWorldSpace(Vec3 ndc)
 	{
 		glm::mat4 viewProjection = Renderer2D::GetViewProjectionMatrix();
-		glm::vec4 worldCoords = glm::vec4(ndc, 1.0f) * glm::inverse(viewProjection);
-		return glm::vec3(worldCoords);
+		glm::vec4 worldCoords =  glm::inverse(viewProjection) * glm::vec4(ndc.x, ndc.y, ndc.z, 1.0f);
+		return Vec3(worldCoords.x, worldCoords.y, worldCoords.z);
 	}
 
 	void Renderer2D::ResetStats()

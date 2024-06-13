@@ -1,8 +1,6 @@
 #include "ParticleSystem.h"
 
-#include <glm/gtc/constants.hpp>
-#define GLM_ENABLE_EXPERIMENTAL
-#include <glm/gtx/compatibility.hpp>
+#include "Rhombus/Math/Math.h"
 
 ParticleSystem::ParticleSystem(uint32_t maxParticles)
 	: m_poolIndex(maxParticles-1)
@@ -48,10 +46,10 @@ void ParticleSystem::OnRender(rhombus::OrthographicCamera& camera)
 
 			// Fade away particles
 			float life = particle.lifeRemaining / particle.lifetime;
-			glm::vec4 color = glm::lerp(particle.colorEnd, particle.colorBegin, life);
+			rhombus::Color color = rhombus::math::Lerp(particle.colorEnd, particle.colorBegin, life);
 
-			float size = glm::lerp(particle.sizeEnd, particle.sizeBegin, life);
-			glm::vec3 particlePosition = { particle.position.x, particle.position.y, 0.2f };
+			float size = rhombus::math::Lerp(particle.sizeEnd, particle.sizeBegin, life);
+			rhombus::Vec3 particlePosition = { particle.position.x, particle.position.y, 0.2f };
 			rhombus::Renderer2D::DrawQuad(particlePosition, particle.rotation, { size, size }, color);
 		}
 		rhombus::Renderer2D::EndScene();
@@ -63,7 +61,7 @@ void ParticleSystem::Emit(const ParticleParams& params)
 	Particle& particle = m_particlePool[m_poolIndex];
 	particle.active = true;
 	particle.position = params.position;
-	particle.rotation = Random::Randf() * 2.0f * glm::pi<float>();
+	particle.rotation = Random::Randf() * 2.0f * rhombus::math::PI;
 
 	// Velocity
 	particle.velocity = params.velocity;

@@ -28,7 +28,7 @@ private:
 	rhombus::Ref<rhombus::SubTexture2D> m_TextureStairs, m_TextureDoor, m_TextureVendingMachine;
 
 	rhombus::OrthographicCameraController m_CameraController;
-	glm::vec4 m_SquareColor = { 0.2f, 0.3f, 0.8f, 1.0f };
+	rhombus::Color m_SquareColor = { 0.2f, 0.3f, 0.8f, 1.0f };
 
 	ParticleSystem m_ParticleSystem;
 	ParticleParams m_Particle;

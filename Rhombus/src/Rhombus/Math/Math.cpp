@@ -1,55 +1,28 @@
 #include "rbpch.h"
 #include "Math.h"
 
-#include <glm/glm.hpp>
-#define GLM_ENABLE_EXPERIMENTAL
-#include <glm/gtx/quaternion.hpp>
-#include <glm/gtx/compatibility.hpp>
-
 namespace rhombus::math
 {
 	static const float EPSILON_FLOAT = 1.0e-4F;
 
-	float Lerp(float x, float y, float a)
+	float Lerp(float a, float b, float t)
 	{
-		return glm::lerp(x, y, a);
+		return a + (b - a) * t;
 	}
 
-	Vec2 Lerp(const Vec2& x, const Vec2& y, const Vec2& a)
+	Vec2 Lerp(const Vec2& a, const Vec2& b, const Vec2& t)
 	{
-		glm::vec2 xGLM = glm::vec2(x.x, x.y);
-		glm::vec2 yGLM = glm::vec2(y.x, y.y);
-		glm::vec2 aGLM = glm::vec2(a.x, a.y);
-		glm::vec2 resultGLM = glm::lerp(xGLM, yGLM, aGLM);
-		return Vec2(resultGLM.x, resultGLM.y);
+		return Vec2(Lerp(a.x, b.x, t.x), Lerp(a.y, b.y, t.y));
 	}
 
-	Vec3 Lerp(const Vec3& x, const Vec3& y, const Vec3& a)
+	Vec3 Lerp(const Vec3& a, const Vec3& b, const Vec3& t)
 	{
-		glm::vec3 xGLM = glm::vec3(x.x, x.y, x.z);
-		glm::vec3 yGLM = glm::vec3(y.x, y.y, y.z);
-		glm::vec3 aGLM = glm::vec3(a.x, a.y, a.z);
-		glm::vec3 resultGLM = glm::lerp(xGLM, yGLM, aGLM);
-		return Vec3(resultGLM.x, resultGLM.y, resultGLM.z);
+		return Vec3(Lerp(a.x, b.x, t.x), Lerp(a.y, b.y, t.y), Lerp(a.z, b.z, t.z));
 	}
 
-	Vec4 Lerp(const Vec4& x, const Vec4& y, const Vec4& a)
+	Vec4 Lerp(const Vec4& a, const Vec4& b, const Vec4& t)
 	{
-		glm::quat(glm::vec3(1.0f, 1.0f, 1.0f));
-		glm::vec4 xGLM = glm::vec4(x.x, x.y, x.z, x.w);
-		glm::vec4 yGLM = glm::vec4(y.x, y.y, y.z, y.w);
-		glm::vec4 aGLM = glm::vec4(a.x, a.y, a.z, a.w);
-		glm::vec4 resultGLM = glm::lerp(xGLM, yGLM, aGLM);
-		return Vec4(resultGLM.x, resultGLM.y, resultGLM.z, resultGLM.w);
-	}
-
-	Vec3 Rotate(const Quat& rotation, const Vec3& axis)
-	{
-		// TODO remake this, leaving as glm for now to reduce functional changes
-		glm::quat rotationGLM = glm::quat(rotation.w, rotation.x, rotation.y, rotation.z);
-		glm::vec3 axisGLM = glm::vec3(axis.x, axis.y, axis.z);
-		glm::vec3 resultGLM = glm::rotate(rotationGLM, axisGLM);
-		return Vec3(resultGLM.x, resultGLM.y, resultGLM.z);
+		return Vec4(Lerp(a.x, b.x, t.x), Lerp(a.y, b.y, t.y), Lerp(a.z, b.z, t.z), Lerp(a.w, b.w, t.w));
 	}
 
 	Mat4 Translate(const Mat4& mat, const Vec3& translation)

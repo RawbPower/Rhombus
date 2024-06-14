@@ -50,7 +50,7 @@ namespace rhombus
 			}
 		}
 
-		m_EditorCamera = EditorCamera(30.0f, 1.778f, 0.1f, 1000.0f);	// 1.778 = 16/9
+		m_EditorCamera = EditorCamera(30.0f, 1.778f, 0.1f, 10000.0f);	// 1.778 = 16/9
 
 		m_ViewportSize = { (float)fbSpec.Width, (float)fbSpec.Height };
 		m_ViewportBounds[0] = { 0.0f, 0.0f };

@@ -16,8 +16,6 @@ namespace rhombus::math
 	Vec3 Lerp(const Vec3& x, const Vec3& y, const Vec3& a);
 	Vec4 Lerp(const Vec4& x, const Vec4& y, const Vec4& a);
 
-	Vec3 Rotate(const Quat& rotation, const Vec3& axis);
-
 	Mat4 Translate(const Mat4& mat, const Vec3& translation);
 	Mat4 Rotate(const Mat4& mat, float angle, const Vec3& v);
 	Mat4 Scale(const Mat4& mat, const Vec3& scale);

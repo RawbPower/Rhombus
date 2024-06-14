@@ -392,17 +392,19 @@ namespace rhombus
 
 			float snapValues[3] = { snapValue, snapValue, snapValue };
 
-			// Fix transform Mat4::ToPtr() first. Need to figure out why that is not working like glm::mat4
-			glm::mat4 transformGLM = transform;
+			Mat4 cameraViewMat = Mat4({ cameraView[0][0], cameraView[0][1], cameraView[0][2], cameraView[0][3] },
+				{ cameraView[1][0], cameraView[1][1], cameraView[1][2], cameraView[1][3]},
+				{ cameraView[2][0], cameraView[2][1], cameraView[2][2], cameraView[2][3]}, 
+				{ cameraView[3][0], cameraView[3][1], cameraView[3][2], cameraView[3][3]});
 
-			ImGuizmo::Manipulate(glm::value_ptr(cameraView), glm::value_ptr(cameraProjection),
-				(ImGuizmo::OPERATION)m_gizmoType, ImGuizmo::LOCAL, glm::value_ptr(transformGLM),
+			Mat4 cameraProjectionMat = Mat4({ cameraProjection[0][0], cameraProjection[0][1], cameraProjection[0][2], cameraProjection[0][3] },
+				{ cameraProjection[1][0], cameraProjection[1][1], cameraProjection[1][2], cameraProjection[1][3] },
+				{ cameraProjection[2][0], cameraProjection[2][1], cameraProjection[2][2], cameraProjection[2][3] },
+				{ cameraProjection[3][0], cameraProjection[3][1], cameraProjection[3][2], cameraProjection[3][3] });
+
+			ImGuizmo::Manipulate(cameraViewMat.ToPtr(), cameraProjectionMat.ToPtr(),
+				(ImGuizmo::OPERATION)m_gizmoType, ImGuizmo::LOCAL, transform.ToPtr(),
 				nullptr, snap ? snapValues : nullptr);
-
-			transform[0] = Vec4(transformGLM[0].x, transformGLM[0].y, transformGLM[0].z, transformGLM[0].w);
-			transform[1] = Vec4(transformGLM[1].x, transformGLM[1].y, transformGLM[1].z, transformGLM[1].w);
-			transform[2] = Vec4(transformGLM[2].x, transformGLM[2].y, transformGLM[2].z, transformGLM[2].w);
-			transform[3] = Vec4(transformGLM[3].x, transformGLM[3].y, transformGLM[3].z, transformGLM[3].w);
 
 			if (ImGuizmo::IsUsing())
 			{

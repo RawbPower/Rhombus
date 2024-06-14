@@ -37,8 +37,17 @@ namespace rhombus {
 	void Renderer::Submit(const Ref<Shader>& shader, const Ref<VertexArray>& vertexArray, const Mat4& transform)
 	{
 		shader->Bind();
-		std::dynamic_pointer_cast<OpenGLShader>(shader)->UploadUniformMat4("u_ViewProjection", s_SceneData->ViewProjectionMatrix);
-		std::dynamic_pointer_cast<OpenGLShader>(shader)->UploadUniformMat4("u_Transform", transform);
+		Mat4 viewProjectionMat = Mat4({ s_SceneData->ViewProjectionMatrix[0][0], s_SceneData->ViewProjectionMatrix[0][1], s_SceneData->ViewProjectionMatrix[0][2], s_SceneData->ViewProjectionMatrix[0][3] },
+			{ s_SceneData->ViewProjectionMatrix[1][0], s_SceneData->ViewProjectionMatrix[1][1], s_SceneData->ViewProjectionMatrix[1][2], s_SceneData->ViewProjectionMatrix[1][3] },
+			{ s_SceneData->ViewProjectionMatrix[2][0], s_SceneData->ViewProjectionMatrix[2][1], s_SceneData->ViewProjectionMatrix[2][2], s_SceneData->ViewProjectionMatrix[2][3] },
+			{ s_SceneData->ViewProjectionMatrix[3][0], s_SceneData->ViewProjectionMatrix[3][1], s_SceneData->ViewProjectionMatrix[3][2], s_SceneData->ViewProjectionMatrix[3][3] });
+		std::dynamic_pointer_cast<OpenGLShader>(shader)->UploadUniformMat4("u_ViewProjection", viewProjectionMat);
+
+		Mat4 transformMat = Mat4({ transform[0][0], transform[0][1], transform[0][2], transform[0][3] },
+			{ transform[1][0], transform[1][1], transform[1][2], transform[1][3] },
+			{ transform[2][0], transform[2][1], transform[2][2], transform[2][3] },
+			{ transform[3][0], transform[3][1], transform[3][2], transform[3][3] });
+		std::dynamic_pointer_cast<OpenGLShader>(shader)->UploadUniformMat4("u_Transform", transformMat);
 
 		vertexArray->Bind();
 		RenderCommand::DrawIndexed(vertexArray);

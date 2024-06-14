@@ -186,7 +186,7 @@ namespace rhombus
 	}
 
 	// TODO: Manage multiple shaders better
-	void SetShaderViewProjection(glm::mat4 viewProjection)
+	void SetShaderViewProjection(Mat4 viewProjection)
 	{
 		s_Data.ViewProjectionMatrix = viewProjection;
 		s_Data.QuadShader->Bind();
@@ -204,7 +204,12 @@ namespace rhombus
 		glm::mat4 transformGLM = transform;
 		glm::mat4 viewProjection = camera.GetProjection() * glm::inverse(transformGLM);
 
-		SetShaderViewProjection(viewProjection);
+		Mat4 viewProjectionMat = Mat4({ viewProjection[0][0], viewProjection[0][1], viewProjection[0][2], viewProjection[0][3] },
+			{ viewProjection[1][0], viewProjection[1][1], viewProjection[1][2], viewProjection[1][3] },
+			{ viewProjection[2][0], viewProjection[2][1], viewProjection[2][2], viewProjection[2][3] },
+			{ viewProjection[3][0], viewProjection[3][1], viewProjection[3][2], viewProjection[3][3] });
+
+		SetShaderViewProjection(viewProjectionMat);
 
 		StartBatch();
 	}
@@ -215,7 +220,12 @@ namespace rhombus
 
 		glm::mat4 viewProjection = camera.GetViewProjection();
 
-		SetShaderViewProjection(viewProjection);
+		Mat4 viewProjectionMat = Mat4({ viewProjection[0][0], viewProjection[0][1], viewProjection[0][2], viewProjection[0][3] },
+			{ viewProjection[1][0], viewProjection[1][1], viewProjection[1][2], viewProjection[1][3] },
+			{ viewProjection[2][0], viewProjection[2][1], viewProjection[2][2], viewProjection[2][3] },
+			{ viewProjection[3][0], viewProjection[3][1], viewProjection[3][2], viewProjection[3][3] });
+
+		SetShaderViewProjection(viewProjectionMat);
 
 		StartBatch();
 	}
@@ -224,7 +234,14 @@ namespace rhombus
 	{
 		RB_PROFILE_FUNCTION();
 
-		SetShaderViewProjection(camera.GetViewProjectionMatrix());
+		glm::mat4 viewProjection = camera.GetViewProjectionMatrix();
+
+		Mat4 viewProjectionMat = Mat4({ viewProjection[0][0], viewProjection[0][1], viewProjection[0][2], viewProjection[0][3] },
+			{ viewProjection[1][0], viewProjection[1][1], viewProjection[1][2], viewProjection[1][3] },
+			{ viewProjection[2][0], viewProjection[2][1], viewProjection[2][2], viewProjection[2][3] },
+			{ viewProjection[3][0], viewProjection[3][1], viewProjection[3][2], viewProjection[3][3] });
+
+		SetShaderViewProjection(viewProjectionMat);
 
 		StartBatch();
 	}

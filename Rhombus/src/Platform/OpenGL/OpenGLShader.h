@@ -25,7 +25,7 @@ namespace rhombus {
 		virtual void SetFloat2(const std::string& name, const Vec2& value) override;
 		virtual void SetFloat3(const std::string& name, const Vec3& value) override;
 		virtual void SetFloat4(const std::string& name, const Vec4& value) override;
-		virtual void SetMat4(const std::string& name, const glm::mat4& value) override;
+		virtual void SetMat4(const std::string& name, const Mat4& value) override;
 
 		virtual const std::string& GetName() const override { return m_Name; }
 
@@ -38,7 +38,7 @@ namespace rhombus {
 		void UploadUniformFloat4(const std::string& name, const Vec4& value);
 
 		void UploadUniformMat3(const std::string& name, const Mat3& matrix);
-		void UploadUniformMat4(const std::string& name, const glm::mat4& matrix);
+		void UploadUniformMat4(const std::string& name, const Mat4& matrix);
 	private:
 		std::string ReadFile(const std::string& filepath);
 		std::unordered_map<GLenum, std::string> PreProcess(const std::string& source);

@@ -257,7 +257,7 @@ namespace rhombus {
 		UploadUniformFloat4(name, value);
 	}
 
-	void OpenGLShader::SetMat4(const std::string& name, const glm::mat4& value)
+	void OpenGLShader::SetMat4(const std::string& name, const Mat4& value)
 	{
 		RB_PROFILE_FUNCTION();
 
@@ -308,11 +308,11 @@ namespace rhombus {
 		glUniformMatrix3fv(location, 1, GL_FALSE, matrix.ToPtr());
 	}
 
-	void OpenGLShader::UploadUniformMat4(const std::string& name, const glm::mat4& matrix)
+	void OpenGLShader::UploadUniformMat4(const std::string& name, const Mat4& matrix)
 	{
 		GLint location = glGetUniformLocation(m_RendererID, name.c_str());
 		// f in this function name means "float" and v means "array of" floats
-		glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(matrix));
+		glUniformMatrix4fv(location, 1, GL_FALSE, matrix.ToPtr());
 	}
 
 }

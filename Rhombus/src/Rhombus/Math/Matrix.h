@@ -447,7 +447,7 @@ namespace rhombus
 	// Check this!
 	inline Mat4 Mat4::Inverse() const 
 	{
-		Mat4 inv;
+		/*Mat4 inv;
 		for (int i = 0; i < 4; i++) 
 		{
 			for (int j = 0; j < 4; j++) 
@@ -458,7 +458,15 @@ namespace rhombus
 		float det = Determinant();
 		float invDet = 1.0f / det;
 		inv *= invDet;
-		return inv;
+		return inv;*/
+		glm::mat4 temp = *this;
+		glm::mat4 inv = glm::inverse(temp);
+
+		return Mat4({inv[0][0], inv[0][1], inv[0][2], inv[0][3]},
+			{ inv[1][0], inv[1][1], inv[1][2], inv[1][3] }, 
+			{ inv[2][0], inv[2][1], inv[2][2], inv[2][3] }, 
+			{ inv[3][0], inv[3][1], inv[3][2], inv[3][3] } );
+
 	}
 
 	inline Mat3 Mat4::Minor(const int i, const int j) const 
@@ -572,17 +580,18 @@ namespace rhombus
 		m.rows[3] = Vec4(0, 0, -1, 0);
 		return m;*/
 
-		return glm::perspective(fovy, aspect_ratio, znear, zfar);
+		glm::mat4 pers = glm::perspective(fovy, aspect_ratio, znear, zfar);
+		return pers;
 		
 		/*Mat4({xscale, 0.0f, 0.0f, 0.0f},
 					{ 0.0f, yscale, 0.0f, 0.0f },
 					{ 0.0f, 0.0f, (zfar + znear) / (znear - zfar), (2.0f * zfar * znear) / (znear - zfar) },
 					{ 0.0f, 0.0f, -1.0f, 0.0f } );*/
 
-		/*return Mat4({matGLM[0][0], matGLM[0][1], matGLM[0][2], matGLM[0][3]},
-			{ matGLM[1][0], matGLM[1][1], matGLM[1][2], matGLM[1][3] },
-			{ matGLM[2][0], matGLM[2][1], matGLM[2][2], matGLM[2][3] },
-			{ matGLM[3][0], matGLM[3][1], matGLM[3][2], matGLM[3][3] });*/
+		/*return Mat4({pers[0][0], pers[0][1], pers[0][2], pers[0][3]},
+			{ pers[1][0], pers[1][1], pers[1][2], pers[1][3] },
+			{ pers[2][0], pers[2][1], pers[2][2], pers[2][3] },
+			{ pers[3][0], pers[3][1], pers[3][2], pers[3][3] });*/
 	}
 
 	// Check this!
@@ -601,7 +610,13 @@ namespace rhombus
 			{ 0.0f, 2.0f / height, 0.0f, 0.0f },
 			{ 0.0f, 0.0f, -2.0f / depth, 0.0f },
 			{ tx, ty, tz, 1.0f });*/
-		return glm::ortho(xmin, xmax, ymin, ymax, znear, zfar);
+		glm::mat4 ortho = glm::ortho(xmin, xmax, ymin, ymax, znear, zfar);
+		return ortho;
+
+		/*return Mat4({ortho[0][0], ortho[0][1], ortho[0][2], ortho[0][3]},
+			{ ortho[1][0], ortho[1][1], ortho[1][2], ortho[1][3] },
+			{ ortho[2][0], ortho[2][1], ortho[2][2], ortho[2][3] },
+			{ ortho[3][0], ortho[3][1], ortho[3][2], ortho[3][3] });*/
 	}
 
 	inline Vec4 Mat4::operator * (const Vec4& rhs) const 

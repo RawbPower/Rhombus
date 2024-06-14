@@ -302,8 +302,6 @@ namespace rhombus
 		Vec3 c() { return cols[2].GetXYZ(); }
 		Vec3 d() { return cols[3].GetXYZ(); }
 
-		operator glm::mat4() const;
-
 		static Mat4 Zero();
 		static Mat4 Identity();
 
@@ -386,16 +384,6 @@ namespace rhombus
 		return cols[idx];
 	}
 
-	inline Mat4::operator glm::mat4() const
-	{
-		glm::mat4 m;
-		m[0] = cols[0];
-		m[1] = cols[1];
-		m[2] = cols[2];
-		m[3] = cols[3];
-		return m;
-	}
-
 	inline Mat4 Mat4::Zero() 
 	{
 		return Mat4({ 0.0f, 0.0f, 0.0f, 0.0f },
@@ -458,9 +446,6 @@ namespace rhombus
 		float det = Determinant();
 		float invDet = 1.0f / det;
 		inv *= invDet;
-
-		glm::mat4 temp = *this;
-		glm::mat4 invGLM = glm::inverse(temp);
 
 		return inv;
 	}

@@ -29,7 +29,6 @@ namespace rhombus
 		float& operator [] (const int idx);
 
 		operator Vec4() const;
-		operator glm::vec4() const;
 
 		Vec3 GetRGB() { return Vec3(r, g, b); }
 
@@ -230,16 +229,6 @@ namespace rhombus
 		v.y = g;
 		v.z = b;
 		v.z = a;
-		return v;
-	}
-
-	inline Color::operator glm::vec4() const
-	{
-		glm::vec4 v;
-		v.x = r;
-		v.y = g;
-		v.z = b;
-		v.w = a;
 		return v;
 	}
 }

@@ -2,8 +2,6 @@
 
 #include "Rhombus/Core/Log.h"
 
-#include <glm/glm.hpp>
-
 namespace rhombus
 {
 	// TODO: make function types consistent in form
@@ -97,8 +95,6 @@ namespace rhombus
 		float operator [] (const int idx) const;
 		float& operator [] (const int idx);
 
-		operator glm::vec3() const;
-
 		void Zero() { x = 0.0f; y = 0.0f; z = 0.0f; }
 
 		const Vec3& Normalize();
@@ -152,8 +148,6 @@ namespace rhombus
 		Vec4 operator / (const float rhs) const;
 		float operator [] (const int idx) const;
 		float& operator [] (const int idx);
-
-		operator glm::vec4() const;
 
 		Vec3 GetXYZ() { return Vec3(x, y, z); }
 
@@ -575,15 +569,6 @@ namespace rhombus
 		return (&x)[idx];
 	}
 
-	inline Vec3::operator glm::vec3() const
-	{
-		glm::vec3 v;
-		v.x = x;
-		v.y = y;
-		v.z = z;
-		return v;
-	}
-
 	inline const Vec3& Vec3::Normalize()
 	{
 		float mag = GetMagnitude();
@@ -861,16 +846,6 @@ namespace rhombus
 	{
 		RB_CORE_ASSERT(idx >= 0 && idx < 4, "Index {0} is out of bounds of Vec4", idx);
 		return (&x)[idx];
-	}
-
-	inline Vec4::operator glm::vec4() const
-	{
-		glm::vec4 v;
-		v.x = x;
-		v.y = y;
-		v.z = z;
-		v.w = w;
-		return v;
 	}
 
 	inline const Vec4& Vec4::Normalize()

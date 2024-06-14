@@ -317,8 +317,8 @@ namespace rhombus
 		/*void Orient(Vec3 pos, Vec3 fwd, Vec3 up);
 		void LookAt(Vec3 pos, Vec3 lookAt, Vec3 up);
 		void LookAtOpenGL(Vec3 pos, Vec3 lookAt, Vec3 up);*/
-		static glm::mat4 Perspective(float fovy, float aspect_ratio, float znear, float zfar);
-		static glm::mat4 Ortho(float xmin, float xmax, float ymin, float ymax, float znear, float zfar);
+		static Mat4 Perspective(float fovy, float aspect_ratio, float znear, float zfar);
+		static Mat4 Ortho(float xmin, float xmax, float ymin, float ymax, float znear, float zfar);
 
 		const float* ToPtr() const { return cols[0].ToPtr(); }
 		float* ToPtr() { return cols[0].ToPtr(); }
@@ -564,7 +564,7 @@ namespace rhombus
 	}*/
 
 	// Check this!
-	inline glm::mat4 Mat4::Perspective(float fovy, float aspect_ratio, float znear, float zfar)
+	inline Mat4 Mat4::Perspective(float fovy, float aspect_ratio, float znear, float zfar)
 	{
 		// OpenGL only
 		//const float pi = acosf(-1.0f);
@@ -581,21 +581,21 @@ namespace rhombus
 		return m;*/
 
 		glm::mat4 pers = glm::perspective(fovy, aspect_ratio, znear, zfar);
-		return pers;
+		//return pers;
 		
 		/*Mat4({xscale, 0.0f, 0.0f, 0.0f},
 					{ 0.0f, yscale, 0.0f, 0.0f },
 					{ 0.0f, 0.0f, (zfar + znear) / (znear - zfar), (2.0f * zfar * znear) / (znear - zfar) },
 					{ 0.0f, 0.0f, -1.0f, 0.0f } );*/
 
-		/*return Mat4({pers[0][0], pers[0][1], pers[0][2], pers[0][3]},
+		return Mat4({pers[0][0], pers[0][1], pers[0][2], pers[0][3]},
 			{ pers[1][0], pers[1][1], pers[1][2], pers[1][3] },
 			{ pers[2][0], pers[2][1], pers[2][2], pers[2][3] },
-			{ pers[3][0], pers[3][1], pers[3][2], pers[3][3] });*/
+			{ pers[3][0], pers[3][1], pers[3][2], pers[3][3] });
 	}
 
 	// Check this!
-	inline glm::mat4 Mat4::Ortho(float xmin, float xmax, float ymin, float ymax, float znear, float zfar)
+	inline Mat4 Mat4::Ortho(float xmin, float xmax, float ymin, float ymax, float znear, float zfar)
 	{
 		// OpenGL only
 		/*const float width = xmax - xmin;
@@ -611,12 +611,12 @@ namespace rhombus
 			{ 0.0f, 0.0f, -2.0f / depth, 0.0f },
 			{ tx, ty, tz, 1.0f });*/
 		glm::mat4 ortho = glm::ortho(xmin, xmax, ymin, ymax, znear, zfar);
-		return ortho;
+		//return ortho;
 
-		/*return Mat4({ortho[0][0], ortho[0][1], ortho[0][2], ortho[0][3]},
+		return Mat4({ortho[0][0], ortho[0][1], ortho[0][2], ortho[0][3]},
 			{ ortho[1][0], ortho[1][1], ortho[1][2], ortho[1][3] },
 			{ ortho[2][0], ortho[2][1], ortho[2][2], ortho[2][3] },
-			{ ortho[3][0], ortho[3][1], ortho[3][2], ortho[3][3] });*/
+			{ ortho[3][0], ortho[3][1], ortho[3][2], ortho[3][3] });
 	}
 
 	inline Vec4 Mat4::operator * (const Vec4& rhs) const 

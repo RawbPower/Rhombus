@@ -23,8 +23,8 @@ namespace rhombus {
 
 		inline void SetViewportSize(float width, float height) { m_viewportWidth = width; m_viewportHeight = height; UpdateProjection(); }
 
-		const glm::mat4& GetViewMatrix() const { return m_viewMatrix; }
-		glm::mat4 GetViewProjection() const { return m_projection * m_viewMatrix; }
+		const Mat4& GetViewMatrix() const { return m_viewMatrix; }
+		Mat4 GetViewProjection() const { return m_projection * m_viewMatrix; }
 
 		Vec3 GetUpDirection() const;
 		Vec3 GetRightDirection() const;
@@ -52,7 +52,7 @@ namespace rhombus {
 	private:
 		float m_fov = 45.0f, m_aspectRatio = 1.778f, m_nearClip = 0.1f, m_farClip = 1000.0f;
 
-		glm::mat4 m_viewMatrix;
+		Mat4 m_viewMatrix;
 		Vec3 m_position = { 0.0f, 0.0f, 0.0f };
 		Vec3 m_focalPoint = { 0.0f, 0.0f, 0.0f };
 

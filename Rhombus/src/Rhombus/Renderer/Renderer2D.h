@@ -49,7 +49,7 @@ namespace rhombus
 		static float GetLineWidth();
 		static void SetLineWidth(float width);
 
-		static glm::mat4 GetViewProjectionMatrix();
+		static Mat4 GetViewProjectionMatrix();
 		static Vec3 ConvertScreenToWorldSpace(int x, int y);
 		static Vec3 ConvertScreenToWorldSpace(Vec3 ndc);
 

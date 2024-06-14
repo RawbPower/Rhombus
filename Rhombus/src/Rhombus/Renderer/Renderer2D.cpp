@@ -79,7 +79,7 @@ namespace rhombus
 		uint32_t TextureSlotIndex = 1;		// 0 is white texture
 
 		Vec4 QuadVertexPosition[4];
-		glm::mat4 ViewProjectionMatrix;
+		Mat4 ViewProjectionMatrix;
 
 		Renderer2D::Statistics Stats;
 	};
@@ -201,15 +201,9 @@ namespace rhombus
 	{
 		RB_PROFILE_FUNCTION();
 
-		glm::mat4 transformGLM = transform;
-		glm::mat4 viewProjection = camera.GetProjection() * glm::inverse(transformGLM);
+		Mat4 viewProjection = camera.GetProjection() * transform.Inverse();
 
-		Mat4 viewProjectionMat = Mat4({ viewProjection[0][0], viewProjection[0][1], viewProjection[0][2], viewProjection[0][3] },
-			{ viewProjection[1][0], viewProjection[1][1], viewProjection[1][2], viewProjection[1][3] },
-			{ viewProjection[2][0], viewProjection[2][1], viewProjection[2][2], viewProjection[2][3] },
-			{ viewProjection[3][0], viewProjection[3][1], viewProjection[3][2], viewProjection[3][3] });
-
-		SetShaderViewProjection(viewProjectionMat);
+		SetShaderViewProjection(viewProjection);
 
 		StartBatch();
 	}
@@ -218,14 +212,9 @@ namespace rhombus
 	{
 		RB_PROFILE_FUNCTION();
 
-		glm::mat4 viewProjection = camera.GetViewProjection();
+		Mat4 viewProjection = camera.GetViewProjection();
 
-		Mat4 viewProjectionMat = Mat4({ viewProjection[0][0], viewProjection[0][1], viewProjection[0][2], viewProjection[0][3] },
-			{ viewProjection[1][0], viewProjection[1][1], viewProjection[1][2], viewProjection[1][3] },
-			{ viewProjection[2][0], viewProjection[2][1], viewProjection[2][2], viewProjection[2][3] },
-			{ viewProjection[3][0], viewProjection[3][1], viewProjection[3][2], viewProjection[3][3] });
-
-		SetShaderViewProjection(viewProjectionMat);
+		SetShaderViewProjection(viewProjection);
 
 		StartBatch();
 	}
@@ -234,14 +223,9 @@ namespace rhombus
 	{
 		RB_PROFILE_FUNCTION();
 
-		glm::mat4 viewProjection = camera.GetViewProjectionMatrix();
+		Mat4 viewProjection = camera.GetViewProjectionMatrix();
 
-		Mat4 viewProjectionMat = Mat4({ viewProjection[0][0], viewProjection[0][1], viewProjection[0][2], viewProjection[0][3] },
-			{ viewProjection[1][0], viewProjection[1][1], viewProjection[1][2], viewProjection[1][3] },
-			{ viewProjection[2][0], viewProjection[2][1], viewProjection[2][2], viewProjection[2][3] },
-			{ viewProjection[3][0], viewProjection[3][1], viewProjection[3][2], viewProjection[3][3] });
-
-		SetShaderViewProjection(viewProjectionMat);
+		SetShaderViewProjection(viewProjection);
 
 		StartBatch();
 	}
@@ -618,7 +602,7 @@ namespace rhombus
 		s_Data.LineWidth = width;
 	}
 
-	glm::mat4 Renderer2D::GetViewProjectionMatrix()
+	Mat4 Renderer2D::GetViewProjectionMatrix()
 	{ 
 		return s_Data.ViewProjectionMatrix; 
 	}
@@ -633,9 +617,9 @@ namespace rhombus
 
 	Vec3 Renderer2D::ConvertScreenToWorldSpace(Vec3 ndc)
 	{
-		glm::mat4 viewProjection = Renderer2D::GetViewProjectionMatrix();
-		glm::vec4 worldCoords =  glm::inverse(viewProjection) * glm::vec4(ndc.x, ndc.y, ndc.z, 1.0f);
-		return Vec3(worldCoords.x, worldCoords.y, worldCoords.z);
+		Mat4 viewProjection = Renderer2D::GetViewProjectionMatrix();
+		Vec4 worldCoords =  viewProjection.Inverse() * Vec4(ndc, 1.0f);
+		return worldCoords;
 	}
 
 	void Renderer2D::ResetStats()

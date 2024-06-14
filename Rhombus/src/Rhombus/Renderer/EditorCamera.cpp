@@ -30,7 +30,7 @@ namespace rhombus {
 
 		Quat orientation = GetOrientation();
 		m_viewMatrix = math::Translate(Mat4::Identity(), m_position) * orientation.ToMat4();
-		m_viewMatrix = glm::inverse(m_viewMatrix);
+		m_viewMatrix = m_viewMatrix.Inverse();
 	}
 
 	std::pair<float, float> EditorCamera::PanSpeed() const

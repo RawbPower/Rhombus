@@ -53,12 +53,12 @@ namespace rhombus
 			float orthoRight = m_AspectRaio * m_OrthographicSize * 0.5f;
 			float orthoBottom = -m_OrthographicSize * 0.5f;
 			float orthoTop = m_OrthographicSize * 0.5f;
-			glm::mat4 projection = Mat4::Ortho(orthoLeft, orthoRight, orthoBottom, orthoTop, m_OrthographicNear, m_OrthographicFar);
+			Mat4 projection = Mat4::Ortho(orthoLeft, orthoRight, orthoBottom, orthoTop, m_OrthographicNear, m_OrthographicFar);
 			m_projection = projection;
 		}
 		else
 		{
-			glm::mat4 projection = Mat4::Perspective(m_PerspectiveFOV, m_AspectRaio, m_PerspectiveNear, m_PerspectiveFar);
+			Mat4 projection = Mat4::Perspective(m_PerspectiveFOV, m_AspectRaio, m_PerspectiveNear, m_PerspectiveFar);
 			m_projection = projection;
 		}
 	}

@@ -376,8 +376,8 @@ namespace rhombus
 			// glm::mat4 cameraView = glm::inverse(cameraEntity.GetComponent<TransformComponent>().GetTransform());
 
 			// Editor Camera
-			const glm::mat4& cameraProjection = m_EditorCamera.GetProjection();
-			glm::mat4 cameraView = m_EditorCamera.GetViewMatrix();
+			const Mat4& cameraProjection = m_EditorCamera.GetProjection();
+			Mat4 cameraView = m_EditorCamera.GetViewMatrix();
 
 			// Entity transform
 			auto& transformComponent = selectedEntity.GetComponent<TransformComponent>();
@@ -392,17 +392,7 @@ namespace rhombus
 
 			float snapValues[3] = { snapValue, snapValue, snapValue };
 
-			Mat4 cameraViewMat = Mat4({ cameraView[0][0], cameraView[0][1], cameraView[0][2], cameraView[0][3] },
-				{ cameraView[1][0], cameraView[1][1], cameraView[1][2], cameraView[1][3]},
-				{ cameraView[2][0], cameraView[2][1], cameraView[2][2], cameraView[2][3]}, 
-				{ cameraView[3][0], cameraView[3][1], cameraView[3][2], cameraView[3][3]});
-
-			Mat4 cameraProjectionMat = Mat4({ cameraProjection[0][0], cameraProjection[0][1], cameraProjection[0][2], cameraProjection[0][3] },
-				{ cameraProjection[1][0], cameraProjection[1][1], cameraProjection[1][2], cameraProjection[1][3] },
-				{ cameraProjection[2][0], cameraProjection[2][1], cameraProjection[2][2], cameraProjection[2][3] },
-				{ cameraProjection[3][0], cameraProjection[3][1], cameraProjection[3][2], cameraProjection[3][3] });
-
-			ImGuizmo::Manipulate(cameraViewMat.ToPtr(), cameraProjectionMat.ToPtr(),
+			ImGuizmo::Manipulate(cameraView.ToPtr(), cameraProjection.ToPtr(),
 				(ImGuizmo::OPERATION)m_gizmoType, ImGuizmo::LOCAL, transform.ToPtr(),
 				nullptr, snap ? snapValues : nullptr);
 

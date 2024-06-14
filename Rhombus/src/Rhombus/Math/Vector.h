@@ -1,7 +1,5 @@
 #pragma once
 
-#include "Rhombus/Core/Log.h"
-
 namespace rhombus
 {
 	// TODO: make function types consistent in form
@@ -307,13 +305,11 @@ namespace rhombus
 
 	inline float Vec2::operator [] (const int idx) const
 	{
-		RB_CORE_ASSERT(idx >= 0 && idx < 2, "Index {0} is out of bounds of Vec2", idx);
 		return (&x)[idx];
 	}
 
 	inline float& Vec2::operator [] (const int idx)
 	{
-		RB_CORE_ASSERT(idx >= 0 && idx < 2, "Index {0} is out of bounds of Vec2", idx);
 		return (&x)[idx];
 	}
 
@@ -559,13 +555,11 @@ namespace rhombus
 
 	inline float Vec3::operator [] (const int idx) const
 	{
-		RB_CORE_ASSERT(idx >= 0 && idx < 3, "Index {0} is out of bounds of Vec3", idx);
 		return (&x)[idx];
 	}
 
 	inline float& Vec3::operator [] (const int idx)
 	{
-		RB_CORE_ASSERT(idx >= 0 && idx < 3, "Index {0} is out of bounds of Vec3", idx);
 		return (&x)[idx];
 	}
 
@@ -838,13 +832,11 @@ namespace rhombus
 
 	inline float Vec4::operator [] (const int idx) const
 	{
-		RB_CORE_ASSERT(idx >= 0 && idx < 4, "Index {0} is out of bounds of Vec4", idx);
 		return (&x)[idx];
 	}
 
 	inline float& Vec4::operator [] (const int idx)
 	{
-		RB_CORE_ASSERT(idx >= 0 && idx < 4, "Index {0} is out of bounds of Vec4", idx);
 		return (&x)[idx];
 	}
 

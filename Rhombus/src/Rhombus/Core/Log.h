@@ -1,9 +1,9 @@
 #pragma once
 
 #include "Core.h"
-
-#define GLM_ENABLE_EXPERIMENTAL
-#include "glm/gtx/string_cast.hpp"
+#include "Rhombus/Math/Vector.h"
+#include "Rhombus/Math/Matrix.h"
+#include "Rhombus/Math/Quat.h"
 
 // This ignores all warnings raised inside External headers
 #pragma warning(push, 0)
@@ -29,22 +29,52 @@ namespace rhombus {
 	};
 }
 
-template<typename OStream, glm::length_t L, typename T, glm::qualifier Q>
-inline OStream& operator<<(OStream& os, const glm::vec<L, T, Q>& vector)
+template<typename OStream>
+inline OStream& operator<<(OStream& os, const rhombus::Vec2& vector)
 {
-	return os << glm::to_string(vector);
+	return os << "(" << vector.x << "," << vector.y << ")";
 }
 
-template<typename OStream, glm::length_t C, glm::length_t R, typename T, glm::qualifier Q>
-inline OStream& operator<<(OStream& os, const glm::mat<C, R, T, Q>& matrix)
+template<typename OStream>
+inline OStream& operator<<(OStream& os, const rhombus::Vec3& vector)
 {
-	return os << glm::to_string(matrix);
+	return os << "(" << vector.x << "," << vector.y << "," << vector.z << ")";
 }
 
-template<typename OStream, typename T, glm::qualifier Q>
-inline OStream& operator<<(OStream& os, glm::qua<T, Q> quaternion)
+template<typename OStream>
+inline OStream& operator<<(OStream& os, const rhombus::Vec4& vector)
 {
-	return os << glm::to_string(quaternion);
+	return os << "(" << vector.x << "," << vector.y << "," << vector.z << "," << vector.w << ")";
+}
+
+template<typename OStream>
+inline OStream& operator<<(OStream& os, const rhombus::Mat2& matrix)
+{
+	return os << "(" << matrix.cols[0][0] << "," << matrix.cols[0][1] << ")," << 
+				"(" << matrix.cols[1][0] << "," << matrix.cols[1][1] << ")";
+}
+
+template<typename OStream>
+inline OStream& operator<<(OStream& os, const rhombus::Mat3& matrix)
+{
+	return os << "(" << matrix.cols[0][0] << "," << matrix.cols[0][1] << "," << matrix.cols[0][2] << ")," <<
+				"(" << matrix.cols[1][0] << "," << matrix.cols[1][1] << "," << matrix.cols[1][2] << ")," <<
+				"(" << matrix.cols[2][0] << "," << matrix.cols[2][1] << "," << matrix.cols[2][2] << ")";
+}
+
+template<typename OStream>
+inline OStream& operator<<(OStream& os, const rhombus::Mat4& matrix)
+{
+	return os << "(" << matrix.cols[0][0] << "," << matrix.cols[0][1] << "," << matrix.cols[0][2] << "," << matrix.cols[0][3] << ")," <<
+		"(" << matrix.cols[1][0] << "," << matrix.cols[1][1] << "," << matrix.cols[1][2] << "," << matrix.cols[1][3] << ")," <<
+		"(" << matrix.cols[2][0] << "," << matrix.cols[2][1] << "," << matrix.cols[2][2] << "," << matrix.cols[2][3] << ")," <<
+		"(" << matrix.cols[3][0] << "," << matrix.cols[3][1] << "," << matrix.cols[3][2] << "," << matrix.cols[3][3] << ")";
+}
+
+template<typename OStream>
+inline OStream& operator<<(OStream& os, const rhombus::Quat& quaternion)
+{
+	return os << "(" << quaternion.w << "{" << quaternion.x << "," << quaternion.y << "," << quaternion.z << "})";
 }
 
 // Core log macros

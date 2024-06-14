@@ -374,13 +374,11 @@ namespace rhombus
 
 	inline Vec4 Mat4::operator [] (const int idx) const
 	{
-		RB_CORE_ASSERT(idx >= 0 && idx < 4, "Index {0} is out of bounds of Mat4", idx);
 		return cols[idx];
 	}
 
 	inline Vec4& Mat4::operator [] (const int idx)
 	{
-		RB_CORE_ASSERT(idx >= 0 && idx < 4, "Index {0} is out of bounds of Mat4", idx);
 		return cols[idx];
 	}
 

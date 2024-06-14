@@ -447,60 +447,56 @@ namespace rhombus
 	// Check this!
 	inline Mat4 Mat4::Inverse() const 
 	{
-		/*Mat4 inv;
-		for (int i = 0; i < 4; i++) 
+		Mat4 inv;
+		for (int c = 0; c < 4; c++) 
 		{
-			for (int j = 0; j < 4; j++) 
+			for (int r = 0; r < 4; r++) 
 			{
-				inv.cols[i][j] = Cofactor(i, j);	// Perform the transpose while calculating the cofactors
+				inv.cols[c][r] = Cofactor(c, r);	// Perform the transpose while calculating the cofactors
 			}
 		}
 		float det = Determinant();
 		float invDet = 1.0f / det;
 		inv *= invDet;
-		return inv;*/
+
 		glm::mat4 temp = *this;
-		glm::mat4 inv = glm::inverse(temp);
+		glm::mat4 invGLM = glm::inverse(temp);
 
-		return Mat4({inv[0][0], inv[0][1], inv[0][2], inv[0][3]},
-			{ inv[1][0], inv[1][1], inv[1][2], inv[1][3] }, 
-			{ inv[2][0], inv[2][1], inv[2][2], inv[2][3] }, 
-			{ inv[3][0], inv[3][1], inv[3][2], inv[3][3] } );
-
+		return inv;
 	}
 
-	inline Mat3 Mat4::Minor(const int i, const int j) const 
+	inline Mat3 Mat4::Minor(const int c, const int r) const 
 	{
 		Mat3 minor;
 
-		int yy = 0;
-		for (int y = 0; y < 4; y++) 
+		int xx = 0;
+		for (int x = 0; x < 4; x++) 
 		{
-			if (y == j) 
+			if (x == c) 
 			{
 				continue;
 			}
 
-			int xx = 0;
-			for (int x = 0; x < 4; x++) 
+			int yy = 0;
+			for (int y = 0; y < 4; y++) 
 			{
-				if (x == i) {
+				if (y == r) {
 					continue;
 				}
 
-				minor.cols[xx][yy] = cols[x][y];
-				xx++;
+				minor.cols[yy][xx] = cols[y][x];
+				yy++;
 			}
 
-			yy++;
+			xx++;
 		}
 		return minor;
 	}
 
-	inline float Mat4::Cofactor(const int i, const int j) const 
+	inline float Mat4::Cofactor(const int c, const int r) const 
 	{
-		const Mat3 minor = Minor(i, j);
-		const float C = float(pow(-1, i + 1 + j + 1)) * minor.Determinant();
+		const Mat3 minor = Minor(c, r);
+		const float C = float(pow(-1, c + 1 + r + 1)) * minor.Determinant();
 		return C;
 	}
 
@@ -567,56 +563,32 @@ namespace rhombus
 	inline Mat4 Mat4::Perspective(float fovy, float aspect_ratio, float znear, float zfar)
 	{
 		// OpenGL only
-		//const float pi = acosf(-1.0f);
-		//const float fovy_radians = fovy * pi / 180.0f;
-		//const float f = 1.0f / tanf(fovy_radians * 0.5f);
-		//const float xscale = f;
-		//const float yscale = f / aspect_ratio;
-
-		/*Mat4 m;
-		m.rows[0] = Vec4(xscale, 0, 0, 0);
-		m.rows[1] = Vec4(0, yscale, 0, 0);
-		m.rows[2] = Vec4(0, 0, (zfar + znear) / (znear - zfar), (2.0f * zfar * znear) / (znear - zfar));
-		m.rows[3] = Vec4(0, 0, -1, 0);
-		return m;*/
-
-		glm::mat4 pers = glm::perspective(fovy, aspect_ratio, znear, zfar);
-		//return pers;
+		const float f = 1.0f / tanf(fovy * 0.5f);
+		const float xscale = f / aspect_ratio;
+		const float yscale = f;
 		
-		/*Mat4({xscale, 0.0f, 0.0f, 0.0f},
+		return Mat4({xscale, 0.0f, 0.0f, 0.0f},
 					{ 0.0f, yscale, 0.0f, 0.0f },
-					{ 0.0f, 0.0f, (zfar + znear) / (znear - zfar), (2.0f * zfar * znear) / (znear - zfar) },
-					{ 0.0f, 0.0f, -1.0f, 0.0f } );*/
-
-		return Mat4({pers[0][0], pers[0][1], pers[0][2], pers[0][3]},
-			{ pers[1][0], pers[1][1], pers[1][2], pers[1][3] },
-			{ pers[2][0], pers[2][1], pers[2][2], pers[2][3] },
-			{ pers[3][0], pers[3][1], pers[3][2], pers[3][3] });
+					{ 0.0f, 0.0f, (zfar + znear) / (znear - zfar), -1.0f },
+					{ 0.0f, 0.0f, (2.0f * zfar * znear) / (znear - zfar), 0.0f } );
 	}
 
 	// Check this!
 	inline Mat4 Mat4::Ortho(float xmin, float xmax, float ymin, float ymax, float znear, float zfar)
 	{
 		// OpenGL only
-		/*const float width = xmax - xmin;
+		const float width = xmax - xmin;
 		const float height = ymax - ymin;
 		const float depth = zfar - znear;
 
 		const float tx = -(xmax + xmin) / width;
 		const float ty = -(ymax + ymin) / height;
-		const float tz = -(zfar + znear) / depth;*/
+		const float tz = -(zfar + znear) / depth;
 
-		/*return Mat4({2.0f / width, 0.0f, 0.0f, 0.0f},
+		return Mat4({2.0f / width, 0.0f, 0.0f, 0.0f},
 			{ 0.0f, 2.0f / height, 0.0f, 0.0f },
 			{ 0.0f, 0.0f, -2.0f / depth, 0.0f },
-			{ tx, ty, tz, 1.0f });*/
-		glm::mat4 ortho = glm::ortho(xmin, xmax, ymin, ymax, znear, zfar);
-		//return ortho;
-
-		return Mat4({ortho[0][0], ortho[0][1], ortho[0][2], ortho[0][3]},
-			{ ortho[1][0], ortho[1][1], ortho[1][2], ortho[1][3] },
-			{ ortho[2][0], ortho[2][1], ortho[2][2], ortho[2][3] },
-			{ ortho[3][0], ortho[3][1], ortho[3][2], ortho[3][3] });
+			{ tx, ty, tz, 1.0f });
 	}
 
 	inline Vec4 Mat4::operator * (const Vec4& rhs) const 

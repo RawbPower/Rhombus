@@ -443,14 +443,6 @@ namespace rhombus
 
 		for (size_t i = 0; i < quadVertexCount; i++)
 		{
-			/*glm::mat4 scaledTransformGLM = glm::mat4({scaledTransform[0][0], scaledTransform[0][1], scaledTransform[0][2], scaledTransform[0][3]},
-				{ scaledTransform[1][0], scaledTransform[1][1], scaledTransform[1][2], scaledTransform[1][3] },
-				{ scaledTransform[2][0], scaledTransform[2][1], scaledTransform[2][2], scaledTransform[2][3] },
-				{ scaledTransform[3][0], scaledTransform[3][1], scaledTransform[3][2], scaledTransform[3][3] });
-			glm::vec4 qvpGLM = glm::vec4(s_Data.QuadVertexPosition[i]);
-			Vec4 qvp = s_Data.QuadVertexPosition[i];
-			Vec4 result = scaledTransform * qvp;
-			glm::vec4 resultGLM = scaledTransformGLM * qvpGLM;*/
 			s_Data.QuadVertexBufferPtr->Position = scaledTransform * s_Data.QuadVertexPosition[i];
 			s_Data.QuadVertexBufferPtr->Color = color;
 			s_Data.QuadVertexBufferPtr->TexCoord = textureCoords[i];

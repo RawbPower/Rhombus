@@ -94,8 +94,8 @@ namespace rhombus
 		float Determinant() const;
 		Mat3 Transpose() const;
 		Mat3 Inverse() const;
-		Mat2 Minor(const int i, const int j) const;
-		float Cofactor(const int i, const int j) const;
+		Mat2 Minor(const int c, const int r) const;
+		float Cofactor(const int c, const int r) const;
 
 		Vec3 operator * (const Vec3& rhs) const;
 		Mat3 operator * (const float rhs) const;
@@ -197,9 +197,9 @@ namespace rhombus
 	inline Mat3 Mat3::Inverse() const 
 	{
 		Mat3 inv;
-		for (int i = 0; i < 3; i++) {
-			for (int j = 0; j < 3; j++) {
-				inv.cols[i][j]= Cofactor(i, j);	// Perform the transpose while calculating the cofactors
+		for (int c = 0; c < 3; c++) {
+			for (int r = 0; r < 3; r++) {
+				inv.cols[c][r]= Cofactor(c, r);	// Perform the transpose while calculating the cofactors
 			}
 		}
 		float det = Determinant();
@@ -208,35 +208,35 @@ namespace rhombus
 		return inv;
 	}
 
-	inline Mat2 Mat3::Minor(const int i, const int j) const 
+	inline Mat2 Mat3::Minor(const int c, const int r) const 
 	{
 		Mat2 minor;
 
-		int yy = 0;
-		for (int y = 0; y < 3; y++) {
-			if (y == j) {
+		int xx = 0;
+		for (int x = 0; x < 3; x++) {
+			if (x == c) {
 				continue;
 			}
 
-			int xx = 0;
-			for (int x = 0; x < 3; x++) {
-				if (x == i) {
+			int yy = 0;
+			for (int y = 0; y < 3; y++) {
+				if (y == r) {
 					continue;
 				}
 
-				minor.cols[xx][yy] = cols[x][y];
-				xx++;
+				minor.cols[yy][xx] = cols[y][x];
+				yy++;
 			}
 
-			yy++;
+			xx++;
 		}
 		return minor;
 	}
 
-	inline float Mat3::Cofactor(const int i, const int j) const 
+	inline float Mat3::Cofactor(const int c, const int r) const 
 	{
-		const Mat2 minor = Minor(i, j);
-		const float C = float(pow(-1, i + 1 + j + 1)) * minor.Determinant();
+		const Mat2 minor = Minor(c, r);
+		const float C = float(pow(-1, c + 1 + r + 1)) * minor.Determinant();
 		return C;
 	}
 
@@ -309,8 +309,8 @@ namespace rhombus
 		float Determinant() const;
 		Mat4 Transpose() const;
 		Mat4 Inverse() const;
-		Mat3 Minor(const int i, const int j) const;
-		float Cofactor(const int i, const int j) const;
+		Mat3 Minor(const int c, const int r) const;
+		float Cofactor(const int c, const int r) const;
 
 		/*void Orient(Vec3 pos, Vec3 fwd, Vec3 up);
 		void LookAt(Vec3 pos, Vec3 lookAt, Vec3 up);

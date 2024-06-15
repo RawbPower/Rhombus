@@ -228,7 +228,7 @@ namespace rhombus
 		v.x = r;
 		v.y = g;
 		v.z = b;
-		v.z = a;
+		v.w = a;
 		return v;
 	}
 }

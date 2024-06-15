@@ -51,6 +51,10 @@ namespace rhombus
 
 		void DuplicateEntity(Entity entity);
 
+		// Adds appropriate number suffix to this entity name
+		std::string GetNameForDuplicate(Entity entity);
+		bool DoesNameExistInScene(std::string name);
+
 		Entity GetEntityByUUID(UUID uuid);
 
 		Entity GetPrimaryCameraEntity();

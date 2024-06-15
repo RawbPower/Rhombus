@@ -413,6 +413,7 @@ namespace rhombus
 		{
 			ImGui::DragFloat2("Offset", component.m_offset.ToPtr(), 0.01f);
 			ImGui::DragFloat2("Size", component.m_size.ToPtr());
+			ImGui::ColorEdit4("Debug Colour", component.GetDebugColor().ToPtr());
 		});
 
 		DrawComponent<CardComponent>("Card", entity, [](auto& component)

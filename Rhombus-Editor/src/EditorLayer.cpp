@@ -814,8 +814,9 @@ namespace rhombus
 						* math::Rotate(Mat4::Identity(), tc.m_rotation.z, Vec3(0.0f, 0.0f, 1.0f))
 						* math::Scale(Mat4::Identity(), scale);
 
-					Renderer2D::DrawRect(transform, m_AreaColor);
-					Color overlayColor = m_AreaColor;
+					Color debugColor = ba2d.GetDebugColor().a > 0.0f ? ba2d.GetDebugColor() : m_AreaColor;
+					Renderer2D::DrawRect(transform, debugColor);
+					Color overlayColor = debugColor;
 					overlayColor.a = 0.2f;
 					Renderer2D::DrawQuad(transform, overlayColor);
 				}

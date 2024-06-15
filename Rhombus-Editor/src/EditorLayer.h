@@ -87,7 +87,7 @@ namespace rhombus
 
 		int m_gizmoType = 7;		// ImGuizmo::OPERATION::TRANSLATE
 
-		bool m_ShowPhysicsColliders = false;
+		bool m_ShowPhysicsColliders = true;
 		Color m_PhysicsColliderColor = Color(0.0, 1.0, 0.0, 1.0);
 		Color m_AreaColor = Color(0.0, 0.0, 1.0, 1.0);
 

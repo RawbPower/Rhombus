@@ -13,6 +13,7 @@ Entities:
     BoxArea2DComponent:
       Offset: [0, 0]
       Size: [22.5, 32]
+      DebugColor: [0.87843138, 0.0705882385, 0.854901969, 1]
     CardComponent:
       Rank: 1
       Suit: 0
@@ -29,7 +30,7 @@ Entities:
         PerspectiveFOV: 0.785398185
         PerspectiveNear: 0.00999999978
         PerspectiveFar: 1000
-        OrthographicSize: 836
+        OrthographicSize: 787
         OrthographicNear: -1
         OrthographicFar: 1
         PixelPerfect: true
@@ -58,6 +59,7 @@ Entities:
     BoxArea2DComponent:
       Offset: [0, 0]
       Size: [22.5, 32]
+      DebugColor: [0.87843138, 0.0705882385, 0.854901969, 1]
     CardComponent:
       Rank: 13
       Suit: 1
@@ -74,6 +76,7 @@ Entities:
     BoxArea2DComponent:
       Offset: [0, 0]
       Size: [22.5, 32]
+      DebugColor: [0.877451003, 0.0688196793, 0.853667736, 1]
     CardComponent:
       Rank: 12
       Suit: 2
@@ -90,6 +93,7 @@ Entities:
     BoxArea2DComponent:
       Offset: [0, 0]
       Size: [22.5, 32]
+      DebugColor: [0.87843138, 0.0705882385, 0.854901969, 1]
     CardComponent:
       Rank: 11
       Suit: 3
@@ -106,6 +110,7 @@ Entities:
     BoxArea2DComponent:
       Offset: [0, 0]
       Size: [22.5, 32]
+      DebugColor: [0.87843138, 0.0705882385, 0.854901969, 1]
     CardComponent:
       Rank: 10
       Suit: 0
@@ -122,6 +127,7 @@ Entities:
     BoxArea2DComponent:
       Offset: [0, 0]
       Size: [22.5, 32]
+      DebugColor: [0.87843138, 0.0705882385, 0.854901969, 1]
     CardComponent:
       Rank: 9
       Suit: 1
@@ -138,6 +144,7 @@ Entities:
     BoxArea2DComponent:
       Offset: [0, 0]
       Size: [22.5, 32]
+      DebugColor: [0.87843138, 0.0705882385, 0.854901969, 1]
     CardComponent:
       Rank: 8
       Suit: 2
@@ -154,6 +161,183 @@ Entities:
     BoxArea2DComponent:
       Offset: [0, 0]
       Size: [22.5, 32]
+      DebugColor: [0.87843138, 0.0705882385, 0.854901969, 1]
     CardComponent:
       Rank: 7
       Suit: 3
+  - Entity: 8084451237944974462
+    TagComponent:
+      Tag: Site 1
+    TransformComponent:
+      Position: [-209, 94.5, 0]
+      Rotation: [0, -0, 0]
+      Scale: [1, 1, 1]
+    BoxArea2DComponent:
+      Offset: [0, 0]
+      Size: [22.5, 32]
+      DebugColor: [0, 0, 0, 0]
+  - Entity: 199452891732059442
+    TagComponent:
+      Tag: Free Cell 1
+    TransformComponent:
+      Position: [44.5, 94.5, 0]
+      Rotation: [0, -0, 0]
+      Scale: [1, 1, 1]
+    BoxArea2DComponent:
+      Offset: [0, 0]
+      Size: [22.5, 32]
+      DebugColor: [0, 0, 0, 0]
+  - Entity: 3940828394031682926
+    TagComponent:
+      Tag: Column 1
+    TransformComponent:
+      Position: [-206.5, 23, 0]
+      Rotation: [0, -0, 0]
+      Scale: [1, 1, 1]
+    BoxArea2DComponent:
+      Offset: [0, 0]
+      Size: [22.5, 32]
+      DebugColor: [0, 0, 0, 0]
+  - Entity: 11970580269886680987
+    TagComponent:
+      Tag: Column 2
+    TransformComponent:
+      Position: [-147.5, 23, 0]
+      Rotation: [0, -0, 0]
+      Scale: [1, 1, 1]
+    BoxArea2DComponent:
+      Offset: [0, 0]
+      Size: [22.5, 32]
+      DebugColor: [0, 0, 0, 0]
+  - Entity: 9077371792901969716
+    TagComponent:
+      Tag: Column 3
+    TransformComponent:
+      Position: [-88.5, 23, 0]
+      Rotation: [0, -0, 0]
+      Scale: [1, 1, 1]
+    BoxArea2DComponent:
+      Offset: [0, 0]
+      Size: [22.5, 32]
+      DebugColor: [0, 0, 0, 0]
+  - Entity: 2452109330358541380
+    TagComponent:
+      Tag: Column 4
+    TransformComponent:
+      Position: [-29.5, 23, 0]
+      Rotation: [0, -0, 0]
+      Scale: [1, 1, 1]
+    BoxArea2DComponent:
+      Offset: [0, 0]
+      Size: [22.5, 32]
+      DebugColor: [0, 0, 0, 0]
+  - Entity: 10645660535592834472
+    TagComponent:
+      Tag: Column 5
+    TransformComponent:
+      Position: [29.5, 23, 0]
+      Rotation: [0, -0, 0]
+      Scale: [1, 1, 1]
+    BoxArea2DComponent:
+      Offset: [0, 0]
+      Size: [22.5, 32]
+      DebugColor: [0, 0, 0, 0]
+  - Entity: 1372865166406401429
+    TagComponent:
+      Tag: Column 6
+    TransformComponent:
+      Position: [88.5, 23, 0]
+      Rotation: [0, -0, 0]
+      Scale: [1, 1, 1]
+    BoxArea2DComponent:
+      Offset: [0, 0]
+      Size: [22.5, 32]
+      DebugColor: [0, 0, 0, 0]
+  - Entity: 15424358020562100925
+    TagComponent:
+      Tag: Column 7
+    TransformComponent:
+      Position: [147.5, 23, 0]
+      Rotation: [0, -0, 0]
+      Scale: [1, 1, 1]
+    BoxArea2DComponent:
+      Offset: [0, 0]
+      Size: [22.5, 32]
+      DebugColor: [0, 0, 0, 0]
+  - Entity: 4114663372317632765
+    TagComponent:
+      Tag: Column 8
+    TransformComponent:
+      Position: [206.5, 23, 0]
+      Rotation: [0, -0, 0]
+      Scale: [1, 1, 1]
+    BoxArea2DComponent:
+      Offset: [0, 0]
+      Size: [22.5, 32]
+      DebugColor: [0, 0, 0, 0]
+  - Entity: 3422527351249912802
+    TagComponent:
+      Tag: Free Cell 2
+    TransformComponent:
+      Position: [99.5, 94.5, 0]
+      Rotation: [0, -0, 0]
+      Scale: [1, 1, 1]
+    BoxArea2DComponent:
+      Offset: [0, 0]
+      Size: [22.5, 32]
+      DebugColor: [0, 0, 0, 0]
+  - Entity: 11121856120979436675
+    TagComponent:
+      Tag: Free Cell 3
+    TransformComponent:
+      Position: [155, 94.5, 0]
+      Rotation: [0, -0, 0]
+      Scale: [1, 1, 1]
+    BoxArea2DComponent:
+      Offset: [0, 0]
+      Size: [22.5, 32]
+      DebugColor: [0, 0, 0, 0]
+  - Entity: 12572806521458591849
+    TagComponent:
+      Tag: Free Cell 4
+    TransformComponent:
+      Position: [210, 94.5, 0]
+      Rotation: [0, -0, 0]
+      Scale: [1, 1, 1]
+    BoxArea2DComponent:
+      Offset: [0, 0]
+      Size: [22.5, 32]
+      DebugColor: [0, 0, 0, 0]
+  - Entity: 17103678135621629686
+    TagComponent:
+      Tag: Site 2
+    TransformComponent:
+      Position: [-154.5, 94.5, 0]
+      Rotation: [0, -0, 0]
+      Scale: [1, 1, 1]
+    BoxArea2DComponent:
+      Offset: [0, 0]
+      Size: [22.5, 32]
+      DebugColor: [0, 0, 0, 0]
+  - Entity: 7817693968346137392
+    TagComponent:
+      Tag: Site 3
+    TransformComponent:
+      Position: [-99.5, 94.5, 0]
+      Rotation: [0, -0, 0]
+      Scale: [1, 1, 1]
+    BoxArea2DComponent:
+      Offset: [0, 0]
+      Size: [22.5, 32]
+      DebugColor: [0, 0, 0, 0]
+  - Entity: 3551221006459832491
+    TagComponent:
+      Tag: Site 4
+    TransformComponent:
+      Position: [-44.5, 94.5, 0]
+      Rotation: [0, -0, 0]
+      Scale: [1, 1, 1]
+    BoxArea2DComponent:
+      Offset: [0, 0]
+      Size: [22.5, 32]
+      DebugColor: [0, 0, 0, 0]

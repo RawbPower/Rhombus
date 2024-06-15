@@ -297,6 +297,7 @@ namespace rhombus
 			auto& area2DComponent = entity.GetComponent<BoxArea2DComponent>();
 			out << YAML::Key << "Offset" << YAML::Value << area2DComponent.m_offset;
 			out << YAML::Key << "Size" << YAML::Value << area2DComponent.m_size;
+			out << YAML::Key << "DebugColor" << YAML::Value << area2DComponent.GetDebugColor();
 
 			out << YAML::EndMap; // BoxArea2DComponent
 		}
@@ -477,6 +478,7 @@ namespace rhombus
 					auto& coll = deserializedEntity.AddComponent<BoxArea2DComponent>();
 					coll.m_offset = boxArea2DComponent["Offset"].as<Vec2>();
 					coll.m_size = boxArea2DComponent["Size"].as<Vec2>();
+					coll.GetDebugColor() = boxArea2DComponent["DebugColor"].as<Vec4>();
 				}
 
 				m_scene->DeserializeEntity(&entity, deserializedEntity);

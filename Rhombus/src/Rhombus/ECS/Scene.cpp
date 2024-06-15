@@ -29,7 +29,7 @@ namespace rhombus
 	// Update this list when any new components are added
 	// -----------------------------------------------------
 	using RhombusComponents =
-		ComponentGroup<TagComponent, TransformComponent, SpriteRendererComponent,
+		ComponentGroup<TransformComponent, SpriteRendererComponent,
 		CircleRendererComponent, CameraComponent, ScriptComponent, NativeScriptComponent,
 		Rigidbody2DComponent, BoxCollider2DComponent, CircleCollider2DComponent, BoxArea2DComponent>;
 	// -----------------------------------------------------
@@ -61,10 +61,11 @@ namespace rhombus
 	{
 		m_Registry.Init();
 		
-		// ID component is unique so shouldn't be grouped with the rest 
-		// of the components in general. It is created with the entity 
-		// and doesn't need to be copied
+		// ID and tag components are unique so shouldn't be grouped with 
+		// the rest of the components in general. It is created with the 
+		// entity and doesn't need to be copied
 		m_Registry.RegisterComponent<IDComponent>();
+		m_Registry.RegisterComponent<TagComponent>();
 
 		RegisterComponents(RhombusComponents{});
 	}
@@ -453,10 +454,68 @@ namespace rhombus
 
 	void Scene::DuplicateEntity(Entity entity)
 	{
-		std::string name = entity.GetName();
+		std::string name = GetNameForDuplicate(entity);
 		Entity newEntity = CreateEntity(name);
 
 		CopyComponentIfExists(RhombusComponents{}, newEntity, entity);
+	}
+
+	std::string Scene::GetNameForDuplicate(Entity entity)
+	{
+		// Look for a number suffix
+		std::string digits = "0123456789";
+		std::string name = entity.GetName();
+		std::string numberSuffix = "";
+		int currentCharIndex = name.length() - 1;
+		char currentChar = name[currentCharIndex];
+		while (digits.find(currentChar) != std::string::npos)
+		{
+			numberSuffix = currentChar + numberSuffix;
+			if (currentCharIndex == 0)
+			{
+				break;
+			}
+			currentChar = name[--currentCharIndex];
+		}
+
+		if (numberSuffix == "")
+		{
+			// If no number suffic just add 2
+			name += " 2";
+		}
+		else
+		{
+			// Increment number at end of name
+			std::string prefix = name.substr(0, currentCharIndex + 1);
+			int intSuffix = std::stoi(numberSuffix);
+			intSuffix++;
+			name = prefix + std::to_string(intSuffix);
+
+			// If this name already exists than increment the number again
+			while (DoesNameExistInScene(name))
+			{
+				intSuffix++;
+				name = prefix + std::to_string(intSuffix);
+			}
+		}
+
+		return name;
+	}
+
+	bool Scene::DoesNameExistInScene(std::string name)
+	{
+		std::vector<EntityID> view = m_Registry.GetEntityList<TagComponent>();
+		for (auto e : view)
+		{
+			Entity entity = { e, this };
+			auto& tag = entity.GetComponent<TagComponent>();
+			if (tag.m_tag == name)
+			{
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	Entity Scene::GetEntityByUUID(UUID uuid)

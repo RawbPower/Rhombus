@@ -80,7 +80,7 @@ namespace rhombus {
 			m_initialMousePosition = mouse;
 			if (Input::IsMouseButtonPressed(RB_MOUSE_BUTTON_MIDDLE))
 			{
-				MouseRotate(delta);
+				MousePan(delta);
 			}
 		}
 		

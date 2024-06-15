@@ -2,6 +2,7 @@
 
 #include "Rhombus/Scripting/ScriptEngine.h"
 #include "../Patience/Components/CardComponent.h"
+#include "../Patience/Components/CardSlotComponent.h"
 
 #include <imgui/imgui.h>
 #include <imgui/imgui_internal.h>
@@ -249,6 +250,7 @@ namespace rhombus
 
 			// Game
 			DisplayAddComponentEntry<CardComponent>("Card");
+			DisplayAddComponentEntry<CardSlotComponent>("CardSlot");
 
 			ImGui::EndPopup();
 		}
@@ -420,6 +422,10 @@ namespace rhombus
 		{
 			ImGui::InputInt("Rank", &component.m_rank);
 			ImGui::InputInt("Suit", &component.m_suit);
+		});
+
+		DrawComponent<CardSlotComponent>("Card Slot", entity, [](auto& component)
+		{
 		});
 	}
 

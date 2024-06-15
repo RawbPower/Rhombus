@@ -23,5 +23,7 @@ namespace rhombus
 		virtual void OnMouseMoved(int x, int y) override;
 		virtual void OnMouseButtonPressed(int button) override;
 		virtual void OnMouseButtonReleased(int button) override;
+
+		void PlaceCard(Entity cardEntity);
 	};
 }

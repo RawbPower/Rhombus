@@ -169,24 +169,28 @@ Entities:
     TagComponent:
       Tag: Site 1
     TransformComponent:
-      Position: [-209, 94.5, 0]
+      Position: [-209, 95, 0]
       Rotation: [0, -0, 0]
       Scale: [1, 1, 1]
     BoxArea2DComponent:
       Offset: [0, 0]
       Size: [22.5, 32]
       DebugColor: [0, 0, 0, 0]
+    CardSlotComponent:
+      {}
   - Entity: 199452891732059442
     TagComponent:
       Tag: Free Cell 1
     TransformComponent:
-      Position: [44.5, 94.5, 0]
+      Position: [44.5, 95, 0]
       Rotation: [0, -0, 0]
       Scale: [1, 1, 1]
     BoxArea2DComponent:
       Offset: [0, 0]
       Size: [22.5, 32]
       DebugColor: [0, 0, 0, 0]
+    CardSlotComponent:
+      {}
   - Entity: 3940828394031682926
     TagComponent:
       Tag: Column 1
@@ -198,6 +202,8 @@ Entities:
       Offset: [0, 0]
       Size: [22.5, 32]
       DebugColor: [0, 0, 0, 0]
+    CardSlotComponent:
+      {}
   - Entity: 11970580269886680987
     TagComponent:
       Tag: Column 2
@@ -209,6 +215,8 @@ Entities:
       Offset: [0, 0]
       Size: [22.5, 32]
       DebugColor: [0, 0, 0, 0]
+    CardSlotComponent:
+      {}
   - Entity: 9077371792901969716
     TagComponent:
       Tag: Column 3
@@ -220,6 +228,8 @@ Entities:
       Offset: [0, 0]
       Size: [22.5, 32]
       DebugColor: [0, 0, 0, 0]
+    CardSlotComponent:
+      {}
   - Entity: 2452109330358541380
     TagComponent:
       Tag: Column 4
@@ -231,6 +241,8 @@ Entities:
       Offset: [0, 0]
       Size: [22.5, 32]
       DebugColor: [0, 0, 0, 0]
+    CardSlotComponent:
+      {}
   - Entity: 10645660535592834472
     TagComponent:
       Tag: Column 5
@@ -242,6 +254,8 @@ Entities:
       Offset: [0, 0]
       Size: [22.5, 32]
       DebugColor: [0, 0, 0, 0]
+    CardSlotComponent:
+      {}
   - Entity: 1372865166406401429
     TagComponent:
       Tag: Column 6
@@ -253,6 +267,8 @@ Entities:
       Offset: [0, 0]
       Size: [22.5, 32]
       DebugColor: [0, 0, 0, 0]
+    CardSlotComponent:
+      {}
   - Entity: 15424358020562100925
     TagComponent:
       Tag: Column 7
@@ -264,6 +280,8 @@ Entities:
       Offset: [0, 0]
       Size: [22.5, 32]
       DebugColor: [0, 0, 0, 0]
+    CardSlotComponent:
+      {}
   - Entity: 4114663372317632765
     TagComponent:
       Tag: Column 8
@@ -275,69 +293,83 @@ Entities:
       Offset: [0, 0]
       Size: [22.5, 32]
       DebugColor: [0, 0, 0, 0]
+    CardSlotComponent:
+      {}
   - Entity: 3422527351249912802
     TagComponent:
       Tag: Free Cell 2
     TransformComponent:
-      Position: [99.5, 94.5, 0]
+      Position: [99.5, 95, 0]
       Rotation: [0, -0, 0]
       Scale: [1, 1, 1]
     BoxArea2DComponent:
       Offset: [0, 0]
       Size: [22.5, 32]
       DebugColor: [0, 0, 0, 0]
+    CardSlotComponent:
+      {}
   - Entity: 11121856120979436675
     TagComponent:
       Tag: Free Cell 3
     TransformComponent:
-      Position: [155, 94.5, 0]
+      Position: [154.5, 95, 0]
       Rotation: [0, -0, 0]
       Scale: [1, 1, 1]
     BoxArea2DComponent:
       Offset: [0, 0]
       Size: [22.5, 32]
       DebugColor: [0, 0, 0, 0]
+    CardSlotComponent:
+      {}
   - Entity: 12572806521458591849
     TagComponent:
       Tag: Free Cell 4
     TransformComponent:
-      Position: [210, 94.5, 0]
+      Position: [209.5, 95, 0]
       Rotation: [0, -0, 0]
       Scale: [1, 1, 1]
     BoxArea2DComponent:
       Offset: [0, 0]
       Size: [22.5, 32]
       DebugColor: [0, 0, 0, 0]
+    CardSlotComponent:
+      {}
   - Entity: 17103678135621629686
     TagComponent:
       Tag: Site 2
     TransformComponent:
-      Position: [-154.5, 94.5, 0]
+      Position: [-154.5, 95, 0]
       Rotation: [0, -0, 0]
       Scale: [1, 1, 1]
     BoxArea2DComponent:
       Offset: [0, 0]
       Size: [22.5, 32]
       DebugColor: [0, 0, 0, 0]
+    CardSlotComponent:
+      {}
   - Entity: 7817693968346137392
     TagComponent:
       Tag: Site 3
     TransformComponent:
-      Position: [-99.5, 94.5, 0]
+      Position: [-99.5, 95, 0]
       Rotation: [0, -0, 0]
       Scale: [1, 1, 1]
     BoxArea2DComponent:
       Offset: [0, 0]
       Size: [22.5, 32]
       DebugColor: [0, 0, 0, 0]
+    CardSlotComponent:
+      {}
   - Entity: 3551221006459832491
     TagComponent:
       Tag: Site 4
     TransformComponent:
-      Position: [-44.5, 94.5, 0]
+      Position: [-44.5, 95, 0]
       Rotation: [0, -0, 0]
       Scale: [1, 1, 1]
     BoxArea2DComponent:
       Offset: [0, 0]
       Size: [22.5, 32]
       DebugColor: [0, 0, 0, 0]
+    CardSlotComponent:
+      {}

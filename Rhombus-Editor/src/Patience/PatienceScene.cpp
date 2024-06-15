@@ -1,6 +1,7 @@
 #include "PatienceScene.h"
 
 #include "Components/CardComponent.h"
+#include "Components/CardSlotComponent.h"
 #include "Rhombus.h"
 
 #include <fstream>
@@ -13,7 +14,7 @@ namespace rhombus
 	// Update this list when any new components are added
 	// -----------------------------------------------------
 	using PatienceComponents =
-		ComponentGroup<CardComponent>;
+		ComponentGroup<CardComponent, CardSlotComponent>;
 	// -----------------------------------------------------
 
 	PatienceScene::PatienceScene()
@@ -52,6 +53,14 @@ namespace rhombus
 
 			out << YAML::EndMap; // CardComponent
 		}
+
+		if (entity.HasComponent<CardSlotComponent>())
+		{
+			out << YAML::Key << "CardSlotComponent";
+			out << YAML::BeginMap; // CardSlotComponent
+
+			out << YAML::EndMap; // CardSlotComponent
+		}
 	}
 
 	void PatienceScene::DeserializeEntity(void* yamlEntity, Entity entity)
@@ -64,6 +73,12 @@ namespace rhombus
 			auto& card = entity.AddComponent<CardComponent>();
 			card.m_rank = cardComponent["Rank"].as<int>();
 			card.m_suit = cardComponent["Suit"].as<int>();
+		}
+
+		auto cardSlotComponent = node["CardSlotComponent"];
+		if (cardSlotComponent)
+		{
+			auto& card = entity.AddComponent<CardSlotComponent>();
 		}
 	}
 
@@ -105,7 +120,9 @@ namespace rhombus
 
 					if (ba2D.m_isMouseInArea)
 					{
+						auto& transform = entity.GetComponent<TransformComponent>();
 						card.SetIsHeld(true);
+						card.SetPreviousPosition(transform.m_position);
 					}
 				}
 			}
@@ -126,13 +143,69 @@ namespace rhombus
 				if (card.GetIsHeld())
 				{
 					card.SetIsHeld(false);
+					PlaceCard(entity);
 				}
 			}
 		}
 	}
 
+	void PatienceScene::PlaceCard(Entity cardEntity)
+	{
+		const CardComponent& card = cardEntity.GetComponent<CardComponent>();
+		const BoxArea2DComponent& cardBoxArea = cardEntity.GetComponent<BoxArea2DComponent>();
+		TransformComponent& cardTransform = cardEntity.GetComponent<TransformComponent>();
+		EntityID nearestCardSlot = -1;
+		float nearestSeparation = -1.0f;
+		std::vector<EntityID> view = m_Registry.GetEntityList<CardSlotComponent>();
+		for (EntityID e : view)
+		{
+			Entity entity = { e, this };
+			const BoxArea2DComponent& slotArea = entity.GetComponent<BoxArea2DComponent>();
+			const TransformComponent& slotTransform = entity.GetComponent<TransformComponent>();
+
+			Vec3 cardPos = cardTransform.m_position + Vec3(cardBoxArea.m_offset, 0.0f);
+			Vec3 slotPos = slotTransform.m_position + Vec3(slotArea.m_offset, 0.0f);
+
+			Vec2 separation = Vec2(abs(cardPos.x - slotPos.x), abs(cardPos.y - slotPos.y));
+			if (separation.GetMagnitude() < nearestSeparation || nearestSeparation < 0.0f)
+			{
+				nearestCardSlot = entity;
+				nearestSeparation = separation.GetMagnitude();
+			}
+		}
+
+		bool placedInSlot = false;
+		if (nearestCardSlot >= 0)
+		{
+			Entity entity = { nearestCardSlot, this };
+			const BoxArea2DComponent& slotArea = entity.GetComponent<BoxArea2DComponent>();
+			const TransformComponent& slotTransform = entity.GetComponent<TransformComponent>();
+
+			Vec3 cardPos = cardTransform.m_position + Vec3(cardBoxArea.m_offset, 0.0f);
+			Vec3 slotPos = slotTransform.m_position + Vec3(slotArea.m_offset, 0.0f);
+
+			Vec2 separation = Vec2(abs(cardPos.x - slotPos.x), abs(cardPos.y - slotPos.y));
+
+			if (separation.x < (slotArea.m_size.x + cardBoxArea.m_size.x) && separation.y < (slotArea.m_size.y + cardBoxArea.m_size.y))
+			{
+				cardTransform.m_position = slotTransform.m_position;
+				placedInSlot = true;
+			}
+		}
+
+		if (!placedInSlot)
+		{
+			cardTransform.m_position = Vec3(card.GetPreviousPosition(), cardTransform.m_position.z);
+		}
+	}
+
 	template<>
 	void Scene::OnComponentAdded<CardComponent>(Entity entity, CardComponent& component)
+	{
+	}
+
+	template<>
+	void Scene::OnComponentAdded<CardSlotComponent>(Entity entity, CardSlotComponent& component)
 	{
 	}
 }

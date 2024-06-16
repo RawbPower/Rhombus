@@ -457,7 +457,12 @@ namespace rhombus
 		std::string name = GetNameForDuplicate(entity);
 		Entity newEntity = CreateEntity(name);
 
-		CopyComponentIfExists(RhombusComponents{}, newEntity, entity);
+		CopyEntityComponents(newEntity, entity);
+	}
+
+	void Scene::CopyEntityComponents(Entity dest, Entity src)
+	{
+		CopyComponentIfExists(RhombusComponents{}, dest, src);
 	}
 
 	std::string Scene::GetNameForDuplicate(Entity entity)

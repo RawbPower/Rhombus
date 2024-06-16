@@ -16,6 +16,7 @@ namespace rhombus
 		virtual void OnUpdateRuntime(DeltaTime dt) override;
 
 		virtual void CopyAllComponents(Ref<Scene> destScene, const std::unordered_map<UUID, EntityID>& entityMap) override;
+		virtual void CopyEntityComponents(Entity dest, Entity src) override;
 
 		virtual void SerializeEntity(void* yamlEmitter, Entity entity) override;
 		virtual void DeserializeEntity(void* yamlEntity, Entity entity) override;

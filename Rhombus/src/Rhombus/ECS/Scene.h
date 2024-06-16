@@ -29,6 +29,7 @@ namespace rhombus
 		static void Copy(Ref<Scene> destScene, Ref<Scene> srcScene);
 
 		virtual void CopyAllComponents(Ref<Scene> destScene, const std::unordered_map<UUID, EntityID>& entityMap);
+		virtual void CopyEntityComponents(Entity dest, Entity src);
 
 		Entity CreateEntity(const std::string& name = std::string());
 		Entity CreateEntityWithUUID(UUID uuid, const std::string& name = std::string());

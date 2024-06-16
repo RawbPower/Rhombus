@@ -39,6 +39,12 @@ namespace rhombus
 		CopyComponent(PatienceComponents{}, destScene->GetRegistry(), m_Registry, entityMap);
 	}
 
+	void PatienceScene::CopyEntityComponents(Entity dest, Entity src)
+	{
+		Scene::CopyEntityComponents(dest, src);
+		CopyComponentIfExists(PatienceComponents{}, dest, src);
+	}
+
 	void PatienceScene::SerializeEntity(void* yamlEmitter, Entity entity)
 	{
 		YAML::Emitter& out = *(YAML::Emitter*)yamlEmitter;

@@ -32,7 +32,7 @@ namespace rhombus
 			RB_CORE_ASSERT(m_systems.find(typeName) != m_systems.end(), "System used before registered.");
 
 			// Set the signature for this system
-			m_signatures({ typeName, signature });
+			m_signatures.insert({ typeName, signature });
 		}
 
 		void OnEntityDestroyed(EntityID entity)

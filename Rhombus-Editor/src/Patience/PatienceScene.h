@@ -2,6 +2,8 @@
 
 #include "Rhombus.h"
 
+#include "Systems/CardPlacementSystem.h"
+
 namespace rhombus
 {
 	class Entity;
@@ -25,6 +27,7 @@ namespace rhombus
 		virtual void OnMouseButtonPressed(int button) override;
 		virtual void OnMouseButtonReleased(int button) override;
 
-		void PlaceCard(Entity cardEntity);
+	private:
+		Ref<CardPlacementSystem> cardPlacementSystem;
 	};
 }

@@ -14,12 +14,12 @@ namespace rhombus
 
 	}
 
-	void CardPlacementSystem::OnMouseMoved(int x, int y, Scene& srcScene)
+	void CardPlacementSystem::OnMouseMoved(int x, int y)
 	{
 		Vec3 cursorCoords = Renderer2D::ConvertScreenToWorldSpace(x, y);
 		for (EntityID e : m_entities)
 		{
-			Entity entity = { e, &srcScene };
+			Entity entity = { e, m_scene };
 			auto& transform = entity.GetComponent<TransformComponent>();
 			auto& card = entity.GetComponent<CardComponent>();
 
@@ -30,11 +30,11 @@ namespace rhombus
 		}
 	}
 
-	void CardPlacementSystem::OnMouseButtonPressed(int button, Scene& srcScene)
+	void CardPlacementSystem::OnMouseButtonPressed(int button)
 	{
 		for (EntityID e : m_entities)
 		{
-			Entity entity = { e, &srcScene };
+			Entity entity = { e, m_scene };
 			auto& card = entity.GetComponent<CardComponent>();
 
 			if (entity.HasComponent<BoxArea2DComponent>())
@@ -51,32 +51,32 @@ namespace rhombus
 		}
 	}
 
-	void CardPlacementSystem::OnMouseButtonReleased(int button, Scene& srcScene)
+	void CardPlacementSystem::OnMouseButtonReleased(int button)
 	{
 		for (EntityID e : m_entities)
 		{
-			Entity entity = { e, &srcScene };
+			Entity entity = { e, m_scene };
 			auto& card = entity.GetComponent<CardComponent>();
 
 			if (card.GetIsHeld())
 			{
 				card.SetIsHeld(false);
-				PlaceCard(entity, srcScene);
+				PlaceCard(entity);
 			}
 		}
 	}
 
-	void CardPlacementSystem::PlaceCard(Entity cardEntity, Scene& srcScene)
+	void CardPlacementSystem::PlaceCard(Entity cardEntity)
 	{
 		const CardComponent& card = cardEntity.GetComponent<CardComponent>();
 		const BoxArea2DComponent& cardBoxArea = cardEntity.GetComponent<BoxArea2DComponent>();
 		TransformComponent& cardTransform = cardEntity.GetComponent<TransformComponent>();
 		EntityID nearestCardSlot = -1;
 		float nearestSeparation = -1.0f;
-		std::vector<EntityID> view = srcScene.GetRegistry().GetEntityList<CardSlotComponent>();
+		std::vector<EntityID> view = m_scene->GetRegistry().GetEntityList<CardSlotComponent>();
 		for (EntityID e : view)
 		{
-			Entity entity = { e, &srcScene };
+			Entity entity = { e, m_scene };
 			const BoxArea2DComponent& slotArea = entity.GetComponent<BoxArea2DComponent>();
 			const TransformComponent& slotTransform = entity.GetComponent<TransformComponent>();
 
@@ -94,7 +94,7 @@ namespace rhombus
 		bool placedInSlot = false;
 		if (nearestCardSlot >= 0)
 		{
-			Entity entity = { nearestCardSlot, &srcScene };
+			Entity entity = { nearestCardSlot, m_scene };
 			const BoxArea2DComponent& slotArea = entity.GetComponent<BoxArea2DComponent>();
 			const TransformComponent& slotTransform = entity.GetComponent<TransformComponent>();
 

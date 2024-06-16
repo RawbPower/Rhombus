@@ -7,6 +7,8 @@
 
 namespace rhombus
 {
+	class Scene;
+
 	class Registry
 	{
 	public:
@@ -115,9 +117,9 @@ namespace rhombus
 
 		// System methods
 		template<typename T>
-		Ref<T> RegisterSystem()
+		Ref<T> RegisterSystem(Scene* scene)
 		{
-			return m_systemManager->RegsiterSystem<T>();
+			return m_systemManager->RegsiterSystem<T>(scene);
 		}
 
 		template<typename T>

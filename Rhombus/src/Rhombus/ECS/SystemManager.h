@@ -8,18 +8,20 @@
 
 namespace rhombus
 {
+	class Scene;
+
 	class SystemManager
 	{
 	public:
 		template<typename T>
-		Ref<T> RegsiterSystem()
+		Ref<T> RegsiterSystem(Scene* scene)
 		{
 			const char* typeName = typeid(T).name();
 
 			RB_CORE_ASSERT(m_systems.find(typeName) == m_systems.end(), "Register system more than once.");
 
 			// Create a pointer to the system and return it so it can be used externally
-			auto system = std::make_shared<T>();
+			auto system = std::make_shared<T>(scene);
 			m_systems.insert({ typeName, system });
 			return system;
 		}

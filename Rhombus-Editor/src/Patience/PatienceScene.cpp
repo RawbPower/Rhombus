@@ -27,7 +27,7 @@ namespace rhombus
 		Scene::InitScene();
 		RegisterComponents(PatienceComponents{});
 
-		cardPlacementSystem = m_Registry.RegisterSystem<CardPlacementSystem>();
+		cardPlacementSystem = m_Registry.RegisterSystem<CardPlacementSystem>(this);
 		{
 			Signature signature;
 			signature.set(m_Registry.GetComponentType<CardComponent>());
@@ -99,20 +99,20 @@ namespace rhombus
 	{
 		Scene::OnMouseMoved(x, y);
 
-		cardPlacementSystem->OnMouseMoved(x, y, *this);
+		cardPlacementSystem->OnMouseMoved(x, y);
 	}
 
 	void PatienceScene::OnMouseButtonPressed(int button)
 	{
 		Scene::OnMouseButtonPressed(button);
 
-		cardPlacementSystem->OnMouseButtonPressed(button, *this);
+		cardPlacementSystem->OnMouseButtonPressed(button);
 	}
 
 	void PatienceScene::OnMouseButtonReleased(int button)
 	{
 		Scene::OnMouseButtonReleased(button);
 
-		cardPlacementSystem->OnMouseButtonReleased(button, *this);
+		cardPlacementSystem->OnMouseButtonReleased(button);
 	}
 }

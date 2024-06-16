@@ -10,12 +10,16 @@ namespace rhombus
 	class CardPlacementSystem : public System
 	{
 	public:
+		CardPlacementSystem(Scene* scene) : System(scene)
+		{
+		}
+
 		void Update(DeltaTime time);
 
-		void OnMouseMoved(int x, int y, Scene& srcScene);
-		void OnMouseButtonPressed(int button, Scene& srcScene);
-		void OnMouseButtonReleased(int button, Scene& srcScene);
+		void OnMouseMoved(int x, int y);
+		void OnMouseButtonPressed(int button);
+		void OnMouseButtonReleased(int button);
 
-		void PlaceCard(Entity cardEntity, Scene& srcScene);
+		void PlaceCard(Entity cardEntity);
 	};
 }

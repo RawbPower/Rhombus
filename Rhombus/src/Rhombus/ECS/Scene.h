@@ -74,9 +74,6 @@ namespace rhombus
 		}
 
 	protected:
-		template<typename T>
-		void OnComponentAdded(Entity entity, T& component);
-
 		// Component Registration
 		template<typename... Component>
 		inline void RegisterComponents()

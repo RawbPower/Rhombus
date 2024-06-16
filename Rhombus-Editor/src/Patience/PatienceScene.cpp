@@ -204,14 +204,4 @@ namespace rhombus
 			cardTransform.m_position = Vec3(card.GetPreviousPosition(), cardTransform.m_position.z);
 		}
 	}
-
-	template<>
-	void Scene::OnComponentAdded<CardComponent>(Entity entity, CardComponent& component)
-	{
-	}
-
-	template<>
-	void Scene::OnComponentAdded<CardSlotComponent>(Entity entity, CardSlotComponent& component)
-	{
-	}
 }

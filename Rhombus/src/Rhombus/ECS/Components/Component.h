@@ -9,7 +9,8 @@ namespace rhombus
 {
 	class ComponentBase
 	{
-		
+	public:
+		virtual void OnComponentAdded() {}
 	};
 
 	class IDComponent : public ComponentBase

@@ -3,6 +3,7 @@
 #include "Component.h"
 
 #include "Rhombus/ECS/SceneCamera.h"
+#include "Rhombus/Core/Application.h"
 
 namespace rhombus
 {
@@ -11,6 +12,15 @@ namespace rhombus
 	public:
 		CameraComponent() = default;
 		CameraComponent(const CameraComponent&) = default;
+
+		virtual void OnComponentAdded() override
+		{
+			Viewport viewport = Application::Get().GetViewport();
+			if (viewport.width > 0 && viewport.height > 0)
+			{
+				GetCamera().SetViewportResize(viewport.width, viewport.height);
+			}
+		}
 
 		SceneCamera& GetCamera() { return m_camera; }
 		void SetIsPrimaryCamera(bool primary) { m_primary = primary; }

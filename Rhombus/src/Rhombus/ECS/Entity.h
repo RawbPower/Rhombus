@@ -43,7 +43,7 @@ namespace rhombus
 			RB_CORE_ASSERT(!HasComponent<T>(), "Entity ({0}) already has component that is being added!", m_entityId);
 			//T& component = m_scene->m_Registry.emplace<T>(m_entityId, std::forward<Args>(args)...);
 			T& component = m_scene->m_Registry.AddComponent<T>(m_entityId);
-			m_scene->OnComponentAdded<T>(*this, component);
+			component.OnComponentAdded();
 			return component;
 		}
 
@@ -54,8 +54,7 @@ namespace rhombus
 			//T& component = m_scene->m_Registry.emplace<T>(m_entityId, std::forward<Args>(args)...);
 			T& component = m_scene->m_Registry.AddComponent<T>(m_entityId, srcComponent);
 
-			// TODO: Replace with component.OnComponentAdded(*this);
-			m_scene->OnComponentAdded<T>(*this, component);
+			component.OnComponentAdded();
 			return component;
 		}
 
@@ -65,8 +64,7 @@ namespace rhombus
 			//T& component = m_scene->m_Registry.emplace_or_replace<T>(m_entityId, std::forward<Args>(args)...);
 			T& component = m_scene->m_Registry.AddOrReplaceComponent<T>(m_entityId, srcComponent);
 
-			// TODO: Replace with component.OnComponentAdded(*this);
-			m_scene->OnComponentAdded<T>(*this, component);
+			component.OnComponentAdded();
 			return component;
 		}
 

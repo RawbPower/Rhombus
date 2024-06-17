@@ -17,9 +17,8 @@ namespace rhombus
 	void CardPlacementSystem::OnMouseMoved(int x, int y)
 	{
 		Vec3 cursorCoords = Renderer2D::ConvertScreenToWorldSpace(x, y);
-		for (EntityID e : m_entities)
+		for (Entity entity : GetEntities())
 		{
-			Entity entity = { e, m_scene };
 			auto& transform = entity.GetComponent<TransformComponent>();
 			auto& card = entity.GetComponent<CardComponent>();
 
@@ -32,9 +31,8 @@ namespace rhombus
 
 	void CardPlacementSystem::OnMouseButtonPressed(int button)
 	{
-		for (EntityID e : m_entities)
+		for (Entity entity : GetEntities())
 		{
-			Entity entity = { e, m_scene };
 			auto& card = entity.GetComponent<CardComponent>();
 
 			if (entity.HasComponent<BoxArea2DComponent>())
@@ -53,9 +51,8 @@ namespace rhombus
 
 	void CardPlacementSystem::OnMouseButtonReleased(int button)
 	{
-		for (EntityID e : m_entities)
+		for (Entity entity : GetEntities())
 		{
-			Entity entity = { e, m_scene };
 			auto& card = entity.GetComponent<CardComponent>();
 
 			if (card.GetIsHeld())
@@ -96,7 +93,7 @@ namespace rhombus
 		{
 			Entity entity = { nearestCardSlot, m_scene };
 			const BoxArea2DComponent& slotArea = entity.GetComponent<BoxArea2DComponent>();
-			const TransformComponent& slotTransform = entity.GetComponent<TransformComponent>();
+			TransformComponent& slotTransform = entity.GetComponent<TransformComponent>();
 
 			Vec3 cardPos = cardTransform.m_position + Vec3(cardBoxArea.m_offset, 0.0f);
 			Vec3 slotPos = slotTransform.m_position + Vec3(slotArea.m_offset, 0.0f);

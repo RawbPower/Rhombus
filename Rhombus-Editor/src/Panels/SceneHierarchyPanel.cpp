@@ -426,6 +426,28 @@ namespace rhombus
 
 		DrawComponent<CardSlotComponent>("Card Slot", entity, [](auto& component)
 		{
+			const int count = (int)CardSlotComponent::COUNT;
+			const char* items[count];
+			for (int i = 0; i < count; i++)
+			{
+				items[i] = component.GetSlotTypeName(i);
+			}
+			int item_current_idx = (int)component.GetSlotType(); // Here we store our selection data as an index.
+			const char* combo_preview_value = items[item_current_idx];  // Pass in the preview value visible before opening the combo (it could be anything)
+			if (ImGui::BeginCombo("Slot Type", combo_preview_value))
+			{
+				for (int n = 0; n < count; n++)
+				{
+					const bool is_selected = (item_current_idx == n);
+					if (ImGui::Selectable(items[n], is_selected))
+						component.SetSlotType(n);
+
+					// Set the initial focus when opening the combo (scrolling + keyboard navigation focus)
+					if (is_selected)
+						ImGui::SetItemDefaultFocus();
+				}
+				ImGui::EndCombo();
+			}
 		});
 	}
 

@@ -72,6 +72,9 @@ namespace rhombus
 			out << YAML::Key << "CardSlotComponent";
 			out << YAML::BeginMap; // CardSlotComponent
 
+			auto& cardComponent = entity.GetComponent<CardSlotComponent>();
+			out << YAML::Key << "SlotType" << YAML::Value << (int)cardComponent.GetSlotType();
+
 			out << YAML::EndMap; // CardSlotComponent
 		}
 	}
@@ -91,7 +94,8 @@ namespace rhombus
 		auto cardSlotComponent = node["CardSlotComponent"];
 		if (cardSlotComponent)
 		{
-			auto& card = entity.AddComponent<CardSlotComponent>();
+			auto& cardSlot = entity.AddComponent<CardSlotComponent>();
+			cardSlot.SetSlotType(cardSlotComponent["SlotType"].as<int>());
 		}
 	}
 

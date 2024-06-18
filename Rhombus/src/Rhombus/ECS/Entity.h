@@ -3,7 +3,6 @@
 #include "ECSTypes.h"
 #include "Rhombus/Core/UUID.h"
 #include "Scene.h"
-#include "Components/Component.h"
 
 namespace rhombus
 {
@@ -43,6 +42,7 @@ namespace rhombus
 			RB_CORE_ASSERT(!HasComponent<T>(), "Entity ({0}) already has component that is being added!", m_entityId);
 			//T& component = m_scene->m_Registry.emplace<T>(m_entityId, std::forward<Args>(args)...);
 			T& component = m_scene->m_Registry.AddComponent<T>(m_entityId);
+			component.SetOwnerEntity(*this);
 			component.OnComponentAdded();
 			return component;
 		}
@@ -53,7 +53,7 @@ namespace rhombus
 			RB_CORE_ASSERT(!HasComponent<T>(), "Entity ({0}) already has component that is being added!", m_entityId);
 			//T& component = m_scene->m_Registry.emplace<T>(m_entityId, std::forward<Args>(args)...);
 			T& component = m_scene->m_Registry.AddComponent<T>(m_entityId, srcComponent);
-
+			component.SetOwnerEntity(*this);
 			component.OnComponentAdded();
 			return component;
 		}
@@ -63,7 +63,7 @@ namespace rhombus
 		{
 			//T& component = m_scene->m_Registry.emplace_or_replace<T>(m_entityId, std::forward<Args>(args)...);
 			T& component = m_scene->m_Registry.AddOrReplaceComponent<T>(m_entityId, srcComponent);
-
+			component.SetOwnerEntity(*this);
 			component.OnComponentAdded();
 			return component;
 		}
@@ -83,8 +83,8 @@ namespace rhombus
 		operator bool() const { return m_entityId != -1; }
 		operator EntityID() const { return m_entityId; }
 
-		UUID GetUUID() { return GetComponent<IDComponent>().m_id; }
-		const std::string GetName() { return GetComponent<TagComponent>().m_tag; }
+		UUID GetUUID();
+		const std::string GetName();
 
 	private:
 		EntityID m_rbEntityId;

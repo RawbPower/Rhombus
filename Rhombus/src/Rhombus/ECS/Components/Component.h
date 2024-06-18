@@ -5,12 +5,20 @@
 #include "Rhombus/Math/Matrix.h"
 #include "Rhombus/Math/Quat.h"
 
+#include "Rhombus/ECS/Entity.h"
+
 namespace rhombus
 {
 	class ComponentBase
 	{
 	public:
 		virtual void OnComponentAdded() {}
+
+		void SetOwnerEntity(Entity entity) { m_ownerEntity = entity; }
+		Entity GetOwnerEntity() const { return m_ownerEntity; }
+
+	private:
+		Entity m_ownerEntity;
 	};
 
 	class IDComponent : public ComponentBase

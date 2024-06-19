@@ -7,6 +7,7 @@ namespace rhombus
 	// Is this still red?
 	using EntityID = uint32_t;
 	const EntityID MAX_ENTITIES = 5000;
+	const EntityID INVALID_ENTITY = 0xFFFFFFFF;
 
 	using ComponentType = uint8_t;
 	const ComponentType MAX_COMPONENTS = 64;

@@ -359,7 +359,7 @@ namespace rhombus
 		// Gimzos
 		// TODO: Get a independent selection from the mouse picker and use events to update different panels
 		Entity selectedEntity = m_sceneHierarchyPanel.GetSelectedEntity();
-		if (selectedEntity && m_gizmoType != -1)
+		if (selectedEntity && m_gizmoType != -1 && m_SceneState == SceneState::Edit)
 		{
 			ImGuizmo::SetOrthographic(false);
 			ImGuizmo::SetDrawlist();

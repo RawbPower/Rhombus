@@ -22,6 +22,10 @@ namespace rhombus
 		Vec2 GetPreviousPosition() const { return m_previousPosition; }
 		void SetPreviousPosition(Vec2 prevPos) { m_previousPosition = prevPos; }
 
+		Entity GetCurrentSlot() const { return m_currentSlot; }
+		void SetCurrentlSlot(Entity cardSlot) { m_currentSlot = cardSlot; }
+		void ResetCurrentlSlot(Vec2 prevPos) { m_currentSlot = Entity(); }
+
 	public:
 		int m_rank;
 		int m_suit;
@@ -29,5 +33,6 @@ namespace rhombus
 	private:
 		bool m_isHeld = false;
 		Vec2 m_previousPosition = Vec2(0.0f);
+		Entity m_currentSlot;
 	};
 }

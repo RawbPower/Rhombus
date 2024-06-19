@@ -14,6 +14,8 @@ namespace rhombus
 		{
 		}
 
+		void Init();
+
 		void Update(DeltaTime time);
 
 		void OnMouseMoved(int x, int y);
@@ -21,5 +23,6 @@ namespace rhombus
 		void OnMouseButtonReleased(int button);
 
 		void PlaceCard(Entity cardEntity);
+		EntityID CheckForCardSlot(Entity cardEntity);
 	};
 }

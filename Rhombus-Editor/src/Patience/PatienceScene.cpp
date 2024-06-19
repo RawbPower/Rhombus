@@ -35,6 +35,12 @@ namespace rhombus
 		}
 	}
 
+	void PatienceScene::OnRuntimeStart()
+	{
+		Scene::OnRuntimeStart();
+		cardPlacementSystem->Init();
+	}
+
 	void PatienceScene::OnUpdateRuntime(DeltaTime dt)
 	{
 		Scene::OnUpdateRuntime(dt);

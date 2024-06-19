@@ -9,6 +9,25 @@
 
 namespace rhombus
 {
+	void CardPlacementSystem::Init()
+	{
+		for (Entity cardEntity : GetEntities())
+		{
+			EntityID currentSlot = CheckForCardSlot(cardEntity);
+
+			CardComponent& card = cardEntity.GetComponent<CardComponent>();
+			TransformComponent& cardTransform = cardEntity.GetComponent<TransformComponent>();
+
+			if (currentSlot != INVALID_ENTITY)
+			{
+				Entity currentSlotEntity = { currentSlot, m_scene };
+				CardSlotComponent& cardSlot = currentSlotEntity.GetComponent<CardSlotComponent>();
+				cardSlot.AddCard(cardEntity);
+				card.SetCurrentlSlot(currentSlotEntity);
+			}
+		}
+	}
+
 	void CardPlacementSystem::Update(DeltaTime time)
 	{
 
@@ -65,6 +84,31 @@ namespace rhombus
 
 	void CardPlacementSystem::PlaceCard(Entity cardEntity)
 	{
+		EntityID currentSlot = CheckForCardSlot(cardEntity);
+
+		CardComponent& card = cardEntity.GetComponent<CardComponent>();
+		TransformComponent& cardTransform = cardEntity.GetComponent<TransformComponent>();
+
+		if (currentSlot == INVALID_ENTITY)
+		{
+			cardTransform.m_position = Vec3(card.GetPreviousPosition(), cardTransform.m_position.z);
+		}
+		else
+		{
+			Entity currentSlotEntity = { currentSlot, m_scene };
+			TransformComponent& slotTransform = currentSlotEntity.GetComponent<TransformComponent>();
+			cardTransform.m_position = Vec3(slotTransform.m_position.x, slotTransform.m_position.y, cardTransform.m_position.z);
+			CardSlotComponent& cardSlot = currentSlotEntity.GetComponent<CardSlotComponent>();
+			Entity previousCardSlot = card.GetCurrentSlot();
+			previousCardSlot.GetComponent<CardSlotComponent>().RemoveCard(cardEntity);
+			cardSlot.AddCard(cardEntity);
+			card.SetCurrentlSlot(currentSlotEntity);
+		}
+	}
+
+	EntityID CardPlacementSystem::CheckForCardSlot(Entity cardEntity)
+	{
+		EntityID currentSlot = INVALID_ENTITY;
 		const CardComponent& card = cardEntity.GetComponent<CardComponent>();
 		const BoxArea2DComponent& cardBoxArea = cardEntity.GetComponent<BoxArea2DComponent>();
 		TransformComponent& cardTransform = cardEntity.GetComponent<TransformComponent>();
@@ -102,14 +146,10 @@ namespace rhombus
 
 			if (separation.x < (slotArea.m_size.x + cardBoxArea.m_size.x) && separation.y < (slotArea.m_size.y + cardBoxArea.m_size.y))
 			{
-				cardTransform.m_position = slotTransform.m_position;
-				placedInSlot = true;
+				currentSlot = entity;
 			}
 		}
 
-		if (!placedInSlot)
-		{
-			cardTransform.m_position = Vec3(card.GetPreviousPosition(), cardTransform.m_position.z);
-		}
+		return currentSlot;
 	}
 }

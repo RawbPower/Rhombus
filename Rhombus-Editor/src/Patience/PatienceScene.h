@@ -15,6 +15,7 @@ namespace rhombus
 
 		virtual void InitScene() override;
 
+		virtual void OnRuntimeStart() override;
 		virtual void OnUpdateRuntime(DeltaTime dt) override;
 
 		virtual void CopyAllComponents(Ref<Scene> destScene, const std::unordered_map<UUID, EntityID>& entityMap) override;

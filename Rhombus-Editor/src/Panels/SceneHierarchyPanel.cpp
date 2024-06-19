@@ -422,6 +422,13 @@ namespace rhombus
 		{
 			ImGui::InputInt("Rank", &component.m_rank);
 			ImGui::InputInt("Suit", &component.m_suit);
+
+			{
+				ImGui::Text("Card Slot");
+				ImGui::Indent();
+					ImGui::Text(component.GetCurrentSlot().GetName().c_str());
+				ImGui::Unindent();
+			}
 		});
 
 		DrawComponent<CardSlotComponent>("Card Slot", entity, [](auto& component)
@@ -447,6 +454,14 @@ namespace rhombus
 						ImGui::SetItemDefaultFocus();
 				}
 				ImGui::EndCombo();
+			}
+
+			{
+				ImGui::Text("Card Stack");
+				ImGui::BeginChild("Child", ImVec2(ImGui::GetContentRegionAvail().x * 0.5f, 60), ImGuiChildFlags_Border);
+				for (auto card : component.m_cardStack)
+					ImGui::Text(card.GetName().c_str());
+				ImGui::EndChild();
 			}
 		});
 	}

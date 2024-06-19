@@ -2,6 +2,8 @@
 
 #include "Rhombus.h"
 
+#include <list>
+
 namespace rhombus
 {
 	class CardSlotComponent : public ComponentBase
@@ -14,6 +16,9 @@ namespace rhombus
 
 		int GetIsOccupied() const { return m_isOccupied; }
 		void SetIsOccupied(bool occupied) { m_isOccupied = occupied; }
+
+		void AddCard(Entity card) { m_cardStack.push_back(card); m_isOccupied = true; }
+		void RemoveCard(Entity card) { m_cardStack.remove(card); }
 
 		void SetSlotType(int slotType)
 		{
@@ -45,6 +50,9 @@ namespace rhombus
 				break;
 			}
 		}
+
+	public:
+		std::list<Entity> m_cardStack;
 
 	private:
 		SlotType m_slotType = SINGLE;

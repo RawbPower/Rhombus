@@ -423,10 +423,11 @@ namespace rhombus
 			ImGui::InputInt("Rank", &component.m_rank);
 			ImGui::InputInt("Suit", &component.m_suit);
 
+			if (component.GetCurrentSlot())
 			{
 				ImGui::Text("Card Slot");
 				ImGui::Indent();
-					ImGui::Text(component.GetCurrentSlot().GetName().c_str());
+				ImGui::Text(component.GetCurrentSlot().GetName().c_str());
 				ImGui::Unindent();
 			}
 		});

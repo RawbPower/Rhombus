@@ -14,18 +14,24 @@ namespace rhombus
 		CardSlotComponent() = default;
 		CardSlotComponent(const CardSlotComponent&) = default;
 
+		virtual void OnComponentAdded() override;
+
 		int GetIsOccupied() const { return m_isOccupied; }
 		void SetIsOccupied(bool occupied) { m_isOccupied = occupied; }
 
+		bool CanAcceptCards();
 		void AddCard(Entity card);
-		void RemoveCard(Entity card) { m_cardStack.remove(card); }
+		void RemoveCard(Entity card);
 
-		void ArrangeCardPositions();
+		void UpdateCardStack();
 
 		void SetSlotType(int slotType)
 		{
 			m_slotType = (SlotType)slotType;
 		}
+
+		Vec2& GetStaggeredOffset() { return m_staggeredOffset; }
+		void SetStaggeredOffset(Vec2 offset) { m_staggeredOffset = offset; }
 
 		const SlotType GetSlotType() const{ return m_slotType; }
 
@@ -55,9 +61,13 @@ namespace rhombus
 
 	public:
 		std::list<Entity> m_cardStack;
+		Vec2 m_staggeredOffset = Vec2(0.0f, -16.0f);
 
 	private:
 		SlotType m_slotType = SINGLE;
 		bool m_isOccupied = false;
+
+		Vec2 m_emptyAreaOffset = { 0.0f, 0.0f };
+		Vec2 m_emptyAreaSize = { 0.5f, 0.5f };
 	};
 }

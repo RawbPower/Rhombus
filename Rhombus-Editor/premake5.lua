@@ -25,7 +25,8 @@ project "Rhombus-Editor"
 
 	links
 	{
-		"Rhombus"
+		"Rhombus",
+		"yaml-cpp"
 	}
 
 	filter "system:windows"

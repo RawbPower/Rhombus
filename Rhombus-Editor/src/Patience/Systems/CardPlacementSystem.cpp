@@ -55,7 +55,7 @@ namespace rhombus
 		{
 			auto& card = entity.GetComponent<CardComponent>();
 
-			if (entity.HasComponent<BoxArea2DComponent>())
+			if (entity.HasComponent<BoxArea2DComponent>() && card.GetIsAvailable())
 			{
 				auto& ba2D = entity.GetComponent<BoxArea2DComponent>();
 
@@ -101,10 +101,18 @@ namespace rhombus
 			cardTransform.m_position = Vec3(slotTransform.m_position.x, slotTransform.m_position.y, slotTransform.m_position.z);
 			cardTransform.SetLayer(Z_LAYER::FOREGROUND_1_LAYER);
 			CardSlotComponent& cardSlot = currentSlotEntity.GetComponent<CardSlotComponent>();
-			Entity previousCardSlot = card.GetCurrentSlot();
-			previousCardSlot.GetComponent<CardSlotComponent>().RemoveCard(cardEntity);
-			cardSlot.AddCard(cardEntity);
-			card.SetCurrentlSlot(currentSlotEntity);
+			
+			if (cardSlot.CanAcceptCards())
+			{
+				Entity previousCardSlot = card.GetCurrentSlot();
+				previousCardSlot.GetComponent<CardSlotComponent>().RemoveCard(cardEntity);
+				cardSlot.AddCard(cardEntity);
+				card.SetCurrentlSlot(currentSlotEntity);
+			}
+			else
+			{
+				cardTransform.m_position = Vec3(card.GetPreviousPosition(), cardTransform.m_position.z);
+			}
 		}
 	}
 

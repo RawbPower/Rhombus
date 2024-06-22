@@ -49,6 +49,7 @@ namespace rhombus
 		float Dot(const Vec2& rhs) const { return x * rhs.x + y * rhs.y; }
 
 		static float Dot(const Vec2& a, const Vec2& b) { return a.Dot(b); }
+		static Vec2 Abs(const Vec2& a) { return Vec2(abs(a.x), abs(a.y)); }
 
 		const float* ToPtr() const { return &x; }
 		float* ToPtr() { return &x; }

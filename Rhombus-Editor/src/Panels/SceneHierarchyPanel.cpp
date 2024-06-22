@@ -457,6 +457,11 @@ namespace rhombus
 				ImGui::EndCombo();
 			}
 
+			if (component.GetSlotType() == CardSlotComponent::STAGGERED)
+			{
+				ImGui::DragFloat2("Offset", component.GetStaggeredOffset().ToPtr(), 0.01f);
+			}
+
 			{
 				ImGui::Text("Card Stack");
 				ImGui::BeginChild("Child", ImVec2(ImGui::GetContentRegionAvail().x * 0.5f, 60), ImGuiChildFlags_Border);

@@ -19,6 +19,9 @@ namespace rhombus
 		int GetIsHeld() const { return m_isHeld; }
 		void SetIsHeld(bool held) { m_isHeld = held; }
 
+		int GetIsAvailable() const { return m_isAvailable; }
+		void SetIsAvailable(bool available) { m_isAvailable = available; }
+
 		Vec2 GetPreviousPosition() const { return m_previousPosition; }
 		void SetPreviousPosition(Vec2 prevPos) { m_previousPosition = prevPos; }
 
@@ -32,6 +35,7 @@ namespace rhombus
 
 	private:
 		bool m_isHeld = false;
+		bool m_isAvailable = true;
 		Vec2 m_previousPosition = Vec2(0.0f);
 		Entity m_currentSlot;
 	};

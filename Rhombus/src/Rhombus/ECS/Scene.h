@@ -92,7 +92,7 @@ namespace rhombus
 
 		// Component Copying
 		template<typename... Component>
-		inline static void CopyComponent(Registry& dest, const Registry& src, const	std::unordered_map<UUID, EntityID>& entityMap)
+		inline static void CopyComponent(Ref<Scene> destScene, const Registry& src, const	std::unordered_map<UUID, EntityID>& entityMap)
 		{
 			([&]()
 				{
@@ -103,13 +103,14 @@ namespace rhombus
 						EntityID destEntityID = entityMap.at(uuid);
 
 						auto& component = src.GetComponent<Component>(e);
-						dest.AddOrReplaceComponent<Component>(destEntityID, component);
+						auto& destComponent = destScene->m_Registry.AddOrReplaceComponent<Component>(destEntityID, component);
+						destComponent.SetOwnerEntity(destEntityID, destScene.get());
 					}
 				}(), ...);
 		}
 
 		template<typename... Component>
-		inline static void CopyComponent(ComponentGroup<Component...>, Registry& dst, Registry& src, const std::unordered_map<UUID, EntityID>& entityMap)
+		inline static void CopyComponent(ComponentGroup<Component...>, Ref<Scene> dst, Registry& src, const std::unordered_map<UUID, EntityID>& entityMap)
 		{
 			CopyComponent<Component...>(dst, src, entityMap);
 		}

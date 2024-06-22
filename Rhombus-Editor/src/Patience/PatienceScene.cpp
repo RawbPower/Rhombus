@@ -49,7 +49,7 @@ namespace rhombus
 	void PatienceScene::CopyAllComponents(Ref<Scene> destScene, const std::unordered_map<UUID, EntityID>& entityMap)
 	{
 		Scene::CopyAllComponents(destScene, entityMap);
-		CopyComponent(PatienceComponents{}, destScene->GetRegistry(), m_Registry, entityMap);
+		CopyComponent(PatienceComponents{}, destScene, m_Registry, entityMap);
 	}
 
 	void PatienceScene::CopyEntityComponents(Entity dest, Entity src)

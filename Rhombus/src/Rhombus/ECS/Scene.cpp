@@ -97,7 +97,7 @@ namespace rhombus
 
 	void Scene::CopyAllComponents(Ref<Scene> destScene, const std::unordered_map<UUID, EntityID>& entityMap)
 	{
-		CopyComponent(RhombusComponents{}, destScene->m_Registry, m_Registry, entityMap);
+		CopyComponent(RhombusComponents{}, destScene, m_Registry, entityMap);
 	}
 
 	Entity Scene::CreateEntity(const std::string& name)

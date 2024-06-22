@@ -12,6 +12,7 @@ namespace rhombus
 		virtual void OnComponentAdded() {}
 
 		void SetOwnerEntity(Entity entity) { m_ownerEntity = entity; }
+		void SetOwnerEntity(EntityID entityID, Scene* scene) { m_ownerEntity = { entityID, scene }; }
 		Entity GetOwnerEntity() const { return m_ownerEntity; }
 
 	private:

@@ -16,6 +16,7 @@
 //#include "Rhombus/ECS/Components/Rigidbody2DComponent.h"
 #include "Rhombus/ECS/Components/ScriptComponent.h"
 #include "Rhombus/ECS/Components/SpriteRendererComponent.h"
+#include "Rhombus/ECS/Components/TransformComponent.h"
 
 // Box2d
 #include <box2d/b2_world.h>

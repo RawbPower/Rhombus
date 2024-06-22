@@ -17,8 +17,10 @@ namespace rhombus
 		int GetIsOccupied() const { return m_isOccupied; }
 		void SetIsOccupied(bool occupied) { m_isOccupied = occupied; }
 
-		void AddCard(Entity card) { m_cardStack.push_back(card); m_isOccupied = true; }
+		void AddCard(Entity card);
 		void RemoveCard(Entity card) { m_cardStack.remove(card); }
+
+		void ArrangeCardPositions();
 
 		void SetSlotType(int slotType)
 		{

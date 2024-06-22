@@ -7,6 +7,7 @@
 #include "Rhombus/Scripting/ScriptEngine.h"
 #include "Rhombus/Renderer/Renderer2D.h"
 #include "Rhombus/ECS/Components/Rigidbody2DComponent.h"
+#include "Rhombus/ECS/Components/TransformComponent.h"
 #include "Rhombus/ECS/Components/Area2DComponent.h"
 
 #include "box2d/b2_body.h"

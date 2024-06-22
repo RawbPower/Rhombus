@@ -44,6 +44,7 @@ namespace rhombus
 			if (card.GetIsHeld())
 			{
 				transform.m_position = Vec3(cursorCoords.x, cursorCoords.y, transform.m_position.z);
+				transform.SetLayer(Z_LAYER::FOREGROUND_2_LAYER);
 			}
 		}
 	}
@@ -97,7 +98,8 @@ namespace rhombus
 		{
 			Entity currentSlotEntity = { currentSlot, m_scene };
 			TransformComponent& slotTransform = currentSlotEntity.GetComponent<TransformComponent>();
-			cardTransform.m_position = Vec3(slotTransform.m_position.x, slotTransform.m_position.y, cardTransform.m_position.z);
+			cardTransform.m_position = Vec3(slotTransform.m_position.x, slotTransform.m_position.y, slotTransform.m_position.z);
+			cardTransform.SetLayer(Z_LAYER::FOREGROUND_1_LAYER);
 			CardSlotComponent& cardSlot = currentSlotEntity.GetComponent<CardSlotComponent>();
 			Entity previousCardSlot = card.GetCurrentSlot();
 			previousCardSlot.GetComponent<CardSlotComponent>().RemoveCard(cardEntity);

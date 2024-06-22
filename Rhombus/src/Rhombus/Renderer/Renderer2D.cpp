@@ -5,6 +5,7 @@
 #include "Shader.h"
 #include "RenderCommand.h"
 #include "Rhombus/Core/Application.h"
+#include "Rhombus/Math/Math.h"
 
 namespace rhombus
 {

@@ -28,6 +28,7 @@
 #include "Rhombus/ECS/Components/Rigidbody2DComponent.h"
 #include "Rhombus/ECS/Components/ScriptComponent.h"
 #include "Rhombus/ECS/Components/SpriteRendererComponent.h"
+#include "Rhombus/ECS/Components/TransformComponent.h"
 
 #include "Rhombus/Math/Quat.h"
 #include "Rhombus/Math/Matrix.h"

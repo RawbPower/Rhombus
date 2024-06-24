@@ -1,6 +1,5 @@
 // CLIENT
 
-#include <Rhombus.h>
 #include <Rhombus/Core/EntryPoint.h>
 
 #include "Platform/OpenGL/OpenGLShader.h"

@@ -1,6 +1,5 @@
 #pragma once
 
-#include "Rhombus.h"
 #include "Panels/SceneHierarchyPanel.h"
 #include "Panels/ContentBrowerPanel.h";
 #include "Rhombus/Renderer/EditorCamera.h"

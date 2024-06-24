@@ -50,3 +50,5 @@
 
 #include "Rhombus/Renderer/OrthographicCamera.h"
 //--------------------------------
+
+using namespace rhombus;

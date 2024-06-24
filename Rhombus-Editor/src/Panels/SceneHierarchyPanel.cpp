@@ -3,6 +3,7 @@
 #include "Rhombus/Scripting/ScriptEngine.h"
 #include "../Patience/Components/CardComponent.h"
 #include "../Patience/Components/CardSlotComponent.h"
+#include "../Patience/Components/PatienceManagerComponent.h"
 
 #include <imgui/imgui.h>
 #include <imgui/imgui_internal.h>
@@ -250,7 +251,8 @@ namespace rhombus
 
 			// Game
 			DisplayAddComponentEntry<CardComponent>("Card");
-			DisplayAddComponentEntry<CardSlotComponent>("CardSlot");
+			DisplayAddComponentEntry<CardSlotComponent>("Card Slot");
+			DisplayAddComponentEntry<PatienceManagerComponent>("Patience Manager");
 
 			ImGui::EndPopup();
 		}
@@ -469,6 +471,15 @@ namespace rhombus
 					ImGui::Text(card.GetName().c_str());
 				ImGui::EndChild();
 			}
+		});
+
+		DrawComponent<PatienceManagerComponent>("Patience Manager", entity, [](auto& component)
+		{
+			static char buffer[64];
+			strcpy(buffer, component.m_setupScript.c_str());
+
+			if (ImGui::InputText("Setup Script", buffer, sizeof(buffer)))
+				component.m_setupScript = buffer;
 		});
 	}
 

@@ -389,3 +389,12 @@ Entities:
     CardSlotComponent:
       SlotType: 1
       StaggeredOffset: [0, -16]
+  - Entity: 6513507509365870060
+    TagComponent:
+      Tag: Patience Manager
+    TransformComponent:
+      Position: [0, 0, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    PatienceManagerComponent:
+      SetupScript: ""

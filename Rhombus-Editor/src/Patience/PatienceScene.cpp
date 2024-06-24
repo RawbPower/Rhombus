@@ -2,6 +2,7 @@
 
 #include "Components/CardComponent.h"
 #include "Components/CardSlotComponent.h"
+#include "Components/PatienceManagerComponent.h"
 #include "Rhombus/ECS/SceneSerializer.h"
 #include "Rhombus.h"
 
@@ -10,7 +11,7 @@ namespace rhombus
 	// Update this list when any new components are added
 	// -----------------------------------------------------
 	using PatienceComponents =
-		ComponentGroup<CardComponent, CardSlotComponent>;
+		ComponentGroup<CardComponent, CardSlotComponent, PatienceManagerComponent>;
 	// -----------------------------------------------------
 
 	PatienceScene::PatienceScene()
@@ -81,6 +82,16 @@ namespace rhombus
 
 			out << YAML::EndMap; // CardSlotComponent
 		}
+
+		if (entity.HasComponent<PatienceManagerComponent>())
+		{
+			auto& managerComponent = entity.GetComponent<PatienceManagerComponent>();
+
+			out << YAML::Key << "PatienceManagerComponent";
+			out << YAML::BeginMap;	// PatienceManagerComponent
+			out << YAML::Key << "SetupScript" << YAML::Value << managerComponent.m_setupScript;
+			out << YAML::EndMap;	// PatienceManagerComponent
+		}
 	}
 
 	void PatienceScene::DeserializeEntity(void* yamlEntity, Entity entity)
@@ -101,6 +112,13 @@ namespace rhombus
 			auto& cardSlot = entity.AddComponent<CardSlotComponent>();
 			cardSlot.SetSlotType(cardSlotComponent["SlotType"].as<int>());
 			cardSlot.SetStaggeredOffset(cardSlotComponent["StaggeredOffset"].as<Vec2>());
+		}
+
+		auto managerComponent = node["PatienceManagerComponent"];
+		if (managerComponent)
+		{
+			auto& manager = entity.AddComponent<PatienceManagerComponent>();
+			manager.m_setupScript = managerComponent["SetupScript"].as<std::string>();
 		}
 	}
 

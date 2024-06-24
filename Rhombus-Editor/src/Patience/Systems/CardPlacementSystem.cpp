@@ -1,7 +1,7 @@
 #include "CardPlacementSystem.h"
 
-#include "../Components/CardComponent.h"
-#include "../Components/CardSlotComponent.h"
+#include "Patience/Components/CardComponent.h"
+#include "Patience/Components/CardSlotComponent.h"
 
 void CardPlacementSystem::Init()
 {

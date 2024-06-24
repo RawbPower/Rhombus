@@ -18,6 +18,7 @@ project "Rhombus-Editor"
 		"%{wks.location}/Rhombus/vendor/spdlog/include",
 		"%{wks.location}/Rhombus/src",
 		"%{wks.location}/Rhombus/vendor",
+		"%{wks.location}/Rhombus-Editor/src",
 		"%{IncludeDir.glm}",
 		"%{IncludeDir.yaml_cpp}",
 		"%{IncludeDir.ImGuizmo}"

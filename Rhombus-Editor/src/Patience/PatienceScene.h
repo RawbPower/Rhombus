@@ -2,6 +2,7 @@
 
 #include "Rhombus.h"
 #include "Systems/CardPlacementSystem.h"
+#include "Systems/PatienceSetupSystem.h"
 
 class PatienceScene : public Scene
 {
@@ -25,4 +26,5 @@ public:
 
 private:
 	Ref<CardPlacementSystem> cardPlacementSystem;
+	Ref<PatienceSetupSystem> setupSystem;
 };

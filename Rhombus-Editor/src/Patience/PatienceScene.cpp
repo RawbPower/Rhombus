@@ -2,13 +2,13 @@
 
 #include "Components/CardComponent.h"
 #include "Components/CardSlotComponent.h"
-#include "Components/PatienceManagerComponent.h"
+#include "Components/PatienceComponent.h"
 #include "Rhombus/ECS/SceneSerializer.h"
 
 // Update this list when any new components are added
 // -----------------------------------------------------
 using PatienceComponents =
-	ComponentGroup<CardComponent, CardSlotComponent, PatienceManagerComponent>;
+	ComponentGroup<CardComponent, CardSlotComponent, PatienceComponent>;
 // -----------------------------------------------------
 
 PatienceScene::PatienceScene()
@@ -27,12 +27,21 @@ void PatienceScene::InitScene()
 		signature.set(m_Registry.GetComponentType<CardComponent>());
 		m_Registry.SetSystemSignature<CardPlacementSystem>(signature);
 	}
+
+	setupSystem = m_Registry.RegisterSystem<PatienceSetupSystem>(this);
+	{
+		Signature signature;
+		signature.set(m_Registry.GetComponentType<PatienceComponent>());
+		m_Registry.SetSystemSignature<PatienceSetupSystem>(signature);
+	}
+
 }
 
 void PatienceScene::OnRuntimeStart()
 {
 	Scene::OnRuntimeStart();
 	cardPlacementSystem->Init();
+	setupSystem->Init();
 }
 
 void PatienceScene::OnUpdateRuntime(DeltaTime dt)
@@ -80,14 +89,14 @@ void PatienceScene::SerializeEntity(void* yamlEmitter, Entity entity)
 		out << YAML::EndMap; // CardSlotComponent
 	}
 
-	if (entity.HasComponent<PatienceManagerComponent>())
+	if (entity.HasComponent<PatienceComponent>())
 	{
-		auto& managerComponent = entity.GetComponent<PatienceManagerComponent>();
+		auto& patienceComponent = entity.GetComponent<PatienceComponent>();
 
-		out << YAML::Key << "PatienceManagerComponent";
-		out << YAML::BeginMap;	// PatienceManagerComponent
-		out << YAML::Key << "SetupScript" << YAML::Value << managerComponent.m_setupScript;
-		out << YAML::EndMap;	// PatienceManagerComponent
+		out << YAML::Key << "PatienceComponent";
+		out << YAML::BeginMap;	// PatienceComponent
+		out << YAML::Key << "SetupScript" << YAML::Value << patienceComponent.m_setupScript;
+		out << YAML::EndMap;	// PatienceComponent
 	}
 }
 
@@ -111,11 +120,11 @@ void PatienceScene::DeserializeEntity(void* yamlEntity, Entity entity)
 		cardSlot.SetStaggeredOffset(cardSlotComponent["StaggeredOffset"].as<Vec2>());
 	}
 
-	auto managerComponent = node["PatienceManagerComponent"];
-	if (managerComponent)
+	auto patienceComponent = node["PatienceComponent"];
+	if (patienceComponent)
 	{
-		auto& manager = entity.AddComponent<PatienceManagerComponent>();
-		manager.m_setupScript = managerComponent["SetupScript"].as<std::string>();
+		auto& patience = entity.AddComponent<PatienceComponent>();
+		patience.m_setupScript = patienceComponent["SetupScript"].as<std::string>();
 	}
 }
 

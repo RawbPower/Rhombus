@@ -2,6 +2,7 @@
 #include "ScriptEngine.h"
 #include "ScriptGlue.h"
 
+#include "Rhombus/Core/Log.h"
 #include "Rhombus/Project/Project.h"
 #include "Rhombus/ECS/Components/ScriptComponent.h"
 
@@ -150,6 +151,60 @@ namespace rhombus
 
 		lua_pushnumber(L, (int)entityID32b);
 		lua_setfield(L, -2, "entityIDb");
+	}
+
+	bool ScriptEngine::DoScript(std::string sciptPath)
+	{
+		lua_newtable(L);
+		lua_setglobal(L, "GameModeData");
+		int r = luaL_dofile(L, sciptPath.c_str());
+		return CheckLua(L, r);
+	}
+
+	std::list<std::string> ScriptEngine::GetCardsTest(std::string globalName)
+	{
+		std::list<std::string> cards;
+		std::list<std::string> cardDatas;
+		lua_getglobal(L, "GameModeData");
+		lua_getfield(L, -1, globalName.c_str());
+		lua_getfield(L, -1, "Deck");
+		int len = lua_rawlen(L, -1);
+		for (int i = 1; i <= len; i++)
+		{
+			RB_CORE_INFO("Stack size {0}", lua_gettop(L));
+			lua_pushinteger(L, i);
+			lua_gettable(L, -2);
+			const char* cardData = lua_tostring(L, -1);
+			cardDatas.push_back(cardData);
+			lua_pop(L, 1);
+		}
+
+		lua_newtable(L);
+		lua_setglobal(L, "CardData");
+		lua_getglobal(L, "CardData");
+		for (std::string cardData : cardDatas)
+		{
+			std::string sciptPath = Project::GetScriptDirectory().string() + "\\CardData_" + cardData + ".lua";
+			int r = luaL_dofile(L, sciptPath.c_str());
+			if (CheckLua(L, r))
+			{
+				lua_getfield(L, -1, cardData.c_str());
+				lua_pushnil(L);  /* first key */
+				while (lua_next(L, -2) != 0) 
+				{
+					/* uses 'key' (at index -2) and 'value' (at index -1) */
+					cards.push_back(lua_tostring(L, -2));
+					/*printf("%s - %s\n",
+						lua_typename(L, lua_type(L, -2)),
+						lua_typename(L, lua_type(L, -1)));*/
+					/* removes 'value'; keeps 'key' for next iteration */
+					lua_pop(L, 1);
+				}
+				lua_pop(L, 1);
+			}
+		}
+
+		return cards;
 	}
 
 	void ScriptEngine::OnInitEntity(Entity entity)

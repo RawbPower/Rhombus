@@ -4,7 +4,7 @@ CardData.BasicDiamonds =
 	{
 		Rank = 1,
 		Suit = "Diamond",
-		Sprite = "textures/Cards/Card2.png"
+		Sprite = "textures/Cards/Card2.png",
 		PackingType = "Default"
 	},
 
@@ -12,7 +12,7 @@ CardData.BasicDiamonds =
 	{
 		Rank = 2,
 		Suit = "Diamond",
-		Sprite = "textures/Cards/Card6.png"
+		Sprite = "textures/Cards/Card6.png",
 		PackingType = "Default"
 	},
 
@@ -20,7 +20,7 @@ CardData.BasicDiamonds =
 	{
 		Rank = 3,
 		Suit = "Diamond",
-		Sprite = "textures/Cards/Card10.png"
+		Sprite = "textures/Cards/Card10.png",
 		PackingType = "Default"
 	},
 
@@ -28,7 +28,7 @@ CardData.BasicDiamonds =
 	{
 		Rank = 4,
 		Suit = "Diamond",
-		Sprite = "textures/Cards/Card14.png"
+		Sprite = "textures/Cards/Card14.png",
 		PackingType = "Default"
 	},
 
@@ -36,7 +36,7 @@ CardData.BasicDiamonds =
 	{
 		Rank = 5,
 		Suit = "Diamond",
-		Sprite = "textures/Cards/Card18.png"
+		Sprite = "textures/Cards/Card18.png",
 		PackingType = "Default"
 	},
 
@@ -44,7 +44,7 @@ CardData.BasicDiamonds =
 	{
 		Rank = 6,
 		Suit = "Diamond",
-		Sprite = "textures/Cards/Card22.png"
+		Sprite = "textures/Cards/Card22.png",
 		PackingType = "Default"
 	},
 
@@ -52,7 +52,7 @@ CardData.BasicDiamonds =
 	{
 		Rank = 7,
 		Suit = "Diamond",
-		Sprite = "textures/Cards/Card26.png"
+		Sprite = "textures/Cards/Card26.png",
 		PackingType = "Default"
 	},
 
@@ -60,7 +60,7 @@ CardData.BasicDiamonds =
 	{
 		Rank = 8,
 		Suit = "Diamond",
-		Sprite = "textures/Cards/Card30.png"
+		Sprite = "textures/Cards/Card30.png",
 		PackingType = "Default"
 	},
 
@@ -68,7 +68,7 @@ CardData.BasicDiamonds =
 	{
 		Rank = 9,
 		Suit = "Diamond",
-		Sprite = "textures/Cards/Card34.png"
+		Sprite = "textures/Cards/Card34.png",
 		PackingType = "Default"
 	},
 
@@ -76,7 +76,7 @@ CardData.BasicDiamonds =
 	{
 		Rank = 10,
 		Suit = "Diamond",
-		Sprite = "textures/Cards/Card38.png"
+		Sprite = "textures/Cards/Card38.png",
 		PackingType = "Default"
 	},
 
@@ -84,7 +84,7 @@ CardData.BasicDiamonds =
 	{
 		Rank = 11,
 		Suit = "Diamond",
-		Sprite = "textures/Cards/Card42.png"
+		Sprite = "textures/Cards/Card42.png",
 		PackingType = "Default"
 	},
 
@@ -92,7 +92,7 @@ CardData.BasicDiamonds =
 	{
 		Rank = 12,
 		Suit = "Diamond",
-		Sprite = "textures/Cards/Card46.png"
+		Sprite = "textures/Cards/Card46.png",
 		PackingType = "Default"
 	},
 
@@ -100,7 +100,7 @@ CardData.BasicDiamonds =
 	{
 		Rank = 13,
 		Suit = "Diamond",
-		Sprite = "textures/Cards/Card50.png"
+		Sprite = "textures/Cards/Card50.png",
 		PackingType = "Default"
 	}
 }

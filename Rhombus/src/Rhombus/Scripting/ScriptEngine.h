@@ -3,7 +3,8 @@
 #include "Rhombus/ECS/Scene.h"
 #include "Rhombus/ECS/Entity.h"
 
-#include <list>
+#include <vector>
+#include <tuple>
 
 namespace rhombus {
 
@@ -19,7 +20,7 @@ namespace rhombus {
 		static void SetupEntity(Entity entity);
 
 		static bool DoScript(std::string sciptPath);
-		static std::list<std::string> GetCardsTest(std::string globalName);
+		static std::vector<std::tuple<std::string, std::string>> GetCardsTest(std::string globalName);
 
 		static void OnInitEntity(Entity entity);
 		static void OnUpdateEntity(Entity entity, DeltaTime dt);

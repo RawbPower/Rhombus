@@ -161,9 +161,9 @@ namespace rhombus
 		return CheckLua(L, r);
 	}
 
-	std::list<std::string> ScriptEngine::GetCardsTest(std::string globalName)
+	std::vector<std::tuple<std::string, std::string>> ScriptEngine::GetCardsTest(std::string globalName)
 	{
-		std::list<std::string> cards;
+		std::vector<std::tuple<std::string, std::string>> cards;
 		std::list<std::string> cardDatas;
 		lua_getglobal(L, "GameModeData");
 		lua_getfield(L, -1, globalName.c_str());
@@ -193,12 +193,15 @@ namespace rhombus
 				while (lua_next(L, -2) != 0) 
 				{
 					/* uses 'key' (at index -2) and 'value' (at index -1) */
-					cards.push_back(lua_tostring(L, -2));
+					std::string name = lua_tostring(L, -2);
+					lua_getfield(L, -1, "Sprite");
+					std::string sprite = lua_tostring(L, -1);
+					cards.push_back(std::tuple<std::string, std::string>{name, sprite});
 					/*printf("%s - %s\n",
 						lua_typename(L, lua_type(L, -2)),
 						lua_typename(L, lua_type(L, -1)));*/
 					/* removes 'value'; keeps 'key' for next iteration */
-					lua_pop(L, 1);
+					lua_pop(L, 2);
 				}
 				lua_pop(L, 1);
 			}

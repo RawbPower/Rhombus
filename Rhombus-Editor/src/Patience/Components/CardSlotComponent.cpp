@@ -47,8 +47,11 @@ void CardSlotComponent::UpdateCardStack()
 		i++;
 	}
 
-	float sizeMult = numOfCards > 0 ? ((float)numOfCards - 1.0f) * 0.5f : 0.0f;
-	BoxArea2DComponent& area = GetOwnerEntity().GetComponent<BoxArea2DComponent>();
-	area.m_offset = m_emptyAreaOffset + m_staggeredOffset * sizeMult;
-	area.m_size = m_emptyAreaSize + Vec2::Abs(m_staggeredOffset) * sizeMult;
+	if (m_slotType == STAGGERED)
+	{
+		float sizeMult = numOfCards > 0 ? ((float)numOfCards - 1.0f) * 0.5f : 0.0f;
+		BoxArea2DComponent& area = GetOwnerEntity().GetComponent<BoxArea2DComponent>();
+		area.m_offset = m_emptyAreaOffset + m_staggeredOffset * sizeMult;
+		area.m_size = m_emptyAreaSize + Vec2::Abs(m_staggeredOffset) * sizeMult;
+	}
 }

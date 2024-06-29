@@ -41,6 +41,8 @@ void PatienceSetupSystem::Init()
 			{
 				Entity cardEntity = m_scene->CreateEntity(cardData.name);
 				CardComponent& card = cardEntity.AddComponent<CardComponent>();
+				card.m_rank = cardData.rank;
+				card.m_suit = cardData.suit;
 				BoxArea2DComponent& area = cardEntity.AddComponent<BoxArea2DComponent>();
 				area.m_size = Vec2(22.5f, 32.0f);
 				SpriteRendererComponent& spriteRendererComponent = cardEntity.AddComponent<SpriteRendererComponent>();

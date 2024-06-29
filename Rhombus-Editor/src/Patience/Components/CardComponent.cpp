@@ -8,7 +8,7 @@ CardComponent::Suit CardComponent::GetSuitFromName(const char* name)
 	int suitIndex = 0;
 	for (const char* suitName : sm_suitNameList)
 	{
-		if (suitName == name)
+		if (strcmp(suitName, name) == 0)
 		{
 			suit = (CardComponent::Suit)suitIndex;
 			break;

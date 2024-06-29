@@ -109,7 +109,7 @@ void PatienceScene::DeserializeEntity(void* yamlEntity, Entity entity)
 	{
 		auto& card = entity.AddComponent<CardComponent>();
 		card.m_rank = cardComponent["Rank"].as<int>();
-		card.m_suit = cardComponent["Suit"].as<int>();
+		card.m_suit = (CardComponent::Suit)cardComponent["Suit"].as<int>();
 	}
 
 	auto cardSlotComponent = node["CardSlotComponent"];

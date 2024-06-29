@@ -5,14 +5,17 @@
 class CardComponent : public ComponentBase
 {
 public:
+
+	enum Suit { SUIT_HEART = 0, SUIT_DIAMOND, SUIT_SPADE, SUIT_CLUB, SUIT_COUNT };
+
 	CardComponent() = default;
 	CardComponent(const CardComponent&) = default;
 
 	int GetColor() const { return m_rank; }
 	void SetColor(int rank) { m_rank = rank; }
 
-	int GetSuit() const { return m_suit; }
-	void SetSuit(int suit) { m_suit = suit; }
+	Suit GetSuit() const { return m_suit; }
+	void SetSuit(Suit suit) { m_suit = suit; }
 
 	int GetIsHeld() const { return m_isHeld; }
 	void SetIsHeld(bool held) { m_isHeld = held; }
@@ -27,13 +30,39 @@ public:
 	void SetCurrentlSlot(Entity cardSlot) { m_currentSlot = cardSlot; }
 	void ResetCurrentlSlot(Vec2 prevPos) { m_currentSlot = Entity(); }
 
+	const char* GetSuitName()
+	{
+		return GetSuitName(m_suit);
+	}
+
+	static const char* GetSuitName(int suit)
+	{
+		if (suit >= 0 && suit < SUIT_COUNT)
+		{
+			sm_suitNameList[suit];
+		}
+		else
+		{
+			return "Invalid";
+		}
+	}
+
+	static const char** GetSuitNameList()
+	{
+		return sm_suitNameList;
+	}
+
+	static Suit GetSuitFromName(const char* name);
+
 public:
 	int m_rank;
-	int m_suit;
+	Suit m_suit;
 
 private:
 	bool m_isHeld = false;
 	bool m_isAvailable = true;
 	Vec2 m_previousPosition = Vec2(0.0f);
 	Entity m_currentSlot;
+
+	static const char* sm_suitNameList[SUIT_COUNT];
 };

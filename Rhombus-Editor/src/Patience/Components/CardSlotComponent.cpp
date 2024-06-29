@@ -2,6 +2,8 @@
 
 #include "CardComponent.h"
 
+const char* CardSlotComponent::sm_slotTypeNameList[SLOT_TYPE_COUNT] = { "Single", "Stack", "Staggered" };
+
 void CardSlotComponent::OnComponentAdded()
 {
 	const BoxArea2DComponent& area = GetOwnerEntity().GetComponentRead<BoxArea2DComponent>();
@@ -11,7 +13,7 @@ void CardSlotComponent::OnComponentAdded()
 
 bool CardSlotComponent::CanAcceptCards()
 {
-	return m_slotType != SINGLE || m_cardStack.size() == 0;
+	return m_slotType != SLOT_TYPE_SINGLE || m_cardStack.size() == 0;
 }
 
 void CardSlotComponent::AddCard(Entity card) 
@@ -37,7 +39,7 @@ void CardSlotComponent::UpdateCardStack()
 		const TransformComponent& slotTransform = GetOwnerEntity().GetComponentRead<TransformComponent>();
 		CardComponent& cardComponent = card.GetComponent<CardComponent>();
 
-		if (m_slotType == STAGGERED)
+		if (m_slotType == SLOT_TYPE_STAGGERED)
 		{
 			transform.m_position.x = slotTransform.m_position.x + i * m_staggeredOffset.x;
 			transform.m_position.y = slotTransform.m_position.y + i * m_staggeredOffset.y;
@@ -47,8 +49,11 @@ void CardSlotComponent::UpdateCardStack()
 		i++;
 	}
 
-	float sizeMult = numOfCards > 0 ? ((float)numOfCards - 1.0f) * 0.5f : 0.0f;
-	BoxArea2DComponent& area = GetOwnerEntity().GetComponent<BoxArea2DComponent>();
-	area.m_offset = m_emptyAreaOffset + m_staggeredOffset * sizeMult;
-	area.m_size = m_emptyAreaSize + Vec2::Abs(m_staggeredOffset) * sizeMult;
+	if (m_slotType == SLOT_TYPE_STAGGERED)
+	{
+		float sizeMult = numOfCards > 0 ? ((float)numOfCards - 1.0f) * 0.5f : 0.0f;
+		BoxArea2DComponent& area = GetOwnerEntity().GetComponent<BoxArea2DComponent>();
+		area.m_offset = m_emptyAreaOffset + m_staggeredOffset * sizeMult;
+		area.m_size = m_emptyAreaSize + Vec2::Abs(m_staggeredOffset) * sizeMult;
+	}
 }

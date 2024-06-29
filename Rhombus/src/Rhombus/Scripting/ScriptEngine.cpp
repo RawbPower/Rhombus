@@ -2,6 +2,7 @@
 #include "ScriptEngine.h"
 #include "ScriptGlue.h"
 
+#include "Rhombus/Core/Log.h"
 #include "Rhombus/Project/Project.h"
 #include "Rhombus/ECS/Components/ScriptComponent.h"
 
@@ -150,6 +151,78 @@ namespace rhombus
 
 		lua_pushnumber(L, (int)entityID32b);
 		lua_setfield(L, -2, "entityIDb");
+	}
+
+	bool ScriptEngine::DoScript(std::string sciptPath)
+	{
+		int r = luaL_dofile(L, sciptPath.c_str());
+		return CheckLua(L, r);
+	}
+
+	void ScriptEngine::InitNewTable(const char* tableName)
+	{
+		lua_newtable(L);
+		lua_setglobal(L, tableName);
+	}
+
+	void ScriptEngine::GetGlobal(const char* globalName)
+	{
+		lua_getglobal(L, globalName);
+	}
+
+	void ScriptEngine::GetField(const char* fieldName, int tableIndex)
+	{
+		lua_getfield(L, tableIndex, fieldName);
+	}
+
+	void ScriptEngine::GetListOfStringValueFromField(const char* fieldName, std::list<std::string>& list, int tableIndex)
+	{
+		lua_getfield(L, tableIndex, fieldName);
+		int len = lua_rawlen(L, -1);
+		for (int i = 1; i <= len; i++)
+		{
+			lua_pushinteger(L, i);
+			lua_gettable(L, -2);
+			const char* str = lua_tostring(L, -1);
+			list.push_back(str);
+			lua_pop(L, 1);
+		}
+	}
+
+	const char* ScriptEngine::GetString(int valueIndex)
+	{
+		return lua_tostring(L, valueIndex);
+	}
+
+	int ScriptEngine::GetInt(int valueIndex)
+	{
+		return (int)lua_tonumber(L, valueIndex);
+	}
+
+	float ScriptEngine::GetFloat(int valueIndex)
+	{
+		return (float)lua_tonumber(L, valueIndex);
+	}
+
+	void ScriptEngine::Pop(int popCount)
+	{
+		lua_pop(L, popCount);
+	}
+
+	void ScriptEngine::StartLoopThroughTable()
+	{
+		lua_pushnil(L);  /* first key */
+	}
+
+	int ScriptEngine::NextKey()
+	{
+		return lua_next(L, -2) != 0;
+	}
+
+	const char* ScriptEngine::GetKey()
+	{
+		/* uses 'key' (at index -2) and 'value' (at index -1) */
+		return lua_tostring(L, -2);
 	}
 
 	void ScriptEngine::OnInitEntity(Entity entity)

@@ -4,7 +4,7 @@ CardData.BasicHearts =
 	{
 		Rank = 1,
 		Suit = "Heart",
-		Sprite = "textures/Cards/Card1.png"
+		Sprite = "textures/Cards/Card1.png",
 		PackingType = "Default"
 	},
 
@@ -12,7 +12,7 @@ CardData.BasicHearts =
 	{
 		Rank = 2,
 		Suit = "Heart",
-		Sprite = "textures/Cards/Card5.png"
+		Sprite = "textures/Cards/Card5.png",
 		PackingType = "Default"
 	},
 
@@ -20,7 +20,7 @@ CardData.BasicHearts =
 	{
 		Rank = 3,
 		Suit = "Heart",
-		Sprite = "textures/Cards/Card9.png"
+		Sprite = "textures/Cards/Card9.png",
 		PackingType = "Default"
 	},
 
@@ -28,7 +28,7 @@ CardData.BasicHearts =
 	{
 		Rank = 4,
 		Suit = "Heart",
-		Sprite = "textures/Cards/Card13.png"
+		Sprite = "textures/Cards/Card13.png",
 		PackingType = "Default"
 	},
 
@@ -36,7 +36,7 @@ CardData.BasicHearts =
 	{
 		Rank = 5,
 		Suit = "Heart",
-		Sprite = "textures/Cards/Card17.png"
+		Sprite = "textures/Cards/Card17.png",
 		PackingType = "Default"
 	},
 
@@ -44,7 +44,7 @@ CardData.BasicHearts =
 	{
 		Rank = 6,
 		Suit = "Heart",
-		Sprite = "textures/Cards/Card21.png"
+		Sprite = "textures/Cards/Card21.png",
 		PackingType = "Default"
 	},
 
@@ -52,7 +52,7 @@ CardData.BasicHearts =
 	{
 		Rank = 7,
 		Suit = "Heart",
-		Sprite = "textures/Cards/Card25.png"
+		Sprite = "textures/Cards/Card25.png",
 		PackingType = "Default"
 	},
 
@@ -60,7 +60,7 @@ CardData.BasicHearts =
 	{
 		Rank = 8,
 		Suit = "Heart",
-		Sprite = "textures/Cards/Card29.png"
+		Sprite = "textures/Cards/Card29.png",
 		PackingType = "Default"
 	},
 
@@ -68,7 +68,7 @@ CardData.BasicHearts =
 	{
 		Rank = 9,
 		Suit = "Heart",
-		Sprite = "textures/Cards/Card33.png"
+		Sprite = "textures/Cards/Card33.png",
 		PackingType = "Default"
 	},
 
@@ -76,7 +76,7 @@ CardData.BasicHearts =
 	{
 		Rank = 10,
 		Suit = "Heart",
-		Sprite = "textures/Cards/Card37.png"
+		Sprite = "textures/Cards/Card37.png",
 		PackingType = "Default"
 	},
 
@@ -84,7 +84,7 @@ CardData.BasicHearts =
 	{
 		Rank = 11,
 		Suit = "Heart",
-		Sprite = "textures/Cards/Card41.png"
+		Sprite = "textures/Cards/Card41.png",
 		PackingType = "Default"
 	},
 
@@ -92,7 +92,7 @@ CardData.BasicHearts =
 	{
 		Rank = 12,
 		Suit = "Heart",
-		Sprite = "textures/Cards/Card45.png"
+		Sprite = "textures/Cards/Card45.png",
 		PackingType = "Default"
 	},
 
@@ -100,7 +100,7 @@ CardData.BasicHearts =
 	{
 		Rank = 13,
 		Suit = "Heart",
-		Sprite = "textures/Cards/Card49.png"
+		Sprite = "textures/Cards/Card49.png",
 		PackingType = "Default"
 	}
 }

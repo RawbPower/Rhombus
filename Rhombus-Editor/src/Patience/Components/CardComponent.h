@@ -52,8 +52,6 @@ public:
 		return sm_suitNameList;
 	}
 
-	static Suit GetSuitFromName(const char* name);
-
 public:
 	int m_rank;
 	Suit m_suit;

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Rhombus.h"
+#include "Patience/Components/PatienceComponent.h"
 #include "Patience/Components/CardComponent.h"
 
 #include <vector>
@@ -26,4 +27,5 @@ public:
 	void Init();
 
 	void GetCardDataFromScript(const char* scriptName, std::vector<CardData>& cardDatas);
+	void GetGameModeDataFromScript(const char* scriptName, PatienceComponent& patienceComponent);
 };

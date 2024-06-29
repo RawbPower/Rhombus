@@ -28,6 +28,7 @@ namespace rhombus {
 		static const char* GetString(int valueIndex = -1);
 		static int GetInt(int valueIndex = -1);
 		static float GetFloat(int valueIndex = -1);
+		static int GetEnumFromName(const char* name, const char** nameList, int nameCount);
 
 		static void Pop(int popCount = 1);
 

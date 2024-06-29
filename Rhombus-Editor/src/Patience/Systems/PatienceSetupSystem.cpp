@@ -1,6 +1,5 @@
 #include "PatienceSetupSystem.h"
 
-#include "Patience/Components/PatienceComponent.h"
 #include "Patience/Components/CardSlotComponent.h"
 #include "Rhombus/Scripting/ScriptEngine.h"
 
@@ -30,6 +29,8 @@ void PatienceSetupSystem::Init()
 		ScriptEngine::InitNewTable("GameModeData");
 		if (ScriptEngine::DoScript(scriptPath))
 		{
+			GetGameModeDataFromScript(patienceComponent.m_setupScript.c_str(), patienceComponent);
+
 			std::vector<CardData> cardDatas;
 			GetCardDataFromScript(patienceComponent.m_setupScript.c_str(), cardDatas);
 
@@ -40,11 +41,14 @@ void PatienceSetupSystem::Init()
 			for (CardData cardData : cardDatas)
 			{
 				Entity cardEntity = m_scene->CreateEntity(cardData.name);
+
 				CardComponent& card = cardEntity.AddComponent<CardComponent>();
 				card.m_rank = cardData.rank;
 				card.m_suit = cardData.suit;
+
 				BoxArea2DComponent& area = cardEntity.AddComponent<BoxArea2DComponent>();
 				area.m_size = Vec2(22.5f, 32.0f);
+
 				SpriteRendererComponent& spriteRendererComponent = cardEntity.AddComponent<SpriteRendererComponent>();
 				std::string texturePath = cardData.sprite;
 				auto path = Project::GetAssetFileSystemPath(texturePath);
@@ -58,6 +62,57 @@ void PatienceSetupSystem::Init()
 			}
 		}
 	}
+}
+
+void PatienceSetupSystem::GetGameModeDataFromScript(const char* scriptName, PatienceComponent& patienceComponent)
+{
+	std::list<std::string> cardSets;
+	ScriptEngine::GetGlobal("GameModeData");
+	ScriptEngine::GetField(scriptName);
+
+	ScriptEngine::GetField("Columns");
+	patienceComponent.m_gameModeData.columns = ScriptEngine::GetInt();
+	ScriptEngine::Pop();
+
+	ScriptEngine::GetField("Sites");
+	patienceComponent.m_gameModeData.sites = ScriptEngine::GetInt();
+	ScriptEngine::Pop();
+
+	ScriptEngine::GetField("Freecells");
+	patienceComponent.m_gameModeData.freecells = ScriptEngine::GetInt();
+	ScriptEngine::Pop();
+
+	ScriptEngine::GetField("Stocks");
+	patienceComponent.m_gameModeData.stocks = ScriptEngine::GetInt();
+	ScriptEngine::Pop();
+
+	ScriptEngine::GetField("Wastepiles");
+	patienceComponent.m_gameModeData.wastepiles = ScriptEngine::GetInt();
+	ScriptEngine::Pop();
+
+	ScriptEngine::GetField("Revelation");
+	patienceComponent.m_gameModeData.revelation = (PatienceComponent::Revelation)ScriptEngine::GetEnumFromName(ScriptEngine::GetString(), PatienceComponent::sm_revelationNameList, PatienceComponent::Revelation::REVELATION_COUNT);
+	ScriptEngine::Pop();
+
+	ScriptEngine::GetField("BuildingOrder");
+	patienceComponent.m_gameModeData.buildingOrder = (PatienceComponent::Ordering)ScriptEngine::GetEnumFromName(ScriptEngine::GetString(), PatienceComponent::sm_orderingNameList, PatienceComponent::Ordering::ORDERING_COUNT);
+	ScriptEngine::Pop();
+
+	ScriptEngine::GetField("FoundationRank");
+	patienceComponent.m_gameModeData.foundationRank = ScriptEngine::GetInt();
+	ScriptEngine::Pop();
+
+	ScriptEngine::GetField("PackingOrder");
+	patienceComponent.m_gameModeData.packingOrder = (PatienceComponent::Ordering)ScriptEngine::GetEnumFromName(ScriptEngine::GetString(), PatienceComponent::sm_orderingNameList, PatienceComponent::Ordering::ORDERING_COUNT);
+	ScriptEngine::Pop();
+
+	ScriptEngine::GetField("PackingType");
+	patienceComponent.m_gameModeData.packingType = (PatienceComponent::PackingType)ScriptEngine::GetEnumFromName(ScriptEngine::GetString(), PatienceComponent::sm_packingTypeNameList, PatienceComponent::PackingType::PACKING_COUNT);
+	ScriptEngine::Pop();
+
+	ScriptEngine::GetField("EmptyColumnType");
+	patienceComponent.m_gameModeData.emptyColumnType = (PatienceComponent::EmptyColumnType)ScriptEngine::GetEnumFromName(ScriptEngine::GetString(), PatienceComponent::sm_emptyColumnTypeNameList, PatienceComponent::EmptyColumnType::EMPTY_COLUMN_COUNT);
+	ScriptEngine::Pop();
 }
 
 void PatienceSetupSystem::GetCardDataFromScript(const char* scriptName, std::vector<CardData>& cardDatas)
@@ -89,7 +144,7 @@ void PatienceSetupSystem::GetCardDataFromScript(const char* scriptName, std::vec
 				ScriptEngine::Pop();
 
 				ScriptEngine::GetField("Suit");
-				CardComponent::Suit suit = CardComponent::GetSuitFromName(ScriptEngine::GetString());
+				CardComponent::Suit suit = (CardComponent::Suit)ScriptEngine::GetEnumFromName(ScriptEngine::GetString(), CardComponent::GetSuitNameList(), CardComponent::Suit::SUIT_COUNT);
 				ScriptEngine::Pop();
 
 				CardData cardData(name, rank, suit, sprite);

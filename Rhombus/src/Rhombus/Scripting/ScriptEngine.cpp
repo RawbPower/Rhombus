@@ -204,6 +204,22 @@ namespace rhombus
 		return (float)lua_tonumber(L, valueIndex);
 	}
 
+	int ScriptEngine::GetEnumFromName(const char* name, const char** nameList, int nameCount)
+	{
+		int enumInt = -1;
+		for (int i = 0; i < nameCount; i++)
+		{
+			const char* enumName = nameList[i];
+			if (strcmp(enumName, name) == 0)
+			{
+				enumInt = i;
+				break;
+			}
+		}
+
+		return enumInt;
+	}
+
 	void ScriptEngine::Pop(int popCount)
 	{
 		lua_pop(L, popCount);

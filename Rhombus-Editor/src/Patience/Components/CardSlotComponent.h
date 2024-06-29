@@ -7,7 +7,7 @@
 class CardSlotComponent : public ComponentBase
 {
 public:
-	enum SlotType {SINGLE = 0, STACK, STAGGERED, COUNT};
+	enum SlotType {SLOT_TYPE_SINGLE = 0, SLOT_TYPE_STACK, SLOT_TYPE_STAGGERED, SLOT_TYPE_COUNT};
 
 	CardSlotComponent() = default;
 	CardSlotComponent(const CardSlotComponent&) = default;
@@ -32,6 +32,7 @@ public:
 	void SetStaggeredOffset(Vec2 offset) { m_staggeredOffset = offset; }
 
 	const SlotType GetSlotType() const{ return m_slotType; }
+	SlotType& GetSlotTypeNonConst() { return m_slotType; }
 
 	const char* GetSlotTypeName()
 	{
@@ -40,21 +41,19 @@ public:
 
 	const char* GetSlotTypeName(int slotType)
 	{
-		switch ((SlotType)slotType)
+		if (slotType >= 0 && slotType < SLOT_TYPE_COUNT)
 		{
-		case CardSlotComponent::SINGLE:
-			return "Single";
-			break;
-		case CardSlotComponent::STACK:
-			return "Stack";
-			break;
-		case CardSlotComponent::STAGGERED:
-			return "Staggered";
-			break;
-		default:
-			return "Invalid";
-			break;
+			m_slotTypeNameList[slotType];
 		}
+		else
+		{
+			return "Invalid";
+		}
+	}
+
+	const char** GetSlotTypeNameList()
+	{
+		return m_slotTypeNameList;
 	}
 
 public:
@@ -62,9 +61,11 @@ public:
 	Vec2 m_staggeredOffset = Vec2(0.0f, -16.0f);
 
 private:
-	SlotType m_slotType = SINGLE;
+	SlotType m_slotType = SLOT_TYPE_SINGLE;
 	bool m_isOccupied = false;
 
 	Vec2 m_emptyAreaOffset = { 0.0f, 0.0f };
 	Vec2 m_emptyAreaSize = { 0.5f, 0.5f };
+
+	const char* m_slotTypeNameList[SLOT_TYPE_COUNT] = {"Single", "Stack", "Staggered"};
 };

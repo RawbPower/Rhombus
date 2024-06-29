@@ -8,10 +8,15 @@
 #include <algorithm>
 #include <random>
 
+struct CardData
+{
+	int rank = 0;
+	CardComponent::Suit suit = CardComponent::Suit::SUIT_HEART;
+	std::string sprite;
+};
 
 void PatienceSetupSystem::Init()
 {
-
 	for (Entity entity : GetEntities())
 	{
 		PatienceComponent& patienceComponent = entity.GetComponent<PatienceComponent>();
@@ -21,7 +26,7 @@ void PatienceSetupSystem::Init()
 		{
 			Entity cardSlotEntity = { slot, m_scene };
 			CardSlotComponent& cardSlotComponent = cardSlotEntity.GetComponent<CardSlotComponent>();
-			if (cardSlotComponent.GetSlotType() == CardSlotComponent::STAGGERED)
+			if (cardSlotComponent.GetSlotType() == CardSlotComponent::SLOT_TYPE_STAGGERED)
 			{
 				cardColumns.push_back(cardSlotEntity);
 			}

@@ -5,6 +5,7 @@
 #include "Patience/Components/CardSlotComponent.h"
 #include "Patience/Components/PatienceComponent.h"
 
+#include "Rhombus/ImGui/ImGuiWidgets.h"
 #include <imgui/imgui.h>
 #include <imgui/imgui_internal.h>
 
@@ -371,24 +372,7 @@ namespace rhombus
 		DrawComponent<Rigidbody2DComponent>("Rigidbody 2D", entity, [](auto& component)
 		{
 			const char* bodyTypeStrings[] = { "Static", "Dynamic", "Kinematic" };
-			const char* currentBodyTypeString = bodyTypeStrings[(int)component.m_type];
-			if (ImGui::BeginCombo("Body Type", currentBodyTypeString))
-			{
-				for (int i = 0; i < 2; i++)
-				{
-					bool isSelected = currentBodyTypeString == bodyTypeStrings[i];
-					if (ImGui::Selectable(bodyTypeStrings[i], isSelected))
-					{
-						currentBodyTypeString = bodyTypeStrings[i];
-						component.m_type = (Rigidbody2DComponent::BodyType)i;
-					}
-
-					if (isSelected)
-						ImGui::SetItemDefaultFocus();
-				}
-
-				ImGui::EndCombo();
-			}
+			ImGui::SelectableEnum("Body Type", bodyTypeStrings, 3, &((int)component.m_type));
 
 			ImGui::Checkbox("Fixed Rotation", &component.m_fixedRotation);
 		});
@@ -423,7 +407,8 @@ namespace rhombus
 		DrawComponent<CardComponent>("Card", entity, [](auto& component)
 		{
 			ImGui::InputInt("Rank", &component.m_rank);
-			ImGui::InputInt("Suit", &component.m_suit);
+
+			ImGui::SelectableEnum("Suit", component.GetSlotTypeNameList(), CardComponent::Suit::SUIT_COUNT, &((int)component.m_suit));
 
 			if (component.GetCurrentSlot())
 			{
@@ -436,30 +421,9 @@ namespace rhombus
 
 		DrawComponent<CardSlotComponent>("Card Slot", entity, [](auto& component)
 		{
-			const int count = (int)CardSlotComponent::COUNT;
-			const char* items[count];
-			for (int i = 0; i < count; i++)
-			{
-				items[i] = component.GetSlotTypeName(i);
-			}
-			int item_current_idx = (int)component.GetSlotType(); // Here we store our selection data as an index.
-			const char* combo_preview_value = items[item_current_idx];  // Pass in the preview value visible before opening the combo (it could be anything)
-			if (ImGui::BeginCombo("Slot Type", combo_preview_value))
-			{
-				for (int n = 0; n < count; n++)
-				{
-					const bool is_selected = (item_current_idx == n);
-					if (ImGui::Selectable(items[n], is_selected))
-						component.SetSlotType(n);
+			ImGui::SelectableEnum("Slot Type", component.GetSlotTypeNameList(), CardSlotComponent::SLOT_TYPE_COUNT, &((int)component.GetSlotTypeNonConst()));
 
-					// Set the initial focus when opening the combo (scrolling + keyboard navigation focus)
-					if (is_selected)
-						ImGui::SetItemDefaultFocus();
-				}
-				ImGui::EndCombo();
-			}
-
-			if (component.GetSlotType() == CardSlotComponent::STAGGERED)
+			if (component.GetSlotType() == CardSlotComponent::SLOT_TYPE_STAGGERED)
 			{
 				ImGui::DragFloat2("Offset", component.GetStaggeredOffset().ToPtr(), 0.01f);
 			}

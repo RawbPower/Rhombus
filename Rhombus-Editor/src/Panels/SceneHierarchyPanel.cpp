@@ -408,7 +408,7 @@ namespace rhombus
 		{
 			ImGui::InputInt("Rank", &component.m_rank);
 
-			ImGui::SelectableEnum("Suit", component.GetSlotTypeNameList(), CardComponent::Suit::SUIT_COUNT, &((int)component.m_suit));
+			ImGui::SelectableEnum("Suit", CardComponent::GetSuitNameList(), CardComponent::Suit::SUIT_COUNT, &((int)component.m_suit));
 
 			if (component.GetCurrentSlot())
 			{
@@ -421,7 +421,7 @@ namespace rhombus
 
 		DrawComponent<CardSlotComponent>("Card Slot", entity, [](auto& component)
 		{
-			ImGui::SelectableEnum("Slot Type", component.GetSlotTypeNameList(), CardSlotComponent::SLOT_TYPE_COUNT, &((int)component.GetSlotTypeNonConst()));
+			ImGui::SelectableEnum("Slot Type", CardSlotComponent::GetSlotTypeNameList(), CardSlotComponent::SLOT_TYPE_COUNT, &((int)component.GetSlotTypeNonConst()));
 
 			if (component.GetSlotType() == CardSlotComponent::SLOT_TYPE_STAGGERED)
 			{

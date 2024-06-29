@@ -39,11 +39,11 @@ public:
 		return GetSlotTypeName(m_slotType);
 	}
 
-	const char* GetSlotTypeName(int slotType)
+	static const char* GetSlotTypeName(int slotType)
 	{
 		if (slotType >= 0 && slotType < SLOT_TYPE_COUNT)
 		{
-			m_slotTypeNameList[slotType];
+			sm_slotTypeNameList[slotType];
 		}
 		else
 		{
@@ -51,9 +51,9 @@ public:
 		}
 	}
 
-	const char** GetSlotTypeNameList()
+	static const char** GetSlotTypeNameList()
 	{
-		return m_slotTypeNameList;
+		return sm_slotTypeNameList;
 	}
 
 public:
@@ -67,5 +67,5 @@ private:
 	Vec2 m_emptyAreaOffset = { 0.0f, 0.0f };
 	Vec2 m_emptyAreaSize = { 0.5f, 0.5f };
 
-	const char* m_slotTypeNameList[SLOT_TYPE_COUNT] = {"Single", "Stack", "Staggered"};
+	static const char* sm_slotTypeNameList[SLOT_TYPE_COUNT];
 };

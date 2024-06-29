@@ -2,6 +2,8 @@
 
 #include "CardComponent.h"
 
+const char* CardSlotComponent::sm_slotTypeNameList[SLOT_TYPE_COUNT] = { "Single", "Stack", "Staggered" };
+
 void CardSlotComponent::OnComponentAdded()
 {
 	const BoxArea2DComponent& area = GetOwnerEntity().GetComponentRead<BoxArea2DComponent>();

@@ -30,16 +30,16 @@ public:
 	void SetCurrentlSlot(Entity cardSlot) { m_currentSlot = cardSlot; }
 	void ResetCurrentlSlot(Vec2 prevPos) { m_currentSlot = Entity(); }
 
-	const char* GetSlotTypeName()
+	const char* GetSuitName()
 	{
-		return GetSlotTypeName(m_suit);
+		return GetSuitName(m_suit);
 	}
 
-	const char* GetSlotTypeName(int suit)
+	static const char* GetSuitName(int suit)
 	{
 		if (suit >= 0 && suit < SUIT_COUNT)
 		{
-			m_suitNameList[suit];
+			sm_suitNameList[suit];
 		}
 		else
 		{
@@ -47,10 +47,12 @@ public:
 		}
 	}
 
-	const char** GetSlotTypeNameList()
+	static const char** GetSuitNameList()
 	{
-		return m_suitNameList;
+		return sm_suitNameList;
 	}
+
+	static Suit GetSuitFromName(const char* name);
 
 public:
 	int m_rank;
@@ -62,5 +64,5 @@ private:
 	Vec2 m_previousPosition = Vec2(0.0f);
 	Entity m_currentSlot;
 
-	const char* m_suitNameList[SUIT_COUNT] = { "Heart", "Diamond", "Spade", "Club"};
+	static const char* sm_suitNameList[SUIT_COUNT];
 };

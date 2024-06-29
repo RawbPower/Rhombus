@@ -3,14 +3,14 @@ GameModeData.FreeCell =
 	Columns = 8,
 	Sites = 4,
 	Freecells = 4,
-	Stock = 0,
-	Discard = 0,
+	Stocks = 0,
+	Wastepiles = 0,
 
 	Revelation = "Open",
 
 	BuildingOrder = "Ascending",
 	FoundationRank = 1,
-	PackingOrder = "Descening",
+	PackingOrder = "Descending",
 	PackingType = "DifferentSuit",
 	EmptyColumnType = "Any",
 

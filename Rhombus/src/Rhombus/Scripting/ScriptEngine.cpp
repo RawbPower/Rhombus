@@ -155,59 +155,74 @@ namespace rhombus
 
 	bool ScriptEngine::DoScript(std::string sciptPath)
 	{
-		lua_newtable(L);
-		lua_setglobal(L, "GameModeData");
 		int r = luaL_dofile(L, sciptPath.c_str());
 		return CheckLua(L, r);
 	}
 
-	std::vector<std::tuple<std::string, std::string>> ScriptEngine::GetCardsTest(std::string globalName)
+	void ScriptEngine::InitNewTable(const char* tableName)
 	{
-		std::vector<std::tuple<std::string, std::string>> cards;
-		std::list<std::string> cardDatas;
-		lua_getglobal(L, "GameModeData");
-		lua_getfield(L, -1, globalName.c_str());
-		lua_getfield(L, -1, "Deck");
+		lua_newtable(L);
+		lua_setglobal(L, tableName);
+	}
+
+	void ScriptEngine::GetGlobal(const char* globalName)
+	{
+		lua_getglobal(L, globalName);
+	}
+
+	void ScriptEngine::GetField(const char* fieldName, int tableIndex)
+	{
+		lua_getfield(L, tableIndex, fieldName);
+	}
+
+	void ScriptEngine::GetListOfStringValueFromField(const char* fieldName, std::list<std::string>& list, int tableIndex)
+	{
+		lua_getfield(L, tableIndex, fieldName);
 		int len = lua_rawlen(L, -1);
 		for (int i = 1; i <= len; i++)
 		{
-			RB_CORE_INFO("Stack size {0}", lua_gettop(L));
 			lua_pushinteger(L, i);
 			lua_gettable(L, -2);
-			const char* cardData = lua_tostring(L, -1);
-			cardDatas.push_back(cardData);
+			const char* str = lua_tostring(L, -1);
+			list.push_back(str);
 			lua_pop(L, 1);
 		}
+	}
 
-		lua_newtable(L);
-		lua_setglobal(L, "CardData");
-		lua_getglobal(L, "CardData");
-		for (std::string cardData : cardDatas)
-		{
-			std::string sciptPath = Project::GetScriptDirectory().string() + "\\CardData_" + cardData + ".lua";
-			int r = luaL_dofile(L, sciptPath.c_str());
-			if (CheckLua(L, r))
-			{
-				lua_getfield(L, -1, cardData.c_str());
-				lua_pushnil(L);  /* first key */
-				while (lua_next(L, -2) != 0) 
-				{
-					/* uses 'key' (at index -2) and 'value' (at index -1) */
-					std::string name = lua_tostring(L, -2);
-					lua_getfield(L, -1, "Sprite");
-					std::string sprite = lua_tostring(L, -1);
-					cards.push_back(std::tuple<std::string, std::string>{name, sprite});
-					/*printf("%s - %s\n",
-						lua_typename(L, lua_type(L, -2)),
-						lua_typename(L, lua_type(L, -1)));*/
-					/* removes 'value'; keeps 'key' for next iteration */
-					lua_pop(L, 2);
-				}
-				lua_pop(L, 1);
-			}
-		}
+	const char* ScriptEngine::GetString(int valueIndex)
+	{
+		return lua_tostring(L, valueIndex);
+	}
 
-		return cards;
+	int ScriptEngine::GetInt(int valueIndex)
+	{
+		return (int)lua_tonumber(L, valueIndex);
+	}
+
+	float ScriptEngine::GetFloat(int valueIndex)
+	{
+		return (float)lua_tonumber(L, valueIndex);
+	}
+
+	void ScriptEngine::Pop(int popCount)
+	{
+		lua_pop(L, popCount);
+	}
+
+	void ScriptEngine::StartLoopThroughTable()
+	{
+		lua_pushnil(L);  /* first key */
+	}
+
+	int ScriptEngine::NextKey()
+	{
+		return lua_next(L, -2) != 0;
+	}
+
+	const char* ScriptEngine::GetKey()
+	{
+		/* uses 'key' (at index -2) and 'value' (at index -1) */
+		return lua_tostring(L, -2);
 	}
 
 	void ScriptEngine::OnInitEntity(Entity entity)

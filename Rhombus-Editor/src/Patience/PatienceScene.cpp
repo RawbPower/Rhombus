@@ -83,6 +83,7 @@ void PatienceScene::SerializeEntity(void* yamlEmitter, Entity entity)
 
 		auto& cardComponent = entity.GetComponent<CardSlotComponent>();
 		out << YAML::Key << "SlotType" << YAML::Value << (int)cardComponent.GetSlotType();
+		out << YAML::Key << "SlotLayout" << YAML::Value << (int)cardComponent.GetSlotLayout();
 
 		out << YAML::Key << "StaggeredOffset" << YAML::Value << cardComponent.m_staggeredOffset;
 
@@ -117,6 +118,7 @@ void PatienceScene::DeserializeEntity(void* yamlEntity, Entity entity)
 	{
 		auto& cardSlot = entity.AddComponent<CardSlotComponent>();
 		cardSlot.SetSlotType(cardSlotComponent["SlotType"].as<int>());
+		cardSlot.SetSlotLayout(cardSlotComponent["SlotLayout"].as<int>());
 		cardSlot.SetStaggeredOffset(cardSlotComponent["StaggeredOffset"].as<Vec2>());
 	}
 

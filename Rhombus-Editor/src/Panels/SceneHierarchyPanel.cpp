@@ -422,8 +422,9 @@ namespace rhombus
 		DrawComponent<CardSlotComponent>("Card Slot", entity, [](auto& component)
 		{
 			ImGui::SelectableEnum("Slot Type", CardSlotComponent::GetSlotTypeNameList(), CardSlotComponent::SLOT_TYPE_COUNT, &((int)component.GetSlotTypeNonConst()));
+			ImGui::SelectableEnum("Slot Layout", CardSlotComponent::GetSlotLayoutNameList(), CardSlotComponent::SLOT_LAYOUT_COUNT, &((int)component.GetSlotLayoutNonConst()));
 
-			if (component.GetSlotType() == CardSlotComponent::SLOT_TYPE_STAGGERED)
+			if (component.GetSlotLayout() == CardSlotComponent::SLOT_LAYOUT_STAGGERED)
 			{
 				ImGui::DragFloat2("Offset", component.GetStaggeredOffset().ToPtr(), 0.01f);
 			}

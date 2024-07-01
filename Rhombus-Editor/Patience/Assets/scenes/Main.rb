@@ -42,6 +42,7 @@ Entities:
       DebugColor: [0, 0, 0, 0]
     CardSlotComponent:
       SlotType: 1
+      SlotLayout: 1
       StaggeredOffset: [0, -16]
   - Entity: 199452891732059442
     TagComponent:
@@ -55,7 +56,8 @@ Entities:
       Size: [22.5, 32]
       DebugColor: [0, 0, 0, 0]
     CardSlotComponent:
-      SlotType: 0
+      SlotType: 2
+      SlotLayout: 0
       StaggeredOffset: [0, -16]
   - Entity: 3940828394031682926
     TagComponent:
@@ -69,7 +71,8 @@ Entities:
       Size: [22.5, 32]
       DebugColor: [0, 0, 0, 0]
     CardSlotComponent:
-      SlotType: 2
+      SlotType: 0
+      SlotLayout: 2
       StaggeredOffset: [0, -16]
   - Entity: 11970580269886680987
     TagComponent:
@@ -83,7 +86,8 @@ Entities:
       Size: [22.5, 32]
       DebugColor: [0, 0, 0, 0]
     CardSlotComponent:
-      SlotType: 2
+      SlotType: 0
+      SlotLayout: 2
       StaggeredOffset: [0, -16]
   - Entity: 9077371792901969716
     TagComponent:
@@ -97,7 +101,8 @@ Entities:
       Size: [22.5, 32]
       DebugColor: [0, 0, 0, 0]
     CardSlotComponent:
-      SlotType: 2
+      SlotType: 0
+      SlotLayout: 2
       StaggeredOffset: [0, -16]
   - Entity: 2452109330358541380
     TagComponent:
@@ -111,7 +116,8 @@ Entities:
       Size: [22.5, 32]
       DebugColor: [0, 0, 0, 0]
     CardSlotComponent:
-      SlotType: 2
+      SlotType: 0
+      SlotLayout: 2
       StaggeredOffset: [0, -16]
   - Entity: 10645660535592834472
     TagComponent:
@@ -125,7 +131,8 @@ Entities:
       Size: [22.5, 32]
       DebugColor: [0, 0, 0, 0]
     CardSlotComponent:
-      SlotType: 2
+      SlotType: 0
+      SlotLayout: 2
       StaggeredOffset: [0, -16]
   - Entity: 1372865166406401429
     TagComponent:
@@ -139,7 +146,8 @@ Entities:
       Size: [22.5, 32]
       DebugColor: [0, 0, 0, 0]
     CardSlotComponent:
-      SlotType: 2
+      SlotType: 0
+      SlotLayout: 2
       StaggeredOffset: [0, -16]
   - Entity: 15424358020562100925
     TagComponent:
@@ -153,7 +161,8 @@ Entities:
       Size: [22.5, 32]
       DebugColor: [0, 0, 0, 0]
     CardSlotComponent:
-      SlotType: 2
+      SlotType: 0
+      SlotLayout: 2
       StaggeredOffset: [0, -16]
   - Entity: 4114663372317632765
     TagComponent:
@@ -167,7 +176,8 @@ Entities:
       Size: [22.5, 32]
       DebugColor: [0, 0, 0, 0]
     CardSlotComponent:
-      SlotType: 2
+      SlotType: 0
+      SlotLayout: 2
       StaggeredOffset: [0, -16]
   - Entity: 3422527351249912802
     TagComponent:
@@ -181,7 +191,8 @@ Entities:
       Size: [22.5, 32]
       DebugColor: [0, 0, 0, 0]
     CardSlotComponent:
-      SlotType: 0
+      SlotType: 2
+      SlotLayout: 0
       StaggeredOffset: [0, -16]
   - Entity: 11121856120979436675
     TagComponent:
@@ -195,7 +206,8 @@ Entities:
       Size: [22.5, 32]
       DebugColor: [0, 0, 0, 0]
     CardSlotComponent:
-      SlotType: 0
+      SlotType: 2
+      SlotLayout: 0
       StaggeredOffset: [0, -16]
   - Entity: 12572806521458591849
     TagComponent:
@@ -209,7 +221,8 @@ Entities:
       Size: [22.5, 32]
       DebugColor: [0, 0, 0, 0]
     CardSlotComponent:
-      SlotType: 0
+      SlotType: 2
+      SlotLayout: 0
       StaggeredOffset: [0, -16]
   - Entity: 17103678135621629686
     TagComponent:
@@ -224,6 +237,7 @@ Entities:
       DebugColor: [0, 0, 0, 0]
     CardSlotComponent:
       SlotType: 1
+      SlotLayout: 1
       StaggeredOffset: [0, -16]
   - Entity: 7817693968346137392
     TagComponent:
@@ -238,6 +252,7 @@ Entities:
       DebugColor: [0, 0, 0, 0]
     CardSlotComponent:
       SlotType: 1
+      SlotLayout: 1
       StaggeredOffset: [0, -16]
   - Entity: 3551221006459832491
     TagComponent:
@@ -252,6 +267,7 @@ Entities:
       DebugColor: [0, 0, 0, 0]
     CardSlotComponent:
       SlotType: 1
+      SlotLayout: 1
       StaggeredOffset: [0, -16]
   - Entity: 6513507509365870060
     TagComponent:

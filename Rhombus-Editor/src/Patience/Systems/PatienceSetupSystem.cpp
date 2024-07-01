@@ -18,7 +18,7 @@ void PatienceSetupSystem::Init()
 		{
 			Entity cardSlotEntity = { slot, m_scene };
 			CardSlotComponent& cardSlotComponent = cardSlotEntity.GetComponent<CardSlotComponent>();
-			if (cardSlotComponent.GetSlotType() == CardSlotComponent::SLOT_TYPE_STAGGERED)
+			if (cardSlotComponent.GetSlotType() == CardSlotComponent::SlotType::SLOT_TYPE_COLUMN)
 			{
 				cardColumns.push_back(cardSlotEntity);
 			}
@@ -34,7 +34,8 @@ void PatienceSetupSystem::Init()
 			std::vector<CardData> cardDatas;
 			GetCardDataFromScript(patienceComponent.m_setupScript.c_str(), cardDatas);
 
-			auto rng = std::default_random_engine{};
+			auto rd = std::random_device{};
+			auto rng = std::default_random_engine{ rd() };
 			std::shuffle(std::begin(cardDatas), std::end(cardDatas), rng);
 
 			int i = 0;

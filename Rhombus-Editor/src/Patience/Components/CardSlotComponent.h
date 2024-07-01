@@ -7,7 +7,8 @@
 class CardSlotComponent : public ComponentBase
 {
 public:
-	enum SlotType {SLOT_TYPE_SINGLE = 0, SLOT_TYPE_STACK, SLOT_TYPE_STAGGERED, SLOT_TYPE_COUNT};
+	enum SlotLayout {SLOT_LAYOUT_SINGLE = 0, SLOT_LAYOUT_STACK, SLOT_LAYOUT_STAGGERED, SLOT_LAYOUT_COUNT};
+	enum SlotType {SLOT_TYPE_COLUMN = 0, SLOT_TYPE_SITE, SLOT_TYPE_FREECELL, SLOT_TYPE_STOCK, SLOT_TYPE_WASTEPILE, SLOT_TYPE_COUNT};
 
 	CardSlotComponent() = default;
 	CardSlotComponent(const CardSlotComponent&) = default;
@@ -23,16 +24,40 @@ public:
 
 	void UpdateCardStack();
 
-	void SetSlotType(int slotType)
-	{
-		m_slotType = (SlotType)slotType;
-	}
-
 	Vec2& GetStaggeredOffset() { return m_staggeredOffset; }
 	void SetStaggeredOffset(Vec2 offset) { m_staggeredOffset = offset; }
 
-	const SlotType GetSlotType() const{ return m_slotType; }
+	// Slot Layout
+	const SlotLayout GetSlotLayout() const{ return m_slotLayout; }
+	SlotLayout& GetSlotLayoutNonConst() { return m_slotLayout; }
+	void SetSlotLayout(int slotLayout) { m_slotLayout = (SlotLayout)slotLayout; }
+
+	const char* GetSlotLayoutName()
+	{
+		return GetSlotLayoutName(m_slotLayout);
+	}
+
+	static const char* GetSlotLayoutName(int slotLayout)
+	{
+		if (slotLayout >= 0 && slotLayout < SLOT_LAYOUT_COUNT)
+		{
+			sm_slotLayoutNameList[slotLayout];
+		}
+		else
+		{
+			return "Invalid";
+		}
+	}
+
+	static const char** GetSlotLayoutNameList()
+	{
+		return sm_slotLayoutNameList;
+	}
+
+	// Slot Type
+	const SlotType GetSlotType() const { return m_slotType; }
 	SlotType& GetSlotTypeNonConst() { return m_slotType; }
+	void SetSlotType(int slotType) { m_slotType = (SlotType)slotType; }
 
 	const char* GetSlotTypeName()
 	{
@@ -61,11 +86,13 @@ public:
 	Vec2 m_staggeredOffset = Vec2(0.0f, -16.0f);
 
 private:
-	SlotType m_slotType = SLOT_TYPE_SINGLE;
+	SlotLayout m_slotLayout = SLOT_LAYOUT_SINGLE;
+	SlotType m_slotType = SLOT_TYPE_COLUMN;
 	bool m_isOccupied = false;
 
 	Vec2 m_emptyAreaOffset = { 0.0f, 0.0f };
 	Vec2 m_emptyAreaSize = { 0.5f, 0.5f };
 
+	static const char* sm_slotLayoutNameList[SLOT_LAYOUT_COUNT];
 	static const char* sm_slotTypeNameList[SLOT_TYPE_COUNT];
 };

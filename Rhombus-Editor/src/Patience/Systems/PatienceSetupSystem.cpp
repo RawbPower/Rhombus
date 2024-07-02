@@ -8,11 +8,11 @@
 
 void PatienceSetupSystem::Init()
 {
+	std::vector<EntityID> cardSlots = m_scene->GetRegistry().GetEntityList<CardSlotComponent>();
 	for (Entity entity : GetEntities())
 	{
 		// Get a list of columns slot to place the card into
 		PatienceComponent& patienceComponent = entity.GetComponent<PatienceComponent>();
-		std::vector<EntityID> cardSlots = m_scene->GetRegistry().GetEntityList<CardSlotComponent>();
 		std::vector<Entity> cardColumns;
 		for (EntityID slot : cardSlots)
 		{
@@ -62,6 +62,13 @@ void PatienceSetupSystem::Init()
 				i = (i + 1) % cardColumns.size();
 			}
 		}
+
+		for (EntityID slot : cardSlots)
+		{
+			Entity cardSlotEntity = { slot, m_scene };
+			CardSlotComponent& cardSlotComponent = cardSlotEntity.GetComponent<CardSlotComponent>();
+			cardSlotComponent.UpdateAllowCards();
+		}
 	}
 }
 
@@ -71,49 +78,7 @@ void PatienceSetupSystem::GetGameModeDataFromScript(const char* scriptName, Pati
 	ScriptEngine::GetGlobal("GameModeData");
 	ScriptEngine::GetField(scriptName);
 
-	ScriptEngine::GetField("Columns");
-	patienceComponent.m_gameModeData.columns = ScriptEngine::GetInt();
-	ScriptEngine::Pop();
-
-	ScriptEngine::GetField("Sites");
-	patienceComponent.m_gameModeData.sites = ScriptEngine::GetInt();
-	ScriptEngine::Pop();
-
-	ScriptEngine::GetField("Freecells");
-	patienceComponent.m_gameModeData.freecells = ScriptEngine::GetInt();
-	ScriptEngine::Pop();
-
-	ScriptEngine::GetField("Stocks");
-	patienceComponent.m_gameModeData.stocks = ScriptEngine::GetInt();
-	ScriptEngine::Pop();
-
-	ScriptEngine::GetField("Wastepiles");
-	patienceComponent.m_gameModeData.wastepiles = ScriptEngine::GetInt();
-	ScriptEngine::Pop();
-
-	ScriptEngine::GetField("Revelation");
-	patienceComponent.m_gameModeData.revelation = (PatienceComponent::Revelation)ScriptEngine::GetEnumFromName(ScriptEngine::GetString(), PatienceComponent::sm_revelationNameList, PatienceComponent::Revelation::REVELATION_COUNT);
-	ScriptEngine::Pop();
-
-	ScriptEngine::GetField("BuildingOrder");
-	patienceComponent.m_gameModeData.buildingOrder = (PatienceComponent::Ordering)ScriptEngine::GetEnumFromName(ScriptEngine::GetString(), PatienceComponent::sm_orderingNameList, PatienceComponent::Ordering::ORDERING_COUNT);
-	ScriptEngine::Pop();
-
-	ScriptEngine::GetField("FoundationRank");
-	patienceComponent.m_gameModeData.foundationRank = ScriptEngine::GetInt();
-	ScriptEngine::Pop();
-
-	ScriptEngine::GetField("PackingOrder");
-	patienceComponent.m_gameModeData.packingOrder = (PatienceComponent::Ordering)ScriptEngine::GetEnumFromName(ScriptEngine::GetString(), PatienceComponent::sm_orderingNameList, PatienceComponent::Ordering::ORDERING_COUNT);
-	ScriptEngine::Pop();
-
-	ScriptEngine::GetField("PackingType");
-	patienceComponent.m_gameModeData.packingType = (PatienceComponent::PackingType)ScriptEngine::GetEnumFromName(ScriptEngine::GetString(), PatienceComponent::sm_packingTypeNameList, PatienceComponent::PackingType::PACKING_COUNT);
-	ScriptEngine::Pop();
-
-	ScriptEngine::GetField("EmptyColumnType");
-	patienceComponent.m_gameModeData.emptyColumnType = (PatienceComponent::EmptyColumnType)ScriptEngine::GetEnumFromName(ScriptEngine::GetString(), PatienceComponent::sm_emptyColumnTypeNameList, PatienceComponent::EmptyColumnType::EMPTY_COLUMN_COUNT);
-	ScriptEngine::Pop();
+	CardSlotComponent::InitCardSlotData();
 }
 
 void PatienceSetupSystem::GetCardDataFromScript(const char* scriptName, std::vector<CardData>& cardDatas)

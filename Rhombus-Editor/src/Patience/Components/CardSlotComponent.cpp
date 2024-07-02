@@ -2,8 +2,15 @@
 
 #include "CardComponent.h"
 
+#include "Rhombus/Scripting/ScriptEngine.h"
+
 const char* CardSlotComponent::sm_slotLayoutNameList[SLOT_LAYOUT_COUNT] = { "Single", "Stack", "Staggered" };
 const char* CardSlotComponent::sm_slotTypeNameList[SLOT_TYPE_COUNT] = { "Column", "Site", "Freecell", "Stock", "Wastepile" };
+
+const char* CardSlotComponent::sm_revelationNameList[REVELATION_COUNT] = { "Open", "Closed" };
+const char* CardSlotComponent::sm_orderingNameList[ORDERING_COUNT] = { "Ascending", "Descending" };
+const char* CardSlotComponent::sm_packingTypeNameList[PACKING_COUNT] = { "Any", "DifferentSuit", "DifferentColor", "SameSuit" };
+const char* CardSlotComponent::sm_emptyColumnTypeNameList[EMPTY_COLUMN_COUNT] = { "Any", "King" };
 
 void CardSlotComponent::OnComponentAdded()
 {
@@ -11,6 +18,12 @@ void CardSlotComponent::OnComponentAdded()
 	m_emptyAreaOffset = area.m_offset;
 	m_emptyAreaSize = area.m_size;
 }
+
+void CardSlotComponent::UpdateAllowCards()
+{
+
+}
+
 
 bool CardSlotComponent::CanAcceptCards()
 {
@@ -57,4 +70,51 @@ void CardSlotComponent::UpdateCardStack()
 		area.m_offset = m_emptyAreaOffset + m_staggeredOffset * sizeMult;
 		area.m_size = m_emptyAreaSize + Vec2::Abs(m_staggeredOffset) * sizeMult;
 	}
+}
+
+void CardSlotComponent::InitCardSlotData()
+{
+	ScriptEngine::GetField("Columns");
+	sm_cardSlotData.columns = ScriptEngine::GetInt();
+	ScriptEngine::Pop();
+
+	ScriptEngine::GetField("Sites");
+	sm_cardSlotData.sites = ScriptEngine::GetInt();
+	ScriptEngine::Pop();
+
+	ScriptEngine::GetField("Freecells");
+	sm_cardSlotData.freecells = ScriptEngine::GetInt();
+	ScriptEngine::Pop();
+
+	ScriptEngine::GetField("Stocks");
+	sm_cardSlotData.stocks = ScriptEngine::GetInt();
+	ScriptEngine::Pop();
+
+	ScriptEngine::GetField("Wastepiles");
+	sm_cardSlotData.wastepiles = ScriptEngine::GetInt();
+	ScriptEngine::Pop();
+
+	ScriptEngine::GetField("Revelation");
+	sm_cardSlotData.revelation = (Revelation)ScriptEngine::GetEnumFromName(ScriptEngine::GetString(), sm_revelationNameList, Revelation::REVELATION_COUNT);
+	ScriptEngine::Pop();
+
+	ScriptEngine::GetField("BuildingOrder");
+	sm_cardSlotData.buildingOrder = (Ordering)ScriptEngine::GetEnumFromName(ScriptEngine::GetString(), sm_orderingNameList, Ordering::ORDERING_COUNT);
+	ScriptEngine::Pop();
+
+	ScriptEngine::GetField("FoundationRank");
+	sm_cardSlotData.foundationRank = ScriptEngine::GetInt();
+	ScriptEngine::Pop();
+
+	ScriptEngine::GetField("PackingOrder");
+	sm_cardSlotData.packingOrder = (Ordering)ScriptEngine::GetEnumFromName(ScriptEngine::GetString(), sm_orderingNameList, Ordering::ORDERING_COUNT);
+	ScriptEngine::Pop();
+
+	ScriptEngine::GetField("PackingType");
+	sm_cardSlotData.packingType = (PackingType)ScriptEngine::GetEnumFromName(ScriptEngine::GetString(), sm_packingTypeNameList, PackingType::PACKING_COUNT);
+	ScriptEngine::Pop();
+
+	ScriptEngine::GetField("EmptyColumnType");
+	sm_cardSlotData.emptyColumnType = (EmptyColumnType)ScriptEngine::GetEnumFromName(ScriptEngine::GetString(), sm_emptyColumnTypeNameList, EmptyColumnType::EMPTY_COLUMN_COUNT);
+	ScriptEngine::Pop();
 }

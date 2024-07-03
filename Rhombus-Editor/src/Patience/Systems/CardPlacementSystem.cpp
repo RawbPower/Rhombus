@@ -86,7 +86,7 @@ void CardPlacementSystem::PlaceCard(Entity cardEntity)
 
 	if (currentSlot == INVALID_ENTITY)
 	{
-		cardTransform.m_position = Vec3(card.GetPreviousPosition(), cardTransform.m_position.z);
+		cardTransform.m_position = Vec3(card.GetPreviousPosition());
 	}
 	else
 	{
@@ -96,7 +96,7 @@ void CardPlacementSystem::PlaceCard(Entity cardEntity)
 		cardTransform.SetLayer(Z_LAYER::FOREGROUND_1_LAYER);
 		CardSlotComponent& cardSlot = currentSlotEntity.GetComponent<CardSlotComponent>();
 			
-		if (cardSlot.CanAcceptCards())
+		if (cardSlot.CanAcceptCards() && cardSlot.IsCardAllowedInSlot(card.m_rank, card.m_suit))
 		{
 			Entity previousCardSlot = card.GetCurrentSlot();
 			previousCardSlot.GetComponent<CardSlotComponent>().RemoveCard(cardEntity);
@@ -105,7 +105,7 @@ void CardPlacementSystem::PlaceCard(Entity cardEntity)
 		}
 		else
 		{
-			cardTransform.m_position = Vec3(card.GetPreviousPosition(), cardTransform.m_position.z);
+			cardTransform.m_position = Vec3(card.GetPreviousPosition());
 		}
 	}
 }

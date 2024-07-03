@@ -67,7 +67,7 @@ void PatienceSetupSystem::Init()
 		{
 			Entity cardSlotEntity = { slot, m_scene };
 			CardSlotComponent& cardSlotComponent = cardSlotEntity.GetComponent<CardSlotComponent>();
-			cardSlotComponent.UpdateAllowCards();
+			cardSlotComponent.UpdateAllowedCards();
 		}
 	}
 }

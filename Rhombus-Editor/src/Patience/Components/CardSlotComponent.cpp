@@ -19,9 +19,117 @@ void CardSlotComponent::OnComponentAdded()
 	m_emptyAreaSize = area.m_size;
 }
 
-void CardSlotComponent::UpdateAllowCards()
+void CardSlotComponent::UpdateAllowedCards()
 {
+	CardComponent* topCardData = m_cardStack.size() > 0 ? &m_cardStack.back().GetComponent<CardComponent>() : nullptr;
+	switch (m_slotType)
+	{
+	case SLOT_TYPE_COLUMN:
+		if (topCardData)
+		{
+			if (topCardData->m_rank == 0)		// Wild Card
+			{
+				m_allowedRanks = -1;
+				m_allowedSuits = -1;
+			}
+			else
+			{
+				switch (sm_cardSlotData.packingOrder)
+				{
+				case ORDERING_ASCENDING:
+					m_allowedRanks = (1ul << topCardData->m_rank + 1) | 1;
+					break;
+				case ORDERING_DESCENDING:
+					m_allowedRanks = (topCardData->m_rank > 0 ? 1ul << topCardData->m_rank - 1 : 0) | 1;
+					break;
+				default:
+					break;
+				}
 
+				switch (sm_cardSlotData.packingType)
+				{
+				case PACKING_ANY:
+					m_allowedSuits = -1;
+					break;
+				case PACKING_DIFFERENT_SUIT:
+					m_allowedSuits = ~(1ul << (uint32_t)topCardData->m_suit);
+					break;
+				case PACKING_DIFFERENT_COLOR:
+					if (topCardData->m_suit == CardComponent::Suit::SUIT_HEART || topCardData->m_suit == CardComponent::Suit::SUIT_DIAMOND)
+					{
+						m_allowedSuits = (1ul << (uint32_t)CardComponent::Suit::SUIT_SPADE) | (1ul << (uint32_t)CardComponent::Suit::SUIT_CLUB);
+					}
+					else if (topCardData->m_suit == CardComponent::Suit::SUIT_SPADE || topCardData->m_suit == CardComponent::Suit::SUIT_CLUB)
+					{
+						m_allowedSuits = (1ul << (uint32_t)CardComponent::Suit::SUIT_HEART) | (1ul << (uint32_t)CardComponent::Suit::SUIT_DIAMOND);
+					}
+					else
+					{
+						m_allowedSuits = -1;
+					}
+					break;
+				case PACKING_SAME_SUIT:
+					m_allowedSuits = (1ul << (uint32_t)topCardData->m_suit) | (1ul << (uint32_t)CardComponent::Suit::SUIT_WILD);
+					break;
+				default:
+					break;
+				}
+			}
+		}
+		else
+		{
+			switch (sm_cardSlotData.emptyColumnType)
+			{
+			case EMPTY_COLUMN_KING:
+				m_allowedRanks = (1ul << 13) | (1ul << 0);
+				break;
+			default:
+				m_allowedRanks = -1;
+				break;
+			}
+			m_allowedSuits = -1;
+		}
+
+		break;
+	case SLOT_TYPE_SITE:
+		if (!topCardData)
+		{
+			m_allowedRanks = 1ul << sm_cardSlotData.foundationRank;
+			m_allowedSuits = -1;
+		}
+		else
+		{
+			switch (sm_cardSlotData.buildingOrder)
+			{
+			case ORDERING_ASCENDING:
+				m_allowedRanks = 1ul << topCardData->m_rank + 1;
+				break;
+			case ORDERING_DESCENDING:
+				m_allowedRanks = topCardData->m_rank > 0 ? 1ul << topCardData->m_rank - 1 : 0;
+				break;
+			default:
+				break;
+			}
+
+			m_allowedSuits = 1ul << (uint32_t)topCardData->m_suit;
+		}
+		break;
+	case SLOT_TYPE_FREECELL:
+		m_allowedRanks = -1;
+		m_allowedSuits = -1;
+		break;
+	default:
+		m_allowedRanks = -1;
+		m_allowedSuits = -1;
+		break;
+	}
+}
+
+bool CardSlotComponent::IsCardAllowedInSlot(int rank, CardComponent::Suit suit)
+{
+	const bool isRankAllowed = (m_allowedRanks & (1ul << rank)) != 0;
+	const bool isSuitAllowed = (m_allowedSuits & (1ul << (uint32_t)suit)) != 0;
+	return isSuitAllowed && isRankAllowed;
 }
 
 
@@ -35,12 +143,14 @@ void CardSlotComponent::AddCard(Entity card)
 	m_cardStack.push_back(card); 
 	m_isOccupied = true;
 	UpdateCardStack();
+	UpdateAllowedCards();
 }
 
 void CardSlotComponent::RemoveCard(Entity card)
 { 
 	m_cardStack.remove(card); 
 	UpdateCardStack();
+	UpdateAllowedCards();
 }
 
 void CardSlotComponent::UpdateCardStack()

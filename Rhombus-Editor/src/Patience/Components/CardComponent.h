@@ -23,12 +23,12 @@ public:
 	int GetIsAvailable() const { return m_isAvailable; }
 	void SetIsAvailable(bool available) { m_isAvailable = available; }
 
-	Vec2 GetPreviousPosition() const { return m_previousPosition; }
-	void SetPreviousPosition(Vec2 prevPos) { m_previousPosition = prevPos; }
+	Vec3 GetPreviousPosition() const { return m_previousPosition; }
+	void SetPreviousPosition(Vec3 prevPos) { m_previousPosition = prevPos; }
 
 	Entity GetCurrentSlot() const { return m_currentSlot; }
 	void SetCurrentlSlot(Entity cardSlot) { m_currentSlot = cardSlot; }
-	void ResetCurrentlSlot(Vec2 prevPos) { m_currentSlot = Entity(); }
+	void ResetCurrentlSlot() { m_currentSlot = Entity(); }
 
 	const char* GetSuitName()
 	{
@@ -59,7 +59,7 @@ public:
 private:
 	bool m_isHeld = false;
 	bool m_isAvailable = true;
-	Vec2 m_previousPosition = Vec2(0.0f);
+	Vec3 m_previousPosition = Vec3(0.0f);
 	Entity m_currentSlot;
 
 	static const char* sm_suitNameList[SUIT_COUNT];

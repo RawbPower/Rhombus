@@ -16,7 +16,7 @@ public:
 	enum Revelation { REVELATION_OPEN = 0, REVELATION_CLOSED, REVELATION_COUNT };
 	enum Ordering { ORDERING_ASCENDING = 0, ORDERING_DESCENDING, ORDERING_COUNT };
 	enum PackingType { PACKING_ANY, PACKING_DIFFERENT_SUIT, PACKING_DIFFERENT_COLOR, PACKING_SAME_SUIT, PACKING_COUNT };
-	enum EmptyColumnType { EMPTY_COLOUMN_ANY, EMPTY_COLUMN_KING, EMPTY_COLUMN_COUNT };
+	enum EmptyColumnType { EMPTY_COLUMN_ANY, EMPTY_COLUMN_KING, EMPTY_COLUMN_COUNT };
 
 	struct CardSlotData
 	{
@@ -33,8 +33,6 @@ public:
 		Ordering packingOrder;
 		PackingType packingType;
 		EmptyColumnType emptyColumnType;
-
-		CardSlotData() {};
 	};
 
 	CardSlotComponent() = default;
@@ -42,7 +40,8 @@ public:
 
 	virtual void OnComponentAdded() override;
 
-	void UpdateAllowCards();
+	void UpdateAllowedCards();
+	bool IsCardAllowedInSlot(int rank, CardComponent::Suit suit);
 
 	int GetIsOccupied() const { return m_isOccupied; }
 	void SetIsOccupied(bool occupied) { m_isOccupied = occupied; }
@@ -124,8 +123,8 @@ private:
 	Vec2 m_emptyAreaOffset = { 0.0f, 0.0f };
 	Vec2 m_emptyAreaSize = { 0.5f, 0.5f };
 
-	std::bitset<13> m_allowedRanks;
-	std::bitset<CardComponent::Suit::SUIT_COUNT> m_allowedSuits;
+	uint32_t m_allowedRanks;
+	uint32_t m_allowedSuits;
 	
 	inline static CardSlotData sm_cardSlotData;
 

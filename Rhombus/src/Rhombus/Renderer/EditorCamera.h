@@ -58,7 +58,7 @@ namespace rhombus {
 
 		Vec2 m_initialMousePosition = { 0.0f, 0.0f };
 
-		float m_distance = 580.0f;
+		float m_distance = 960.0f;
 		float m_pitch = 0.0f, m_yaw = 0.0f;
 
 		float m_viewportWidth = 1280, m_viewportHeight = 720;

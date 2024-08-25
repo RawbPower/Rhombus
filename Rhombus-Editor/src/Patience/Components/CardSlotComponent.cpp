@@ -44,7 +44,7 @@ void CardSlotComponent::UpdateAllowedCards()
 					break;
 				default:
 					break;
-				}
+				}	
 
 				switch (sm_cardSlotData.packingType)
 				{

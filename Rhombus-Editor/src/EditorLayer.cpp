@@ -11,7 +11,7 @@
 namespace rhombus
 {
 	EditorLayer::EditorLayer()
-		: Layer("Editor"), m_CameraController(640.0f / 360.0f, true), m_SquareColor({ 0.2f, 0.3f, 0.8f, 1.0f })
+		: Layer("Editor"), m_CameraController(960.0f / 540.0f, true), m_SquareColor({ 0.2f, 0.3f, 0.8f, 1.0f })
 	{
 
 	}
@@ -27,8 +27,8 @@ namespace rhombus
 		// Framebuffer
 		FramebufferSpecification fbSpec;
 		fbSpec.Attachments = { FramebufferTextureFormat::RGBA8, FramebufferTextureFormat::RED_INTEGER, FramebufferTextureFormat::Depth };
-		fbSpec.Width = 640;
-		fbSpec.Height = 360;
+		fbSpec.Width = 960;
+		fbSpec.Height = 540;
 		m_Framebuffer = Framebuffer::Create(fbSpec);
 
 		m_ActiveScene = CreateRef<Scene>();

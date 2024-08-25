@@ -6,7 +6,7 @@ class CardComponent : public ComponentBase
 {
 public:
 
-	enum Suit { SUIT_HEART = 0, SUIT_DIAMOND, SUIT_SPADE, SUIT_CLUB, SUIT_WILD, SUIT_COUNT };
+	enum Suit { SUIT_HEART = 0, SUIT_DIAMOND, SUIT_SPADE, SUIT_CLUB, SUIT_TRUMP, SUIT_WILD, SUIT_COUNT };
 
 	CardComponent() = default;
 	CardComponent(const CardComponent&) = default;

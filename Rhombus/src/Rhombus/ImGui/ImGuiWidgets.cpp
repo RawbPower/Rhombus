@@ -5,7 +5,7 @@
 
 namespace ImGui
 {
-	bool SelectableEnum(const char* label, const const char** enumStrings, int enumCount, int* currentEnumValue)
+	bool SelectableEnum(const char* label, const char** enumStrings, int enumCount, int* currentEnumValue)
 	{
 		bool valueChanged = false;
 		const char* currentEnumString = enumStrings[*currentEnumValue];

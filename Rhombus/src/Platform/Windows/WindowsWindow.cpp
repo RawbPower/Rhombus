@@ -147,7 +147,7 @@ namespace rhombus {
 		SDL_Surface* loadedSurface = SDL_LoadBMP(path.c_str());
 		if (loadedSurface == NULL)
 		{
-			printf("Unable to load image {0}! SDL Error: {1}\n", path.c_str(), SDL_GetError());
+			printf("Unable to load image %s! SDL Error: %s\n", path.c_str(), SDL_GetError());
 		}
 
 		return loadedSurface;
@@ -176,8 +176,8 @@ namespace rhombus {
 					if (e.window.event == SDL_WINDOWEVENT_SIZE_CHANGED)
 					{
 						// Don't call this until we update the rendering context
-						float width = e.window.data1;
-						float height = e.window.data2;
+						int width = e.window.data1;
+						int height = e.window.data2;
 						m_Data.Width = width;
 						m_Data.Height = height;
 

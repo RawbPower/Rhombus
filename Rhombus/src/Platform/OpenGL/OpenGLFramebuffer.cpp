@@ -107,8 +107,8 @@ namespace rhombus
 	OpenGLFramebuffer::~OpenGLFramebuffer()
 	{
 		glDeleteFramebuffers(1, &m_RendererID);
-		glDeleteTextures(m_colorAttachmentIDs.size(), m_colorAttachmentIDs.data());
-		glDeleteTextures(1, &m_depthAttachmentID);
+		glDeleteTextures((GLsizei)m_colorAttachmentIDs.size(), m_colorAttachmentIDs.data());
+		glDeleteTextures((GLsizei)1, &m_depthAttachmentID);
 	}
 
 	void OpenGLFramebuffer::Invalidate()
@@ -116,8 +116,8 @@ namespace rhombus
 		if (m_RendererID)
 		{
 			glDeleteFramebuffers(1, &m_RendererID);
-			glDeleteTextures(m_colorAttachmentIDs.size(), m_colorAttachmentIDs.data());
-			glDeleteTextures(1, &m_depthAttachmentID);
+			glDeleteTextures((GLsizei)m_colorAttachmentIDs.size(), m_colorAttachmentIDs.data());
+			glDeleteTextures((GLsizei)1, &m_depthAttachmentID);
 
 			m_colorAttachmentIDs.clear();
 			m_depthAttachmentID = 0;
@@ -132,7 +132,7 @@ namespace rhombus
 		if (m_colorAttachmentSpecifications.size())
 		{
 			m_colorAttachmentIDs.resize(m_colorAttachmentSpecifications.size());
-			utils::CreateTextures(multiSampled, m_colorAttachmentIDs.data(), m_colorAttachmentIDs.size());
+			utils::CreateTextures(multiSampled, m_colorAttachmentIDs.data(), (uint32_t)m_colorAttachmentIDs.size());
 
 			for (size_t i = 0; i < m_colorAttachmentIDs.size(); i++)
 			{
@@ -140,10 +140,10 @@ namespace rhombus
 				switch (m_colorAttachmentSpecifications[i].TextureFormat)
 				{
 				case FramebufferTextureFormat::RGBA8:
-					utils::AttachColorTexture(m_colorAttachmentIDs[i], m_Specification.Samples, GL_RGBA8, GL_RGBA, m_Specification.Width, m_Specification.Height, i);
+					utils::AttachColorTexture(m_colorAttachmentIDs[i], m_Specification.Samples, GL_RGBA8, GL_RGBA, m_Specification.Width, m_Specification.Height, (int)i);
 					break;
 				case FramebufferTextureFormat::RED_INTEGER:
-					utils::AttachColorTexture(m_colorAttachmentIDs[i], m_Specification.Samples, GL_R32I, GL_RED_INTEGER, m_Specification.Width, m_Specification.Height, i);
+					utils::AttachColorTexture(m_colorAttachmentIDs[i], m_Specification.Samples, GL_R32I, GL_RED_INTEGER, m_Specification.Width, m_Specification.Height, (int)i);
 					break;
 				}
 			}
@@ -165,7 +165,7 @@ namespace rhombus
 		{
 			RB_CORE_ASSERT(m_colorAttachmentIDs.size() <= 4, "Exceeded the maximum of 4 color buffers!");
 			GLenum buffers[4] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2, GL_COLOR_ATTACHMENT3 };
-			glDrawBuffers(m_colorAttachmentSpecifications.size(), buffers);
+			glDrawBuffers((GLsizei)m_colorAttachmentSpecifications.size(), buffers);
 		}
 		else if (m_colorAttachmentIDs.empty())
 		{

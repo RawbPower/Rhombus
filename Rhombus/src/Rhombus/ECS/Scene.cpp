@@ -472,7 +472,7 @@ namespace rhombus
 		std::string digits = "0123456789";
 		std::string name = entity.GetName();
 		std::string numberSuffix = "";
-		int currentCharIndex = name.length() - 1;
+		size_t currentCharIndex = name.length() - 1;
 		char currentChar = name[currentCharIndex];
 		while (digits.find(currentChar) != std::string::npos)
 		{

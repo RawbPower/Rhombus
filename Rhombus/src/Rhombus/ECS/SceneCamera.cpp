@@ -11,7 +11,7 @@ namespace rhombus
 
 	void SceneCamera::SetOrthographic(float size, float nearClip, float farClip)
 	{
-		m_projectionType == ProjectionType::Orthographic;
+		m_projectionType = ProjectionType::Orthographic;
 
 		m_OrthographicSize = size;
 		m_OrthographicNear = nearClip;
@@ -22,7 +22,7 @@ namespace rhombus
 
 	void SceneCamera::SetPerspective(float verticalFOV, float nearClip, float farClip)
 	{
-		m_projectionType == ProjectionType::Perspective;
+		m_projectionType = ProjectionType::Perspective;
 
 		m_PerspectiveFOV = verticalFOV;
 		m_PerspectiveNear = nearClip;

@@ -37,10 +37,10 @@ void CardSlotComponent::UpdateAllowedCards()
 				switch (sm_cardSlotData.packingOrder)
 				{
 				case ORDERING_ASCENDING:
-					m_allowedRanks = (1ul << topCardData->m_rank + 1) | 1;
+					m_allowedRanks = (1ul << (topCardData->m_rank + 1)) | 1;
 					break;
 				case ORDERING_DESCENDING:
-					m_allowedRanks = (topCardData->m_rank > 0 ? 1ul << topCardData->m_rank - 1 : 0) | 1;
+					m_allowedRanks = (topCardData->m_rank > 0 ? 1ul << (topCardData->m_rank - 1) : 0) | 1;
 					break;
 				default:
 					break;
@@ -111,10 +111,10 @@ void CardSlotComponent::UpdateAllowedCards()
 			switch (ordering)
 			{
 			case ORDERING_ASCENDING:
-				m_allowedRanks = 1ul << topCardData->m_rank + 1;
+				m_allowedRanks = 1ul << (topCardData->m_rank + 1);
 				break;
 			case ORDERING_DESCENDING:
-				m_allowedRanks = topCardData->m_rank > 0 ? 1ul << topCardData->m_rank - 1 : 0;
+				m_allowedRanks = topCardData->m_rank > 0 ? 1ul << (topCardData->m_rank - 1) : 0;
 				break;
 			default:
 				break;

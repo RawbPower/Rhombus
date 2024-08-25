@@ -554,6 +554,10 @@ namespace rhombus
 				}
 				break;
 			}
+			default:
+			{
+				// Do nothing
+			}
 		}
 	}
 
@@ -829,7 +833,7 @@ namespace rhombus
 			TransformComponent transform = selectedEntity.GetComponent<TransformComponent>();
 
 			//Red
-			Renderer2D::DrawRect(transform.GetTransform(), Color(0.9, 0.9, 0.9, 1));
+			Renderer2D::DrawRect(transform.GetTransform(), Color(0.9f, 0.9f, 0.9f, 1.0f));
 		}
 
 		Renderer2D::EndScene();

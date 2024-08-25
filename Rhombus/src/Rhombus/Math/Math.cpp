@@ -85,7 +85,7 @@ namespace rhombus::math
 	bool DecomposeTransform(const Mat4& transform, Vec3& translation, Vec3& rotation, Vec3& scale)
 	{
 		// Simplified from glm::decompose in matrix_decompose.inl
-
+		
 		Mat4 LocalMatrix(transform);
 
 		// Normalize the matrix.
@@ -111,8 +111,8 @@ namespace rhombus::math
 		Vec3 Row[3], Pdum3;
 
 		// Now get scale and shear.
-		for (size_t i = 0; i < 3; ++i)
-			for (size_t j = 0; j < 3; ++j)
+		for (int i = 0; i < 3; ++i)
+			for (int j = 0; j < 3; ++j)
 				Row[i][j] = LocalMatrix[i][j];
 
 		// Compute X scale factor and normalize first row.

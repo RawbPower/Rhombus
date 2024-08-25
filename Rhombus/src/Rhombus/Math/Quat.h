@@ -39,7 +39,7 @@ namespace rhombus
 		Vec4	ToVec4() const { return Vec4(w, x, y, z); }
 
 		Vec3    GetNormal() const { return GetAngle() > 0.0f ? Vec3(x, y, z) / sinf(GetAngle() / 2.0f) : Vec3(1, 0, 0); }
-		float   GetAngle() const { return acos(w) * 2.0f; }
+		float   GetAngle() const { return acosf(w) * 2.0f; }
 
 	public:
 		float w;
@@ -74,8 +74,8 @@ namespace rhombus
 
 	inline Quat::Quat(Vec3 v)
 	{
-		Vec3 c = Vec3(cos(v.x * 0.5f), cos(v.y * 0.5f), cos(v.z * 0.5f));
-		Vec3 s = Vec3(sin(v.x * 0.5f), sin(v.y * 0.5f), sin(v.z * 0.5f));
+		Vec3 c = Vec3(cosf(v.x * 0.5f), cosf(v.y * 0.5f), cosf(v.z * 0.5f));
+		Vec3 s = Vec3(sinf(v.x * 0.5f), sinf(v.y * 0.5f), sinf(v.z * 0.5f));
 
 		this->w = c.x * c.y * c.z + s.x * s.y * s.z;
 		this->x = s.x * c.y * c.z - c.x * s.y * s.z;

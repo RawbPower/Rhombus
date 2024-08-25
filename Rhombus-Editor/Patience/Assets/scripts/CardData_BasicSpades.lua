@@ -4,7 +4,7 @@ CardData.BasicSpades =
 	{
 		Rank = 1,
 		Suit = "Spade",
-		Sprite = "textures/Cards/Card3.png",
+		Sprite = "textures/CardsNew/Base/Card3.png",
 		PackingType = "Default"
 	},
 
@@ -12,7 +12,7 @@ CardData.BasicSpades =
 	{
 		Rank = 2,
 		Suit = "Spade",
-		Sprite = "textures/Cards/Card7.png",
+		Sprite = "textures/CardsNew/Base/Card7.png",
 		PackingType = "Default"
 	},
 
@@ -20,7 +20,7 @@ CardData.BasicSpades =
 	{
 		Rank = 3,
 		Suit = "Spade",
-		Sprite = "textures/Cards/Card11.png",
+		Sprite = "textures/CardsNew/Base/Card11.png",
 		PackingType = "Default"
 	},
 
@@ -28,7 +28,7 @@ CardData.BasicSpades =
 	{
 		Rank = 4,
 		Suit = "Spade",
-		Sprite = "textures/Cards/Card15.png",
+		Sprite = "textures/CardsNew/Base/Card15.png",
 		PackingType = "Default"
 	},
 
@@ -36,7 +36,7 @@ CardData.BasicSpades =
 	{
 		Rank = 5,
 		Suit = "Spade",
-		Sprite = "textures/Cards/Card19.png",
+		Sprite = "textures/CardsNew/Base/Card19.png",
 		PackingType = "Default"
 	},
 
@@ -44,7 +44,7 @@ CardData.BasicSpades =
 	{
 		Rank = 6,
 		Suit = "Spade",
-		Sprite = "textures/Cards/Card23.png",
+		Sprite = "textures/CardsNew/Base/Card23.png",
 		PackingType = "Default"
 	},
 
@@ -52,7 +52,7 @@ CardData.BasicSpades =
 	{
 		Rank = 7,
 		Suit = "Spade",
-		Sprite = "textures/Cards/Card27.png",
+		Sprite = "textures/CardsNew/Base/Card27.png",
 		PackingType = "Default"
 	},
 
@@ -60,7 +60,7 @@ CardData.BasicSpades =
 	{
 		Rank = 8,
 		Suit = "Spade",
-		Sprite = "textures/Cards/Card31.png",
+		Sprite = "textures/CardsNew/Base/Card31.png",
 		PackingType = "Default"
 	},
 
@@ -68,7 +68,7 @@ CardData.BasicSpades =
 	{
 		Rank = 9,
 		Suit = "Spade",
-		Sprite = "textures/Cards/Card35.png",
+		Sprite = "textures/CardsNew/Base/Card35.png",
 		PackingType = "Default"
 	},
 
@@ -76,7 +76,7 @@ CardData.BasicSpades =
 	{
 		Rank = 10,
 		Suit = "Spade",
-		Sprite = "textures/Cards/Card39.png",
+		Sprite = "textures/CardsNew/Base/Card39.png",
 		PackingType = "Default"
 	},
 
@@ -84,23 +84,31 @@ CardData.BasicSpades =
 	{
 		Rank = 11,
 		Suit = "Spade",
-		Sprite = "textures/Cards/Card43.png",
+		Sprite = "textures/CardsNew/Base/Card43.png",
+		PackingType = "Default"
+	},
+
+	Cavalier_Spades = 
+	{
+		Rank = 12,
+		Suit = "Spade",
+		Sprite = "textures/CardsNew/Base/Card47.png",
 		PackingType = "Default"
 	},
 
 	Queen_Spades = 
 	{
-		Rank = 12,
+		Rank = 13,
 		Suit = "Spade",
-		Sprite = "textures/Cards/Card47.png",
+		Sprite = "textures/CardsNew/Base/Card51.png",
 		PackingType = "Default"
 	},
 
 	King_Spades = 
 	{
-		Rank = 13,
+		Rank = 14,
 		Suit = "Spade",
-		Sprite = "textures/Cards/Card51.png",
+		Sprite = "textures/CardsNew/Base/Card54.png",
 		PackingType = "Default"
 	}
 }

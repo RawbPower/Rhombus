@@ -13,7 +13,7 @@ Entities:
         PerspectiveFOV: 0.785398185
         PerspectiveNear: 0.00999999978
         PerspectiveFar: 1000
-        OrthographicSize: 785
+        OrthographicSize: 683
         OrthographicNear: -1
         OrthographicFar: 1
         PixelPerfect: true
@@ -27,15 +27,18 @@ Entities:
       Rotation: [0, 0, 0]
       Scale: [1, 1, 1]
     SpriteRendererComponent:
-      Color: [1, 1, 1, 1]
-      Texture: textures\Background.png
+      Color: [0.498650163, 0.700980425, 0.38828817, 1]
+      Texture: textures\960x540.png
   - Entity: 8084451237944974462
     TagComponent:
       Tag: Site 1
     TransformComponent:
-      Position: [-209, 95, 0]
+      Position: [-322, 142, 0]
       Rotation: [0, -0, 0]
       Scale: [1, 1, 1]
+    SpriteRendererComponent:
+      Color: [1, 1, 1, 1]
+      Texture: textures\Misc3.png
     BoxArea2DComponent:
       Offset: [0, 0]
       Size: [22.5, 32]
@@ -48,9 +51,12 @@ Entities:
     TagComponent:
       Tag: Free Cell 1
     TransformComponent:
-      Position: [44.5, 95, 0]
+      Position: [100, 139, 0]
       Rotation: [0, -0, 0]
       Scale: [1, 1, 1]
+    SpriteRendererComponent:
+      Color: [1, 1, 1, 1]
+      Texture: textures\Misc2.png
     BoxArea2DComponent:
       Offset: [0, 0]
       Size: [22.5, 32]
@@ -63,9 +69,12 @@ Entities:
     TagComponent:
       Tag: Column 1
     TransformComponent:
-      Position: [-206.5, 23, 0]
+      Position: [-322.5, 36, 0]
       Rotation: [0, -0, 0]
       Scale: [1, 1, 1]
+    SpriteRendererComponent:
+      Color: [1, 1, 1, 1]
+      Texture: textures\Misc1.png
     BoxArea2DComponent:
       Offset: [0, 0]
       Size: [22.5, 32]
@@ -73,14 +82,17 @@ Entities:
     CardSlotComponent:
       SlotType: 0
       SlotLayout: 2
-      StaggeredOffset: [0, -16]
+      StaggeredOffset: [0, -15]
   - Entity: 11970580269886680987
     TagComponent:
       Tag: Column 2
     TransformComponent:
-      Position: [-147.5, 23, 0]
+      Position: [-234, 35, 0]
       Rotation: [0, -0, 0]
       Scale: [1, 1, 1]
+    SpriteRendererComponent:
+      Color: [1, 1, 1, 1]
+      Texture: textures\Misc1.png
     BoxArea2DComponent:
       Offset: [0, 0]
       Size: [22.5, 32]
@@ -88,14 +100,17 @@ Entities:
     CardSlotComponent:
       SlotType: 0
       SlotLayout: 2
-      StaggeredOffset: [0, -16]
+      StaggeredOffset: [0, -15]
   - Entity: 9077371792901969716
     TagComponent:
       Tag: Column 3
     TransformComponent:
-      Position: [-88.5, 23, 0]
+      Position: [-145, 34.5, 0]
       Rotation: [0, -0, 0]
       Scale: [1, 1, 1]
+    SpriteRendererComponent:
+      Color: [1, 1, 1, 1]
+      Texture: textures\Misc1.png
     BoxArea2DComponent:
       Offset: [0, 0]
       Size: [22.5, 32]
@@ -103,14 +118,17 @@ Entities:
     CardSlotComponent:
       SlotType: 0
       SlotLayout: 2
-      StaggeredOffset: [0, -16]
+      StaggeredOffset: [0, -15]
   - Entity: 2452109330358541380
     TagComponent:
       Tag: Column 4
     TransformComponent:
-      Position: [-29.5, 23, 0]
+      Position: [-51.5, 33.5, 0]
       Rotation: [0, -0, 0]
       Scale: [1, 1, 1]
+    SpriteRendererComponent:
+      Color: [1, 1, 1, 1]
+      Texture: textures\Misc1.png
     BoxArea2DComponent:
       Offset: [0, 0]
       Size: [22.5, 32]
@@ -118,14 +136,17 @@ Entities:
     CardSlotComponent:
       SlotType: 0
       SlotLayout: 2
-      StaggeredOffset: [0, -16]
+      StaggeredOffset: [0, -15]
   - Entity: 10645660535592834472
     TagComponent:
       Tag: Column 5
     TransformComponent:
-      Position: [29.5, 23, 0]
+      Position: [48, 33, 0]
       Rotation: [0, -0, 0]
       Scale: [1, 1, 1]
+    SpriteRendererComponent:
+      Color: [1, 1, 1, 1]
+      Texture: textures\Misc1.png
     BoxArea2DComponent:
       Offset: [0, 0]
       Size: [22.5, 32]
@@ -133,14 +154,17 @@ Entities:
     CardSlotComponent:
       SlotType: 0
       SlotLayout: 2
-      StaggeredOffset: [0, -16]
+      StaggeredOffset: [0, -15]
   - Entity: 1372865166406401429
     TagComponent:
       Tag: Column 6
     TransformComponent:
-      Position: [88.5, 23, 0]
+      Position: [147, 32.5, 0]
       Rotation: [0, -0, 0]
       Scale: [1, 1, 1]
+    SpriteRendererComponent:
+      Color: [1, 1, 1, 1]
+      Texture: textures\Misc1.png
     BoxArea2DComponent:
       Offset: [0, 0]
       Size: [22.5, 32]
@@ -148,14 +172,17 @@ Entities:
     CardSlotComponent:
       SlotType: 0
       SlotLayout: 2
-      StaggeredOffset: [0, -16]
+      StaggeredOffset: [0, -15]
   - Entity: 15424358020562100925
     TagComponent:
       Tag: Column 7
     TransformComponent:
-      Position: [147.5, 23, 0]
+      Position: [243.5, 32, 0]
       Rotation: [0, -0, 0]
       Scale: [1, 1, 1]
+    SpriteRendererComponent:
+      Color: [1, 1, 1, 1]
+      Texture: textures\Misc1.png
     BoxArea2DComponent:
       Offset: [0, 0]
       Size: [22.5, 32]
@@ -163,14 +190,17 @@ Entities:
     CardSlotComponent:
       SlotType: 0
       SlotLayout: 2
-      StaggeredOffset: [0, -16]
+      StaggeredOffset: [0, -15]
   - Entity: 4114663372317632765
     TagComponent:
       Tag: Column 8
     TransformComponent:
-      Position: [206.5, 23, 0]
+      Position: [330, 33, 0]
       Rotation: [0, -0, 0]
       Scale: [1, 1, 1]
+    SpriteRendererComponent:
+      Color: [1, 1, 1, 1]
+      Texture: textures\Misc1.png
     BoxArea2DComponent:
       Offset: [0, 0]
       Size: [22.5, 32]
@@ -178,14 +208,17 @@ Entities:
     CardSlotComponent:
       SlotType: 0
       SlotLayout: 2
-      StaggeredOffset: [0, -16]
+      StaggeredOffset: [0, -15]
   - Entity: 3422527351249912802
     TagComponent:
       Tag: Free Cell 2
     TransformComponent:
-      Position: [99.5, 95, 0]
+      Position: [177.5, 138.5, 0]
       Rotation: [0, -0, 0]
       Scale: [1, 1, 1]
+    SpriteRendererComponent:
+      Color: [1, 1, 1, 1]
+      Texture: textures\Misc2.png
     BoxArea2DComponent:
       Offset: [0, 0]
       Size: [22.5, 32]
@@ -198,9 +231,12 @@ Entities:
     TagComponent:
       Tag: Free Cell 3
     TransformComponent:
-      Position: [154.5, 95, 0]
+      Position: [254, 138.5, 0]
       Rotation: [0, -0, 0]
       Scale: [1, 1, 1]
+    SpriteRendererComponent:
+      Color: [1, 1, 1, 1]
+      Texture: textures\Misc2.png
     BoxArea2DComponent:
       Offset: [0, 0]
       Size: [22.5, 32]
@@ -213,9 +249,12 @@ Entities:
     TagComponent:
       Tag: Free Cell 4
     TransformComponent:
-      Position: [209.5, 95, 0]
+      Position: [331, 139, 0]
       Rotation: [0, -0, 0]
       Scale: [1, 1, 1]
+    SpriteRendererComponent:
+      Color: [1, 1, 1, 1]
+      Texture: textures\Misc2.png
     BoxArea2DComponent:
       Offset: [0, 0]
       Size: [22.5, 32]
@@ -228,9 +267,12 @@ Entities:
     TagComponent:
       Tag: Site 2
     TransformComponent:
-      Position: [-154.5, 95, 0]
+      Position: [-243, 142, 0]
       Rotation: [0, -0, 0]
       Scale: [1, 1, 1]
+    SpriteRendererComponent:
+      Color: [1, 1, 1, 1]
+      Texture: textures\Misc4.png
     BoxArea2DComponent:
       Offset: [0, 0]
       Size: [22.5, 32]
@@ -243,9 +285,12 @@ Entities:
     TagComponent:
       Tag: Site 3
     TransformComponent:
-      Position: [-99.5, 95, 0]
+      Position: [-165.5, 142, 0]
       Rotation: [0, -0, 0]
       Scale: [1, 1, 1]
+    SpriteRendererComponent:
+      Color: [1, 1, 1, 1]
+      Texture: textures\Misc5.png
     BoxArea2DComponent:
       Offset: [0, 0]
       Size: [22.5, 32]
@@ -258,9 +303,12 @@ Entities:
     TagComponent:
       Tag: Site 4
     TransformComponent:
-      Position: [-44.5, 95, 0]
+      Position: [-91, 141.5, 0]
       Rotation: [0, -0, 0]
       Scale: [1, 1, 1]
+    SpriteRendererComponent:
+      Color: [1, 1, 1, 1]
+      Texture: textures\Misc6.png
     BoxArea2DComponent:
       Offset: [0, 0]
       Size: [22.5, 32]
@@ -278,3 +326,21 @@ Entities:
       Scale: [1, 1, 1]
     PatienceComponent:
       SetupScript: FreeCell
+  - Entity: 6160244620527321901
+    TagComponent:
+      Tag: Site 5
+    TransformComponent:
+      Position: [0, 140.5, 0]
+      Rotation: [0, -0, 0]
+      Scale: [1, 1, 1]
+    SpriteRendererComponent:
+      Color: [1, 1, 1, 1]
+      Texture: textures\Misc7.png
+    BoxArea2DComponent:
+      Offset: [0, 0]
+      Size: [22.5, 32]
+      DebugColor: [0, 0, 0, 0]
+    CardSlotComponent:
+      SlotType: 1
+      SlotLayout: 1
+      StaggeredOffset: [0, -16]

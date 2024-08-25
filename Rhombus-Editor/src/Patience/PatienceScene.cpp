@@ -87,6 +87,8 @@ void PatienceScene::SerializeEntity(void* yamlEmitter, Entity entity)
 
 		out << YAML::Key << "StaggeredOffset" << YAML::Value << cardComponent.m_staggeredOffset;
 
+		out << YAML::Key << "SuitFoundation" << YAML::Value << cardComponent.m_suitFoundation;
+
 		out << YAML::EndMap; // CardSlotComponent
 	}
 
@@ -120,6 +122,7 @@ void PatienceScene::DeserializeEntity(void* yamlEntity, Entity entity)
 		cardSlot.SetSlotType(cardSlotComponent["SlotType"].as<int>());
 		cardSlot.SetSlotLayout(cardSlotComponent["SlotLayout"].as<int>());
 		cardSlot.SetStaggeredOffset(cardSlotComponent["StaggeredOffset"].as<Vec2>());
+		cardSlot.m_suitFoundation = cardSlotComponent["SuitFoundation"].as<int>();
 	}
 
 	auto patienceComponent = node["PatienceComponent"];

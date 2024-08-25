@@ -429,6 +429,11 @@ namespace rhombus
 				ImGui::DragFloat2("Offset", component.GetStaggeredOffset().ToPtr(), 0.01f);
 			}
 
+			if (component.GetSlotType() == CardSlotComponent::SLOT_TYPE_SITE)
+			{
+				ImGui::SelectableEnum("Suit", CardComponent::GetSuitNameList(), CardComponent::Suit::SUIT_COUNT, &((int)component.m_suitFoundation));
+			}
+
 			{
 				ImGui::Text("Card Stack");
 				ImGui::BeginChild("Child", ImVec2(ImGui::GetContentRegionAvail().x * 0.5f, 60), ImGuiChildFlags_Border);

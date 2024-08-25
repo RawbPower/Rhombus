@@ -114,6 +114,7 @@ public:
 public:
 	std::list<Entity> m_cardStack;
 	Vec2 m_staggeredOffset = Vec2(0.0f, -16.0f);
+	int m_suitFoundation = 0;
 
 private:
 	SlotLayout m_slotLayout = SLOT_LAYOUT_SINGLE;
@@ -128,6 +129,7 @@ private:
 	
 	inline static CardSlotData sm_cardSlotData;
 
+public:
 	static const char* sm_revelationNameList[REVELATION_COUNT];
 	static const char* sm_orderingNameList[ORDERING_COUNT];
 	static const char* sm_packingTypeNameList[PACKING_COUNT];

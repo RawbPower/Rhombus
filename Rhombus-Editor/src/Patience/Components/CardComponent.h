@@ -55,6 +55,7 @@ public:
 public:
 	int m_rank;
 	Suit m_suit;
+	int m_packingTypeOverride;
 
 private:
 	bool m_isHeld = false;

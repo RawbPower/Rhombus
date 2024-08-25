@@ -46,6 +46,7 @@ void PatienceSetupSystem::Init()
 				CardComponent& card = cardEntity.AddComponent<CardComponent>();
 				card.m_rank = cardData.rank;
 				card.m_suit = cardData.suit;
+				card.m_packingTypeOverride = cardData.packingTypeOverride;
 
 				BoxArea2DComponent& area = cardEntity.AddComponent<BoxArea2DComponent>();
 				area.m_size = Vec2(22.5f, 32.0f);
@@ -113,7 +114,17 @@ void PatienceSetupSystem::GetCardDataFromScript(const char* scriptName, std::vec
 				CardComponent::Suit suit = (CardComponent::Suit)ScriptEngine::GetEnumFromName(ScriptEngine::GetString(), CardComponent::GetSuitNameList(), CardComponent::Suit::SUIT_COUNT);
 				ScriptEngine::Pop();
 
-				CardData cardData(name, rank, suit, sprite);
+				ScriptEngine::GetField("PackingType");
+				const char* packingTypeString = ScriptEngine::GetString();
+				CardSlotComponent::PackingType packingTypeOverride = CardSlotComponent::PACKING_COUNT;
+				if (packingTypeString != "Default")
+				{
+					packingTypeOverride = (CardSlotComponent::PackingType)ScriptEngine::GetEnumFromName(packingTypeString, CardSlotComponent::sm_packingTypeNameList, CardSlotComponent::PackingType::PACKING_COUNT);
+				}
+				ScriptEngine::Pop();
+
+				CardData cardData(name, rank, suit, sprite, packingTypeOverride);
+
 				cardDatas.push_back(cardData);
 				ScriptEngine::Pop();
 			}

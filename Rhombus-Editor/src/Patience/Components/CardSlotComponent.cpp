@@ -46,7 +46,8 @@ void CardSlotComponent::UpdateAllowedCards()
 					break;
 				}	
 
-				switch (sm_cardSlotData.packingType)
+				PackingType packingType = topCardData->m_packingTypeOverride != PACKING_COUNT ? (PackingType)topCardData->m_packingTypeOverride : sm_cardSlotData.packingType;
+				switch (packingType)
 				{
 				case PACKING_ANY:
 					m_allowedSuits = -1;
@@ -92,14 +93,22 @@ void CardSlotComponent::UpdateAllowedCards()
 
 		break;
 	case SLOT_TYPE_SITE:
+		m_allowedSuits = 1ul << (uint32_t)m_suitFoundation;
 		if (!topCardData)
 		{
-			m_allowedRanks = 1ul << sm_cardSlotData.foundationRank;
-			m_allowedSuits = -1;
+			if ((CardComponent::Suit)m_suitFoundation != CardComponent::SUIT_TRUMP)
+			{
+				m_allowedRanks = 1ul << sm_cardSlotData.foundationRank;
+			}
+			else
+			{
+				m_allowedRanks = 1ul << 21;
+			}
 		}
 		else
 		{
-			switch (sm_cardSlotData.buildingOrder)
+			CardSlotComponent::Ordering ordering = (CardComponent::Suit)m_suitFoundation != CardComponent::SUIT_TRUMP ? sm_cardSlotData.buildingOrder : ORDERING_DESCENDING;
+			switch (ordering)
 			{
 			case ORDERING_ASCENDING:
 				m_allowedRanks = 1ul << topCardData->m_rank + 1;
@@ -110,8 +119,6 @@ void CardSlotComponent::UpdateAllowedCards()
 			default:
 				break;
 			}
-
-			m_allowedSuits = 1ul << (uint32_t)topCardData->m_suit;
 		}
 		break;
 	case SLOT_TYPE_FREECELL:

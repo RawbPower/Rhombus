@@ -80,7 +80,7 @@ CardData.BasicDiamonds =
 		PackingType = "Default"
 	},
 
-	Jack_Diamonds = 
+	--[[Jack_Diamonds = 
 	{
 		Rank = 11,
 		Suit = "Diamond",
@@ -110,5 +110,5 @@ CardData.BasicDiamonds =
 		Suit = "Diamond",
 		Sprite = "textures/CardsNew/Base/Card54.png",
 		PackingType = "Default"
-	}
+	}]]--
 }

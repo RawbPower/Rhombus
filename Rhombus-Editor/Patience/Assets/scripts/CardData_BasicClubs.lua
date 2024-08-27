@@ -80,7 +80,7 @@ CardData.BasicClubs =
 		PackingType = "Default"
 	},
 
-	Jack_Clubs = 
+	--[[Jack_Clubs = 
 	{
 		Rank = 11,
 		Suit = "Club",
@@ -98,7 +98,7 @@ CardData.BasicClubs =
 
 	Queen_Clubs = 
 	{
-		Rank = 12,
+		Rank = 13,
 		Suit = "Club",
 		Sprite = "textures/CardsNew/Base/Card52.png",
 		PackingType = "Default"
@@ -106,9 +106,9 @@ CardData.BasicClubs =
 
 	King_Clubs = 
 	{
-		Rank = 13,
+		Rank = 14,
 		Suit = "Club",
 		Sprite = "textures/CardsNew/Base/Card56.png",
 		PackingType = "Default"
-	}
+	}]]--
 }

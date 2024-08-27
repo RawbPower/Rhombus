@@ -80,7 +80,7 @@ CardData.BasicSpades =
 		PackingType = "Default"
 	},
 
-	Jack_Spades = 
+	--[[Jack_Spades = 
 	{
 		Rank = 11,
 		Suit = "Spade",
@@ -110,5 +110,5 @@ CardData.BasicSpades =
 		Suit = "Spade",
 		Sprite = "textures/CardsNew/Base/Card54.png",
 		PackingType = "Default"
-	}
+	}]]--
 }

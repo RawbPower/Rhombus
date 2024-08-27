@@ -41,7 +41,7 @@ Entities:
       Texture: textures\Misc3.png
     BoxArea2DComponent:
       Offset: [0, 0]
-      Size: [22.5, 32]
+      Size: [32, 44.5]
       DebugColor: [0, 0, 0, 0]
     CardSlotComponent:
       SlotType: 1
@@ -60,7 +60,7 @@ Entities:
       Texture: textures\Misc2.png
     BoxArea2DComponent:
       Offset: [0, 0]
-      Size: [22.5, 32]
+      Size: [32, 44.5]
       DebugColor: [0, 0, 0, 0]
     CardSlotComponent:
       SlotType: 2
@@ -79,7 +79,7 @@ Entities:
       Texture: textures\Misc1.png
     BoxArea2DComponent:
       Offset: [0, 0]
-      Size: [22.5, 32]
+      Size: [32, 44.5]
       DebugColor: [0, 0, 0, 0]
     CardSlotComponent:
       SlotType: 0
@@ -98,7 +98,7 @@ Entities:
       Texture: textures\Misc1.png
     BoxArea2DComponent:
       Offset: [0, 0]
-      Size: [22.5, 32]
+      Size: [32, 44.5]
       DebugColor: [0, 0, 0, 0]
     CardSlotComponent:
       SlotType: 0
@@ -117,7 +117,7 @@ Entities:
       Texture: textures\Misc1.png
     BoxArea2DComponent:
       Offset: [0, 0]
-      Size: [22.5, 32]
+      Size: [32, 44.5]
       DebugColor: [0, 0, 0, 0]
     CardSlotComponent:
       SlotType: 0
@@ -136,7 +136,7 @@ Entities:
       Texture: textures\Misc1.png
     BoxArea2DComponent:
       Offset: [0, 0]
-      Size: [22.5, 32]
+      Size: [32, 44.5]
       DebugColor: [0, 0, 0, 0]
     CardSlotComponent:
       SlotType: 0
@@ -155,7 +155,7 @@ Entities:
       Texture: textures\Misc1.png
     BoxArea2DComponent:
       Offset: [0, 0]
-      Size: [22.5, 32]
+      Size: [32, 44.5]
       DebugColor: [0, 0, 0, 0]
     CardSlotComponent:
       SlotType: 0
@@ -174,7 +174,7 @@ Entities:
       Texture: textures\Misc1.png
     BoxArea2DComponent:
       Offset: [0, 0]
-      Size: [22.5, 32]
+      Size: [32, 44.5]
       DebugColor: [0, 0, 0, 0]
     CardSlotComponent:
       SlotType: 0
@@ -193,7 +193,7 @@ Entities:
       Texture: textures\Misc1.png
     BoxArea2DComponent:
       Offset: [0, 0]
-      Size: [22.5, 32]
+      Size: [32, 44.5]
       DebugColor: [0, 0, 0, 0]
     CardSlotComponent:
       SlotType: 0
@@ -212,7 +212,7 @@ Entities:
       Texture: textures\Misc1.png
     BoxArea2DComponent:
       Offset: [0, 0]
-      Size: [22.5, 32]
+      Size: [32, 44.5]
       DebugColor: [0, 0, 0, 0]
     CardSlotComponent:
       SlotType: 0
@@ -231,7 +231,7 @@ Entities:
       Texture: textures\Misc2.png
     BoxArea2DComponent:
       Offset: [0, 0]
-      Size: [22.5, 32]
+      Size: [32, 44.5]
       DebugColor: [0, 0, 0, 0]
     CardSlotComponent:
       SlotType: 2
@@ -250,7 +250,7 @@ Entities:
       Texture: textures\Misc2.png
     BoxArea2DComponent:
       Offset: [0, 0]
-      Size: [22.5, 32]
+      Size: [32, 44.5]
       DebugColor: [0, 0, 0, 0]
     CardSlotComponent:
       SlotType: 2
@@ -269,7 +269,7 @@ Entities:
       Texture: textures\Misc2.png
     BoxArea2DComponent:
       Offset: [0, 0]
-      Size: [22.5, 32]
+      Size: [32, 44.5]
       DebugColor: [0, 0, 0, 0]
     CardSlotComponent:
       SlotType: 2
@@ -288,7 +288,7 @@ Entities:
       Texture: textures\Misc4.png
     BoxArea2DComponent:
       Offset: [0, 0]
-      Size: [22.5, 32]
+      Size: [32, 44.5]
       DebugColor: [0, 0, 0, 0]
     CardSlotComponent:
       SlotType: 1
@@ -307,7 +307,7 @@ Entities:
       Texture: textures\Misc5.png
     BoxArea2DComponent:
       Offset: [0, 0]
-      Size: [22.5, 32]
+      Size: [32, 44.5]
       DebugColor: [0, 0, 0, 0]
     CardSlotComponent:
       SlotType: 1
@@ -326,7 +326,7 @@ Entities:
       Texture: textures\Misc6.png
     BoxArea2DComponent:
       Offset: [0, 0]
-      Size: [22.5, 32]
+      Size: [32, 44.5]
       DebugColor: [0, 0, 0, 0]
     CardSlotComponent:
       SlotType: 1
@@ -354,7 +354,7 @@ Entities:
       Texture: textures\Misc7.png
     BoxArea2DComponent:
       Offset: [0, 0]
-      Size: [22.5, 32]
+      Size: [32, 44.5]
       DebugColor: [0, 0, 0, 0]
     CardSlotComponent:
       SlotType: 1

@@ -80,7 +80,7 @@ CardData.BasicHearts =
 		PackingType = "Default"
 	},
 
-	Jack_Hearts = 
+	--[[Jack_Hearts = 
 	{
 		Rank = 11,
 		Suit = "Heart",
@@ -110,5 +110,5 @@ CardData.BasicHearts =
 		Suit = "Heart",
 		Sprite = "textures/CardsNew/Base/Card53.png",
 		PackingType = "Default"
-	}
+	}]]--
 }

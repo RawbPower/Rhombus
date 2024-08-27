@@ -30,16 +30,40 @@ void CardPlacementSystem::Update(DeltaTime time)
 void CardPlacementSystem::OnMouseMoved(int x, int y)
 {
 	Vec3 cursorCoords = Renderer2D::ConvertScreenToWorldSpace(x, y);
+	CardComponent* hoveredCard = nullptr;
+	bool bIsCardHeld = false;
 	for (Entity entity : GetEntities())
 	{
 		auto& transform = entity.GetComponent<TransformComponent>();
 		auto& card = entity.GetComponent<CardComponent>();
+		card.SetIsHovered(false);
 
 		if (card.GetIsHeld())
 		{
 			transform.m_position = Vec3(cursorCoords.x, cursorCoords.y, transform.m_position.z);
 			transform.SetLayer(Z_LAYER::FOREGROUND_2_LAYER);
+			bIsCardHeld = true;
 		}
+		else
+		{
+			if (entity.HasComponent<BoxArea2DComponent>())
+			{
+				auto& ba2D = entity.GetComponent<BoxArea2DComponent>();
+
+				if (ba2D.m_isMouseInArea)
+				{
+					if (!hoveredCard || hoveredCard->GetOwnerEntity().GetComponent<TransformComponent>().m_position.z < transform.m_position.z)
+					{
+						hoveredCard = &card;
+					}
+				}
+			}
+		}
+	}
+
+	if (hoveredCard && !bIsCardHeld)
+	{
+		hoveredCard->SetIsHovered(true);
 	}
 }
 

@@ -46,7 +46,7 @@ void CardSlotComponent::UpdateAllowedCards()
 					break;
 				}	
 
-				PackingType packingType = topCardData->m_packingTypeOverride != PACKING_COUNT ? (PackingType)topCardData->m_packingTypeOverride : sm_cardSlotData.packingType;
+				PackingType packingType = (topCardData->m_packingTypeOverride >= 0 && topCardData->m_packingTypeOverride != PACKING_COUNT) ? (PackingType)topCardData->m_packingTypeOverride : sm_cardSlotData.packingType;
 				switch (packingType)
 				{
 				case PACKING_ANY:

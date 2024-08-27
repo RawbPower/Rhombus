@@ -265,8 +265,15 @@ namespace rhombus
 				}
 			}
 
+			OnDraw();
+
 			Renderer2D::EndScene();
 		}
+	}
+
+	void Scene::OnDraw()
+	{
+	
 	}
 
 	void Scene::OnUpdateEditor(DeltaTime dt, EditorCamera& camera)

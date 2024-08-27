@@ -20,6 +20,9 @@ public:
 	int GetIsHeld() const { return m_isHeld; }
 	void SetIsHeld(bool held) { m_isHeld = held; }
 
+	int GetIsHovered() const { return m_isHovered; }
+	void SetIsHovered(bool hovered) { m_isHovered = hovered; }
+
 	int GetIsAvailable() const { return m_isAvailable; }
 	void SetIsAvailable(bool available) { m_isAvailable = available; }
 
@@ -55,10 +58,11 @@ public:
 public:
 	int m_rank;
 	Suit m_suit;
-	int m_packingTypeOverride;
+	int m_packingTypeOverride = -1;
 
 private:
 	bool m_isHeld = false;
+	bool m_isHovered = false;
 	bool m_isAvailable = true;
 	Vec3 m_previousPosition = Vec3(0.0f);
 	Entity m_currentSlot;

@@ -39,6 +39,7 @@ namespace rhombus
 		virtual void OnRuntimeStop();
 
 		virtual void OnUpdateRuntime(DeltaTime dt);
+		virtual void OnDraw();
 		void OnUpdateEditor(DeltaTime dt, EditorCamera& camera);
 		virtual void OnMouseMoved(int x, int y);
 		virtual void OnMouseButtonPressed(int button);

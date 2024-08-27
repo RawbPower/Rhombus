@@ -13,6 +13,7 @@ public:
 
 	virtual void OnRuntimeStart() override;
 	virtual void OnUpdateRuntime(DeltaTime dt) override;
+	virtual void OnDraw() override;
 
 	virtual void CopyAllComponents(Ref<Scene> destScene, const std::unordered_map<UUID, EntityID>& entityMap) override;
 	virtual void CopyEntityComponents(Entity dest, Entity src) override;

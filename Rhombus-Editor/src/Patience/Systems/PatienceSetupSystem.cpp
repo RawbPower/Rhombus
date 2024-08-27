@@ -49,7 +49,7 @@ void PatienceSetupSystem::Init()
 				card.m_packingTypeOverride = cardData.packingTypeOverride;
 
 				BoxArea2DComponent& area = cardEntity.AddComponent<BoxArea2DComponent>();
-				area.m_size = Vec2(22.5f, 32.0f);
+				area.m_size = Vec2(32.0f, 44.5f);
 
 				SpriteRendererComponent& spriteRendererComponent = cardEntity.AddComponent<SpriteRendererComponent>();
 				std::string texturePath = cardData.sprite;

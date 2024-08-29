@@ -17,8 +17,11 @@ public:
 	Suit GetSuit() const { return m_suit; }
 	void SetSuit(Suit suit) { m_suit = suit; }
 
-	int GetIsHeld() const { return m_isHeld; }
+	bool GetIsHeld() const { return m_isHeld; }
 	void SetIsHeld(bool held) { m_isHeld = held; }
+
+	Vec2 GetHeldOffset() const { return m_heldOffset; }
+	void SetHeldOffset(Vec2 heldOffset) { m_heldOffset = heldOffset; }
 
 	int GetIsHovered() const { return m_isHovered; }
 	void SetIsHovered(bool hovered) { m_isHovered = hovered; }
@@ -64,6 +67,7 @@ private:
 	bool m_isHeld = false;
 	bool m_isHovered = false;
 	bool m_isAvailable = true;
+	Vec2 m_heldOffset = Vec3(0.0f);
 	Vec3 m_previousPosition = Vec3(0.0f);
 	Entity m_currentSlot;
 

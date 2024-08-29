@@ -41,19 +41,26 @@ public:
 	virtual void OnComponentAdded() override;
 
 	void UpdateAllowedCards();
+	void GetAllowedNextCardsInSequence(const CardComponent& card, uint32_t& allowedRanks, uint32_t& allowedSuits);
 	bool IsCardAllowedInSlot(int rank, CardComponent::Suit suit);
+	bool IsCardAllowedInSlot(int rank, CardComponent::Suit suit, uint32_t allowedRanks, uint32_t allowedSuits);
 
 	int GetIsOccupied() const { return m_isOccupied; }
 	void SetIsOccupied(bool occupied) { m_isOccupied = occupied; }
 
 	bool CanAcceptCards();
+	bool CanAcceptSequences();
 	void AddCard(Entity card);
 	void RemoveCard(Entity card);
 
 	void UpdateCardStack();
 
+	void GetCardSequence(Entity topCard, std::queue<Entity>& cardSequenceOut) const;
+
 	Vec2& GetStaggeredOffset() { return m_staggeredOffset; }
 	void SetStaggeredOffset(Vec2 offset) { m_staggeredOffset = offset; }
+
+	uint32_t GetSequenceLength() const { return m_sequenceLength; }
 
 	// Slot Layout
 	const SlotLayout GetSlotLayout() const{ return m_slotLayout; }
@@ -126,6 +133,7 @@ private:
 
 	uint32_t m_allowedRanks;
 	uint32_t m_allowedSuits;
+	uint32_t m_sequenceLength = 1;
 	
 	inline static CardSlotData sm_cardSlotData;
 

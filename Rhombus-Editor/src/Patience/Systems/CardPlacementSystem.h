@@ -17,7 +17,7 @@ public:
 	void OnMouseButtonPressed(int button);
 	void OnMouseButtonReleased(int button);
 
-	void PlaceCard(Entity cardEntity);
+	void PlaceCard(Entity cardEntity, bool isInSequence);
 	EntityID CheckForCardSlot(Entity cardEntity);
 };
 

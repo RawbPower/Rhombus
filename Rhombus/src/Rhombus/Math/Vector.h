@@ -82,6 +82,7 @@ namespace rhombus
 		bool operator == (const Vec3& rhs) const;
 		bool operator != (const Vec3& rhs) const;
 		Vec3 operator + (const Vec3& rhs) const;
+		Vec3 operator + (const Vec2& rhs) const;
 		const Vec3& operator += (const Vec3& rhs);
 		const Vec3& operator -= (const Vec3& rhs);
 		Vec3 operator - (const Vec3& rhs) const;
@@ -282,6 +283,11 @@ namespace rhombus
 		return temp;
 	}
 
+	inline Vec2 operator * (const float lhs, const Vec2 rhs)
+	{
+		return rhs * lhs;
+	}
+
 	inline Vec2 Vec2::operator / (const float rhs) const
 	{
 		Vec2 temp;
@@ -469,6 +475,15 @@ namespace rhombus
 		temp.x = x + rhs.x;
 		temp.y = y + rhs.y;
 		temp.z = z + rhs.z;
+		return temp;
+	}
+
+	inline Vec3 Vec3::operator + (const Vec2& rhs) const
+	{
+		Vec3 temp;
+		temp.x = x + rhs.x;
+		temp.y = y + rhs.y;
+		temp.z = z;
 		return temp;
 	}
 

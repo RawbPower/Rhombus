@@ -36,12 +36,14 @@ void CardPlacementSystem::OnMouseMoved(int x, int y)
 	{
 		auto& transform = entity.GetComponent<TransformComponent>();
 		auto& card = entity.GetComponent<CardComponent>();
+		auto& cardSlot = card.GetCurrentSlot().GetComponent<CardSlotComponent>();
 		card.SetIsHovered(false);
 
 		if (card.GetIsHeld())
 		{
-			transform.m_position = Vec3(cursorCoords.x, cursorCoords.y, transform.m_position.z);
-			transform.SetLayer(Z_LAYER::FOREGROUND_2_LAYER);
+			transform.m_position = Vec3(cursorCoords.x, cursorCoords.y, transform.m_position.z) + card.GetHeldOffset();
+			transform.SetPositionByLayerSection(Z_LAYER::FOREGROUND_2_LAYER, card.GetHeldOffset().GetMagnitude() / cardSlot.m_staggeredOffset.GetMagnitude(), 10);
+
 			bIsCardHeld = true;
 		}
 		else
@@ -73,35 +75,56 @@ void CardPlacementSystem::OnMouseButtonPressed(int button)
 	{
 		auto& card = entity.GetComponent<CardComponent>();
 
-		if (entity.HasComponent<BoxArea2DComponent>() && card.GetIsAvailable())
+		if (card.GetIsAvailable() && card.GetIsHovered())
 		{
-			auto& ba2D = entity.GetComponent<BoxArea2DComponent>();
-
-			if (ba2D.m_isMouseInArea)
+			const CardSlotComponent& cardSlot = card.GetCurrentSlot().GetComponentRead<CardSlotComponent>();
+			std::queue<Entity> cardSequence;
+			cardSlot.GetCardSequence(card.GetOwnerEntity(), cardSequence);
+			int numCardInSequnce = cardSequence.size();
+			while (cardSequence.size() > 0)
 			{
-				auto& transform = entity.GetComponent<TransformComponent>();
-				card.SetIsHeld(true);
-				card.SetPreviousPosition(transform.m_position);
+				Entity nextCardInSequence = cardSequence.front();
+				auto& transform = nextCardInSequence.GetComponent<TransformComponent>();
+				nextCardInSequence.GetComponent<CardComponent>().SetIsHeld(true);
+				nextCardInSequence.GetComponent<CardComponent>().SetHeldOffset((float)(numCardInSequnce - cardSequence.size()) * cardSlot.m_staggeredOffset);
+				nextCardInSequence.GetComponent<CardComponent>().SetPreviousPosition(transform.m_position);
+				cardSequence.pop();
 			}
+			break;
 		}
 	}
 }
 
+bool compareByHeldOffset(const CardComponent* card1, const CardComponent* card2)
+{
+	return card1->GetHeldOffset().GetMag2() < card2->GetHeldOffset().GetMag2();
+}
+
 void CardPlacementSystem::OnMouseButtonReleased(int button)
 {
+	std::vector<CardComponent*> heldCards;
 	for (Entity entity : GetEntities())
 	{
 		auto& card = entity.GetComponent<CardComponent>();
 
 		if (card.GetIsHeld())
 		{
-			card.SetIsHeld(false);
-			PlaceCard(entity);
+			heldCards.push_back(&card);
 		}
+	}
+
+	sort(heldCards.begin(), heldCards.end(), compareByHeldOffset);
+
+	for (auto& cardPtr : heldCards) 
+	{
+		CardComponent& card = *cardPtr;
+		card.SetIsHeld(false);
+		card.SetHeldOffset(Vec2(0.0f));
+		PlaceCard(card.GetOwnerEntity(), heldCards.size() > 1);
 	}
 }
 
-void CardPlacementSystem::PlaceCard(Entity cardEntity)
+void CardPlacementSystem::PlaceCard(Entity cardEntity, bool isInSequence)
 {
 	EntityID currentSlot = CheckForCardSlot(cardEntity);
 
@@ -119,8 +142,10 @@ void CardPlacementSystem::PlaceCard(Entity cardEntity)
 		cardTransform.m_position = Vec3(slotTransform.m_position.x, slotTransform.m_position.y, slotTransform.m_position.z);
 		cardTransform.SetLayer(Z_LAYER::FOREGROUND_1_LAYER);
 		CardSlotComponent& cardSlot = currentSlotEntity.GetComponent<CardSlotComponent>();
+
+		const bool cannotAcceptSequence = isInSequence && !cardSlot.CanAcceptSequences();
 			
-		if (cardSlot.CanAcceptCards() && cardSlot.IsCardAllowedInSlot(card.m_rank, card.m_suit))
+		if (!cannotAcceptSequence && cardSlot.CanAcceptCards() && cardSlot.IsCardAllowedInSlot(card.m_rank, card.m_suit))
 		{
 			Entity previousCardSlot = card.GetCurrentSlot();
 			previousCardSlot.GetComponent<CardSlotComponent>().RemoveCard(cardEntity);

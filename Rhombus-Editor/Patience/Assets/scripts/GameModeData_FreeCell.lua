@@ -19,7 +19,8 @@ GameModeData.FreeCell =
 		"BasicHearts",
 		"BasicDiamonds",
 		"BasicSpades",
-		"BasicClubs"
+		"BasicClubs",
+		"Monsters"
 	},
 
 	StartingColumns =

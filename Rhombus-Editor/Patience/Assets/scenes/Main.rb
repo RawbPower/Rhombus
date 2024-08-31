@@ -13,7 +13,7 @@ Entities:
         PerspectiveFOV: 0.785398185
         PerspectiveNear: 0.00999999978
         PerspectiveFar: 1000
-        OrthographicSize: 683
+        OrthographicSize: 729
         OrthographicNear: -1
         OrthographicFar: 1
         PixelPerfect: true
@@ -361,3 +361,22 @@ Entities:
       SlotLayout: 1
       StaggeredOffset: [0, -16]
       SuitFoundation: 4
+  - Entity: 7413053044011340593
+    TagComponent:
+      Tag: Waste Pile
+    TransformComponent:
+      Position: [434, -204.5, 0]
+      Rotation: [0, -0, 0]
+      Scale: [1, 1, 1]
+    SpriteRendererComponent:
+      Color: [1, 1, 1, 1]
+      Texture: textures\Misc8.png
+    BoxArea2DComponent:
+      Offset: [0, 0]
+      Size: [32, 44.5]
+      DebugColor: [0, 0, 0, 0]
+    CardSlotComponent:
+      SlotType: 4
+      SlotLayout: 1
+      StaggeredOffset: [0, -16]
+      SuitFoundation: 0

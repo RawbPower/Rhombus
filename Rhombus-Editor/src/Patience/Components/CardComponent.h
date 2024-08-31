@@ -7,6 +7,12 @@ class CardComponent : public ComponentBase
 public:
 
 	enum Suit { SUIT_HEART = 0, SUIT_DIAMOND, SUIT_SPADE, SUIT_CLUB, SUIT_TRUMP, SUIT_WILD, SUIT_COUNT };
+	enum Type { TYPE_REGULAR = 0, TYPE_MONSTER, TYPE_COUNT };
+
+	struct MonsterStats
+	{
+		int m_health;
+	};
 
 	CardComponent() = default;
 	CardComponent(const CardComponent&) = default;
@@ -36,6 +42,8 @@ public:
 	void SetCurrentlSlot(Entity cardSlot) { m_currentSlot = cardSlot; }
 	void ResetCurrentlSlot() { m_currentSlot = Entity(); }
 
+	bool CanBeHeld() const { return m_type != TYPE_MONSTER; }
+
 	const char* GetSuitName()
 	{
 		return GetSuitName(m_suit);
@@ -58,10 +66,17 @@ public:
 		return sm_suitNameList;
 	}
 
+	static const char** GetTypeNameList()
+	{
+		return sm_typeNameList;
+	}
+
 public:
 	int m_rank;
 	Suit m_suit;
 	int m_packingTypeOverride = -1;
+	Type m_type = TYPE_REGULAR;
+	MonsterStats m_monsterStats;		// Late initialize this
 
 private:
 	bool m_isHeld = false;
@@ -72,4 +87,5 @@ private:
 	Entity m_currentSlot;
 
 	static const char* sm_suitNameList[SUIT_COUNT];
+	static const char* sm_typeNameList[TYPE_COUNT];
 };

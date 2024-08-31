@@ -47,6 +47,8 @@ void PatienceSetupSystem::Init()
 				card.m_rank = cardData.rank;
 				card.m_suit = cardData.suit;
 				card.m_packingTypeOverride = cardData.packingTypeOverride;
+				card.m_type = cardData.type;
+				card.m_monsterStats = cardData.monsterStats;
 
 				BoxArea2DComponent& area = cardEntity.AddComponent<BoxArea2DComponent>();
 				area.m_size = Vec2(32.0f, 44.5f);
@@ -114,16 +116,30 @@ void PatienceSetupSystem::GetCardDataFromScript(const char* scriptName, std::vec
 				CardComponent::Suit suit = (CardComponent::Suit)ScriptEngine::GetEnumFromName(ScriptEngine::GetString(), CardComponent::GetSuitNameList(), CardComponent::Suit::SUIT_COUNT);
 				ScriptEngine::Pop();
 
+				CardData cardData(name, rank, suit, sprite);
+
 				ScriptEngine::GetField("PackingType");
 				const char* packingTypeString = ScriptEngine::GetString();
-				CardSlotComponent::PackingType packingTypeOverride = CardSlotComponent::PACKING_COUNT;
 				if (packingTypeString != "Default")
 				{
-					packingTypeOverride = (CardSlotComponent::PackingType)ScriptEngine::GetEnumFromName(packingTypeString, CardSlotComponent::sm_packingTypeNameList, CardSlotComponent::PackingType::PACKING_COUNT);
+					cardData.packingTypeOverride = (CardSlotComponent::PackingType)ScriptEngine::GetEnumFromName(packingTypeString, CardSlotComponent::sm_packingTypeNameList, CardSlotComponent::PackingType::PACKING_COUNT);
 				}
 				ScriptEngine::Pop();
 
-				CardData cardData(name, rank, suit, sprite, packingTypeOverride);
+				if (ScriptEngine::GetField("Type"))
+				{
+					cardData.type = (CardComponent::Type)ScriptEngine::GetEnumFromName(ScriptEngine::GetString(), CardComponent::GetTypeNameList(), CardComponent::Type::TYPE_COUNT);
+				}
+				ScriptEngine::Pop();
+
+				if (cardData.type == CardComponent::Type::TYPE_MONSTER)
+				{
+					ScriptEngine::GetField("Monster_Stats");
+					ScriptEngine::GetField("Health");
+					cardData.monsterStats.m_health = ScriptEngine::GetInt();
+					ScriptEngine::Pop();
+					ScriptEngine::Pop();
+				}
 
 				cardDatas.push_back(cardData);
 				ScriptEngine::Pop();

@@ -14,9 +14,6 @@ const char* CardSlotComponent::sm_emptyColumnTypeNameList[EMPTY_COLUMN_COUNT] = 
 
 void CardSlotComponent::OnComponentAdded()
 {
-	const BoxArea2DComponent& area = GetOwnerEntity().GetComponentRead<BoxArea2DComponent>();
-	m_emptyAreaOffset = area.m_offset;
-	m_emptyAreaSize = area.m_size;
 }
 
 void CardSlotComponent::UpdateAllowedCards()
@@ -103,6 +100,10 @@ void CardSlotComponent::UpdateAllowedCards()
 				}
 
 				higherCard = &it->GetComponentRead<CardComponent>();
+				if (higherCard->m_type == CardComponent::TYPE_MONSTER)
+				{
+					break;
+				}
 
 				uint32_t allowedRanks, allowedSuits;
 				GetAllowedNextCardsInSequence(*higherCard, allowedRanks, allowedSuits);
@@ -124,7 +125,7 @@ void CardSlotComponent::UpdateAllowedCards()
 	}
 }
 
-void CardSlotComponent::GetAllowedNextCardsInSequence(const CardComponent& card, uint32_t& allowedRanks, uint32_t& allowedSuits)
+void CardSlotComponent::GetAllowedNextCardsInSequence(const CardComponent& card, uint32_t& allowedRanks, uint32_t& allowedSuits) const
 {
 	if (card.m_rank == 0)		// Wild Card
 	{
@@ -177,32 +178,33 @@ void CardSlotComponent::GetAllowedNextCardsInSequence(const CardComponent& card,
 	}
 }
 
-bool CardSlotComponent::IsCardAllowedInSlot(int rank, CardComponent::Suit suit)
+bool CardSlotComponent::IsCardAllowedInSlot(int rank, CardComponent::Suit suit) const
 {
 	const bool isRankAllowed = (m_allowedRanks & (1ul << rank)) != 0;
 	const bool isSuitAllowed = (m_allowedSuits & (1ul << (uint32_t)suit)) != 0;
 	return isSuitAllowed && isRankAllowed;
 }
 
-bool CardSlotComponent::IsCardAllowedInSlot(int rank, CardComponent::Suit suit, uint32_t allowedRanks, uint32_t allowedSuits)
+bool CardSlotComponent::IsCardAllowedInSlot(int rank, CardComponent::Suit suit, uint32_t allowedRanks, uint32_t allowedSuits) const
 {
 	const bool isRankAllowed = (allowedRanks & (1ul << rank)) != 0;
 	const bool isSuitAllowed = (allowedSuits & (1ul << (uint32_t)suit)) != 0;
 	return isSuitAllowed && isRankAllowed;
 }
 
-bool CardSlotComponent::CanAcceptCards()
+bool CardSlotComponent::CanAcceptCards() const
 {
 	return m_slotLayout != SLOT_LAYOUT_SINGLE || m_cardStack.size() == 0;
 }
 
-bool CardSlotComponent::CanAcceptSequences()
+bool CardSlotComponent::CanAcceptSequences() const
 {
 	return m_slotType == SLOT_TYPE_COLUMN;
 }
 
 void CardSlotComponent::AddCard(Entity card) 
 { 
+	CardComponent& cardComponent = card.GetComponent<CardComponent>();
 	m_cardStack.push_back(card); 
 	m_isOccupied = true;
 	UpdateAllowedCards();

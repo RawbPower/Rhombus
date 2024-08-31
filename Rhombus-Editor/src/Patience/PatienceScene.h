@@ -3,6 +3,7 @@
 #include "Rhombus.h"
 #include "Systems/CardPlacementSystem.h"
 #include "Systems/PatienceSetupSystem.h"
+#include "Systems/CardSlotSystem.h"
 
 class PatienceScene : public Scene
 {
@@ -26,6 +27,7 @@ public:
 	virtual void OnMouseButtonReleased(int button) override;
 
 private:
+	Ref<CardSlotSystem> cardSlotSystem;
 	Ref<CardPlacementSystem> cardPlacementSystem;
 	Ref<PatienceSetupSystem> setupSystem;
 };

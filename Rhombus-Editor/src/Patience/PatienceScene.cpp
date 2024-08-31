@@ -21,6 +21,13 @@ void PatienceScene::InitScene()
 	Scene::InitScene();
 	RegisterComponents(PatienceComponents{});
 
+	cardSlotSystem = m_Registry.RegisterSystem<CardSlotSystem>(this);
+	{
+		Signature signature;
+		signature.set(m_Registry.GetComponentType<CardSlotComponent>());
+		m_Registry.SetSystemSignature<CardSlotSystem>(signature);
+	}
+
 	cardPlacementSystem = m_Registry.RegisterSystem<CardPlacementSystem>(this);
 	{
 		Signature signature;
@@ -40,6 +47,7 @@ void PatienceScene::InitScene()
 void PatienceScene::OnRuntimeStart()
 {
 	Scene::OnRuntimeStart();
+	cardSlotSystem->Init();
 	cardPlacementSystem->Init();
 	setupSystem->Init();
 }

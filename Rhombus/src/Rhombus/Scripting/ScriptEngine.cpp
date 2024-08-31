@@ -170,9 +170,10 @@ namespace rhombus
 		lua_getglobal(L, globalName);
 	}
 
-	void ScriptEngine::GetField(const char* fieldName, int tableIndex)
+	bool ScriptEngine::GetField(const char* fieldName, int tableIndex)
 	{
-		lua_getfield(L, tableIndex, fieldName);
+		int result = lua_getfield(L, tableIndex, fieldName);
+		return result != LUA_TNIL;
 	}
 
 	void ScriptEngine::GetListOfStringValueFromField(const char* fieldName, std::list<std::string>& list, int tableIndex)

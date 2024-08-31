@@ -18,6 +18,8 @@ public:
 	void OnMouseButtonReleased(int button);
 
 	void PlaceCard(Entity cardEntity, bool isInSequence);
+	void PlaceCard(Entity cardEntity, Entity slotEntity, bool isInSequence, bool isDiscard);
+	bool DamageMonsterInColumn(Entity slotEntity);
 	EntityID CheckForCardSlot(Entity cardEntity);
 };
 

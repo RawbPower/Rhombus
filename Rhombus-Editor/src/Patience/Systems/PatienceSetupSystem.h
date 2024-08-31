@@ -16,10 +16,13 @@ public:
 		int rank = 0;
 		CardComponent::Suit suit = CardComponent::Suit::SUIT_HEART;
 		std::string sprite;
-		CardSlotComponent::PackingType packingTypeOverride;
+		CardSlotComponent::PackingType packingTypeOverride = CardSlotComponent::PACKING_COUNT;
+		CardComponent::Type type = CardComponent::Type::TYPE_REGULAR;
 
-		CardData(const char* _cardName, int _rank, CardComponent::Suit _suit, std::string _sprite, CardSlotComponent::PackingType _packingTypeOverride) :
-			name(_cardName), rank(_rank), suit(_suit), sprite(_sprite), packingTypeOverride(_packingTypeOverride) {}
+		CardComponent::MonsterStats monsterStats;
+
+		CardData(const char* _cardName, int _rank, CardComponent::Suit _suit, std::string _sprite) :
+			name(_cardName), rank(_rank), suit(_suit), sprite(_sprite) {}
 	};
 
 	PatienceSetupSystem(Scene* scene) : System(scene)

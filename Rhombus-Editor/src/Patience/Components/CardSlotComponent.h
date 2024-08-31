@@ -41,15 +41,15 @@ public:
 	virtual void OnComponentAdded() override;
 
 	void UpdateAllowedCards();
-	void GetAllowedNextCardsInSequence(const CardComponent& card, uint32_t& allowedRanks, uint32_t& allowedSuits);
-	bool IsCardAllowedInSlot(int rank, CardComponent::Suit suit);
-	bool IsCardAllowedInSlot(int rank, CardComponent::Suit suit, uint32_t allowedRanks, uint32_t allowedSuits);
+	void GetAllowedNextCardsInSequence(const CardComponent& card, uint32_t& allowedRanks, uint32_t& allowedSuits) const;
+	bool IsCardAllowedInSlot(int rank, CardComponent::Suit suit) const;
+	bool IsCardAllowedInSlot(int rank, CardComponent::Suit suit, uint32_t allowedRanks, uint32_t allowedSuits) const;
 
 	int GetIsOccupied() const { return m_isOccupied; }
 	void SetIsOccupied(bool occupied) { m_isOccupied = occupied; }
 
-	bool CanAcceptCards();
-	bool CanAcceptSequences();
+	bool CanAcceptCards() const;
+	bool CanAcceptSequences() const;
 	void AddCard(Entity card);
 	void RemoveCard(Entity card);
 
@@ -94,7 +94,7 @@ public:
 	SlotType& GetSlotTypeNonConst() { return m_slotType; }
 	void SetSlotType(int slotType) { m_slotType = (SlotType)slotType; }
 
-	const char* GetSlotTypeName()
+	const char* GetSlotTypeName() const
 	{
 		return GetSlotTypeName(m_slotType);
 	}
@@ -123,13 +123,13 @@ public:
 	Vec2 m_staggeredOffset = Vec2(0.0f, -16.0f);
 	int m_suitFoundation = 0;
 
+	Vec2 m_emptyAreaOffset = { 0.0f, 0.0f };
+	Vec2 m_emptyAreaSize = { 0.5f, 0.5f };
+
 private:
 	SlotLayout m_slotLayout = SLOT_LAYOUT_SINGLE;
 	SlotType m_slotType = SLOT_TYPE_COLUMN;
 	bool m_isOccupied = false;
-
-	Vec2 m_emptyAreaOffset = { 0.0f, 0.0f };
-	Vec2 m_emptyAreaSize = { 0.5f, 0.5f };
 
 	uint32_t m_allowedRanks;
 	uint32_t m_allowedSuits;

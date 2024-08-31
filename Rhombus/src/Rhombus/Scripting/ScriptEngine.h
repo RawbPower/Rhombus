@@ -22,7 +22,7 @@ namespace rhombus {
 
 		static void InitNewTable(const char* tableName);
 		static void GetGlobal(const char* globalName);
-		static void GetField(const char* fieldName, int tableIndex = -1);
+		static bool GetField(const char* fieldName, int tableIndex = -1);
 		static void GetListOfStringValueFromField(const char* fieldName, std::list<std::string>& list, int tableIndex = -1);
 
 		static const char* GetString(int valueIndex = -1);

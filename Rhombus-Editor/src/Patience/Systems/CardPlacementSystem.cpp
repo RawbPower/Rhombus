@@ -75,7 +75,7 @@ void CardPlacementSystem::OnMouseButtonPressed(int button)
 	{
 		auto& card = entity.GetComponent<CardComponent>();
 
-		if (card.GetIsAvailable() && card.GetIsHovered())
+		if (card.GetIsAvailable() && card.GetIsHovered() && card.CanBeHeld())
 		{
 			const CardSlotComponent& cardSlot = card.GetCurrentSlot().GetComponentRead<CardSlotComponent>();
 			std::queue<Entity> cardSequence;
@@ -122,41 +122,117 @@ void CardPlacementSystem::OnMouseButtonReleased(int button)
 		card.SetHeldOffset(Vec2(0.0f));
 		PlaceCard(card.GetOwnerEntity(), heldCards.size() > 1);
 	}
+
+	if (heldCards.size() > 0)
+	{
+		DamageMonsterInColumn(heldCards[0]->GetCurrentSlot());
+	}
 }
 
 void CardPlacementSystem::PlaceCard(Entity cardEntity, bool isInSequence)
 {
 	EntityID currentSlot = CheckForCardSlot(cardEntity);
 
-	CardComponent& card = cardEntity.GetComponent<CardComponent>();
-	TransformComponent& cardTransform = cardEntity.GetComponent<TransformComponent>();
-
 	if (currentSlot == INVALID_ENTITY)
 	{
+		CardComponent& card = cardEntity.GetComponent<CardComponent>();
+		TransformComponent& cardTransform = cardEntity.GetComponent<TransformComponent>();
 		cardTransform.m_position = Vec3(card.GetPreviousPosition());
 	}
 	else
 	{
-		Entity currentSlotEntity = { currentSlot, m_scene };
-		TransformComponent& slotTransform = currentSlotEntity.GetComponent<TransformComponent>();
-		cardTransform.m_position = Vec3(slotTransform.m_position.x, slotTransform.m_position.y, slotTransform.m_position.z);
-		cardTransform.SetLayer(Z_LAYER::FOREGROUND_1_LAYER);
-		CardSlotComponent& cardSlot = currentSlotEntity.GetComponent<CardSlotComponent>();
+		Entity slotEntity = { currentSlot, m_scene };
+		PlaceCard(cardEntity, slotEntity, isInSequence, false);
+	}
+}
 
-		const bool cannotAcceptSequence = isInSequence && !cardSlot.CanAcceptSequences();
-			
-		if (!cannotAcceptSequence && cardSlot.CanAcceptCards() && cardSlot.IsCardAllowedInSlot(card.m_rank, card.m_suit))
+void CardPlacementSystem::PlaceCard(Entity cardEntity, Entity slotEntity, bool isInSequence, bool isDiscard)
+{
+	CardComponent& card = cardEntity.GetComponent<CardComponent>();
+	TransformComponent& cardTransform = cardEntity.GetComponent<TransformComponent>();
+
+	TransformComponent& slotTransform = slotEntity.GetComponent<TransformComponent>();
+	cardTransform.m_position = Vec3(slotTransform.m_position.x, slotTransform.m_position.y, slotTransform.m_position.z);
+	cardTransform.SetLayer(Z_LAYER::FOREGROUND_1_LAYER);
+	CardSlotComponent& cardSlot = slotEntity.GetComponent<CardSlotComponent>();
+
+	const bool cannotAcceptSequence = isInSequence && !cardSlot.CanAcceptSequences();
+		
+	const bool isValidWaste = (cardSlot.GetSlotType() != CardSlotComponent::SLOT_TYPE_WASTEPILE) || isDiscard;
+	if (!cannotAcceptSequence && cardSlot.CanAcceptCards() && isValidWaste && cardSlot.IsCardAllowedInSlot(card.m_rank, card.m_suit))
+	{
+		Entity previousCardSlot = card.GetCurrentSlot();
+		previousCardSlot.GetComponent<CardSlotComponent>().RemoveCard(cardEntity);
+		cardSlot.AddCard(cardEntity);
+		card.SetCurrentlSlot(slotEntity);
+	}
+	else
+	{
+		cardTransform.m_position = Vec3(card.GetPreviousPosition());
+	}
+}
+
+bool CardPlacementSystem::DamageMonsterInColumn(Entity slotEntity)
+{
+	CardSlotComponent& cardSlot = slotEntity.GetComponent<CardSlotComponent>();
+
+	if (cardSlot.GetSlotType() != CardSlotComponent::SLOT_TYPE_COLUMN)
+	{
+		return false;
+	}
+
+	bool monsterDamaged = false;
+	int sequenceLength = cardSlot.GetSequenceLength();
+	int i = 0;
+	int damage = 0;
+	std::vector<Entity> damagingSequence;
+	std::list<Entity>::reverse_iterator it;
+	for (it = cardSlot.m_cardStack.rbegin(); it != cardSlot.m_cardStack.rend(); it++)
+	{
+		const CardComponent& card = it->GetComponentRead<CardComponent>();
+		if (i < sequenceLength)
 		{
-			Entity previousCardSlot = card.GetCurrentSlot();
-			previousCardSlot.GetComponent<CardSlotComponent>().RemoveCard(cardEntity);
-			cardSlot.AddCard(cardEntity);
-			card.SetCurrentlSlot(currentSlotEntity);
+			damage += card.m_rank;
+			damagingSequence.push_back(*it);
 		}
 		else
 		{
-			cardTransform.m_position = Vec3(card.GetPreviousPosition());
+			if (card.m_type == CardComponent::Type::TYPE_MONSTER)
+			{
+				if (card.m_monsterStats.m_health <= damage)
+				{
+					std::vector<EntityID> view = m_scene->GetRegistry().GetEntityList<CardSlotComponent>();
+					for (EntityID e : view)
+					{
+						Entity entity = { e, m_scene };
+						if (entity.GetComponent<CardSlotComponent>().GetSlotType() == CardSlotComponent::SLOT_TYPE_WASTEPILE)
+						{
+							PlaceCard(card.GetOwnerEntity(), entity, false, true);
+							monsterDamaged = true;
+						}
+					}
+				}
+				break;
+			}
+		}
+		i++;
+	}
+
+	// Rearrange damagin card so they card be reused
+	if (monsterDamaged)
+	{
+		for (const Entity e : damagingSequence)
+		{
+			cardSlot.RemoveCard(e);
+		}
+
+		for (const Entity e : damagingSequence)
+		{
+			cardSlot.AddCard(e);
 		}
 	}
+
+	return monsterDamaged;
 }
 
 EntityID CardPlacementSystem::CheckForCardSlot(Entity cardEntity)

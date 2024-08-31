@@ -209,6 +209,10 @@ bool CardPlacementSystem::DamageMonsterInColumn(Entity slotEntity)
 						{
 							PlaceCard(card.GetOwnerEntity(), entity, false, true);
 							monsterDamaged = true;
+
+							SpriteRendererComponent& sprite = card.GetOwnerEntity().GetComponent<SpriteRendererComponent>();
+							auto path = Project::GetAssetFileSystemPath("textures\\CardsNew\\Base\\Card0.png");
+							sprite.m_texture = Texture2D::Create(path.string());
 						}
 					}
 				}

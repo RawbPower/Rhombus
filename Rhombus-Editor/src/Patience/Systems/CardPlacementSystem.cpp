@@ -103,6 +103,7 @@ bool compareByHeldOffset(const CardComponent* card1, const CardComponent* card2)
 void CardPlacementSystem::OnMouseButtonReleased(int button)
 {
 	std::vector<CardComponent*> heldCards;
+	int damage = 0;
 	for (Entity entity : GetEntities())
 	{
 		auto& card = entity.GetComponent<CardComponent>();
@@ -110,6 +111,7 @@ void CardPlacementSystem::OnMouseButtonReleased(int button)
 		if (card.GetIsHeld())
 		{
 			heldCards.push_back(&card);
+			damage += card.m_rank;
 		}
 	}
 
@@ -120,7 +122,7 @@ void CardPlacementSystem::OnMouseButtonReleased(int button)
 		CardComponent& card = *cardPtr;
 		card.SetIsHeld(false);
 		card.SetHeldOffset(Vec2(0.0f));
-		PlaceCard(card.GetOwnerEntity(), heldCards.size() > 1);
+		PlaceCard(card.GetOwnerEntity(), heldCards.size() > 1, damage);
 	}
 
 	if (heldCards.size() > 0)
@@ -129,7 +131,7 @@ void CardPlacementSystem::OnMouseButtonReleased(int button)
 	}
 }
 
-void CardPlacementSystem::PlaceCard(Entity cardEntity, bool isInSequence)
+void CardPlacementSystem::PlaceCard(Entity cardEntity, bool isInSequence, int damage)
 {
 	EntityID currentSlot = CheckForCardSlot(cardEntity);
 
@@ -142,7 +144,26 @@ void CardPlacementSystem::PlaceCard(Entity cardEntity, bool isInSequence)
 	else
 	{
 		Entity slotEntity = { currentSlot, m_scene };
-		PlaceCard(cardEntity, slotEntity, isInSequence, false);
+		const CardSlotComponent& cardSlot = slotEntity.GetComponentRead<CardSlotComponent>();
+		if (cardSlot.m_cardStack.size() > 0)
+		{
+			Entity topCardEntity = cardSlot.m_cardStack.back();
+			const CardComponent& topCard = topCardEntity.GetComponentRead<CardComponent>();
+			if (topCard.m_type == CardComponent::TYPE_MONSTER && topCard.m_monsterStats.m_health > damage)
+			{
+				CardComponent& card = cardEntity.GetComponent<CardComponent>();
+				TransformComponent& cardTransform = cardEntity.GetComponent<TransformComponent>();
+				cardTransform.m_position = Vec3(card.GetPreviousPosition());
+			}
+			else
+			{
+				PlaceCard(cardEntity, slotEntity, isInSequence, false);
+			}
+		}
+		else
+		{
+			PlaceCard(cardEntity, slotEntity, isInSequence, false);
+		}
 	}
 }
 
@@ -216,8 +237,8 @@ bool CardPlacementSystem::DamageMonsterInColumn(Entity slotEntity)
 						}
 					}
 				}
-				break;
 			}
+			break;
 		}
 		i++;
 	}

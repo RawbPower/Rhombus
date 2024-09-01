@@ -249,11 +249,7 @@ bool CardPlacementSystem::DamageMonsterInColumn(Entity slotEntity)
 		for (const Entity e : damagingSequence)
 		{
 			cardSlot.RemoveCard(e);
-		}
-
-		for (const Entity e : damagingSequence)
-		{
-			cardSlot.AddCard(e);
+			m_scene->DestroyEntity(e);	
 		}
 	}
 

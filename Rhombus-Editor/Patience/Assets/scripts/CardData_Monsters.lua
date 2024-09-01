@@ -1,6 +1,6 @@
 CardData.Monsters =
 {
-	Monster_10 = 
+	--[[ Monster_10 = 
 	{
 		Rank = 0,
 		Suit = "Claw",
@@ -11,7 +11,7 @@ CardData.Monsters =
 		{
 			Health = 10
 		}
-	},
+	}, ]]--
 
 	Monster_15 = 
 	{
@@ -49,6 +49,19 @@ CardData.Monsters =
 		Monster_Stats =
 		{
 			Health = 25
+		}
+	},
+
+	Monster_30 = 
+	{
+		Rank = 0,
+		Suit = "Claw",
+		Sprite = "textures/CardsNew/Monsters/MonsterCard5.png",
+		PackingType = "Any",
+		Type = "Monster",
+		Monster_Stats =
+		{
+			Health = 30
 		}
 	}
 }

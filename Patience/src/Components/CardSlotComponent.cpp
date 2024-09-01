@@ -5,7 +5,7 @@
 #include "Rhombus/Scripting/ScriptEngine.h"
 
 const char* CardSlotComponent::sm_slotLayoutNameList[SLOT_LAYOUT_COUNT] = { "Single", "Stack", "Staggered" };
-const char* CardSlotComponent::sm_slotTypeNameList[SLOT_TYPE_COUNT] = { "Column", "Site", "Freecell", "Stock", "Wastepile" };
+const char* CardSlotComponent::sm_slotTypeNameList[SLOT_TYPE_COUNT] = { "Column", "Site", "Freecell", "Stock", "Wastepile", "Monster"};
 
 const char* CardSlotComponent::sm_revelationNameList[REVELATION_COUNT] = { "Open", "Closed" };
 const char* CardSlotComponent::sm_orderingNameList[ORDERING_COUNT] = { "Ascending", "Descending" };

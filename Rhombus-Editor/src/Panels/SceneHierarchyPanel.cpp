@@ -1,9 +1,9 @@
 #include "SceneHierarchyPanel.h"
 
 #include "Rhombus/Scripting/ScriptEngine.h"
-#include "Patience/Components/CardComponent.h"
-#include "Patience/Components/CardSlotComponent.h"
-#include "Patience/Components/PatienceComponent.h"
+#include "Components/CardComponent.h"
+#include "Components/CardSlotComponent.h"
+#include "Components/PatienceComponent.h"
 
 #include "Rhombus/ImGui/ImGuiWidgets.h"
 #include <imgui/imgui.h>

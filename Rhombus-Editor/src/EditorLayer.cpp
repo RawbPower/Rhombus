@@ -6,6 +6,8 @@
 #include "Rhombus/Utils/PlatformUtils.h"
 #include "Rhombus/Math/Math.h"
 
+#include "PatienceScene.h"
+
 #include "ImGuizmo.h"
 
 namespace rhombus

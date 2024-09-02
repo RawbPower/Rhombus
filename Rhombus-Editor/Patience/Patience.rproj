@@ -1,5 +1,0 @@
-Project:
-  Name: Solitaire
-  StartScene: "scenes/Main.rb"
-  AssetDirectory: "Assets"
-  ScriptDirectory: "scripts"

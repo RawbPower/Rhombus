@@ -533,7 +533,7 @@ namespace rhombus
 
 	Entity Scene::GetEntityByUUID(UUID uuid)
 	{
-		// TODO(Yan): Maybe should be assert
+		// TODO: Maybe should be assert
 		if (m_EntityMap.find(uuid) != m_EntityMap.end())
 			return { m_EntityMap.at(uuid), this };
 

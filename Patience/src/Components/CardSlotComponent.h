@@ -122,6 +122,8 @@ public:
 	std::list<Entity> m_cardStack;
 	Vec2 m_staggeredOffset = Vec2(0.0f, -16.0f);
 	int m_suitFoundation = 0;
+	UUID m_monsterBattleSite = 0;
+
 
 	Vec2 m_emptyAreaOffset = { 0.0f, 0.0f };
 	Vec2 m_emptyAreaSize = { 0.5f, 0.5f };

@@ -125,10 +125,10 @@ void CardPlacementSystem::OnMouseButtonReleased(int button)
 		PlaceCard(card.GetOwnerEntity(), heldCards.size() > 1, damage);
 	}
 
-	if (heldCards.size() > 0)
+	/*if (heldCards.size() > 0)
 	{
 		DamageMonsterInColumn(heldCards[0]->GetCurrentSlot());
-	}
+	}*/
 }
 
 void CardPlacementSystem::PlaceCard(Entity cardEntity, bool isInSequence, int damage)

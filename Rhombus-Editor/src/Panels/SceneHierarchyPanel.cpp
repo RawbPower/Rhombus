@@ -1,6 +1,7 @@
 #include "SceneHierarchyPanel.h"
 
 #include "Rhombus/Scripting/ScriptEngine.h"
+#include "Rhombus/ECS/ECSTypes.h"
 #include "Components/CardComponent.h"
 #include "Components/CardSlotComponent.h"
 #include "Components/PatienceComponent.h"
@@ -68,9 +69,16 @@ namespace rhombus
 		ImGuiTreeNodeFlags flags = ((m_selectionContext == entity) ? ImGuiTreeNodeFlags_Selected : 0) | ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_SpanAvailWidth;
 		bool opened = ImGui::TreeNodeEx((void*)(uint64_t)(uint32_t)entity, flags, tag.c_str());
 
-		if (ImGui::IsItemClicked())
+		if (ImGui::IsItemReleased())
 		{
 			m_selectionContext = entity;
+		}
+
+		if (ImGui::BeginDragDropSource())
+		{
+			UUID* uuid = &entity.GetUUID();
+			ImGui::SetDragDropPayload("SCENE_HIERACHY_UUID", uuid, sizeof(UUID));
+			ImGui::EndDragDropSource();
 		}
 
 		bool entityDeleted = false;
@@ -432,6 +440,26 @@ namespace rhombus
 			if (component.GetSlotType() == CardSlotComponent::SLOT_TYPE_SITE)
 			{
 				ImGui::SelectableEnum("Suit", CardComponent::GetSuitNameList(), CardComponent::Suit::SUIT_COUNT, &((int)component.m_suitFoundation));
+			}
+
+			if (component.GetSlotType() == CardSlotComponent::SLOT_TYPE_MONSTER)
+			{
+				Scene* entityScene = component.GetOwnerEntity().GetContext();
+				Entity siteEntity = entityScene->GetEntityByUUID(component.m_monsterBattleSite);
+				std::string entityName = ((EntityID)siteEntity != INVALID_ENTITY) ? siteEntity.GetName() : "None";
+				char entityChar[128];
+				std::strcpy(entityChar, entityName.c_str());
+				ImGui::InputText("MonsterBattleSite", entityChar, sizeof(entityChar), ImGuiInputTextFlags_ReadOnly);
+
+				if (ImGui::BeginDragDropTarget())
+				{
+					if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("SCENE_HIERACHY_UUID"))
+					{
+						UUID* uuid = (UUID*)payload->Data;
+						component.m_monsterBattleSite = *uuid;
+					}
+					ImGui::EndDragDropTarget();
+				}
 			}
 
 			{

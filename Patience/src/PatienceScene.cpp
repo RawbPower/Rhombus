@@ -122,6 +122,8 @@ void PatienceScene::SerializeEntity(void* yamlEmitter, Entity entity)
 
 		out << YAML::Key << "SuitFoundation" << YAML::Value << cardComponent.m_suitFoundation;
 
+		out << YAML::Key << "MonsterBattleSite" << YAML::Value << cardComponent.m_monsterBattleSite;
+
 		out << YAML::EndMap; // CardSlotComponent
 	}
 
@@ -156,6 +158,7 @@ void PatienceScene::DeserializeEntity(void* yamlEntity, Entity entity)
 		cardSlot.SetSlotLayout(cardSlotComponent["SlotLayout"].as<int>());
 		cardSlot.SetStaggeredOffset(cardSlotComponent["StaggeredOffset"].as<Vec2>());
 		cardSlot.m_suitFoundation = cardSlotComponent["SuitFoundation"].as<int>();
+		cardSlot.m_monsterBattleSite = cardSlotComponent["MonsterBattleSite"].as<uint64_t>();
 	}
 
 	auto patienceComponent = node["PatienceComponent"];

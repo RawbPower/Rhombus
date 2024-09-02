@@ -85,6 +85,7 @@ namespace rhombus
 
 		UUID GetUUID();
 		const std::string GetName();
+		Scene* GetContext() const { return m_scene; }
 
 	private:
 		EntityID m_rbEntityId;

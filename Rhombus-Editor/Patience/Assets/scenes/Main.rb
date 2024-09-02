@@ -316,14 +316,14 @@ Entities:
       SuitFoundation: 5
   - Entity: 3551221006459832491
     TagComponent:
-      Tag: Site 4
+      Tag: Trump Site
     TransformComponent:
-      Position: [-91, 107, 0]
+      Position: [100.5, 205, 0]
       Rotation: [0, -0, 0]
       Scale: [1, 1, 1]
     SpriteRendererComponent:
       Color: [1, 1, 1, 1]
-      Texture: textures\Misc10.png
+      Texture: textures\Misc7.png
     BoxArea2DComponent:
       Offset: [0, 0]
       Size: [32, 44.5]
@@ -332,7 +332,7 @@ Entities:
       SlotType: 1
       SlotLayout: 1
       StaggeredOffset: [0, -16]
-      SuitFoundation: 5
+      SuitFoundation: 4
   - Entity: 6513507509365870060
     TagComponent:
       Tag: Patience
@@ -456,3 +456,22 @@ Entities:
       SlotLayout: 1
       StaggeredOffset: [0, -16]
       SuitFoundation: 3
+  - Entity: 1884100701556230925
+    TagComponent:
+      Tag: Site 5
+    TransformComponent:
+      Position: [-91, 107, 0]
+      Rotation: [0, -0, 0]
+      Scale: [1, 1, 1]
+    SpriteRendererComponent:
+      Color: [1, 1, 1, 1]
+      Texture: textures\Misc10.png
+    BoxArea2DComponent:
+      Offset: [0, 0]
+      Size: [32, 44.5]
+      DebugColor: [0, 0, 0, 0]
+    CardSlotComponent:
+      SlotType: 1
+      SlotLayout: 1
+      StaggeredOffset: [0, -16]
+      SuitFoundation: 5

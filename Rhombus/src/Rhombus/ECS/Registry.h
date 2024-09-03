@@ -115,6 +115,12 @@ namespace rhombus
 			return m_componentManager->GetEntityList<T>();
 		}
 
+		template<typename T>
+		EntityID GetFirstEntity() const
+		{
+			return m_componentManager->GetFirstEntity<T>();
+		}
+
 		// System methods
 		template<typename T>
 		Ref<T> RegisterSystem(Scene* scene)

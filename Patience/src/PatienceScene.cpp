@@ -47,9 +47,9 @@ void PatienceScene::InitScene()
 void PatienceScene::OnRuntimeStart()
 {
 	Scene::OnRuntimeStart();
+	setupSystem->Init();
 	cardSlotSystem->Init();
 	cardPlacementSystem->Init();
-	setupSystem->Init();
 }
 
 void PatienceScene::OnUpdateRuntime(DeltaTime dt)

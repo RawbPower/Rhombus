@@ -2,22 +2,19 @@
 
 #include "Components/CardComponent.h"
 #include "Components/CardSlotComponent.h"
+#include "Components/PatienceComponent.h"
 
 void CardPlacementSystem::Init()
 {
-	for (Entity cardEntity : GetEntities())
+	std::vector<EntityID> cardSlots = m_scene->GetRegistry().GetEntityList<CardSlotComponent>();
+
+	for (EntityID slot : cardSlots)
 	{
-		EntityID currentSlot = CheckForCardSlot(cardEntity);
-
-		CardComponent& card = cardEntity.GetComponent<CardComponent>();
-		TransformComponent& cardTransform = cardEntity.GetComponent<TransformComponent>();
-
-		if (currentSlot != INVALID_ENTITY)
+		Entity cardSlotEntity = { slot, m_scene };
+		CardSlotComponent& cardSlotComponent = cardSlotEntity.GetComponent<CardSlotComponent>();
+		if (cardSlotComponent.GetSlotType() == CardSlotComponent::SlotType::SLOT_TYPE_COLUMN)
 		{
-			Entity currentSlotEntity = { currentSlot, m_scene };
-			CardSlotComponent& cardSlot = currentSlotEntity.GetComponent<CardSlotComponent>();
-			cardSlot.AddCard(cardEntity);
-			card.SetCurrentlSlot(currentSlotEntity);
+			ReleaseMonster(cardSlotEntity);
 		}
 	}
 }
@@ -115,7 +112,14 @@ void CardPlacementSystem::OnMouseButtonReleased(int button)
 		}
 	}
 
+	if (heldCards.size() == 0)
+	{
+		return;
+	}
+
 	sort(heldCards.begin(), heldCards.end(), compareByHeldOffset);
+
+	Entity originalSlot = heldCards[0]->GetCurrentSlot();
 
 	for (auto& cardPtr : heldCards) 
 	{
@@ -124,6 +128,8 @@ void CardPlacementSystem::OnMouseButtonReleased(int button)
 		card.SetHeldOffset(Vec2(0.0f));
 		PlaceCard(card.GetOwnerEntity(), heldCards.size() > 1, damage);
 	}
+
+	ReleaseMonster(originalSlot);
 
 	/*if (heldCards.size() > 0)
 	{
@@ -301,4 +307,44 @@ EntityID CardPlacementSystem::CheckForCardSlot(Entity cardEntity)
 	}
 
 	return currentSlot;
+}
+
+void CardPlacementSystem::ReleaseMonster(Entity slotEntity)
+{
+	CardSlotComponent& cardSlotComponent = slotEntity.GetComponent<CardSlotComponent>();
+
+	if (cardSlotComponent.m_cardStack.size() == 0)
+	{
+		return;
+	}
+
+	Entity patienceEntity = { m_scene->GetRegistry().GetFirstEntity<PatienceComponent>(), m_scene };
+	PatienceComponent& patienceComponent = patienceEntity.GetComponent<PatienceComponent>();
+
+	Entity topCard = cardSlotComponent.m_cardStack.back();
+
+	if (topCard.GetComponentRead<CardComponent>().m_type != CardComponent::Type::TYPE_MONSTER)
+	{
+		return;
+	}
+
+	bool releasedMonster = false;
+	for (Entity monsterSlot : patienceComponent.m_monsterSlots)
+	{
+		CardSlotComponent& monsterSlotComponent = monsterSlot.GetComponent<CardSlotComponent>();
+		if (monsterSlotComponent.m_cardStack.size() > 0)
+		{
+			continue;
+		}
+
+		PlaceCard(topCard, monsterSlot, false, false);
+		releasedMonster = true;
+		break;
+	}
+
+	// Recursively call to get all monsters in column
+	if (releasedMonster)
+	{
+		ReleaseMonster(slotEntity);
+	}
 }

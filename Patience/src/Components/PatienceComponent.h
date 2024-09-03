@@ -9,4 +9,5 @@ public:
 	PatienceComponent(const PatienceComponent&) = default;
 
 	std::string m_setupScript;
+	std::vector<Entity> m_monsterSlots;
 };

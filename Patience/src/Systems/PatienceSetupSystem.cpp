@@ -65,13 +65,6 @@ void PatienceSetupSystem::Init()
 				i = (i + 1) % cardColumns.size();
 			}
 		}
-
-		for (EntityID slot : cardSlots)
-		{
-			Entity cardSlotEntity = { slot, m_scene };
-			CardSlotComponent& cardSlotComponent = cardSlotEntity.GetComponent<CardSlotComponent>();
-			cardSlotComponent.UpdateAllowedCards();
-		}
 	}
 }
 

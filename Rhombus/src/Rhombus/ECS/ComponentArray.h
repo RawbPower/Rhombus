@@ -100,6 +100,11 @@ namespace rhombus
 			return list;
 		}
 
+		EntityID GetFirstEntity()
+		{
+			return m_entityToIndexMap.begin()->first;
+		}
+
 		void OnEntityDestroyed(EntityID entity) override
 		{
 			if (m_entityToIndexMap.find(entity) != m_entityToIndexMap.end())

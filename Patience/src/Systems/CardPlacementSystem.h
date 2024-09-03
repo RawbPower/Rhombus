@@ -21,5 +21,6 @@ public:
 	void PlaceCard(Entity cardEntity, Entity slotEntity, bool isInSequence, bool isDiscard);
 	bool DamageMonsterInColumn(Entity slotEntity);
 	EntityID CheckForCardSlot(Entity cardEntity);
+	void ReleaseMonster(Entity slotEntity);
 };
 

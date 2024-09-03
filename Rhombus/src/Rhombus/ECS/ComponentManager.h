@@ -88,6 +88,12 @@ namespace rhombus
 			return GetComponentArray<T>()->GetEntityList();
 		}
 
+		template<typename T>
+		EntityID GetFirstEntity()
+		{
+			return GetComponentArray<T>()->GetFirstEntity();
+		}
+
 		void OnEntityDestroyed(EntityID entity)
 		{
 			// Notify each component array that an entity has been destoryed

@@ -11,7 +11,7 @@ public:
 
 	struct MonsterStats
 	{
-		int m_health;
+		int m_health = 0;
 	};
 
 	CardComponent() = default;
@@ -74,7 +74,7 @@ public:
 public:
 	int m_rank;
 	Suit m_suit;
-	int m_packingTypeOverride = -1;
+	int m_packingSuitOrderOverride = -1;
 	Type m_type = TYPE_REGULAR;
 	MonsterStats m_monsterStats;		// Late initialize this
 

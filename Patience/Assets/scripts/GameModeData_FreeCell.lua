@@ -8,10 +8,11 @@ GameModeData.FreeCell =
 
 	Revelation = "Open",
 
-	BuildingOrder = "Ascending",
-	FoundationRank = 1,
-	PackingOrder = "Descending",
-	PackingType = "DifferentSuit",
+	--[[BuildingRankOrder = "Ascending",
+	BuildingType = "Any"
+	FoundationRank = "Any", ]]--
+	PackingRankOrder = "Descending",
+	PackingSuitOrder = "DifferentSuit",
 	EmptyColumnType = "Any",
 
 	Deck = 

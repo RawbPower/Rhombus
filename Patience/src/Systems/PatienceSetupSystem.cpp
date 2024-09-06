@@ -46,7 +46,7 @@ void PatienceSetupSystem::Init()
 				CardComponent& card = cardEntity.AddComponent<CardComponent>();
 				card.m_rank = cardData.rank;
 				card.m_suit = cardData.suit;
-				card.m_packingTypeOverride = cardData.packingTypeOverride;
+				card.m_packingSuitOrderOverride = cardData.packingSuitOrderOverride;
 				card.m_type = cardData.type;
 				card.m_monsterStats = cardData.monsterStats;
 
@@ -111,11 +111,11 @@ void PatienceSetupSystem::GetCardDataFromScript(const char* scriptName, std::vec
 
 				CardData cardData(name, rank, suit, sprite);
 
-				ScriptEngine::GetField("PackingType");
-				const char* packingTypeString = ScriptEngine::GetString();
-				if (packingTypeString != "Default")
+				ScriptEngine::GetField("PackingSuitOrder");
+				const char* suitOrderString = ScriptEngine::GetString();
+				if (suitOrderString != "Default")
 				{
-					cardData.packingTypeOverride = (CardSlotComponent::PackingType)ScriptEngine::GetEnumFromName(packingTypeString, CardSlotComponent::sm_packingTypeNameList, CardSlotComponent::PackingType::PACKING_COUNT);
+					cardData.packingSuitOrderOverride = (CardSlotComponent::SuitOrdering)ScriptEngine::GetEnumFromName(suitOrderString, CardSlotComponent::sm_suitOrderingNameList, CardSlotComponent::SuitOrdering::SUIT_ORDERING_COUNT);
 				}
 				ScriptEngine::Pop();
 

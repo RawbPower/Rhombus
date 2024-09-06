@@ -114,15 +114,20 @@ void PatienceScene::SerializeEntity(void* yamlEmitter, Entity entity)
 		out << YAML::Key << "CardSlotComponent";
 		out << YAML::BeginMap; // CardSlotComponent
 
-		auto& cardComponent = entity.GetComponent<CardSlotComponent>();
-		out << YAML::Key << "SlotType" << YAML::Value << (int)cardComponent.GetSlotType();
-		out << YAML::Key << "SlotLayout" << YAML::Value << (int)cardComponent.GetSlotLayout();
+		auto& cardSlotComponent = entity.GetComponent<CardSlotComponent>();
+		out << YAML::Key << "SlotType" << YAML::Value << (int)cardSlotComponent.GetSlotType();
+		out << YAML::Key << "SlotLayout" << YAML::Value << (int)cardSlotComponent.GetSlotLayout();
 
-		out << YAML::Key << "StaggeredOffset" << YAML::Value << cardComponent.m_staggeredOffset;
+		out << YAML::Key << "StaggeredOffset" << YAML::Value << cardSlotComponent.m_staggeredOffset;
 
-		out << YAML::Key << "SuitFoundation" << YAML::Value << cardComponent.m_suitFoundation;
+		out << YAML::Key << "MonsterBattleSite" << YAML::Value << cardSlotComponent.m_monsterBattleSite;
 
-		out << YAML::Key << "MonsterBattleSite" << YAML::Value << cardComponent.m_monsterBattleSite;
+		out << YAML::Key << "Site:FoundationSuit" << YAML::Value << cardSlotComponent.m_siteInfo.m_foundationSuit;
+		out << YAML::Key << "Site:FoundationRank" << YAML::Value << cardSlotComponent.m_siteInfo.m_foundationRank;
+		out << YAML::Key << "Site:RankOrdering" << YAML::Value << (int)cardSlotComponent.m_siteInfo.m_rankOrdering;
+		out << YAML::Key << "Site:SuitOrdering" << YAML::Value << (int)cardSlotComponent.m_siteInfo.m_suitOrdering;
+		out << YAML::Key << "Site:CanLoop" << YAML::Value << cardSlotComponent.m_siteInfo.m_canLoop;
+		out << YAML::Key << "Site:LoopMax" << YAML::Value << cardSlotComponent.m_siteInfo.m_loopMax;
 
 		out << YAML::EndMap; // CardSlotComponent
 	}
@@ -157,8 +162,14 @@ void PatienceScene::DeserializeEntity(void* yamlEntity, Entity entity)
 		cardSlot.SetSlotType(cardSlotComponent["SlotType"].as<int>());
 		cardSlot.SetSlotLayout(cardSlotComponent["SlotLayout"].as<int>());
 		cardSlot.SetStaggeredOffset(cardSlotComponent["StaggeredOffset"].as<Vec2>());
-		cardSlot.m_suitFoundation = cardSlotComponent["SuitFoundation"].as<int>();
 		cardSlot.m_monsterBattleSite = cardSlotComponent["MonsterBattleSite"].as<uint64_t>();
+
+		cardSlot.m_siteInfo.m_foundationSuit = cardSlotComponent["Site:FoundationSuit"].as<uint32_t>();
+		cardSlot.m_siteInfo.m_foundationRank = cardSlotComponent["Site:FoundationRank"].as<int>();
+		cardSlot.m_siteInfo.m_rankOrdering = (CardSlotComponent::RankOrdering)cardSlotComponent["Site:RankOrdering"].as<int>();
+		cardSlot.m_siteInfo.m_suitOrdering = (CardSlotComponent::SuitOrdering)cardSlotComponent["Site:SuitOrdering"].as<int>();
+		cardSlot.m_siteInfo.m_canLoop = cardSlotComponent["Site:CanLoop"].as<bool>();
+		cardSlot.m_siteInfo.m_loopMax = cardSlotComponent["Site:LoopMax"].as<int>();
 	}
 
 	auto patienceComponent = node["PatienceComponent"];

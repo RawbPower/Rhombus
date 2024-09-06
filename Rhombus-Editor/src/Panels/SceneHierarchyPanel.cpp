@@ -439,7 +439,19 @@ namespace rhombus
 
 			if (component.GetSlotType() == CardSlotComponent::SLOT_TYPE_SITE)
 			{
-				ImGui::SelectableEnum("Suit", CardComponent::GetSuitNameList(), CardComponent::Suit::SUIT_COUNT, &((int)component.m_suitFoundation));
+				ImGui::Separator();
+				ImGui::Indent();
+				ImGui::SelectableEnum("Foundation Suit", CardComponent::GetSuitNameList(), CardComponent::Suit::SUIT_COUNT, &((int)component.m_siteInfo.m_foundationSuit));
+				ImGui::InputInt("Foundation Rank", &component.m_siteInfo.m_foundationRank);
+				ImGui::SelectableEnum("Rank Ordering", CardSlotComponent::sm_rankOrderingNameList, CardSlotComponent::RankOrdering::RANK_ORDERING_COUNT, &((int)component.m_siteInfo.m_rankOrdering));
+				ImGui::SelectableEnum("Suit Ordering", CardSlotComponent::sm_suitOrderingNameList, CardSlotComponent::SuitOrdering::SUIT_ORDERING_COUNT, &((int)component.m_siteInfo.m_suitOrdering));
+				ImGui::Checkbox("Can Loop", &component.m_siteInfo.m_canLoop);
+				if (component.m_siteInfo.m_canLoop)
+				{
+					ImGui::InputInt("Rank", &component.m_siteInfo.m_loopMax);
+				}
+				ImGui::Unindent();
+				ImGui::Separator();
 			}
 
 			if (component.GetSlotType() == CardSlotComponent::SLOT_TYPE_MONSTER)

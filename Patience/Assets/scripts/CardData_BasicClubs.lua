@@ -5,7 +5,7 @@ CardData.BasicClubs =
 		Rank = 1,
 		Suit = "Club",
 		Sprite = "textures/CardsNew/Base/Card4.png",
-		PackingType = "Default"
+		PackingSuitOrder = "Default"
 	},
 
 	Two_Clubs = 
@@ -13,7 +13,7 @@ CardData.BasicClubs =
 		Rank = 2,
 		Suit = "Club",
 		Sprite = "textures/CardsNew/Base/Card8.png",
-		PackingType = "Default"
+		PackingSuitOrder = "Default"
 	},
 
 	Three_Clubs = 
@@ -21,7 +21,7 @@ CardData.BasicClubs =
 		Rank = 3,
 		Suit = "Club",
 		Sprite = "textures/CardsNew/Base/Card12.png",
-		PackingType = "Default"
+		PackingSuitOrder = "Default"
 	},
 
 	Four_Clubs = 
@@ -29,7 +29,7 @@ CardData.BasicClubs =
 		Rank = 4,
 		Suit = "Club",
 		Sprite = "textures/CardsNew/Base/Card16.png",
-		PackingType = "Default"
+		PackingSuitOrder = "Default"
 	},
 
 	Five_Clubs = 
@@ -37,7 +37,7 @@ CardData.BasicClubs =
 		Rank = 5,
 		Suit = "Club",
 		Sprite = "textures/CardsNew/Base/Card20.png",
-		PackingType = "Default"
+		PackingSuitOrder = "Default"
 	},
 
 	Six_Clubs = 
@@ -45,7 +45,7 @@ CardData.BasicClubs =
 		Rank = 6,
 		Suit = "Club",
 		Sprite = "textures/CardsNew/Base/Card24.png",
-		PackingType = "Default"
+		PackingSuitOrder = "Default"
 	},
 
 	Seven_Clubs = 
@@ -53,7 +53,7 @@ CardData.BasicClubs =
 		Rank = 7,
 		Suit = "Club",
 		Sprite = "textures/CardsNew/Base/Card28.png",
-		PackingType = "Default"
+		PackingSuitOrder = "Default"
 	},
 
 	Eight_Clubs = 
@@ -61,7 +61,7 @@ CardData.BasicClubs =
 		Rank = 8,
 		Suit = "Club",
 		Sprite = "textures/CardsNew/Base/Card32.png",
-		PackingType = "Default"
+		PackingSuitOrder = "Default"
 	},
 
 	Nine_Clubs = 
@@ -69,7 +69,7 @@ CardData.BasicClubs =
 		Rank = 9,
 		Suit = "Club",
 		Sprite = "textures/CardsNew/Base/Card36.png",
-		PackingType = "Default"
+		PackingSuitOrder = "Default"
 	},
 
 	Ten_Clubs = 
@@ -77,7 +77,7 @@ CardData.BasicClubs =
 		Rank = 10,
 		Suit = "Club",
 		Sprite = "textures/CardsNew/Base/Card40.png",
-		PackingType = "Default"
+		PackingSuitOrder = "Default"
 	},
 
 	--[[Jack_Clubs = 
@@ -85,7 +85,7 @@ CardData.BasicClubs =
 		Rank = 11,
 		Suit = "Club",
 		Sprite = "textures/CardsNew/Base/Card44.png",
-		PackingType = "Default"
+		PackingSuitOrder = "Default"
 	},
 
 	Cavalier_Clubs = 
@@ -93,7 +93,7 @@ CardData.BasicClubs =
 		Rank = 12,
 		Suit = "Club",
 		Sprite = "textures/CardsNew/Base/Card48.png",
-		PackingType = "Default"
+		PackingSuitOrder = "Default"
 	},
 
 	Queen_Clubs = 
@@ -101,7 +101,7 @@ CardData.BasicClubs =
 		Rank = 13,
 		Suit = "Club",
 		Sprite = "textures/CardsNew/Base/Card52.png",
-		PackingType = "Default"
+		PackingSuitOrder = "Default"
 	},
 
 	King_Clubs = 
@@ -109,6 +109,6 @@ CardData.BasicClubs =
 		Rank = 14,
 		Suit = "Club",
 		Sprite = "textures/CardsNew/Base/Card56.png",
-		PackingType = "Default"
+		PackingSuitOrder = "Default"
 	}]]--
 }

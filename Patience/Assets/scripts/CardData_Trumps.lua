@@ -5,7 +5,7 @@ CardData.Trumps =
 		Rank = 0,
 		Suit = "Wild",
 		Sprite = "textures/CardsNew/Base/Card57.png",
-		PackingType = "SameSuit"
+		PackingSuitOrder = "SameSuit"
 	},
 
 	I_Magician = 
@@ -13,7 +13,7 @@ CardData.Trumps =
 		Rank = 1,
 		Suit = "Trump",
 		Sprite = "textures/CardsNew/Base/Card58.png",
-		PackingType = "SameSuit"
+		PackingSuitOrder = "SameSuit"
 	},
 
 	II_High_Priestess = 
@@ -21,7 +21,7 @@ CardData.Trumps =
 		Rank = 2,
 		Suit = "Trump",
 		Sprite = "textures/CardsNew/Base/Card59.png",
-		PackingType = "SameSuit"
+		PackingSuitOrder = "SameSuit"
 	},
 
 	III_Empress = 
@@ -29,7 +29,7 @@ CardData.Trumps =
 		Rank = 3,
 		Suit = "Trump",
 		Sprite = "textures/CardsNew/Base/Card60.png",
-		PackingType = "SameSuit"
+		PackingSuitOrder = "SameSuit"
 	},
 
 	IV_Emperor = 
@@ -37,7 +37,7 @@ CardData.Trumps =
 		Rank = 4,
 		Suit = "Trump",
 		Sprite = "textures/CardsNew/Base/Card61.png",
-		PackingType = "SameSuit"
+		PackingSuitOrder = "SameSuit"
 	},
 
 	V_Heirophant = 
@@ -45,7 +45,7 @@ CardData.Trumps =
 		Rank = 5,
 		Suit = "Trump",
 		Sprite = "textures/CardsNew/Base/Card62.png",
-		PackingType = "SameSuit"
+		PackingSuitOrder = "SameSuit"
 	},
 
 	VI_Lovers = 
@@ -53,7 +53,7 @@ CardData.Trumps =
 		Rank = 6,
 		Suit = "Trump",
 		Sprite = "textures/CardsNew/Base/Card63.png",
-		PackingType = "SameSuit"
+		PackingSuitOrder = "SameSuit"
 	},
 
 	VII_Chariot = 
@@ -61,7 +61,7 @@ CardData.Trumps =
 		Rank = 7,
 		Suit = "Trump",
 		Sprite = "textures/CardsNew/Base/Card64.png",
-		PackingType = "SameSuit"
+		PackingSuitOrder = "SameSuit"
 	},
 
 	VIII_Justice = 
@@ -69,7 +69,7 @@ CardData.Trumps =
 		Rank = 8,
 		Suit = "Trump",
 		Sprite = "textures/CardsNew/Base/Card65.png",
-		PackingType = "SameSuit"
+		PackingSuitOrder = "SameSuit"
 	},
 
 	IX_Hermit = 
@@ -77,7 +77,7 @@ CardData.Trumps =
 		Rank = 9,
 		Suit = "Trump",
 		Sprite = "textures/CardsNew/Base/Card66.png",
-		PackingType = "SameSuit"
+		PackingSuitOrder = "SameSuit"
 	},
 
 	X_Wheel_Of_Fortune = 
@@ -85,7 +85,7 @@ CardData.Trumps =
 		Rank = 10,
 		Suit = "Trump",
 		Sprite = "textures/CardsNew/Base/Card67.png",
-		PackingType = "SameSuit"
+		PackingSuitOrder = "SameSuit"
 	},
 
 	XI_Strength = 
@@ -93,7 +93,7 @@ CardData.Trumps =
 		Rank = 11,
 		Suit = "Trump",
 		Sprite = "textures/CardsNew/Base/Card68.png",
-		PackingType = "SameSuit"
+		PackingSuitOrder = "SameSuit"
 	},
 
 	XII_Hanged_Man = 
@@ -101,7 +101,7 @@ CardData.Trumps =
 		Rank = 12,
 		Suit = "Trump",
 		Sprite = "textures/CardsNew/Base/Card69.png",
-		PackingType = "SameSuit"
+		PackingSuitOrder = "SameSuit"
 	},
 
 	XIII_Death = 
@@ -109,7 +109,7 @@ CardData.Trumps =
 		Rank = 13,
 		Suit = "Trump",
 		Sprite = "textures/CardsNew/Base/Card70.png",
-		PackingType = "SameSuit"
+		PackingSuitOrder = "SameSuit"
 	},
 
 	XIV_Temperance = 
@@ -117,7 +117,7 @@ CardData.Trumps =
 		Rank = 14,
 		Suit = "Trump",
 		Sprite = "textures/CardsNew/Base/Card71.png",
-		PackingType = "SameSuit"
+		PackingSuitOrder = "SameSuit"
 	},
 
 	XV_Devil = 
@@ -125,7 +125,7 @@ CardData.Trumps =
 		Rank = 15,
 		Suit = "Trump",
 		Sprite = "textures/CardsNew/Base/Card72.png",
-		PackingType = "SameSuit"
+		PackingSuitOrder = "SameSuit"
 	},
 
 	XVI_Tower = 
@@ -133,7 +133,7 @@ CardData.Trumps =
 		Rank = 16,
 		Suit = "Trump",
 		Sprite = "textures/CardsNew/Base/Card73.png",
-		PackingType = "SameSuit"
+		PackingSuitOrder = "SameSuit"
 	},
 
 	XVII_Star = 
@@ -141,7 +141,7 @@ CardData.Trumps =
 		Rank = 17,
 		Suit = "Trump",
 		Sprite = "textures/CardsNew/Base/Card74.png",
-		PackingType = "SameSuit"
+		PackingSuitOrder = "SameSuit"
 	},
 
 	XVIII_Moon = 
@@ -149,7 +149,7 @@ CardData.Trumps =
 		Rank = 18,
 		Suit = "Trump",
 		Sprite = "textures/CardsNew/Base/Card75.png",
-		PackingType = "SameSuit"
+		PackingSuitOrder = "SameSuit"
 	},
 
 	XIX_Sun = 
@@ -157,7 +157,7 @@ CardData.Trumps =
 		Rank = 19,
 		Suit = "Trump",
 		Sprite = "textures/CardsNew/Base/Card76.png",
-		PackingType = "SameSuit"
+		PackingSuitOrder = "SameSuit"
 	},
 
 	XX_Judgement = 
@@ -165,7 +165,7 @@ CardData.Trumps =
 		Rank = 20,
 		Suit = "Trump",
 		Sprite = "textures/CardsNew/Base/Card77.png",
-		PackingType = "SameSuit"
+		PackingSuitOrder = "SameSuit"
 	},
 
 	XXI_World = 
@@ -173,6 +173,6 @@ CardData.Trumps =
 		Rank = 21,
 		Suit = "Trump",
 		Sprite = "textures/CardsNew/Base/Card78.png",
-		PackingType = "SameSuit"
+		PackingSuitOrder = "SameSuit"
 	}
 }

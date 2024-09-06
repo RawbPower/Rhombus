@@ -47,8 +47,13 @@ Entities:
       SlotType: 1
       SlotLayout: 1
       StaggeredOffset: [0, -16]
-      SuitFoundation: 5
       MonsterBattleSite: 0
+      Site:FoundationSuit: 5
+      Site:FoundationRank: -1
+      Site:RankOrdering: 1
+      Site:SuitOrdering: 0
+      Site:CanLoop: true
+      Site:LoopMax: 10
   - Entity: 199452891732059442
     TagComponent:
       Tag: Free Cell 1
@@ -67,8 +72,13 @@ Entities:
       SlotType: 2
       SlotLayout: 0
       StaggeredOffset: [0, -16]
-      SuitFoundation: 0
       MonsterBattleSite: 0
+      Site:FoundationSuit: 0
+      Site:FoundationRank: -1
+      Site:RankOrdering: 0
+      Site:SuitOrdering: 0
+      Site:CanLoop: false
+      Site:LoopMax: 13
   - Entity: 3940828394031682926
     TagComponent:
       Tag: Column 1
@@ -87,8 +97,13 @@ Entities:
       SlotType: 0
       SlotLayout: 2
       StaggeredOffset: [0, -15]
-      SuitFoundation: 0
       MonsterBattleSite: 0
+      Site:FoundationSuit: 0
+      Site:FoundationRank: -1
+      Site:RankOrdering: 0
+      Site:SuitOrdering: 0
+      Site:CanLoop: false
+      Site:LoopMax: 13
   - Entity: 11970580269886680987
     TagComponent:
       Tag: Column 2
@@ -107,8 +122,13 @@ Entities:
       SlotType: 0
       SlotLayout: 2
       StaggeredOffset: [0, -15]
-      SuitFoundation: 0
       MonsterBattleSite: 0
+      Site:FoundationSuit: 0
+      Site:FoundationRank: -1
+      Site:RankOrdering: 0
+      Site:SuitOrdering: 0
+      Site:CanLoop: false
+      Site:LoopMax: 13
   - Entity: 9077371792901969716
     TagComponent:
       Tag: Column 3
@@ -127,8 +147,13 @@ Entities:
       SlotType: 0
       SlotLayout: 2
       StaggeredOffset: [0, -15]
-      SuitFoundation: 0
       MonsterBattleSite: 0
+      Site:FoundationSuit: 0
+      Site:FoundationRank: -1
+      Site:RankOrdering: 0
+      Site:SuitOrdering: 0
+      Site:CanLoop: false
+      Site:LoopMax: 13
   - Entity: 2452109330358541380
     TagComponent:
       Tag: Column 4
@@ -147,8 +172,13 @@ Entities:
       SlotType: 0
       SlotLayout: 2
       StaggeredOffset: [0, -15]
-      SuitFoundation: 0
       MonsterBattleSite: 0
+      Site:FoundationSuit: 0
+      Site:FoundationRank: -1
+      Site:RankOrdering: 0
+      Site:SuitOrdering: 0
+      Site:CanLoop: false
+      Site:LoopMax: 13
   - Entity: 10645660535592834472
     TagComponent:
       Tag: Column 5
@@ -167,8 +197,13 @@ Entities:
       SlotType: 0
       SlotLayout: 2
       StaggeredOffset: [0, -15]
-      SuitFoundation: 0
       MonsterBattleSite: 0
+      Site:FoundationSuit: 0
+      Site:FoundationRank: -1
+      Site:RankOrdering: 0
+      Site:SuitOrdering: 0
+      Site:CanLoop: false
+      Site:LoopMax: 13
   - Entity: 1372865166406401429
     TagComponent:
       Tag: Column 6
@@ -187,8 +222,13 @@ Entities:
       SlotType: 0
       SlotLayout: 2
       StaggeredOffset: [0, -15]
-      SuitFoundation: 0
       MonsterBattleSite: 0
+      Site:FoundationSuit: 0
+      Site:FoundationRank: -1
+      Site:RankOrdering: 0
+      Site:SuitOrdering: 0
+      Site:CanLoop: false
+      Site:LoopMax: 13
   - Entity: 15424358020562100925
     TagComponent:
       Tag: Column 7
@@ -207,8 +247,13 @@ Entities:
       SlotType: 0
       SlotLayout: 2
       StaggeredOffset: [0, -15]
-      SuitFoundation: 0
       MonsterBattleSite: 0
+      Site:FoundationSuit: 0
+      Site:FoundationRank: -1
+      Site:RankOrdering: 0
+      Site:SuitOrdering: 0
+      Site:CanLoop: false
+      Site:LoopMax: 13
   - Entity: 4114663372317632765
     TagComponent:
       Tag: Column 8
@@ -227,8 +272,13 @@ Entities:
       SlotType: 0
       SlotLayout: 2
       StaggeredOffset: [0, -15]
-      SuitFoundation: 0
       MonsterBattleSite: 0
+      Site:FoundationSuit: 0
+      Site:FoundationRank: -1
+      Site:RankOrdering: 0
+      Site:SuitOrdering: 0
+      Site:CanLoop: false
+      Site:LoopMax: 13
   - Entity: 3422527351249912802
     TagComponent:
       Tag: Free Cell 2
@@ -247,8 +297,13 @@ Entities:
       SlotType: 2
       SlotLayout: 0
       StaggeredOffset: [0, -16]
-      SuitFoundation: 0
       MonsterBattleSite: 0
+      Site:FoundationSuit: 0
+      Site:FoundationRank: -1
+      Site:RankOrdering: 0
+      Site:SuitOrdering: 0
+      Site:CanLoop: false
+      Site:LoopMax: 13
   - Entity: 11121856120979436675
     TagComponent:
       Tag: Free Cell 3
@@ -267,8 +322,13 @@ Entities:
       SlotType: 2
       SlotLayout: 0
       StaggeredOffset: [0, -16]
-      SuitFoundation: 0
       MonsterBattleSite: 0
+      Site:FoundationSuit: 0
+      Site:FoundationRank: -1
+      Site:RankOrdering: 0
+      Site:SuitOrdering: 0
+      Site:CanLoop: false
+      Site:LoopMax: 13
   - Entity: 12572806521458591849
     TagComponent:
       Tag: Free Cell 4
@@ -287,8 +347,13 @@ Entities:
       SlotType: 2
       SlotLayout: 0
       StaggeredOffset: [0, -16]
-      SuitFoundation: 0
       MonsterBattleSite: 0
+      Site:FoundationSuit: 0
+      Site:FoundationRank: -1
+      Site:RankOrdering: 0
+      Site:SuitOrdering: 0
+      Site:CanLoop: false
+      Site:LoopMax: 13
   - Entity: 17103678135621629686
     TagComponent:
       Tag: Site 2
@@ -307,8 +372,13 @@ Entities:
       SlotType: 1
       SlotLayout: 1
       StaggeredOffset: [0, -16]
-      SuitFoundation: 5
       MonsterBattleSite: 0
+      Site:FoundationSuit: 5
+      Site:FoundationRank: -1
+      Site:RankOrdering: 1
+      Site:SuitOrdering: 0
+      Site:CanLoop: true
+      Site:LoopMax: 10
   - Entity: 7817693968346137392
     TagComponent:
       Tag: Site 3
@@ -327,8 +397,13 @@ Entities:
       SlotType: 1
       SlotLayout: 1
       StaggeredOffset: [0, -16]
-      SuitFoundation: 5
       MonsterBattleSite: 0
+      Site:FoundationSuit: 5
+      Site:FoundationRank: -1
+      Site:RankOrdering: 1
+      Site:SuitOrdering: 0
+      Site:CanLoop: true
+      Site:LoopMax: 10
   - Entity: 3551221006459832491
     TagComponent:
       Tag: Trump Site
@@ -347,8 +422,13 @@ Entities:
       SlotType: 1
       SlotLayout: 1
       StaggeredOffset: [0, -16]
-      SuitFoundation: 4
       MonsterBattleSite: 0
+      Site:FoundationSuit: 4
+      Site:FoundationRank: 21
+      Site:RankOrdering: 2
+      Site:SuitOrdering: 3
+      Site:CanLoop: false
+      Site:LoopMax: 13
   - Entity: 6513507509365870060
     TagComponent:
       Tag: Patience
@@ -376,8 +456,13 @@ Entities:
       SlotType: 4
       SlotLayout: 1
       StaggeredOffset: [0, -16]
-      SuitFoundation: 0
       MonsterBattleSite: 0
+      Site:FoundationSuit: 0
+      Site:FoundationRank: -1
+      Site:RankOrdering: 0
+      Site:SuitOrdering: 0
+      Site:CanLoop: false
+      Site:LoopMax: 13
   - Entity: 17823553619270458254
     TagComponent:
       Tag: Discard
@@ -396,8 +481,13 @@ Entities:
       SlotType: 3
       SlotLayout: 1
       StaggeredOffset: [0, -16]
-      SuitFoundation: 0
       MonsterBattleSite: 0
+      Site:FoundationSuit: 0
+      Site:FoundationRank: -1
+      Site:RankOrdering: 0
+      Site:SuitOrdering: 0
+      Site:CanLoop: false
+      Site:LoopMax: 13
   - Entity: 12787628317176038056
     TagComponent:
       Tag: Monster Slot 1
@@ -416,8 +506,13 @@ Entities:
       SlotType: 5
       SlotLayout: 1
       StaggeredOffset: [0, -16]
-      SuitFoundation: 0
       MonsterBattleSite: 8084451237944974462
+      Site:FoundationSuit: 0
+      Site:FoundationRank: -1
+      Site:RankOrdering: 0
+      Site:SuitOrdering: 0
+      Site:CanLoop: false
+      Site:LoopMax: 13
   - Entity: 18327124517942167182
     TagComponent:
       Tag: Monster Slot 2
@@ -436,8 +531,13 @@ Entities:
       SlotType: 5
       SlotLayout: 1
       StaggeredOffset: [0, -16]
-      SuitFoundation: 1
       MonsterBattleSite: 17103678135621629686
+      Site:FoundationSuit: 0
+      Site:FoundationRank: -1
+      Site:RankOrdering: 0
+      Site:SuitOrdering: 0
+      Site:CanLoop: false
+      Site:LoopMax: 13
   - Entity: 16734684856214597296
     TagComponent:
       Tag: Monster Slot 3
@@ -456,8 +556,13 @@ Entities:
       SlotType: 5
       SlotLayout: 1
       StaggeredOffset: [0, -16]
-      SuitFoundation: 2
       MonsterBattleSite: 7817693968346137392
+      Site:FoundationSuit: 0
+      Site:FoundationRank: -1
+      Site:RankOrdering: 0
+      Site:SuitOrdering: 0
+      Site:CanLoop: false
+      Site:LoopMax: 13
   - Entity: 7334499350773271843
     TagComponent:
       Tag: Monster Slot 4
@@ -476,8 +581,13 @@ Entities:
       SlotType: 5
       SlotLayout: 1
       StaggeredOffset: [0, -16]
-      SuitFoundation: 3
       MonsterBattleSite: 1884100701556230925
+      Site:FoundationSuit: 0
+      Site:FoundationRank: -1
+      Site:RankOrdering: 0
+      Site:SuitOrdering: 0
+      Site:CanLoop: false
+      Site:LoopMax: 13
   - Entity: 1884100701556230925
     TagComponent:
       Tag: Site 4
@@ -496,5 +606,10 @@ Entities:
       SlotType: 1
       SlotLayout: 1
       StaggeredOffset: [0, -16]
-      SuitFoundation: 5
       MonsterBattleSite: 0
+      Site:FoundationSuit: 5
+      Site:FoundationRank: -1
+      Site:RankOrdering: 1
+      Site:SuitOrdering: 0
+      Site:CanLoop: true
+      Site:LoopMax: 10

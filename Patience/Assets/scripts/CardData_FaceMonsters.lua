@@ -5,7 +5,7 @@ CardData.FaceMonsters =
 		Rank = 0,
 		Suit = "Heart",
 		Sprite = "textures/CardsNew/Base/Card41.png",
-		PackingType = "Any",
+		PackingSuitOrder = "Any",
 		Type = "Monster",
 		Monster_Stats =
 		{
@@ -18,7 +18,7 @@ CardData.FaceMonsters =
 		Rank = 0,
 		Suit = "Diamond",
 		Sprite = "textures/CardsNew/Base/Card42.png",
-		PackingType = "Any",
+		PackingSuitOrder = "Any",
 		Type = "Monster",
 		Monster_Stats =
 		{
@@ -31,7 +31,7 @@ CardData.FaceMonsters =
 		Rank = 0,
 		Suit = "Spade",
 		Sprite = "textures/CardsNew/Base/Card43.png",
-		PackingType = "Any",
+		PackingSuitOrder = "Any",
 		Type = "Monster",
 		Monster_Stats =
 		{
@@ -44,7 +44,7 @@ CardData.FaceMonsters =
 		Rank = 0,
 		Suit = "Club",
 		Sprite = "textures/CardsNew/Base/Card44.png",
-		PackingType = "Any",
+		PackingSuitOrder = "Any",
 		Type = "Monster",
 		Monster_Stats =
 		{
@@ -57,7 +57,7 @@ CardData.FaceMonsters =
 		Rank = 0,
 		Suit = "Heart",
 		Sprite = "textures/CardsNew/Base/Card49.png",
-		PackingType = "Any",
+		PackingSuitOrder = "Any",
 		Type = "Monster",
 		Monster_Stats =
 		{
@@ -70,7 +70,7 @@ CardData.FaceMonsters =
 		Rank = 0,
 		Suit = "Diamond",
 		Sprite = "textures/CardsNew/Base/Card50.png",
-		PackingType = "Any",
+		PackingSuitOrder = "Any",
 		Type = "Monster",
 		Monster_Stats =
 		{
@@ -83,7 +83,7 @@ CardData.FaceMonsters =
 		Rank = 0,
 		Suit = "Spade",
 		Sprite = "textures/CardsNew/Base/Card51.png",
-		PackingType = "Any",
+		PackingSuitOrder = "Any",
 		Type = "Monster",
 		Monster_Stats =
 		{
@@ -96,7 +96,7 @@ CardData.FaceMonsters =
 		Rank = 0,
 		Suit = "Club",
 		Sprite = "textures/CardsNew/Base/Card52.png",
-		PackingType = "Any",
+		PackingSuitOrder = "Any",
 		Type = "Monster",
 		Monster_Stats =
 		{
@@ -109,7 +109,7 @@ CardData.FaceMonsters =
 		Rank = 0,
 		Suit = "Heart",
 		Sprite = "textures/CardsNew/Base/Card53.png",
-		PackingType = "Any",
+		PackingSuitOrder = "Any",
 		Type = "Monster",
 		Monster_Stats =
 		{
@@ -122,7 +122,7 @@ CardData.FaceMonsters =
 		Rank = 0,
 		Suit = "Diamond",
 		Sprite = "textures/CardsNew/Base/Card54.png",
-		PackingType = "Any",
+		PackingSuitOrder = "Any",
 		Type = "Monster",
 		Monster_Stats =
 		{
@@ -135,7 +135,7 @@ CardData.FaceMonsters =
 		Rank = 0,
 		Suit = "Spade",
 		Sprite = "textures/CardsNew/Base/Card55.png",
-		PackingType = "Any",
+		PackingSuitOrder = "Any",
 		Type = "Monster",
 		Monster_Stats =
 		{
@@ -148,7 +148,7 @@ CardData.FaceMonsters =
 		Rank = 0,
 		Suit = "Club",
 		Sprite = "textures/CardsNew/Base/Card56.png",
-		PackingType = "Any",
+		PackingSuitOrder = "Any",
 		Type = "Monster",
 		Monster_Stats =
 		{

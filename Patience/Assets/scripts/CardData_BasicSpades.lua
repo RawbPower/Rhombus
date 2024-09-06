@@ -5,7 +5,7 @@ CardData.BasicSpades =
 		Rank = 1,
 		Suit = "Spade",
 		Sprite = "textures/CardsNew/Base/Card3.png",
-		PackingType = "Default"
+		PackingSuitOrder = "Default"
 	},
 
 	Two_Spades = 
@@ -13,7 +13,7 @@ CardData.BasicSpades =
 		Rank = 2,
 		Suit = "Spade",
 		Sprite = "textures/CardsNew/Base/Card7.png",
-		PackingType = "Default"
+		PackingSuitOrder = "Default"
 	},
 
 	Three_Spades = 
@@ -21,7 +21,7 @@ CardData.BasicSpades =
 		Rank = 3,
 		Suit = "Spade",
 		Sprite = "textures/CardsNew/Base/Card11.png",
-		PackingType = "Default"
+		PackingSuitOrder = "Default"
 	},
 
 	Four_Spades = 
@@ -29,7 +29,7 @@ CardData.BasicSpades =
 		Rank = 4,
 		Suit = "Spade",
 		Sprite = "textures/CardsNew/Base/Card15.png",
-		PackingType = "Default"
+		PackingSuitOrder = "Default"
 	},
 
 	Five_Spades = 
@@ -37,7 +37,7 @@ CardData.BasicSpades =
 		Rank = 5,
 		Suit = "Spade",
 		Sprite = "textures/CardsNew/Base/Card19.png",
-		PackingType = "Default"
+		PackingSuitOrder = "Default"
 	},
 
 	Six_Spades = 
@@ -45,7 +45,7 @@ CardData.BasicSpades =
 		Rank = 6,
 		Suit = "Spade",
 		Sprite = "textures/CardsNew/Base/Card23.png",
-		PackingType = "Default"
+		PackingSuitOrder = "Default"
 	},
 
 	Seven_Spades = 
@@ -53,7 +53,7 @@ CardData.BasicSpades =
 		Rank = 7,
 		Suit = "Spade",
 		Sprite = "textures/CardsNew/Base/Card27.png",
-		PackingType = "Default"
+		PackingSuitOrder = "Default"
 	},
 
 	Eight_Spades = 
@@ -61,7 +61,7 @@ CardData.BasicSpades =
 		Rank = 8,
 		Suit = "Spade",
 		Sprite = "textures/CardsNew/Base/Card31.png",
-		PackingType = "Default"
+		PackingSuitOrder = "Default"
 	},
 
 	Nine_Spades = 
@@ -69,7 +69,7 @@ CardData.BasicSpades =
 		Rank = 9,
 		Suit = "Spade",
 		Sprite = "textures/CardsNew/Base/Card35.png",
-		PackingType = "Default"
+		PackingSuitOrder = "Default"
 	},
 
 	Ten_Spades = 
@@ -77,7 +77,7 @@ CardData.BasicSpades =
 		Rank = 10,
 		Suit = "Spade",
 		Sprite = "textures/CardsNew/Base/Card39.png",
-		PackingType = "Default"
+		PackingSuitOrder = "Default"
 	},
 
 	--[[Jack_Spades = 
@@ -85,7 +85,7 @@ CardData.BasicSpades =
 		Rank = 11,
 		Suit = "Spade",
 		Sprite = "textures/CardsNew/Base/Card43.png",
-		PackingType = "Default"
+		PackingSuitOrder = "Default"
 	},
 
 	Cavalier_Spades = 
@@ -93,7 +93,7 @@ CardData.BasicSpades =
 		Rank = 12,
 		Suit = "Spade",
 		Sprite = "textures/CardsNew/Base/Card47.png",
-		PackingType = "Default"
+		PackingSuitOrder = "Default"
 	},
 
 	Queen_Spades = 
@@ -101,7 +101,7 @@ CardData.BasicSpades =
 		Rank = 13,
 		Suit = "Spade",
 		Sprite = "textures/CardsNew/Base/Card51.png",
-		PackingType = "Default"
+		PackingSuitOrder = "Default"
 	},
 
 	King_Spades = 
@@ -109,6 +109,6 @@ CardData.BasicSpades =
 		Rank = 14,
 		Suit = "Spade",
 		Sprite = "textures/CardsNew/Base/Card54.png",
-		PackingType = "Default"
+		PackingSuitOrder = "Default"
 	}]]--
 }

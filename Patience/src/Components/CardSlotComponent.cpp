@@ -8,8 +8,8 @@ const char* CardSlotComponent::sm_slotLayoutNameList[SLOT_LAYOUT_COUNT] = { "Sin
 const char* CardSlotComponent::sm_slotTypeNameList[SLOT_TYPE_COUNT] = { "Column", "Site", "Freecell", "Stock", "Wastepile", "Monster"};
 
 const char* CardSlotComponent::sm_revelationNameList[REVELATION_COUNT] = { "Open", "Closed" };
-const char* CardSlotComponent::sm_orderingNameList[ORDERING_COUNT] = { "Ascending", "Descending" };
-const char* CardSlotComponent::sm_packingTypeNameList[PACKING_COUNT] = { "Any", "DifferentSuit", "DifferentColor", "SameSuit" };
+const char* CardSlotComponent::sm_rankOrderingNameList[RANK_ORDERING_COUNT] = { "Any", "Ascending", "Descending" };
+const char* CardSlotComponent::sm_suitOrderingNameList[SUIT_ORDERING_COUNT] = { "Any", "DifferentSuit", "DifferentColor", "SameSuit" };
 const char* CardSlotComponent::sm_emptyColumnTypeNameList[EMPTY_COLUMN_COUNT] = { "Any", "King" };
 
 void CardSlotComponent::OnComponentAdded()
@@ -24,7 +24,9 @@ void CardSlotComponent::UpdateAllowedCards()
 	case SLOT_TYPE_COLUMN:
 		if (topCardData)
 		{
-			GetAllowedNextCardsInSequence(*topCardData, m_allowedRanks, m_allowedSuits);
+			uint32_t allowedRanks, allowedSuits;
+			SuitOrdering suitOrdering = (topCardData->m_packingSuitOrderOverride >= 0 && topCardData->m_packingSuitOrderOverride != SUIT_ORDERING_COUNT) ? (SuitOrdering)topCardData->m_packingSuitOrderOverride : sm_cardSlotData.packingSuitOrder;
+			GetAllowedNextCardsInSequence(*topCardData, sm_cardSlotData.packingRankOrder, suitOrdering, sm_cardSlotData.canLoop, sm_cardSlotData.loopMax, m_allowedRanks, m_allowedSuits);
 		}
 		else
 		{
@@ -42,32 +44,29 @@ void CardSlotComponent::UpdateAllowedCards()
 
 		break;
 	case SLOT_TYPE_SITE:
-		m_allowedSuits = 1ul << (uint32_t)m_suitFoundation;
 		if (!topCardData)
 		{
-			if ((CardComponent::Suit)m_suitFoundation != CardComponent::SUIT_TRUMP)
+			if (m_siteInfo.m_foundationRank < 0)
 			{
-				m_allowedRanks = 1ul << sm_cardSlotData.foundationRank;
+				m_allowedRanks = -1;
 			}
 			else
 			{
-				m_allowedRanks = 1ul << 21;
+				m_allowedRanks = 1ul << m_siteInfo.m_foundationRank;
+			}
+
+			if ((CardComponent::Suit)m_siteInfo.m_foundationSuit == CardComponent::SUIT_WILD)
+			{
+				m_allowedSuits = -1;
+			}
+			else
+			{
+				m_allowedSuits = 1ul << (uint32_t)m_siteInfo.m_foundationSuit;
 			}
 		}
 		else
 		{
-			CardSlotComponent::Ordering ordering = (CardComponent::Suit)m_suitFoundation != CardComponent::SUIT_TRUMP ? sm_cardSlotData.buildingOrder : ORDERING_DESCENDING;
-			switch (ordering)
-			{
-			case ORDERING_ASCENDING:
-				m_allowedRanks = 1ul << (topCardData->m_rank + 1);
-				break;
-			case ORDERING_DESCENDING:
-				m_allowedRanks = topCardData->m_rank > 0 ? 1ul << (topCardData->m_rank - 1) : 0;
-				break;
-			default:
-				break;
-			}
+			GetAllowedNextCardsInSequence(*topCardData, m_siteInfo.m_rankOrdering, m_siteInfo.m_suitOrdering, m_siteInfo.m_canLoop, m_siteInfo.m_loopMax, m_allowedRanks, m_allowedSuits);
 		}
 		break;
 	case SLOT_TYPE_FREECELL:
@@ -106,7 +105,8 @@ void CardSlotComponent::UpdateAllowedCards()
 				}
 
 				uint32_t allowedRanks, allowedSuits;
-				GetAllowedNextCardsInSequence(*higherCard, allowedRanks, allowedSuits);
+				SuitOrdering suitOrdering = (higherCard->m_packingSuitOrderOverride >= 0 && higherCard->m_packingSuitOrderOverride != SUIT_ORDERING_COUNT) ? (SuitOrdering)higherCard->m_packingSuitOrderOverride : sm_cardSlotData.packingSuitOrder;
+				GetAllowedNextCardsInSequence(*higherCard, sm_cardSlotData.packingRankOrder, suitOrdering, sm_cardSlotData.canLoop, sm_cardSlotData.loopMax, allowedRanks, allowedSuits);
 
 				if (IsCardAllowedInSlot(lowerCard->m_rank, lowerCard->m_suit, allowedRanks, allowedSuits))
 				{
@@ -125,7 +125,7 @@ void CardSlotComponent::UpdateAllowedCards()
 	}
 }
 
-void CardSlotComponent::GetAllowedNextCardsInSequence(const CardComponent& card, uint32_t& allowedRanks, uint32_t& allowedSuits) const
+void CardSlotComponent::GetAllowedNextCardsInSequence(const CardComponent& card, RankOrdering rankOrdering, SuitOrdering suitOrdering, bool canLoop, int loopMax, uint32_t& allowedRanks, uint32_t& allowedSuits) const
 {
 	if (card.m_rank == 0)		// Wild Card
 	{
@@ -134,28 +134,38 @@ void CardSlotComponent::GetAllowedNextCardsInSequence(const CardComponent& card,
 	}
 	else
 	{
-		switch (sm_cardSlotData.packingOrder)
+		switch (rankOrdering)
 		{
-		case ORDERING_ASCENDING:
-			allowedRanks = (1ul << (card.m_rank + 1)) | 1;
+		case RANK_ORDERING_ANY:
+			allowedRanks = -1;
 			break;
-		case ORDERING_DESCENDING:
+		case RANK_ORDERING_ASCENDING:
+			allowedRanks = (1ul << (card.m_rank + 1)) | 1;
+			if (canLoop && card.m_rank == loopMax)
+			{
+				allowedRanks = (1ul << 1) | 1;
+			}
+			break;
+		case RANK_ORDERING_DESCENDING:
 			allowedRanks = (card.m_rank > 0 ? 1ul << (card.m_rank - 1) : 0) | 1;
+			if (canLoop && card.m_rank == 1)
+			{
+				allowedRanks = (1ul << loopMax) | 1;
+			}
 			break;
 		default:
 			break;
 		}
 
-		PackingType packingType = (card.m_packingTypeOverride >= 0 && card.m_packingTypeOverride != PACKING_COUNT) ? (PackingType)card.m_packingTypeOverride : sm_cardSlotData.packingType;
-		switch (packingType)
+		switch (suitOrdering)
 		{
-		case PACKING_ANY:
+		case SUIT_ORDERING_ANY:
 			allowedSuits = -1;
 			break;
-		case PACKING_DIFFERENT_SUIT:
+		case SUIT_ORDERING_DIFFERENT_SUIT:
 			allowedSuits = ~(1ul << (uint32_t)card.m_suit);
 			break;
-		case PACKING_DIFFERENT_COLOR:
+		case SUIT_ORDERING_DIFFERENT_COLOR:
 			if (card.m_suit == CardComponent::Suit::SUIT_HEART || card.m_suit == CardComponent::Suit::SUIT_DIAMOND)
 			{
 				allowedSuits = (1ul << (uint32_t)CardComponent::Suit::SUIT_SPADE) | (1ul << (uint32_t)CardComponent::Suit::SUIT_CLUB);
@@ -169,7 +179,7 @@ void CardSlotComponent::GetAllowedNextCardsInSequence(const CardComponent& card,
 				allowedSuits = -1;
 			}
 			break;
-		case PACKING_SAME_SUIT:
+		case SUIT_ORDERING_SAME_SUIT:
 			allowedSuits = (1ul << (uint32_t)card.m_suit) | (1ul << (uint32_t)CardComponent::Suit::SUIT_WILD);
 			break;
 		default:
@@ -309,20 +319,12 @@ void CardSlotComponent::InitCardSlotData()
 	sm_cardSlotData.revelation = (Revelation)ScriptEngine::GetEnumFromName(ScriptEngine::GetString(), sm_revelationNameList, Revelation::REVELATION_COUNT);
 	ScriptEngine::Pop();
 
-	ScriptEngine::GetField("BuildingOrder");
-	sm_cardSlotData.buildingOrder = (Ordering)ScriptEngine::GetEnumFromName(ScriptEngine::GetString(), sm_orderingNameList, Ordering::ORDERING_COUNT);
+	ScriptEngine::GetField("PackingRankOrder");
+	sm_cardSlotData.packingRankOrder = (RankOrdering)ScriptEngine::GetEnumFromName(ScriptEngine::GetString(), sm_rankOrderingNameList, RankOrdering::RANK_ORDERING_COUNT);
 	ScriptEngine::Pop();
 
-	ScriptEngine::GetField("FoundationRank");
-	sm_cardSlotData.foundationRank = ScriptEngine::GetInt();
-	ScriptEngine::Pop();
-
-	ScriptEngine::GetField("PackingOrder");
-	sm_cardSlotData.packingOrder = (Ordering)ScriptEngine::GetEnumFromName(ScriptEngine::GetString(), sm_orderingNameList, Ordering::ORDERING_COUNT);
-	ScriptEngine::Pop();
-
-	ScriptEngine::GetField("PackingType");
-	sm_cardSlotData.packingType = (PackingType)ScriptEngine::GetEnumFromName(ScriptEngine::GetString(), sm_packingTypeNameList, PackingType::PACKING_COUNT);
+	ScriptEngine::GetField("PackingSuitOrder");
+	sm_cardSlotData.packingSuitOrder = (SuitOrdering)ScriptEngine::GetEnumFromName(ScriptEngine::GetString(), sm_suitOrderingNameList, SuitOrdering::SUIT_ORDERING_COUNT);
 	ScriptEngine::Pop();
 
 	ScriptEngine::GetField("EmptyColumnType");

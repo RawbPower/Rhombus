@@ -5,7 +5,7 @@ CardData.Monsters =
 		Rank = 0,
 		Suit = "Claw",
 		Sprite = "textures/CardsNew/Monsters/MonsterCard1.png",
-		PackingType = "Any",
+		PackingSuitOrder = "Any",
 		Type = "Monster",
 		Monster_Stats =
 		{
@@ -18,7 +18,7 @@ CardData.Monsters =
 		Rank = 0,
 		Suit = "Claw",
 		Sprite = "textures/CardsNew/Monsters/MonsterCard2.png",
-		PackingType = "Any",
+		PackingSuitOrder = "Any",
 		Type = "Monster",
 		Monster_Stats =
 		{
@@ -31,7 +31,7 @@ CardData.Monsters =
 		Rank = 0,
 		Suit = "Claw",
 		Sprite = "textures/CardsNew/Monsters/MonsterCard3.png",
-		PackingType = "Any",
+		PackingSuitOrder = "Any",
 		Type = "Monster",
 		Monster_Stats =
 		{
@@ -44,7 +44,7 @@ CardData.Monsters =
 		Rank = 0,
 		Suit = "Claw",
 		Sprite = "textures/CardsNew/Monsters/MonsterCard4.png",
-		PackingType = "Any",
+		PackingSuitOrder = "Any",
 		Type = "Monster",
 		Monster_Stats =
 		{
@@ -57,7 +57,7 @@ CardData.Monsters =
 		Rank = 0,
 		Suit = "Claw",
 		Sprite = "textures/CardsNew/Monsters/MonsterCard5.png",
-		PackingType = "Any",
+		PackingSuitOrder = "Any",
 		Type = "Monster",
 		Monster_Stats =
 		{

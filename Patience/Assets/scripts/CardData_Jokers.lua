@@ -5,7 +5,7 @@ CardData.Jokers =
 		Rank = 0,
 		Suit = "Wild",
 		Sprite = "textures/Cards/Card54.png",
-		PackingType = "Default"
+		PackingSuitOrder = "Default"
 	},
 
 	Joker_Green = 
@@ -13,6 +13,6 @@ CardData.Jokers =
 		Rank = 0,
 		Suit = "Wild",
 		Sprite = "textures/Cards/Card55.png",
-		PackingType = "Default"
+		PackingSuitOrder = "Default"
 	}
 }

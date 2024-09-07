@@ -504,7 +504,7 @@ Entities:
       DebugColor: [0, 0, 0, 0]
     CardSlotComponent:
       SlotType: 5
-      SlotLayout: 1
+      SlotLayout: 0
       StaggeredOffset: [0, -16]
       MonsterBattleSite: 8084451237944974462
       Site:FoundationSuit: 0
@@ -529,7 +529,7 @@ Entities:
       DebugColor: [0, 0, 0, 0]
     CardSlotComponent:
       SlotType: 5
-      SlotLayout: 1
+      SlotLayout: 0
       StaggeredOffset: [0, -16]
       MonsterBattleSite: 17103678135621629686
       Site:FoundationSuit: 0
@@ -554,7 +554,7 @@ Entities:
       DebugColor: [0, 0, 0, 0]
     CardSlotComponent:
       SlotType: 5
-      SlotLayout: 1
+      SlotLayout: 0
       StaggeredOffset: [0, -16]
       MonsterBattleSite: 7817693968346137392
       Site:FoundationSuit: 0
@@ -579,7 +579,7 @@ Entities:
       DebugColor: [0, 0, 0, 0]
     CardSlotComponent:
       SlotType: 5
-      SlotLayout: 1
+      SlotLayout: 0
       StaggeredOffset: [0, -16]
       MonsterBattleSite: 1884100701556230925
       Site:FoundationSuit: 0

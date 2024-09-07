@@ -192,6 +192,7 @@ void CardPlacementSystem::PlaceCard(Entity cardEntity, Entity slotEntity, bool i
 		previousCardSlot.GetComponent<CardSlotComponent>().RemoveCard(cardEntity);
 		cardSlot.AddCard(cardEntity);
 		card.SetCurrentlSlot(slotEntity);
+		DamageMonster(slotEntity);
 	}
 	else
 	{
@@ -199,63 +200,84 @@ void CardPlacementSystem::PlaceCard(Entity cardEntity, Entity slotEntity, bool i
 	}
 }
 
-bool CardPlacementSystem::DamageMonsterInColumn(Entity slotEntity)
+bool CardPlacementSystem::DamageMonster(Entity siteEntity)
 {
-	CardSlotComponent& cardSlot = slotEntity.GetComponent<CardSlotComponent>();
+	CardSlotComponent& cardSite = siteEntity.GetComponent<CardSlotComponent>();
 
-	if (cardSlot.GetSlotType() != CardSlotComponent::SLOT_TYPE_COLUMN)
+	if (cardSite.GetSlotType() != CardSlotComponent::SLOT_TYPE_SITE)
 	{
 		return false;
 	}
 
-	bool monsterDamaged = false;
-	int sequenceLength = cardSlot.GetSequenceLength();
-	int i = 0;
-	int damage = 0;
-	std::vector<Entity> damagingSequence;
-	std::list<Entity>::reverse_iterator it;
-	for (it = cardSlot.m_cardStack.rbegin(); it != cardSlot.m_cardStack.rend(); it++)
-	{
-		const CardComponent& card = it->GetComponentRead<CardComponent>();
-		if (i < sequenceLength)
-		{
-			damage += card.m_rank;
-			damagingSequence.push_back(*it);
-		}
-		else
-		{
-			if (card.m_type == CardComponent::Type::TYPE_MONSTER)
-			{
-				if (card.m_monsterStats.m_health <= damage)
-				{
-					std::vector<EntityID> view = m_scene->GetRegistry().GetEntityList<CardSlotComponent>();
-					for (EntityID e : view)
-					{
-						Entity entity = { e, m_scene };
-						if (entity.GetComponent<CardSlotComponent>().GetSlotType() == CardSlotComponent::SLOT_TYPE_WASTEPILE)
-						{
-							PlaceCard(card.GetOwnerEntity(), entity, false, true);
-							monsterDamaged = true;
+	CardSlotComponent* damagedMonsterSlot = nullptr;
+	Entity patienceEntity = { m_scene->GetRegistry().GetFirstEntity<PatienceComponent>(), m_scene };
+	PatienceComponent& patienceComponent = patienceEntity.GetComponent<PatienceComponent>();
 
-							SpriteRendererComponent& sprite = card.GetOwnerEntity().GetComponent<SpriteRendererComponent>();
-							auto path = Project::GetAssetFileSystemPath("textures\\CardsNew\\Base\\Card0.png");
-							sprite.m_texture = Texture2D::Create(path.string());
-						}
-					}
-				}
-			}
+	for (Entity monsterSlotEntity : patienceComponent.m_monsterSlots)
+	{
+		CardSlotComponent& monsterSlot = monsterSlotEntity.GetComponent<CardSlotComponent>();
+		if (m_scene->GetEntityByUUID(monsterSlot.m_monsterBattleSite) == siteEntity)
+		{
+			damagedMonsterSlot = &monsterSlot;
 			break;
 		}
-		i++;
+	}
+
+	if (!damagedMonsterSlot || damagedMonsterSlot->m_cardStack.size() == 0)
+	{
+		return false;
+	}
+
+	int damage = 0;
+	for (Entity cardEntity : cardSite.m_cardStack)
+	{
+		const CardComponent& card = cardEntity.GetComponentRead<CardComponent>();
+		damage += card.m_rank;
+	}
+
+	CardComponent& monsterCard = damagedMonsterSlot->m_cardStack.back().GetComponent<CardComponent>();
+	bool monsterDamaged = false;
+	if (monsterCard.m_monsterStats.m_health <= damage)
+	{
+		std::vector<EntityID> view = m_scene->GetRegistry().GetEntityList<CardSlotComponent>();
+		for (EntityID e : view)
+		{
+			Entity entity = { e, m_scene };
+			if (entity.GetComponent<CardSlotComponent>().GetSlotType() == CardSlotComponent::SLOT_TYPE_WASTEPILE)
+			{
+				PlaceCard(monsterCard.GetOwnerEntity(), entity, false, true);
+				monsterDamaged = true;
+
+				SpriteRendererComponent& sprite = monsterCard.GetOwnerEntity().GetComponent<SpriteRendererComponent>();
+				auto path = Project::GetAssetFileSystemPath("textures\\CardsNew\\Backs\\CardBack1.png");
+				sprite.m_texture = Texture2D::Create(path.string());
+			}
+		}
 	}
 
 	// Rearrange damagin card so they card be reused
 	if (monsterDamaged)
 	{
-		for (const Entity e : damagingSequence)
+		int siteCount = cardSite.m_cardStack.size();
+		for (int i = 0; i < siteCount; i++)
 		{
-			cardSlot.RemoveCard(e);
-			m_scene->DestroyEntity(e);	
+			Entity cardEntity = cardSite.m_cardStack.back();
+			//cardSite.RemoveCard(cardEntity);
+			//m_scene->DestroyEntity(cardEntity);
+
+			std::vector<EntityID> view = m_scene->GetRegistry().GetEntityList<CardSlotComponent>();
+			for (EntityID e : view)
+			{
+				Entity entity = { e, m_scene };
+				if (entity.GetComponent<CardSlotComponent>().GetSlotType() == CardSlotComponent::SLOT_TYPE_STOCK)
+				{
+					PlaceCard(cardEntity, entity, false, true);
+
+					SpriteRendererComponent& sprite = cardEntity.GetComponent<SpriteRendererComponent>();
+					auto path = Project::GetAssetFileSystemPath("textures\\CardsNew\\Backs\\CardBack0.png");
+					sprite.m_texture = Texture2D::Create(path.string());
+				}
+			}
 		}
 	}
 

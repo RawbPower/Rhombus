@@ -19,7 +19,7 @@ public:
 
 	void PlaceCard(Entity cardEntity, bool isInSequence, int damage);
 	void PlaceCard(Entity cardEntity, Entity slotEntity, bool isInSequence, bool isDiscard);
-	bool DamageMonsterInColumn(Entity slotEntity);
+	bool DamageMonster(Entity siteEntity);
 	EntityID CheckForCardSlot(Entity cardEntity);
 	void ReleaseMonster(Entity slotEntity);
 };

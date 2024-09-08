@@ -72,6 +72,8 @@ public:
 
 	uint32_t GetSequenceLength() const { return m_sequenceLength; }
 
+	Entity GetMonsterSlot() const { return m_monsterSlot; }
+
 	// Slot Layout
 	const SlotLayout GetSlotLayout() const{ return m_slotLayout; }
 	SlotLayout& GetSlotLayoutNonConst() { return m_slotLayout; }
@@ -139,9 +141,12 @@ public:
 	Vec2 m_emptyAreaSize = { 0.5f, 0.5f };
 
 private:
+	friend class CardSlotSystem;
+
 	SlotLayout m_slotLayout = SLOT_LAYOUT_SINGLE;
 	SlotType m_slotType = SLOT_TYPE_COLUMN;
 	bool m_isOccupied = false;
+	Entity m_monsterSlot;
 
 	uint32_t m_allowedRanks;
 	uint32_t m_allowedSuits;

@@ -7,9 +7,9 @@
 
 namespace rhombus
 {
-	enum Z_LAYER { BACKGROUND_LAYER = 0, FOREGROUND_1_LAYER, FOREGROUND_2_LAYER, FOREGROUND_3_LAYER, UI_LAYER, LAYER_COUNT };
+	enum Z_LAYER { BACKGROUND_LAYER = 0, MIDDLEGROUND_LAYER, FOREGROUND_1_LAYER, FOREGROUND_2_LAYER, FOREGROUND_3_LAYER, UI_LAYER, LAYER_COUNT };
 
-	const float zLayers[] = {-0.1f, 0.0f, 0.25f, 0.5f, 0.75f, 1.0f};
+	const float zLayers[] = {-0.5f, -0.25f, 0.0f, 0.25f, 0.5f, 0.75f, 1.0f};
 
 	class TransformComponent : public ComponentBase
 	{

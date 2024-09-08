@@ -15,11 +15,12 @@ void CardSlotSystem::Init()
 	{
 		auto& cardSlot = entity.GetComponent<CardSlotComponent>();
 
-		entity.GetComponent<TransformComponent>().SetLayer(Z_LAYER::BACKGROUND_LAYER);
+		entity.GetComponent<TransformComponent>().SetLayer(Z_LAYER::MIDDLEGROUND_LAYER);
 
 		if (cardSlot.GetSlotType() == CardSlotComponent::SlotType::SLOT_TYPE_MONSTER)
 		{
 			patienceComponent.m_monsterSlots.push_back(entity);
+			m_scene->GetEntityByUUID(cardSlot.m_monsterBattleSite).GetComponent<CardSlotComponent>().m_monsterSlot = entity;
 		}
 
 		if (entity.HasComponent<BoxArea2DComponent>())

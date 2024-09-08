@@ -3,6 +3,7 @@
 #include "CardComponent.h"
 
 #include "Rhombus/Scripting/ScriptEngine.h"
+#include "Rhombus/ECS/ECSTypes.h"
 
 const char* CardSlotComponent::sm_slotLayoutNameList[SLOT_LAYOUT_COUNT] = { "Single", "Stack", "Staggered" };
 const char* CardSlotComponent::sm_slotTypeNameList[SLOT_TYPE_COUNT] = { "Column", "Site", "Freecell", "Stock", "Wastepile", "Monster"};
@@ -204,6 +205,16 @@ bool CardSlotComponent::IsCardAllowedInSlot(int rank, CardComponent::Suit suit, 
 
 bool CardSlotComponent::CanAcceptCards() const
 {
+	const bool bHasMonsterSlot = (m_slotType == SLOT_TYPE_SITE && (EntityID)m_monsterSlot != INVALID_ENTITY);
+
+	if (bHasMonsterSlot)
+	{
+		if (m_monsterSlot.GetComponentRead<CardSlotComponent>().m_cardStack.size() == 0)
+		{
+			return false;
+		}
+	}
+
 	return m_slotLayout != SLOT_LAYOUT_SINGLE || m_cardStack.size() == 0;
 }
 
@@ -243,12 +254,24 @@ void CardSlotComponent::UpdateCardStack()
 			continue;
 		}
 
+		if (m_slotType == SLOT_TYPE_MONSTER)
+		{
+			const BoxArea2DComponent& slotArea = GetOwnerEntity().GetComponent<BoxArea2DComponent>();
+			Vec3 slotPlacementPosition = slotTransform.m_position + slotArea.m_offset;
+			transform.m_position.x = slotPlacementPosition.x;
+			transform.m_position.y = slotPlacementPosition.y;
+		}
+
 		if (m_slotLayout == SLOT_LAYOUT_STAGGERED)
 		{
 			transform.m_position.x = slotTransform.m_position.x + i * m_staggeredOffset.x;
 			transform.m_position.y = slotTransform.m_position.y + i * m_staggeredOffset.y;
 		}
-		transform.SetPositionByLayerSection(Z_LAYER::FOREGROUND_1_LAYER, i, numOfCards);
+		transform.SetPositionByLayerSection(Z_LAYER::FOREGROUND_2_LAYER, i, numOfCards);
+		if (m_slotType == SLOT_TYPE_MONSTER)
+		{
+			transform.SetLayer(Z_LAYER::FOREGROUND_1_LAYER);
+		}
 		cardComponent.SetIsAvailable(i >= (numOfCards - m_sequenceLength));
 		i++;
 	}

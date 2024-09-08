@@ -15,13 +15,13 @@ namespace rhombus
 		Entity(const Entity& other) = default;
 
 		template<typename T>
-		bool HasComponent()
+		bool HasComponent() const
 		{
 			return m_scene->m_Registry.HasComponent<T>(m_entityId);
 		}
 
 		template<typename T>
-		const T& GetComponentRead()
+		const T& GetComponentRead() const
 		{
 			RB_CORE_ASSERT(HasComponent<T>(), "Entity ({0}) does not have component that you are trying to get!", m_entityId);
 
@@ -89,7 +89,7 @@ namespace rhombus
 
 	private:
 		EntityID m_rbEntityId;
-		EntityID m_entityId = -1;
+		EntityID m_entityId = 0xFFFFFFFF;
 		Scene* m_scene = nullptr;
 	};
 }

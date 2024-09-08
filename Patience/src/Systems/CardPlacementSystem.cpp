@@ -39,7 +39,7 @@ void CardPlacementSystem::OnMouseMoved(int x, int y)
 		if (card.GetIsHeld())
 		{
 			transform.m_position = Vec3(cursorCoords.x, cursorCoords.y, transform.m_position.z) + card.GetHeldOffset();
-			transform.SetPositionByLayerSection(Z_LAYER::FOREGROUND_2_LAYER, card.GetHeldOffset().GetMagnitude() / cardSlot.m_staggeredOffset.GetMagnitude(), 10);
+			transform.SetPositionByLayerSection(Z_LAYER::FOREGROUND_3_LAYER, card.GetHeldOffset().GetMagnitude() / cardSlot.m_staggeredOffset.GetMagnitude(), 10);
 
 			bIsCardHeld = true;
 		}
@@ -209,19 +209,7 @@ bool CardPlacementSystem::DamageMonster(Entity siteEntity)
 		return false;
 	}
 
-	CardSlotComponent* damagedMonsterSlot = nullptr;
-	Entity patienceEntity = { m_scene->GetRegistry().GetFirstEntity<PatienceComponent>(), m_scene };
-	PatienceComponent& patienceComponent = patienceEntity.GetComponent<PatienceComponent>();
-
-	for (Entity monsterSlotEntity : patienceComponent.m_monsterSlots)
-	{
-		CardSlotComponent& monsterSlot = monsterSlotEntity.GetComponent<CardSlotComponent>();
-		if (m_scene->GetEntityByUUID(monsterSlot.m_monsterBattleSite) == siteEntity)
-		{
-			damagedMonsterSlot = &monsterSlot;
-			break;
-		}
-	}
+	CardSlotComponent* damagedMonsterSlot = (EntityID)siteEntity.GetComponentRead<CardSlotComponent>().GetMonsterSlot() == INVALID_ENTITY ? nullptr : &siteEntity.GetComponentRead<CardSlotComponent>().GetMonsterSlot().GetComponent<CardSlotComponent>();
 
 	if (!damagedMonsterSlot || damagedMonsterSlot->m_cardStack.size() == 0)
 	{

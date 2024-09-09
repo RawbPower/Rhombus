@@ -163,24 +163,26 @@ void CardPlacementSystem::PlaceCard(Entity cardEntity, bool isInSequence, int da
 			}
 			else
 			{
-				PlaceCard(cardEntity, slotEntity, isInSequence, false);
+				PlaceCard(cardEntity, slotEntity, isInSequence, false, true);
 			}
 		}
 		else
 		{
-			PlaceCard(cardEntity, slotEntity, isInSequence, false);
+			PlaceCard(cardEntity, slotEntity, isInSequence, false, true);
 		}
 	}
 }
 
-void CardPlacementSystem::PlaceCard(Entity cardEntity, Entity slotEntity, bool isInSequence, bool isDiscard)
+void CardPlacementSystem::PlaceCard(Entity cardEntity, Entity slotEntity, bool isInSequence, bool isDiscard, bool updateTransform)
 {
 	CardComponent& card = cardEntity.GetComponent<CardComponent>();
 	TransformComponent& cardTransform = cardEntity.GetComponent<TransformComponent>();
-
-	TransformComponent& slotTransform = slotEntity.GetComponent<TransformComponent>();
-	cardTransform.m_position = Vec3(slotTransform.m_position.x, slotTransform.m_position.y, slotTransform.m_position.z);
-	cardTransform.SetLayer(Z_LAYER::FOREGROUND_1_LAYER);
+	if (updateTransform)
+	{
+		TransformComponent& slotTransform = slotEntity.GetComponent<TransformComponent>();
+		cardTransform.m_position = Vec3(slotTransform.m_position.x, slotTransform.m_position.y, slotTransform.m_position.z);
+		cardTransform.SetLayer(Z_LAYER::FOREGROUND_1_LAYER);
+	}
 	CardSlotComponent& cardSlot = slotEntity.GetComponent<CardSlotComponent>();
 
 	const bool cannotAcceptSequence = isInSequence && !cardSlot.CanAcceptSequences();
@@ -233,12 +235,13 @@ bool CardPlacementSystem::DamageMonster(Entity siteEntity)
 			Entity entity = { e, m_scene };
 			if (entity.GetComponent<CardSlotComponent>().GetSlotType() == CardSlotComponent::SLOT_TYPE_WASTEPILE)
 			{
-				PlaceCard(monsterCard.GetOwnerEntity(), entity, false, true);
+				PlaceCard(monsterCard.GetOwnerEntity(), entity, false, true, false);
+				MoveCardToSlot(monsterCard.GetOwnerEntity(), entity, false);
 				monsterDamaged = true;
 
-				SpriteRendererComponent& sprite = monsterCard.GetOwnerEntity().GetComponent<SpriteRendererComponent>();
-				auto path = Project::GetAssetFileSystemPath("textures\\CardsNew\\Backs\\CardBack1.png");
-				sprite.m_texture = Texture2D::Create(path.string());
+				//SpriteRendererComponent& sprite = monsterCard.GetOwnerEntity().GetComponent<SpriteRendererComponent>();
+				//auto path = Project::GetAssetFileSystemPath("textures\\CardsNew\\Backs\\CardBack1.png");
+				//sprite.m_texture = Texture2D::Create(path.string());
 			}
 		}
 	}
@@ -259,7 +262,7 @@ bool CardPlacementSystem::DamageMonster(Entity siteEntity)
 				Entity entity = { e, m_scene };
 				if (entity.GetComponent<CardSlotComponent>().GetSlotType() == CardSlotComponent::SLOT_TYPE_STOCK)
 				{
-					PlaceCard(cardEntity, entity, false, true);
+					PlaceCard(cardEntity, entity, false, true, true);
 
 					SpriteRendererComponent& sprite = cardEntity.GetComponent<SpriteRendererComponent>();
 					auto path = Project::GetAssetFileSystemPath("textures\\CardsNew\\Backs\\CardBack0.png");
@@ -347,7 +350,7 @@ void CardPlacementSystem::ReleaseMonster(Entity slotEntity)
 			continue;
 		}
 
-		PlaceCard(topCard, monsterSlot, false, false);
+		PlaceCard(topCard, monsterSlot, false, false, true);
 		releasedMonster = true;
 		break;
 	}
@@ -357,4 +360,28 @@ void CardPlacementSystem::ReleaseMonster(Entity slotEntity)
 	{
 		ReleaseMonster(slotEntity);
 	}
+}
+
+/*void SetCardBackSprite(Entity card)
+{
+	SpriteRendererComponent& sprite = card.GetComponent<SpriteRendererComponent>();
+	auto path = Project::GetAssetFileSystemPath("textures\\CardsNew\\Backs\\CardBack0.png");
+	sprite.m_texture = Texture2D::Create(path.string());
+}*/
+
+void CardPlacementSystem::MoveCardToSlot(Entity card, Entity slot, bool flipCard)
+{
+	TransformComponent& transform = card.GetComponent<TransformComponent>();
+	const TransformComponent& slotTransform = slot.GetComponentRead<TransformComponent>();
+	Vec3 final = Vec3(slotTransform.m_position.x, slotTransform.m_position.y, transform.m_position.z);
+	Ref<Tween> translationTween = m_scene->CreateTween(card, &transform.m_position, transform.m_position, final, 0.6f);
+	translationTween->Start();
+
+	/*if (flipCard)
+	{
+		Tween* rotationTween = m_scene.CreateTween(card, &transform.m_rotation.y, 0.0f, 90.0f, 0.3f);
+		rotationTween.AddCallbackStep(&SetCardBackSprite);
+		rotationTween.AddTweenStep(&transform.m_rotation.y, -90.0f, 0.0f, 0.3f);
+		rotationTween.Start();
+	}*/
 }

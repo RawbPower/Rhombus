@@ -6,12 +6,13 @@
 #include "Rhombus/Core/DeltaTime.h"
 #include "Rhombus/Core/UUID.h"
 #include "Rhombus/Renderer/EditorCamera.h"
-
+#include "Rhombus/ECS/Systems/TweeningSystem.h"
 class b2World;
 
 namespace rhombus
 {
 	class Entity;
+	class Tween;
 
 	template <typename... Component>
 	struct ComponentGroup
@@ -50,6 +51,8 @@ namespace rhombus
 		virtual void DeserializeEntity(void* yamlEntity, Entity entity);
 
 		void InitPhyics2D();
+
+		Ref<Tween> CreateTween(Entity entity, Vec3* param, Vec3 begin, Vec3 finish, float duration);
 
 		void DuplicateEntity(Entity entity);
 
@@ -137,6 +140,7 @@ namespace rhombus
 		uint32_t m_ViewportWidth = 0, m_ViewportHeight = 0;
 
 		b2World* m_PhysicsWorld = nullptr;
+		Ref<TweeningSystem> tweeningSystem;
 
 		std::unordered_map<UUID, EntityID> m_EntityMap;
 

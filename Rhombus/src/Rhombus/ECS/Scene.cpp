@@ -17,6 +17,7 @@
 #include "Rhombus/ECS/Components/ScriptComponent.h"
 #include "Rhombus/ECS/Components/SpriteRendererComponent.h"
 #include "Rhombus/ECS/Components/TransformComponent.h"
+#include "Rhombus/ECS/Components/TweenComponent.h"
 
 // Box2d
 #include <box2d/b2_world.h>
@@ -32,7 +33,7 @@ namespace rhombus
 	using RhombusComponents =
 		ComponentGroup<TransformComponent, SpriteRendererComponent,
 		CircleRendererComponent, CameraComponent, ScriptComponent, NativeScriptComponent,
-		Rigidbody2DComponent, BoxCollider2DComponent, CircleCollider2DComponent, BoxArea2DComponent>;
+		Rigidbody2DComponent, BoxCollider2DComponent, CircleCollider2DComponent, BoxArea2DComponent, TweenComponent>;
 	// -----------------------------------------------------
 
 	static b2BodyType Rigidbody2DTypetoBox2DType(Rigidbody2DComponent::BodyType bodyType)
@@ -69,6 +70,13 @@ namespace rhombus
 		m_Registry.RegisterComponent<TagComponent>();
 
 		RegisterComponents(RhombusComponents{});
+
+		tweeningSystem = m_Registry.RegisterSystem<TweeningSystem>(this);
+		{
+			Signature signature;
+			signature.set(m_Registry.GetComponentType<TweenComponent>());
+			m_Registry.SetSystemSignature<TweeningSystem>(signature);
+		}
 	}
 
 	void Scene::Copy(Ref<Scene> destScene, Ref<Scene> srcScene)
@@ -265,6 +273,8 @@ namespace rhombus
 				}
 			}
 
+			tweeningSystem->UpdateTweens(dt);
+
 			OnDraw();
 
 			Renderer2D::EndScene();
@@ -458,6 +468,19 @@ namespace rhombus
 				body->CreateFixture(&fixtureDef);
 			}
 		}
+	}
+
+	Ref<Tween> Scene::CreateTween(Entity entity, Vec3* param, Vec3 begin, Vec3 finish, float duration)
+	{
+		if (!entity.HasComponent<TweenComponent>())
+		{
+			entity.AddComponent<TweenComponent>();
+		}
+		
+		TweenComponent& tweenComponent = entity.GetComponent<TweenComponent>();
+		//tweenComponent.m_tween = std::make_shared<Tween>(param, begin, finish, duration);
+		Ref<Tween> tween = tweenComponent.CreateTween(param, begin, finish, duration);
+		return tween;
 	}
 
 	void Scene::DuplicateEntity(Entity entity)

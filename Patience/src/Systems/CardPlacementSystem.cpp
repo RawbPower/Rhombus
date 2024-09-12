@@ -229,20 +229,17 @@ bool CardPlacementSystem::DamageMonster(Entity siteEntity)
 	bool monsterDamaged = false;
 	if (monsterCard.m_monsterStats.m_health <= damage)
 	{
-		std::vector<EntityID> view = m_scene->GetRegistry().GetEntityList<CardSlotComponent>();
-		for (EntityID e : view)
+		if (CardSlotComponent::sm_cardSlotData.monsterDiscard != INVALID_ENTITY)
 		{
-			Entity entity = { e, m_scene };
-			if (entity.GetComponent<CardSlotComponent>().GetSlotType() == CardSlotComponent::SLOT_TYPE_WASTEPILE)
-			{
-				PlaceCard(monsterCard.GetOwnerEntity(), entity, false, true, false);
-				MoveCardToSlot(monsterCard.GetOwnerEntity(), entity, false);
-				monsterDamaged = true;
+			Entity entity = { CardSlotComponent::sm_cardSlotData.monsterDiscard, m_scene };
 
-				//SpriteRendererComponent& sprite = monsterCard.GetOwnerEntity().GetComponent<SpriteRendererComponent>();
-				//auto path = Project::GetAssetFileSystemPath("textures\\CardsNew\\Backs\\CardBack1.png");
-				//sprite.m_texture = Texture2D::Create(path.string());
-			}
+			PlaceCard(monsterCard.GetOwnerEntity(), entity, false, true, false);
+			MoveCardToSlot(monsterCard.GetOwnerEntity(), entity, true);
+			monsterDamaged = true;
+
+			//SpriteRendererComponent& sprite = monsterCard.GetOwnerEntity().GetComponent<SpriteRendererComponent>();
+			//auto path = Project::GetAssetFileSystemPath("textures\\CardsNew\\Backs\\CardBack1.png");
+			//sprite.m_texture = Texture2D::Create(path.string());
 		}
 	}
 
@@ -256,18 +253,14 @@ bool CardPlacementSystem::DamageMonster(Entity siteEntity)
 			//cardSite.RemoveCard(cardEntity);
 			//m_scene->DestroyEntity(cardEntity);
 
-			std::vector<EntityID> view = m_scene->GetRegistry().GetEntityList<CardSlotComponent>();
-			for (EntityID e : view)
+			if (CardSlotComponent::sm_cardSlotData.mainDiscard != INVALID_ENTITY)
 			{
-				Entity entity = { e, m_scene };
-				if (entity.GetComponent<CardSlotComponent>().GetSlotType() == CardSlotComponent::SLOT_TYPE_STOCK)
-				{
-					PlaceCard(cardEntity, entity, false, true, true);
+				Entity entity = { CardSlotComponent::sm_cardSlotData.mainDiscard, m_scene };
+				PlaceCard(cardEntity, entity, false, true, true);
 
-					SpriteRendererComponent& sprite = cardEntity.GetComponent<SpriteRendererComponent>();
-					auto path = Project::GetAssetFileSystemPath("textures\\CardsNew\\Backs\\CardBack0.png");
-					sprite.m_texture = Texture2D::Create(path.string());
-				}
+				SpriteRendererComponent& sprite = cardEntity.GetComponent<SpriteRendererComponent>();
+				auto path = Project::GetAssetFileSystemPath("textures\\CardsNew\\Backs\\CardBack0.png");
+				sprite.m_texture = Texture2D::Create(path.string());
 			}
 		}
 	}
@@ -373,15 +366,15 @@ void CardPlacementSystem::MoveCardToSlot(Entity card, Entity slot, bool flipCard
 {
 	TransformComponent& transform = card.GetComponent<TransformComponent>();
 	const TransformComponent& slotTransform = slot.GetComponentRead<TransformComponent>();
-	Vec3 final = Vec3(slotTransform.m_position.x, slotTransform.m_position.y, transform.m_position.z);
+	Vec3 final = Vec3(slotTransform.m_position.x, slotTransform.m_position.y, zLayers[FOREGROUND_3_LAYER]);
 	Ref<Tween> translationTween = m_scene->CreateTween(card, &transform.m_position, transform.m_position, final, 0.6f);
 	translationTween->Start();
 
-	/*if (flipCard)
+	if (flipCard)
 	{
-		Tween* rotationTween = m_scene.CreateTween(card, &transform.m_rotation.y, 0.0f, 90.0f, 0.3f);
-		rotationTween.AddCallbackStep(&SetCardBackSprite);
-		rotationTween.AddTweenStep(&transform.m_rotation.y, -90.0f, 0.0f, 0.3f);
-		rotationTween.Start();
-	}*/
+		Ref<Tween> rotationTween = m_scene->CreateTween(card, &transform.m_rotation.y, 0.0f, (3.14f/2.0f), 6.0f);
+		//rotationTween.AddCallbackStep(&SetCardBackSprite);
+		//rotationTween.AddTweenStep(&transform.m_rotation.y, -90.0f, 0.0f, 0.3f);
+		rotationTween->Start();
+	}
 }

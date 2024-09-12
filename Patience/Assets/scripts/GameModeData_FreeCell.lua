@@ -15,6 +15,9 @@ GameModeData.FreeCell =
 	PackingSuitOrder = "DifferentSuit",
 	EmptyColumnType = "Any",
 
+	MainDiscard = "Discard",
+	MonsterDiscard = "Graveyard",
+
 	Deck = 
 	{
 		"BasicHearts",

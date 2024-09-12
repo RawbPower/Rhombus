@@ -59,6 +59,19 @@ namespace rhombus
 		}
 
 		template<typename T>
+		T& GetOrAddComponent()
+		{
+			if (HasComponent<T>())
+			{
+				return GetComponent<T>();
+			}
+			else
+			{
+				return AddComponent<T>();
+			}
+		}
+
+		template<typename T>
 		T& AddOrReplaceComponent(T srcComponent)
 		{
 			//T& component = m_scene->m_Registry.emplace_or_replace<T>(m_entityId, std::forward<Args>(args)...);

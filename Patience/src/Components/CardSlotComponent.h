@@ -33,6 +33,9 @@ public:
 		bool canLoop = false;
 		int loopMax = 13;
 		EmptyColumnType emptyColumnType;
+
+		EntityID mainDiscard = INVALID_ENTITY;
+		EntityID monsterDiscard = INVALID_ENTITY;
 	};
 
 	struct SiteInfo
@@ -128,7 +131,7 @@ public:
 		return sm_slotTypeNameList;
 	}
 
-	static void InitCardSlotData();
+	static void InitCardSlotData(Scene& scene);
 
 public:
 	std::list<Entity> m_cardStack;
@@ -151,10 +154,10 @@ private:
 	uint32_t m_allowedRanks;
 	uint32_t m_allowedSuits;
 	uint32_t m_sequenceLength = 1;
-	
-	inline static CardSlotData sm_cardSlotData;
 
 public:
+	inline static CardSlotData sm_cardSlotData;
+
 	static const char* sm_revelationNameList[REVELATION_COUNT];
 	static const char* sm_rankOrderingNameList[RANK_ORDERING_COUNT];
 	static const char* sm_suitOrderingNameList[SUIT_ORDERING_COUNT];

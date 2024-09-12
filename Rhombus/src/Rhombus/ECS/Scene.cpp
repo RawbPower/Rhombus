@@ -470,15 +470,30 @@ namespace rhombus
 		}
 	}
 
+	Ref<Tween> Scene::CreateTween(Entity entity, float* param, float begin, float finish, float duration)
+	{
+		TweenComponent& tweenComponent = entity.GetOrAddComponent<TweenComponent>();
+		Ref<Tween> tween = tweenComponent.CreateTween(param, begin, finish, duration);
+		return tween;
+	}
+
+	Ref<Tween> Scene::CreateTween(Entity entity, Vec2* param, Vec2 begin, Vec2 finish, float duration)
+	{
+		TweenComponent& tweenComponent = entity.GetOrAddComponent<TweenComponent>();
+		Ref<Tween> tween = tweenComponent.CreateTween(param, begin, finish, duration);
+		return tween;
+	}
+
 	Ref<Tween> Scene::CreateTween(Entity entity, Vec3* param, Vec3 begin, Vec3 finish, float duration)
 	{
-		if (!entity.HasComponent<TweenComponent>())
-		{
-			entity.AddComponent<TweenComponent>();
-		}
-		
-		TweenComponent& tweenComponent = entity.GetComponent<TweenComponent>();
-		//tweenComponent.m_tween = std::make_shared<Tween>(param, begin, finish, duration);
+		TweenComponent& tweenComponent = entity.GetOrAddComponent<TweenComponent>();
+		Ref<Tween> tween = tweenComponent.CreateTween(param, begin, finish, duration);
+		return tween;
+	}
+
+	Ref<Tween> Scene::CreateTween(Entity entity, Vec4* param, Vec4 begin, Vec4 finish, float duration)
+	{
+		TweenComponent& tweenComponent = entity.GetOrAddComponent<TweenComponent>();
 		Ref<Tween> tween = tweenComponent.CreateTween(param, begin, finish, duration);
 		return tween;
 	}

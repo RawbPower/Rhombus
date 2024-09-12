@@ -11,15 +11,23 @@ namespace rhombus
 		{
 			auto& tweenComponent = entity.GetComponent<TweenComponent>();
 
-			Ref<Tween> tween = tweenComponent.GetTween();
-			if (tween)
+			bool areAllTweensFinished = true;
+			for (int i = 0; i < tweenComponent.GetTweenCount(); i++)
 			{
-				tween->Step(dt);
-				if (tween->GetIsFinished())
+				Ref<Tween> tween = tweenComponent.GetTween(i);
+				if (tween)
 				{
-					entity.RemoveComponent<TweenComponent>();
-					continue;
+					tween->Step(dt);
+					if (!tween->GetIsFinished())
+					{
+						areAllTweensFinished = false;
+					}
 				}
+			}
+
+			if (areAllTweensFinished)
+			{
+				entity.RemoveComponent<TweenComponent>();
 			}
 		}
 	}

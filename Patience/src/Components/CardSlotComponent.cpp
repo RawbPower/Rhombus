@@ -316,7 +316,23 @@ void CardSlotComponent::GetCardSequence(Entity topCard, std::queue<Entity>& card
 	}
 }
 
-void CardSlotComponent::InitCardSlotData()
+EntityID GetSlotFromName(Scene& scene, const char* name)
+{
+	std::vector<EntityID> cardSlots = scene.GetRegistry().GetEntityList<CardSlotComponent>();
+
+	for (EntityID slot : cardSlots)
+	{
+		Entity cardSlotEntity = { slot, &scene };
+		if (cardSlotEntity.GetName() == name)
+		{
+			return cardSlotEntity;
+		}
+	}
+
+	return INVALID_ENTITY;
+}
+
+void CardSlotComponent::InitCardSlotData(Scene& scene)
 {
 	ScriptEngine::GetField("Columns");
 	sm_cardSlotData.columns = ScriptEngine::GetInt();
@@ -352,5 +368,21 @@ void CardSlotComponent::InitCardSlotData()
 
 	ScriptEngine::GetField("EmptyColumnType");
 	sm_cardSlotData.emptyColumnType = (EmptyColumnType)ScriptEngine::GetEnumFromName(ScriptEngine::GetString(), sm_emptyColumnTypeNameList, EmptyColumnType::EMPTY_COLUMN_COUNT);
+	ScriptEngine::Pop();
+
+	ScriptEngine::GetField("MainDiscard");
+	EntityID mainDiscard = GetSlotFromName(scene, ScriptEngine::GetString());
+	if (mainDiscard != INVALID_ENTITY)
+	{
+		sm_cardSlotData.mainDiscard = mainDiscard;
+	}
+	ScriptEngine::Pop();
+
+	ScriptEngine::GetField("MonsterDiscard");
+	EntityID monsterDiscard = GetSlotFromName(scene, ScriptEngine::GetString());
+	if (monsterDiscard != INVALID_ENTITY)
+	{
+		sm_cardSlotData.monsterDiscard = monsterDiscard;
+	}
 	ScriptEngine::Pop();
 }

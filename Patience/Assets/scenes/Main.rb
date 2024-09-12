@@ -369,7 +369,7 @@ Entities:
       Size: [32, 44.5]
       DebugColor: [0, 0, 0, 0]
     CardSlotComponent:
-      SlotType: 3
+      SlotType: 4
       SlotLayout: 1
       StaggeredOffset: [0, -16]
       MonsterBattleSite: 0
@@ -501,3 +501,38 @@ Entities:
       Site:SuitOrdering: 0
       Site:CanLoop: true
       Site:LoopMax: 10
+  - Entity: 11987370279798727053
+    TagComponent:
+      Tag: Deck
+    TransformComponent:
+      Position: [-415, 206, 0]
+      Rotation: [0, -0, 0]
+      Scale: [1, 1, 1]
+    SpriteRendererComponent:
+      Color: [1, 1, 1, 1]
+      Texture: textures\Misc2.png
+    BoxArea2DComponent:
+      Offset: [0, 0]
+      Size: [32, 44.5]
+      DebugColor: [0, 0, 0, 0]
+    CardSlotComponent:
+      SlotType: 3
+      SlotLayout: 1
+      StaggeredOffset: [0, -16]
+      MonsterBattleSite: 0
+      Site:FoundationSuit: 0
+      Site:FoundationRank: -1
+      Site:RankOrdering: 0
+      Site:SuitOrdering: 0
+      Site:CanLoop: false
+      Site:LoopMax: 13
+  - Entity: 4088872620367869381
+    TagComponent:
+      Tag: Card Deck
+    TransformComponent:
+      Position: [-415, 206, 0]
+      Rotation: [0, -0, 0]
+      Scale: [1, 1, 1]
+    SpriteRendererComponent:
+      Color: [1, 1, 1, 1]
+      Texture: textures\CardsNew\Backs\CardBack0.png

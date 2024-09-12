@@ -73,8 +73,8 @@ void PatienceSetupSystem::GetGameModeDataFromScript(const char* scriptName, Pati
 	std::list<std::string> cardSets;
 	ScriptEngine::GetGlobal("GameModeData");
 	ScriptEngine::GetField(scriptName);
-
-	CardSlotComponent::InitCardSlotData();
+	
+	CardSlotComponent::InitCardSlotData(*m_scene);
 }
 
 void PatienceSetupSystem::GetCardDataFromScript(const char* scriptName, std::vector<CardData>& cardDatas)

@@ -355,26 +355,26 @@ void CardPlacementSystem::ReleaseMonster(Entity slotEntity)
 	}
 }
 
-/*void SetCardBackSprite(Entity card)
+void SetCardBackSprite(Entity card)
 {
 	SpriteRendererComponent& sprite = card.GetComponent<SpriteRendererComponent>();
-	auto path = Project::GetAssetFileSystemPath("textures\\CardsNew\\Backs\\CardBack0.png");
+	auto path = Project::GetAssetFileSystemPath("textures\\CardsNew\\Backs\\CardBack1.png");
 	sprite.m_texture = Texture2D::Create(path.string());
-}*/
+}
 
 void CardPlacementSystem::MoveCardToSlot(Entity card, Entity slot, bool flipCard)
 {
 	TransformComponent& transform = card.GetComponent<TransformComponent>();
 	const TransformComponent& slotTransform = slot.GetComponentRead<TransformComponent>();
 	Vec3 final = Vec3(slotTransform.m_position.x, slotTransform.m_position.y, zLayers[FOREGROUND_3_LAYER]);
-	Ref<Tween> translationTween = m_scene->CreateTween(card, &transform.m_position, transform.m_position, final, 0.6f);
+	Ref<Tween> translationTween = m_scene->CreateTween(card, &transform.m_position, transform.m_position, final, 1.0f);
 	translationTween->Start();
 
 	if (flipCard)
 	{
-		Ref<Tween> rotationTween = m_scene->CreateTween(card, &transform.m_rotation.y, 0.0f, (3.14f/2.0f), 6.0f);
-		//rotationTween.AddCallbackStep(&SetCardBackSprite);
-		//rotationTween.AddTweenStep(&transform.m_rotation.y, -90.0f, 0.0f, 0.3f);
+		Ref<Tween> rotationTween = m_scene->CreateTween(card, &transform.m_rotation.y, 0.0f, (3.14f/2.0f), 0.5f);
+		rotationTween->AddCallbackStep(&SetCardBackSprite, card);
+		rotationTween->AddTweenStep(&transform.m_rotation.y, -(3.14f / 2.0f), 0.0f, 0.5);
 		rotationTween->Start();
 	}
 }

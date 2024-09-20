@@ -121,7 +121,13 @@ namespace rhombus {
 			RB_PROFILE_SCOPE("Run Loop");
 
 			float time = Time::GetTime();
+			static int MIN_FPS = 15;
 			DeltaTime deltaTime = time - m_LastFrameTime;
+			if (1.0f / deltaTime < MIN_FPS)
+			{
+				deltaTime = (1.0f / (float)MIN_FPS);
+			}
+
 			m_LastFrameTime = time;
 
 			if (!m_Minimised)

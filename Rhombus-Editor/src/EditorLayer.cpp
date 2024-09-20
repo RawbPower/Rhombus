@@ -130,6 +130,7 @@ namespace rhombus
 
 		// Render
 		Renderer2D::ResetStats();
+		Renderer2D::SetFPDStat(dt);
 #if RB_EDITOR
 		m_Framebuffer->Bind();
 #endif

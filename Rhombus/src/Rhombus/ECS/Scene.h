@@ -7,6 +7,8 @@
 #include "Rhombus/Core/UUID.h"
 #include "Rhombus/Renderer/EditorCamera.h"
 #include "Rhombus/ECS/Systems/TweeningSystem.h"
+#include "Rhombus/Animation/EasingFunctions.h"
+
 class b2World;
 
 namespace rhombus
@@ -52,10 +54,11 @@ namespace rhombus
 
 		void InitPhyics2D();
 
-		Ref<Tween> CreateTween(Entity entity, float* param, float begin, float finish, float duration);
-		Ref<Tween> CreateTween(Entity entity, Vec2* param, Vec2 begin, Vec2 finish, float duration);
-		Ref<Tween> CreateTween(Entity entity, Vec3* param, Vec3 begin, Vec3 finish, float duration);
-		Ref<Tween> CreateTween(Entity entity, Vec4* param, Vec4 begin, Vec4 finish, float duration);
+		Ref<Tween> CreateTween(Entity entity, float duration);
+		Ref<Tween> CreateTween(Entity entity, float* param, float begin, float finish, float duration, EasingType easingType = EasingType::LINEAR);
+		Ref<Tween> CreateTween(Entity entity, Vec2* param, Vec2 begin, Vec2 finish, float duration, EasingType easingType = EasingType::LINEAR);
+		Ref<Tween> CreateTween(Entity entity, Vec3* param, Vec3 begin, Vec3 finish, float duration, EasingType easingType = EasingType::LINEAR);
+		Ref<Tween> CreateTween(Entity entity, Vec4* param, Vec4 begin, Vec4 finish, float duration, EasingType easingType = EasingType::LINEAR);
 
 		void DuplicateEntity(Entity entity);
 

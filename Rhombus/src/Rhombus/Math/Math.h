@@ -20,4 +20,17 @@ namespace rhombus::math
 	Mat4 Rotate(const Mat4& mat, float angle, const Vec3& v);
 	Mat4 Scale(const Mat4& mat, const Vec3& scale);
 	bool DecomposeTransform(const Mat4& transform, Vec3& outTranslation, Vec3& outRotation, Vec3& outScale);
+
+	inline float Cos(float x) { return cos(x); }
+	inline float Sin(float x) { return sin(x); }
+	inline float Tan(float x) { return tan(x); }
+
+	inline float Acos(float x) { return acos(x); }
+	inline float Asin(float x) { return asin(x); }
+	inline float Atan(float x) { return atan(x); }
+	inline float Atan2(float y, float x) { return atan2(y, x); }
+
+	inline float Pow(float x, int a) { return pow(x, a); }
+	inline float Pow(float x, float a) { return pow(x, a); }
+	inline float Sqrt(float x) { return sqrt(x); }
 }

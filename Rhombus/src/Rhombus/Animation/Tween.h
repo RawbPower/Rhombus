@@ -2,6 +2,7 @@
 
 #include "Rhombus/Math/Vector.h"
 #include "Rhombus/Core/DeltaTime.h"
+#include "EasingFunctions.h"
 #include "Rhombus/ECS/Entity.h"
 
 #include <queue>
@@ -14,10 +15,10 @@ namespace rhombus
 	{
 	public:
 		Tween() = default;
-		Tween(float* param, float begin, float finish, float duration);
-		Tween(Vec2* param, Vec2 begin, Vec2 finish, float duration);
-		Tween(Vec3* param, Vec3 begin, Vec3 finish, float duration);
-		Tween(Vec4* param, Vec4 begin, Vec4 finish, float duration);
+		Tween(float* param, float begin, float finish, float duration, EasingType easingType = EasingType::LINEAR);
+		Tween(Vec2* param, Vec2 begin, Vec2 finish, float duration, EasingType easingType = EasingType::LINEAR);
+		Tween(Vec3* param, Vec3 begin, Vec3 finish, float duration, EasingType easingType = EasingType::LINEAR);
+		Tween(Vec4* param, Vec4 begin, Vec4 finish, float duration, EasingType easingType = EasingType::LINEAR);
 		Tween(std::function<void(Entity)> callback, Entity entity);
 
 		void Start();
@@ -27,8 +28,12 @@ namespace rhombus
 		bool GetIsFinished() const { return m_bIsFinished; }
 
 		void Step(DeltaTime dt);
+		float ApplyEasing(EasingType easingType, float t, float b, float c, float d);
 
-		void AddTweenStep(float* param, float begin, float finish, float duration);
+		void AddTweenStep(float* param, float begin, float finish, float duration, EasingType easingType = EasingType::LINEAR);
+		void AddTweenStep(Vec2* param, Vec2 begin, Vec2 finish, float duration, EasingType easingType = EasingType::LINEAR);
+		void AddTweenStep(Vec3* param, Vec3 begin, Vec3 finish, float duration, EasingType easingType = EasingType::LINEAR);
+		void AddTweenStep(Vec4* param, Vec4 begin, Vec4 finish, float duration, EasingType easingType = EasingType::LINEAR);
 		void AddCallbackStep(std::function<void(Entity)> callback, Entity entity);
 	private:
 		struct TweenParamsDOF
@@ -51,19 +56,20 @@ namespace rhombus
 			int m_iNumComponents = 1;
 			float m_fDuration = 0.0f;
 			float m_fCurrentTime = 0.0f;
+			EasingType m_easingType;
 
 			Entity m_callbackEntity;
 			std::function<void(Entity)> m_callback;
 
 			TweenParams() = default;
-			TweenParams(int numComponents, float duration)
-				: m_tweenParamsDOF(), m_iNumComponents(numComponents), m_fDuration(duration), m_fCurrentTime(0.0f)
+			TweenParams(int numComponents, float duration, EasingType easingType)
+				: m_tweenParamsDOF(), m_iNumComponents(numComponents), m_easingType(easingType), m_fDuration(duration), m_fCurrentTime(0.0f)
 			{
 
 			}
 
 			TweenParams(std::function<void(Entity)> callback, Entity entity)
-				: m_tweenParamsDOF(), m_callback(callback), m_callbackEntity(entity), m_iNumComponents(0), m_fDuration(0.0f), m_fCurrentTime(0.0f)
+				: m_tweenParamsDOF(), m_callback(callback), m_callbackEntity(entity), m_easingType(EasingType::LINEAR), m_iNumComponents(0), m_fDuration(0.0f), m_fCurrentTime(0.0f)
 			{
 
 			}

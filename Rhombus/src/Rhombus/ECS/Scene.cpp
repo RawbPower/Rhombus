@@ -470,31 +470,38 @@ namespace rhombus
 		}
 	}
 
-	Ref<Tween> Scene::CreateTween(Entity entity, float* param, float begin, float finish, float duration)
+	Ref<Tween> Scene::CreateTween(Entity entity, float duration)
 	{
 		TweenComponent& tweenComponent = entity.GetOrAddComponent<TweenComponent>();
-		Ref<Tween> tween = tweenComponent.CreateTween(param, begin, finish, duration);
+		Ref<Tween> tween = tweenComponent.CreateTween(nullptr, 0.0f, 0.0f, duration);
 		return tween;
 	}
 
-	Ref<Tween> Scene::CreateTween(Entity entity, Vec2* param, Vec2 begin, Vec2 finish, float duration)
+	Ref<Tween> Scene::CreateTween(Entity entity, float* param, float begin, float finish, float duration, EasingType easingType)
 	{
 		TweenComponent& tweenComponent = entity.GetOrAddComponent<TweenComponent>();
-		Ref<Tween> tween = tweenComponent.CreateTween(param, begin, finish, duration);
+		Ref<Tween> tween = tweenComponent.CreateTween(param, begin, finish, duration, easingType);
 		return tween;
 	}
 
-	Ref<Tween> Scene::CreateTween(Entity entity, Vec3* param, Vec3 begin, Vec3 finish, float duration)
+	Ref<Tween> Scene::CreateTween(Entity entity, Vec2* param, Vec2 begin, Vec2 finish, float duration, EasingType easingType)
 	{
 		TweenComponent& tweenComponent = entity.GetOrAddComponent<TweenComponent>();
-		Ref<Tween> tween = tweenComponent.CreateTween(param, begin, finish, duration);
+		Ref<Tween> tween = tweenComponent.CreateTween(param, begin, finish, duration, easingType);
 		return tween;
 	}
 
-	Ref<Tween> Scene::CreateTween(Entity entity, Vec4* param, Vec4 begin, Vec4 finish, float duration)
+	Ref<Tween> Scene::CreateTween(Entity entity, Vec3* param, Vec3 begin, Vec3 finish, float duration, EasingType easingType)
 	{
 		TweenComponent& tweenComponent = entity.GetOrAddComponent<TweenComponent>();
-		Ref<Tween> tween = tweenComponent.CreateTween(param, begin, finish, duration);
+		Ref<Tween> tween = tweenComponent.CreateTween(param, begin, finish, duration, easingType);
+		return tween;
+	}
+
+	Ref<Tween> Scene::CreateTween(Entity entity, Vec4* param, Vec4 begin, Vec4 finish, float duration, EasingType easingType)
+	{
+		TweenComponent& tweenComponent = entity.GetOrAddComponent<TweenComponent>();
+		Ref<Tween> tween = tweenComponent.CreateTween(param, begin, finish, duration, easingType);
 		return tween;
 	}
 

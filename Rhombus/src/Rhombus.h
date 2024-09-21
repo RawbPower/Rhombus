@@ -54,6 +54,7 @@
 
 // ---Animation-------------------
 #include "Rhombus/Animation/Tween.h"
+#include "Rhombus/Animation/EasingFunctions.h"
 //--------------------------------
 
 using namespace rhombus;

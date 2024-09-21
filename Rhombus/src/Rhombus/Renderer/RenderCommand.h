@@ -38,6 +38,11 @@ namespace rhombus {
 			s_RendererAPI->DrawLines(vertexArray, vertexCount);
 		}
 
+		static void DrawQuad()
+		{
+			s_RendererAPI->DrawQuad();
+		}
+
 		static void SetLineWidth(float width)
 		{
 			s_RendererAPI->SetLineWidth(width);

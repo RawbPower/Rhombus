@@ -17,6 +17,12 @@ void GameLayer::OnAttach()
 	RB_PROFILE_FUNCTION();
 
 	// Framebuffer
+	FramebufferSpecification fbSpec;
+	fbSpec.Attachments = { FramebufferTextureFormat::RGBA8, FramebufferTextureFormat::RED_INTEGER, FramebufferTextureFormat::Depth };
+	fbSpec.Width = 960;
+	fbSpec.Height = 540;
+	m_Framebuffer = Framebuffer::Create(fbSpec);
+
 	m_ActiveScene = CreateRef<Scene>();
 	m_ActiveScene->OnViewportResize(960, 540);
 
@@ -46,10 +52,23 @@ void GameLayer::OnUpdate(rhombus::DeltaTime dt)
 
 	// Render
 	Renderer2D::ResetStats();
+	m_Framebuffer->Bind();
 	RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
 	RenderCommand::Clear();
 
 	m_ActiveScene->OnUpdateRuntime(dt);
+
+	m_Framebuffer->Unbind();
+
+	RenderInWindow();
+}
+
+void GameLayer::RenderInWindow()
+{
+	RenderCommand::SetClearColor({ 0.6f, 0.1f, 0.1f, 1 });
+	RenderCommand::Clear();
+	RenderCommand::SetViewport(0, 0, Application::Get().GetWindow().GetWidth(), Application::Get().GetWindow().GetHeight());
+	Renderer2D::DrawFrambuffer(m_Framebuffer);
 }
 
 void GameLayer::OnImGuiRender()

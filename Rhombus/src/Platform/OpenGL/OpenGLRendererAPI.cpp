@@ -73,6 +73,11 @@ namespace rhombus {
 		glDrawArrays(GL_LINES, 0, vertexCount);
 	}
 
+	void OpenGLRendererAPI::DrawQuad()
+	{
+		glDrawArrays(GL_TRIANGLES, 0, 6);
+	}
+
 	void OpenGLRendererAPI::SetLineWidth(float width)
 	{
 		glLineWidth(width);

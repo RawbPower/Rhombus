@@ -131,9 +131,7 @@ namespace rhombus
 		// Render
 		Renderer2D::ResetStats();
 		Renderer2D::SetFPDStat(dt);
-#if RB_EDITOR
 		m_Framebuffer->Bind();
-#endif
 		RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
 		RenderCommand::Clear();
 
@@ -187,9 +185,19 @@ namespace rhombus
 
 		OnOverlayRender();
 
-#if RB_EDITOR
 		m_Framebuffer->Unbind();
+
+#if !RB_EDITOR
+		RenderInWindow();
 #endif
+	}
+
+	void EditorLayer::RenderInWindow()
+	{
+		RenderCommand::SetClearColor({ 0.6f, 0.1f, 0.1f, 1 });
+		RenderCommand::Clear();
+		RenderCommand::SetViewport(0, 0, Application::Get().GetWindow().GetWidth(), Application::Get().GetWindow().GetHeight());
+		Renderer2D::DrawFrambuffer(m_Framebuffer);
 	}
 
 	void EditorLayer::OnImGuiRender()
@@ -197,6 +205,7 @@ namespace rhombus
 #if !RB_EDITOR
 		return;
 #endif
+
 		RB_PROFILE_FUNCTION();
 
 		//ImGui::ShowDemoWindow();
@@ -765,6 +774,16 @@ namespace rhombus
 		{
 			Renderer2D::BeginScene(m_EditorCamera);
 		}
+
+#if RB_EDITOR
+		Vec3 translation = Vec3(0.0f);
+		Vec3 scale = Vec3(960.0f, 540.0f, 1.0f);
+
+		Mat4 transform = math::Translate(Mat4::Identity(), translation)
+			* math::Rotate(Mat4::Identity(), 0.0f, Vec3(0.0f, 0.0f, 1.0f))
+			* math::Scale(Mat4::Identity(), scale);
+		Renderer2D::DrawRect(transform, Color(1.0f, 1.0f, 1.0f, 0.5f));
+#endif
 
 		if (m_ShowPhysicsColliders)
 		{

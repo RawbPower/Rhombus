@@ -24,6 +24,8 @@ namespace rhombus
 		virtual void OnImGuiRender() override;
 		void OnEvent(Event& e) override;
 
+		void RenderInWindow();
+
 	private:
 		bool OnKeyPressed(KeyPressedEvent& e);
 		bool OnMouseButtonPressed(MouseButtonPressedEvent& e);

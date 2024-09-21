@@ -127,6 +127,9 @@ void CardPlacementSystem::OnMouseButtonReleased(int button)
 		card.SetIsHeld(false);
 		card.SetHeldOffset(Vec2(0.0f));
 		PlaceCard(card.GetOwnerEntity(), heldCards.size() > 1, damage);
+
+		//Ref<Tween> rotationTween = m_scene->CreateTween(card.GetOwnerEntity(), &card.GetOwnerEntity().GetComponent<TransformComponent>().m_rotation.z, 0.0f, math::PI, 10.0f, EasingType::SINE_OUT);
+		//rotationTween->Start();
 	}
 
 	ReleaseMonster(originalSlot);
@@ -372,9 +375,13 @@ void CardPlacementSystem::MoveCardToSlot(Entity card, Entity slot, bool flipCard
 
 	if (flipCard)
 	{
-		Ref<Tween> rotationTween = m_scene->CreateTween(card, 0.35f);
+		Ref<Tween> rotationTween = m_scene->CreateTween(card, 0.25f);
 		rotationTween->AddCallbackStep(&SetCardBackSprite, card);
-		//rotationTween->AddTweenStep(&transform.m_rotation.y, 0.0f, 0.0f, 0.3f, EasingType::CUBIC_OUT);
 		rotationTween->Start();
+
+		/*Ref<Tween> rotationTween = m_scene->CreateTween(card, &transform.m_rotation.y, 0.0f, (3.14f / 2.0f), 1.0f, EasingType::CUBIC_IN);
+		rotationTween->AddCallbackStep(&SetCardBackSprite, card);
+		rotationTween->AddTweenStep(&transform.m_rotation.y, -(3.14f / 2.0f), 0.0f, 1.0f, EasingType::CUBIC_OUT);
+		rotationTween->Start();*/
 	}
 }

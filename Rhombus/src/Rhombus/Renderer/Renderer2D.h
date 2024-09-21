@@ -5,6 +5,7 @@
 #include "SubTexture2D.h"
 #include "Camera.h"
 #include "EditorCamera.h"
+#include "Framebuffer.h"
 
 #include "Rhombus/ECS/Components/SpriteRendererComponent.h"
 
@@ -45,6 +46,8 @@ namespace rhombus
 		static void DrawCircle(const Mat4& transform, const Color& color, float thickness = 1.0f, float fade = 0.0f, int entityID = -1);
 
 		static void DrawSprite(const Mat4& transform, const SpriteRendererComponent& src, int entityID);
+
+		static void DrawFrambuffer(Ref<Framebuffer> frameBuffer);
 
 		static float GetLineWidth();
 		static void SetLineWidth(float width);

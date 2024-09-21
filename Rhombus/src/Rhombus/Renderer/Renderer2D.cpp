@@ -9,6 +9,17 @@
 
 namespace rhombus
 {
+	float screenVertices[] = { // vertex attributes for a quad that fills the entire screen in Normalized Device Coordinates.
+		// positions   // texCoords
+		-1.0f,  1.0f,  0.0f, 1.0f,
+		-1.0f, -1.0f,  0.0f, 0.0f,
+		 1.0f, -1.0f,  1.0f, 0.0f,
+
+		-1.0f,  1.0f,  0.0f, 1.0f,
+		 1.0f, -1.0f,  1.0f, 0.0f,
+		 1.0f,  1.0f,  1.0f, 1.0f
+	};
+
 	struct QuadVertex
 	{
 		Vec3 Position;
@@ -48,6 +59,10 @@ namespace rhombus
 		static const uint32_t MaxVertices = MaxQuads * 4;
 		static const uint32_t MaxIndices = MaxQuads * 6;
 		static const uint32_t MaxTextureSlots = 32;		// TODO: Renderer Capabilities
+
+		Ref<VertexArray> ScreenVertexArray;
+		Ref<VertexBuffer> ScreenVertexBuffer;
+		Ref<Shader> ScreenShader;
 
 		Ref<VertexArray> QuadVertexArray;
 		Ref<VertexBuffer> QuadVertexBuffer;
@@ -90,6 +105,17 @@ namespace rhombus
 	void Renderer2D::Init()
 	{
 		RB_PROFILE_FUNCTION();
+
+		s_Data.ScreenVertexArray = VertexArray::Create();
+
+		s_Data.ScreenVertexBuffer = VertexBuffer::Create(&screenVertices[0], sizeof(screenVertices));
+
+		s_Data.ScreenVertexBuffer->SetLayout({
+			{ ShaderDataType::Float2, "a_Position" },
+			{ ShaderDataType::Float2, "a_TexCoord" }
+		});
+
+		s_Data.ScreenVertexArray->AddVertexBuffer(s_Data.ScreenVertexBuffer);
 
 		s_Data.QuadVertexArray = VertexArray::Create();
 
@@ -163,6 +189,10 @@ namespace rhombus
 		int32_t samplers[s_Data.MaxTextureSlots];
 		for (uint32_t i = 0; i < s_Data.MaxTextureSlots; i++)
 			samplers[i] = i;
+
+		s_Data.ScreenShader = Shader::Create("assets/shaders/Renderer2D_Screen.glsl");
+		s_Data.ScreenShader->Bind();
+		s_Data.ScreenShader->SetInt("u_ScreenTexture", 0);
 
 		s_Data.QuadShader = Shader::Create("assets/shaders/Renderer2D_Quad.glsl");
 		s_Data.QuadShader->Bind();
@@ -583,6 +613,14 @@ namespace rhombus
 			DrawQuad(transform, src.m_texture, src.GetColor(), 1.0f, entityID);
 		else
 			DrawQuad(transform, src.GetColor(), entityID);
+	}
+
+	void Renderer2D::DrawFrambuffer(Ref<Framebuffer> frameBuffer)
+	{
+		s_Data.ScreenShader->Bind();
+		s_Data.ScreenVertexArray->Bind();
+		frameBuffer->BindTexture();
+		RenderCommand::DrawQuad();
 	}
 
 	float Renderer2D::GetLineWidth()

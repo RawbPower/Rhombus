@@ -15,6 +15,8 @@ public:
 	virtual void OnImGuiRender() override;
 	void OnEvent(rhombus::Event& e) override;
 
+	void RenderInWindow();
+
 private:
 	bool OnKeyPressed(KeyPressedEvent& e);
 	bool OnMouseButtonPressed(MouseButtonPressedEvent& e);
@@ -29,4 +31,5 @@ private:
 	void OpenScene(const std::filesystem::path& path);
 
 	Ref<Scene> m_ActiveScene;
+	Ref<Framebuffer> m_Framebuffer;
 };

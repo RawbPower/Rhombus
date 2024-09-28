@@ -65,6 +65,8 @@ namespace rhombus {
 		inline static Application& Get() { return *s_Instance; }
 
 		const ApplicationSpecification& GetSpecification() const { return m_Specification; }
+
+		bool GetIsDebugPaused() const { return m_DebugPause; }
 	private:
 		void Run();
 
@@ -88,6 +90,8 @@ namespace rhombus {
 		ImGuiLayer* m_ImGuiLayer;
 		bool m_Running = true;
 		bool m_Minimised = false;
+		bool m_DebugPause = false;
+		bool m_DebugStep = false;
 		LayerStack m_LayerStack;
 		float m_LastFrameTime = 0.0f;
 	private:

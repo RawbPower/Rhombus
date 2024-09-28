@@ -161,57 +161,62 @@ namespace rhombus
 
 	void Scene::OnUpdateRuntime(DeltaTime dt)
 	{
-		// Update Scripts
+		if (!Application::Get().GetIsDebugPaused())
 		{
-			// Lua
-			std::vector<EntityID> view = m_Registry.GetEntityList<ScriptComponent>();
-			for (auto e : view)
+			// Update Scripts
 			{
-				Entity entity = { e, this };
-				ScriptEngine::OnUpdateEntity(entity, dt);
-			}
-
-			// Native
-			std::vector<EntityID> nativeView = m_Registry.GetEntityList<NativeScriptComponent>();
-			for (auto e : nativeView)
-			{
-				NativeScriptComponent& nsc = m_Registry.GetComponent<NativeScriptComponent>(e);
-				// TODO: Move on Scene::OnScenePlay
-				if (!nsc.m_instance)
+				// Lua
+				std::vector<EntityID> view = m_Registry.GetEntityList<ScriptComponent>();
+				for (auto e : view)
 				{
-					nsc.m_instance = nsc.InstantiateScript();
-					nsc.m_instance->m_entity = Entity(e, this);
-					//nsc.m_instance->m_entity = Entity{entity, this}; ?????
-					nsc.m_instance->OnReady();
+					Entity entity = { e, this };
+					ScriptEngine::OnUpdateEntity(entity, dt);
 				}
 
-				nsc.m_instance->OnUpdate(dt);
+				// Native
+				std::vector<EntityID> nativeView = m_Registry.GetEntityList<NativeScriptComponent>();
+				for (auto e : nativeView)
+				{
+					NativeScriptComponent& nsc = m_Registry.GetComponent<NativeScriptComponent>(e);
+					// TODO: Move on Scene::OnScenePlay
+					if (!nsc.m_instance)
+					{
+						nsc.m_instance = nsc.InstantiateScript();
+						nsc.m_instance->m_entity = Entity(e, this);
+						//nsc.m_instance->m_entity = Entity{entity, this}; ?????
+						nsc.m_instance->OnReady();
+					}
+
+					nsc.m_instance->OnUpdate(dt);
+				}
 			}
-		}
 
-		// Physics
-		{
-			const int32_t velocityIterations = 6;
-			const int32_t positionIterations = 2;
-			m_PhysicsWorld->Step(dt, velocityIterations, positionIterations);
-
-			// Retrieve transform post physics step
-			std::vector<EntityID> view = m_Registry.GetEntityList<Rigidbody2DComponent>();
-			for (auto e : view)
+			// Physics
 			{
-				Entity entity = { e, this };
-				auto& transform = entity.GetComponent<TransformComponent>();
-				auto& rb = entity.GetComponent<Rigidbody2DComponent>();
+				const int32_t velocityIterations = 6;
+				const int32_t positionIterations = 2;
+				m_PhysicsWorld->Step(dt, velocityIterations, positionIterations);
 
-				b2Body* body = (b2Body*)rb.m_runtimeBody;
-				const auto& position = body->GetPosition();
-				transform.m_position.x = position.x;
-				transform.m_position.y = position.y;
-				transform.m_rotation.z = body->GetAngle();
+				// Retrieve transform post physics step
+				std::vector<EntityID> view = m_Registry.GetEntityList<Rigidbody2DComponent>();
+				for (auto e : view)
+				{
+					Entity entity = { e, this };
+					auto& transform = entity.GetComponent<TransformComponent>();
+					auto& rb = entity.GetComponent<Rigidbody2DComponent>();
+
+					b2Body* body = (b2Body*)rb.m_runtimeBody;
+					const auto& position = body->GetPosition();
+					transform.m_position.x = position.x;
+					transform.m_position.y = position.y;
+					transform.m_rotation.z = body->GetAngle();
+				}
 			}
+
+			tweeningSystem->UpdateTweens(dt);
 		}
 
-		Camera* mainCamera = nullptr;
+		SceneCamera* mainCamera = nullptr;
 		Mat4 cameraTransform;
 		{
 			std::vector<EntityID> view = m_Registry.GetEntityList<CameraComponent>();
@@ -273,9 +278,18 @@ namespace rhombus
 				}
 			}
 
-			tweeningSystem->UpdateTweens(dt);
-
 			OnDraw();
+
+			Renderer2D::EndScene();
+
+			Renderer2D::BeginScene();
+
+			if (Application::Get().GetIsDebugPaused())
+			{
+				Vec2 position = Vec2(0.9f, 0.9f);
+				Ref<Texture2D> texture = Texture2D::Create("Resources/Icons/Pause.png");
+				Renderer2D::DrawQuadOverlay(position, 0.0f, 1.0f, texture);
+			}
 
 			Renderer2D::EndScene();
 		}

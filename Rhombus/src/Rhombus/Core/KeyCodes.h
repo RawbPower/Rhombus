@@ -49,6 +49,7 @@
 #define RB_KEY_BACKSLASH          '\\'  /* \ */
 #define RB_KEY_RIGHT_BRACKET      ']'  /* ] */
 #define RB_KEY_GRAVE_ACCENT       '`'  /* ` */
+#define RB_KEY_HASH				  '#'
 #define RB_KEY_WORLD_1            161 /* non-US #1 */
 #define RB_KEY_WORLD_2            162 /* non-US #2 */
 

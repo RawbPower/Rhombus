@@ -571,11 +571,13 @@ namespace rhombus
 				// Do nothing
 			}
 		}
+
+		return false;
 	}
 
 	bool EditorLayer::OnMouseButtonPressed(MouseButtonPressedEvent& e)
 	{
-		if (m_SceneState == SceneState::Play)
+		if (m_SceneState == SceneState::Play && !Application::Get().GetIsDebugPaused())
 		{
 			m_ActiveScene->OnMouseButtonPressed(e.GetMouseButton());
 		}
@@ -594,7 +596,7 @@ namespace rhombus
 
 	bool EditorLayer::OnMouseButtonReleased(MouseButtonReleasedEvent& e)
 	{
-		if (m_SceneState == SceneState::Play)
+		if (m_SceneState == SceneState::Play && !Application::Get().GetIsDebugPaused())
 		{
 			m_ActiveScene->OnMouseButtonReleased(e.GetMouseButton());
 		}
@@ -604,7 +606,7 @@ namespace rhombus
 
 	bool EditorLayer::OnMouseMoved(MouseMovedEvent& e)
 	{
-		if (m_SceneState == SceneState::Play)
+		if (m_SceneState == SceneState::Play && !Application::Get().GetIsDebugPaused())
 		{
 			m_ActiveScene->OnMouseMoved(e.GetX(), e.GetY());
 		}

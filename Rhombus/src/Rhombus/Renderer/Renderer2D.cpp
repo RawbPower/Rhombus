@@ -228,6 +228,17 @@ namespace rhombus
 		s_Data.LineShader->SetMat4("u_ViewProjection", viewProjection);
 	}
 
+	void Renderer2D::BeginScene()
+	{
+		RB_PROFILE_FUNCTION();
+
+		Mat4 viewProjection = Mat4::Identity();
+
+		SetShaderViewProjection(viewProjection);
+
+		StartBatch();
+	}
+
 	void Renderer2D::BeginScene(const Camera& camera, const Mat4& transform)
 	{
 		RB_PROFILE_FUNCTION();
@@ -535,6 +546,72 @@ namespace rhombus
 			s_Data.QuadVertexBufferPtr->TextureIndex = textureIndex;
 			s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
 			s_Data.QuadVertexBufferPtr->EntityID = entityID;
+			s_Data.QuadVertexBufferPtr++;
+		}
+
+		s_Data.QuadIndexCount += 6;
+
+		s_Data.Stats.QuadCount++;
+	}
+
+	void Renderer2D::DrawQuadOverlay(const Vec2& position, const float& angle, const Vec2& scale, const Ref<Texture2D>& texture, const Color& color, float tilingFactor)
+	{
+		RB_PROFILE_FUNCTION();
+
+		Mat4 transform = Mat4::Identity();
+		if (abs(angle) > 0.001f)
+		{
+			transform = math::Translate(Mat4::Identity(), { position.x, position.y, 0.0f }) * math::Rotate(Mat4::Identity(), angle, Vec3(0.0f, 0.0f, 1.0f)) * math::Scale(Mat4::Identity(), { scale.x, scale.y, 1.0f });
+		}
+		else
+		{
+			transform = math::Translate(Mat4::Identity(), { position.x, position.y, 0.0f }) * math::Scale(Mat4::Identity(), { scale.x, scale.y, 1.0f });
+		}
+
+		constexpr size_t quadVertexCount = 4;
+		const Vec2 textureCoords[] = { { 0.0f, 0.0f }, { 1.0f, 0.0f }, { 1.0f, 1.0f }, { 0.0f, 1.0f } };
+
+		// TODO: Add PPU
+		Viewport viewport = Application::Get().GetViewport();
+		Mat4 scaledTransform = math::Scale(transform, Vec3((float)texture->GetWidth()/viewport.width, (float)texture->GetHeight()/viewport.height, 1.0f));
+
+		if (s_Data.QuadIndexCount >= Renderer2DData::MaxIndices)
+		{
+			NextBatch();
+		}
+
+		float textureIndex = 0.0f;
+
+		for (uint32_t i = 1; i < s_Data.TextureSlotIndex; i++)
+		{
+			if (*s_Data.TextureSlots[i].get() == *texture.get())
+			{
+				textureIndex = (float)i;
+				break;
+			}
+		}
+
+		if (textureIndex == 0.0f)
+		{
+			if (s_Data.TextureSlotIndex >= Renderer2DData::MaxTextureSlots)
+			{
+				NextBatch();
+			}
+
+			textureIndex = (float)s_Data.TextureSlotIndex;
+			s_Data.TextureSlots[s_Data.TextureSlotIndex] = texture;
+			s_Data.TextureSlotIndex++;
+		}
+
+		for (size_t i = 0; i < quadVertexCount; i++)
+		{
+			Vec3 position = scaledTransform * s_Data.QuadVertexPosition[i];
+			s_Data.QuadVertexBufferPtr->Position = position;
+			s_Data.QuadVertexBufferPtr->Color = color;
+			s_Data.QuadVertexBufferPtr->TexCoord = textureCoords[i];
+			s_Data.QuadVertexBufferPtr->TextureIndex = textureIndex;
+			s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
+			s_Data.QuadVertexBufferPtr->EntityID = -1;
 			s_Data.QuadVertexBufferPtr++;
 		}
 

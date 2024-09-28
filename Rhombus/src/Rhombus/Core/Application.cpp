@@ -2,6 +2,7 @@
 #include "Application.h"
 
 #include "Rhombus/Core/Log.h"
+#include "Rhombus/Core/KeyCodes.h"
 
 #include "Rhombus/Renderer/Renderer.h"
 #include "Rhombus/Scripting/ScriptEngine.h"
@@ -92,9 +93,9 @@ namespace rhombus {
 
 		dispatcher.Dispatch<WindowMovedEvent>(BIND_EVENT_FN(OnWindowMoved));
 
-		//dispatcher.Dispatch<KeyPressedEvent>(BIND_EVENT_FN(OnKeyPressed));
+		dispatcher.Dispatch<KeyPressedEvent>(BIND_EVENT_FN(OnKeyPressed));
 
-		//dispatcher.Dispatch<KeyReleasedEvent>(BIND_EVENT_FN(OnKeyReleased));
+		dispatcher.Dispatch<KeyReleasedEvent>(BIND_EVENT_FN(OnKeyReleased));
 
 		//dispatcher.Dispatch<MouseButtonPressedEvent>(BIND_EVENT_FN(OnMouseButtonPressed));
 
@@ -129,6 +130,21 @@ namespace rhombus {
 			}
 
 			m_LastFrameTime = time;
+
+			if (m_DebugStep)
+			{
+				// If paused then unpause for a frame
+				if (m_DebugPause)
+				{
+					m_DebugPause = false;
+				}
+				// If not paused, we have just stepped forward a frame. So pause again and disable step
+				else
+				{
+					m_DebugPause = true;
+					m_DebugStep = false;
+				}
+			}
 
 			if (!m_Minimised)
 			{
@@ -192,6 +208,19 @@ namespace rhombus {
 	bool Application::OnKeyPressed(KeyPressedEvent& e)
 	{
 		RB_CORE_INFO(e.ToString());
+
+		if (e.GetKeyCode() == RB_KEY_HASH && !m_DebugStep)	// Can't pause while stepping
+		{
+			m_DebugPause = !m_DebugPause;
+		}
+		
+		if (m_DebugPause)
+		{
+			if (e.GetKeyCode() == RB_KEY_EQUAL)
+			{
+				m_DebugStep = true;
+			}
+		}
 
 		return true;
 	}

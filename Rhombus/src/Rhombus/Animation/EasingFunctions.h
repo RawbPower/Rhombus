@@ -104,7 +104,7 @@ namespace rhombus::easing
 
 	static float QuintOut(float t, float b, float c, float d)
 	{
-		return -c * (math::Pow(t / d - 1, 5) + 1.0f) + b;
+		return c * (math::Pow(t / d - 1, 5) + 1.0f) + b;
 	}
 
 	static float QuintInOut(float t, float b, float c, float d)
@@ -130,7 +130,7 @@ namespace rhombus::easing
 		t /= d / 2.0f;
 		if (t < 1)
 			return c / 2.0f * math::Pow(2.0f, 10.0f * (t - 1.0f)) + b;
-		return c / 2.0f * (-math::Pow(2.0f, -10.0f * (t - 1.0f)) + 1.0f) + b;
+		return c / 2.0f * (-math::Pow(2.0f, -10.0f * (t - 1.0f)) + 2.0f) + b;
 	}
 
 	static float CircIn(float t, float b, float c, float d)

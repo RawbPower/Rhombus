@@ -370,13 +370,17 @@ void CardPlacementSystem::MoveCardToSlot(Entity card, Entity slot, bool flipCard
 	TransformComponent& transform = card.GetComponent<TransformComponent>();
 	const TransformComponent& slotTransform = slot.GetComponentRead<TransformComponent>();
 	Vec3 final = Vec3(slotTransform.m_position.x, slotTransform.m_position.y, zLayers[FOREGROUND_3_LAYER]);
+
 	Ref<Tween> translationTween = m_scene->CreateTween(card, &transform.m_position, transform.m_position, final, 0.6f, EasingType::SINE_OUT);
 	translationTween->Start();
 
 	if (flipCard)
 	{
-		Ref<Tween> rotationTween = m_scene->CreateTween(card, 0.25f);
-		rotationTween->AddCallbackStep(&SetCardBackSprite, card);
+		TweenWaitStep waitStep(0.25f);
+		Ref<Tween> rotationTween = m_scene->CreateTween(card, waitStep);
+
+		TweenCallbackStep callbackStep(&SetCardBackSprite, card);
+		rotationTween->AddTweenStep(callbackStep);
 		rotationTween->Start();
 
 		/*Ref<Tween> rotationTween = m_scene->CreateTween(card, &transform.m_rotation.y, 0.0f, (3.14f / 2.0f), 1.0f, EasingType::CUBIC_IN);

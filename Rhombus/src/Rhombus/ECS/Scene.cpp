@@ -484,10 +484,24 @@ namespace rhombus
 		}
 	}
 
-	Ref<Tween> Scene::CreateTween(Entity entity, float duration)
+	Ref<Tween> Scene::CreateTween(Entity entity, const TweenParameterStep& tweenStep)
 	{
 		TweenComponent& tweenComponent = entity.GetOrAddComponent<TweenComponent>();
-		Ref<Tween> tween = tweenComponent.CreateTween(nullptr, 0.0f, 0.0f, duration);
+		Ref<Tween> tween = tweenComponent.CreateTween(tweenStep);
+		return tween;
+	}
+
+	Ref<Tween> Scene::CreateTween(Entity entity, const TweenCallbackStep& tweenStep)
+	{
+		TweenComponent& tweenComponent = entity.GetOrAddComponent<TweenComponent>();
+		Ref<Tween> tween = tweenComponent.CreateTween(tweenStep);
+		return tween;
+	}
+
+	Ref<Tween> Scene::CreateTween(Entity entity, const TweenWaitStep& tweenStep)
+	{
+		TweenComponent& tweenComponent = entity.GetOrAddComponent<TweenComponent>();
+		Ref<Tween> tween = tweenComponent.CreateTween(tweenStep);
 		return tween;
 	}
 

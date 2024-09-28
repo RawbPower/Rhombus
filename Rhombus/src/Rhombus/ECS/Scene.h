@@ -15,6 +15,9 @@ namespace rhombus
 {
 	class Entity;
 	class Tween;
+	class TweenParameterStep;
+	class TweenCallbackStep;
+	class TweenWaitStep;
 
 	template <typename... Component>
 	struct ComponentGroup
@@ -54,7 +57,9 @@ namespace rhombus
 
 		void InitPhyics2D();
 
-		Ref<Tween> CreateTween(Entity entity, float duration);
+		Ref<Tween> CreateTween(Entity entity, const TweenParameterStep& tweenStep);
+		Ref<Tween> CreateTween(Entity entity, const TweenCallbackStep& tweenStep);
+		Ref<Tween> CreateTween(Entity entity, const TweenWaitStep& tweenStep);
 		Ref<Tween> CreateTween(Entity entity, float* param, float begin, float finish, float duration, EasingType easingType = EasingType::LINEAR);
 		Ref<Tween> CreateTween(Entity entity, Vec2* param, Vec2 begin, Vec2 finish, float duration, EasingType easingType = EasingType::LINEAR);
 		Ref<Tween> CreateTween(Entity entity, Vec3* param, Vec3 begin, Vec3 finish, float duration, EasingType easingType = EasingType::LINEAR);

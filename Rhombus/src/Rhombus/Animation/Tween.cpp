@@ -3,109 +3,7 @@
 
 namespace rhombus
 {
-	Tween::Tween(float* param, float begin, float finish, float duration, EasingType easingType)
-		: m_bIsRunning(false), m_bIsFinished(false)
-	{
-		TweenParams tweenParams(1, duration, easingType);
-		tweenParams[0] = { param, begin, finish };
-		m_tweenSteps.push(tweenParams);
-	}
-
-	Tween::Tween(Vec2* param, Vec2 begin, Vec2 finish, float duration, EasingType easingType)
-		: m_bIsRunning(false), m_bIsFinished(false)
-	{
-		TweenParams tweenParams(2, duration, easingType);
-		tweenParams[0] = { &(param->x), begin.x, finish.x };
-		tweenParams[1] = { &(param->y), begin.y, finish.y };
-		m_tweenSteps.push(tweenParams);
-	}
-
-	Tween::Tween(Vec3* param, Vec3 begin, Vec3 finish, float duration, EasingType easingType)
-		: m_bIsRunning(false), m_bIsFinished(false)
-	{
-		TweenParams tweenParams(3, duration, easingType);
-		tweenParams[0] = { &(param->x), begin.x, finish.x };
-		tweenParams[1] = { &(param->y), begin.y, finish.y };
-		tweenParams[2] = { &(param->z), begin.z, finish.z };
-		m_tweenSteps.push(tweenParams);
-	}
-
-	Tween::Tween(Vec4* param, Vec4 begin, Vec4 finish, float duration, EasingType easingType)
-		: m_bIsRunning(false), m_bIsFinished(false)
-	{
-		TweenParams tweenParams(4, duration, easingType);
-		tweenParams[0] = { &(param->x), begin.x, finish.x };
-		tweenParams[1] = { &(param->y), begin.y, finish.y };
-		tweenParams[2] = { &(param->z), begin.z, finish.z };
-		tweenParams[3] = { &(param->w), begin.w, finish.w };
-		m_tweenSteps.push(tweenParams);
-	}
-
-	Tween::Tween(std::function<void(Entity)> callback, Entity entity)
-		: m_bIsRunning(false), m_bIsFinished(false)
-	{
-		TweenParams tweenParams(callback, entity);
-		m_tweenSteps.push(tweenParams);
-	}
-
-	void Tween::Start() 
-	{ 
-		m_bIsRunning = true;
-		TweenParams& activeTweenStep = m_tweenSteps.front();
-		activeTweenStep.m_fCurrentTime = 0.0f;
-	}
-
-	void Tween::Step(DeltaTime dt)
-	{
-		if (m_bIsRunning)
-		{
-			TweenParams& activeTweenStep = m_tweenSteps.front();
-
-			if (activeTweenStep.m_iNumComponents <= 0)
-			{
-				activeTweenStep.m_callback(activeTweenStep.m_callbackEntity);
-				m_tweenSteps.pop();
-				if (m_tweenSteps.size() == 0)
-				{
-					m_bIsRunning = false;
-					m_bIsFinished = true;
-					return;
-				}
-
-				activeTweenStep = m_tweenSteps.front();
-			}
-
-
-			activeTweenStep.m_fCurrentTime += dt;
-
-			bool moveToNextStep = false;
-			if (activeTweenStep.m_fCurrentTime > activeTweenStep.m_fDuration)
-			{
-				activeTweenStep.m_fCurrentTime = activeTweenStep.m_fDuration;
-				moveToNextStep = true;
-			}
-
-			for (int i = 0; i < activeTweenStep.m_iNumComponents; i++)
-			{
-				if (activeTweenStep[i].m_fParameter)
-				{
-					*activeTweenStep[i].m_fParameter = ApplyEasing(activeTweenStep.m_easingType, activeTweenStep.m_fCurrentTime, activeTweenStep[i].m_fBegin, (activeTweenStep[i].m_fFinish - activeTweenStep[i].m_fBegin), activeTweenStep.m_fDuration);
-				}
-			}
-
-			if (moveToNextStep)
-			{
-				m_tweenSteps.pop();
-				if (m_tweenSteps.size() == 0)
-				{
-					m_bIsRunning = false;
-					m_bIsFinished = true;
-				}
-			}
-		}
-	}
-
-	float Tween::ApplyEasing(EasingType easingType, float t, float b, float c, float d)
+	float TweenParameterStep::ApplyEasing(EasingType easingType, float t, float b, float c, float d)
 	{
 		switch (easingType)
 		{
@@ -176,43 +74,134 @@ namespace rhombus
 		}
 	}
 
-	void Tween::AddTweenStep(float* param, float begin, float finish, float duration, EasingType easingType)
+	float TweenParameterStep::Step(DeltaTime dt)
 	{
-		TweenParams tweenParams(1, duration, easingType);
-		tweenParams[0] = { param, begin, finish };
-		m_tweenSteps.push(tweenParams);
+		m_fCurrentTime += dt;
+
+		const float fTimeAboveDuration = m_fCurrentTime - m_fDuration;
+		if (fTimeAboveDuration > 0.0f)
+		{
+			m_fCurrentTime = m_fDuration;
+		}
+
+		for (int i = 0; i < m_iNumComponents; i++)
+		{
+			if (m_tweenParamsDOF[i].m_fParameter)
+			{
+				*m_tweenParamsDOF[i].m_fParameter = ApplyEasing(m_easingType, m_fCurrentTime, m_tweenParamsDOF[i].m_fBegin, (m_tweenParamsDOF[i].m_fFinish - m_tweenParamsDOF[i].m_fBegin), m_fDuration);
+			}
+		}
+
+		return fTimeAboveDuration > 0.0f ? fTimeAboveDuration : 0.0f;
 	}
 
-	void Tween::AddTweenStep(Vec2* param, Vec2 begin, Vec2 finish, float duration, EasingType easingType)
+	float TweenCallbackStep::Step(DeltaTime dt)
 	{
-		TweenParams tweenParams(2, duration, easingType);
-		tweenParams[0] = { &(param->x), begin.x, finish.x };
-		tweenParams[1] = { &(param->y), begin.y, finish.y };
-		m_tweenSteps.push(tweenParams);
+		m_callback(m_callbackEntity);
+		return dt;
 	}
 
-	void Tween::AddTweenStep(Vec3* param, Vec3 begin, Vec3 finish, float duration, EasingType easingType)
+	float TweenWaitStep::Step(DeltaTime dt)
 	{
-		TweenParams tweenParams(3, duration, easingType);
-		tweenParams[0] = { &(param->x), begin.x, finish.x };
-		tweenParams[1] = { &(param->y), begin.y, finish.y };
-		tweenParams[2] = { &(param->z), begin.z, finish.z };
-		m_tweenSteps.push(tweenParams);
+		m_fCurrentTime += dt;
+		const float fTimeAboveDuration = m_fCurrentTime - m_fDuration;
+		if (fTimeAboveDuration > 0.0f)
+		{
+			m_fCurrentTime = m_fDuration;
+			return fTimeAboveDuration;
+		}
+
+		return 0.0f;
 	}
 
-	void Tween::AddTweenStep(Vec4* param, Vec4 begin, Vec4 finish, float duration, EasingType easingType)
+	Tween::Tween(const TweenParameterStep& tweenStep)
+		: m_bIsRunning(false), m_bIsFinished(false)
 	{
-		TweenParams tweenParams(4, duration, easingType);
-		tweenParams[0] = { &(param->x), begin.x, finish.x };
-		tweenParams[1] = { &(param->y), begin.y, finish.y };
-		tweenParams[2] = { &(param->z), begin.z, finish.z };
-		tweenParams[3] = { &(param->w), begin.w, finish.w };
-		m_tweenSteps.push(tweenParams);
+		m_tweenSteps.push(CreateRef<TweenParameterStep>(tweenStep));
 	}
 
-	void Tween::AddCallbackStep(std::function<void(Entity)> callback, Entity entity)
+	Tween::Tween(const TweenCallbackStep& tweenStep)
+		: m_bIsRunning(false), m_bIsFinished(false)
 	{
-		TweenParams tweenParams(callback, entity);
-		m_tweenSteps.push(tweenParams);
+		m_tweenSteps.push(CreateRef<TweenCallbackStep>(tweenStep));
+	}
+
+	Tween::Tween(const TweenWaitStep& tweenStep)
+		: m_bIsRunning(false), m_bIsFinished(false)
+	{
+		m_tweenSteps.push(CreateRef<TweenWaitStep>(tweenStep));
+	}
+
+	Tween::Tween(float* param, float begin, float finish, float duration, EasingType easingType)
+		: m_bIsRunning(false), m_bIsFinished(false)
+	{
+		m_tweenSteps.push(CreateRef<TweenParameterStep>(param, begin, finish, duration, easingType));
+	}
+
+	Tween::Tween(Vec2* param, Vec2 begin, Vec2 finish, float duration, EasingType easingType)
+		: m_bIsRunning(false), m_bIsFinished(false)
+	{
+		m_tweenSteps.push(CreateRef<TweenParameterStep>(param, begin, finish, duration, easingType));
+	}
+
+	Tween::Tween(Vec3* param, Vec3 begin, Vec3 finish, float duration, EasingType easingType)
+		: m_bIsRunning(false), m_bIsFinished(false)
+	{
+		m_tweenSteps.push(CreateRef<TweenParameterStep>(param, begin, finish, duration, easingType));
+	}
+
+	Tween::Tween(Vec4* param, Vec4 begin, Vec4 finish, float duration, EasingType easingType)
+		: m_bIsRunning(false), m_bIsFinished(false)
+	{
+		m_tweenSteps.push(CreateRef<TweenParameterStep>(param, begin, finish, duration, easingType));
+	}
+
+	void Tween::Start() 
+	{ 
+		m_bIsRunning = true;
+		Ref<TweenStep> activeTweenStep = m_tweenSteps.front();
+		activeTweenStep->m_fCurrentTime = 0.0f;
+	}
+
+	void Tween::Step(DeltaTime dt)
+	{
+		if (m_bIsRunning)
+		{
+			Ref<TweenStep> activeTweenStep = m_tweenSteps.front();
+
+			float fTimeRemaining = dt;
+			while (fTimeRemaining > 0.0f)
+			{
+				fTimeRemaining = activeTweenStep->Step(dt);
+				if (fTimeRemaining > 0.0f)
+				{
+					m_tweenSteps.pop();
+				}
+
+				if (m_tweenSteps.size() == 0)
+				{
+					m_bIsRunning = false;
+					m_bIsFinished = true;
+					return;
+				}
+
+				activeTweenStep = m_tweenSteps.front();
+			}
+		}
+	}
+
+	void Tween::AddTweenStep(const TweenParameterStep& tweenStep)
+	{
+		m_tweenSteps.push(CreateRef<TweenParameterStep>(tweenStep));
+	}
+
+	void Tween::AddTweenStep(const TweenCallbackStep& tweenStep)
+	{
+		m_tweenSteps.push(CreateRef<TweenCallbackStep>(tweenStep));
+	}
+
+	void Tween::AddTweenStep(const TweenWaitStep& tweenStep)
+	{
+		m_tweenSteps.push(CreateRef<TweenWaitStep>(tweenStep));
 	}
 }

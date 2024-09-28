@@ -12,6 +12,9 @@ namespace rhombus
 		TweenComponent() = default;
 		TweenComponent(const TweenComponent& other) = default;
 
+		Ref<Tween> CreateTween(const TweenParameterStep& tweenStep) { m_tweens.push_back(std::make_shared<Tween>(tweenStep)); return m_tweens.back(); }
+		Ref<Tween> CreateTween(const TweenCallbackStep& tweenStep) { m_tweens.push_back(std::make_shared<Tween>(tweenStep)); return m_tweens.back(); }
+		Ref<Tween> CreateTween(const TweenWaitStep& tweenStep) { m_tweens.push_back(std::make_shared<Tween>(tweenStep)); return m_tweens.back(); }
 		Ref<Tween> CreateTween(float* param, float begin, float finish, float duration, EasingType easingType = EasingType::LINEAR) { m_tweens.push_back(std::make_shared<Tween>(param, begin, finish, duration, easingType)); return m_tweens.back(); }
 		Ref<Tween> CreateTween(Vec2* param, Vec2 begin, Vec2 finish, float duration, EasingType easingType = EasingType::LINEAR) { m_tweens.push_back(std::make_shared<Tween>(param, begin, finish, duration, easingType)); return m_tweens.back(); }
 		Ref<Tween> CreateTween(Vec3* param, Vec3 begin, Vec3 finish, float duration, EasingType easingType = EasingType::LINEAR) { m_tweens.push_back(std::make_shared<Tween>(param, begin, finish, duration, easingType)); return m_tweens.back(); }

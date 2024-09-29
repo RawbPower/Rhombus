@@ -5,6 +5,7 @@
 #include "Rhombus/ECS/SceneSerializer.h"
 #include "Rhombus/Utils/PlatformUtils.h"
 #include "Rhombus/Math/Math.h"
+#include "ScreenResolutionPreset.h"
 
 #include "PatienceScene.h"
 
@@ -13,7 +14,7 @@
 namespace rhombus
 {
 	EditorLayer::EditorLayer()
-		: Layer("Editor"), m_CameraController(960.0f / 540.0f, true), m_SquareColor({ 0.2f, 0.3f, 0.8f, 1.0f })
+		: Layer("Editor"), m_CameraController(1920.0f / 1080.0f, true), m_SquareColor({0.2f, 0.3f, 0.8f, 1.0f})
 	{
 
 	}
@@ -25,13 +26,6 @@ namespace rhombus
 		m_CheckerboardTexture = Texture2D::Create("assets/textures/Checkerboard.png");
 		m_IconPlay = Texture2D::Create("Resources/Icons/Play.png");
 		m_IconStop = Texture2D::Create("Resources/Icons/Stop.png");
-
-		// Framebuffer
-		FramebufferSpecification fbSpec;
-		fbSpec.Attachments = { FramebufferTextureFormat::RGBA8, FramebufferTextureFormat::RED_INTEGER, FramebufferTextureFormat::Depth };
-		fbSpec.Width = 960;
-		fbSpec.Height = 540;
-		m_Framebuffer = Framebuffer::Create(fbSpec);
 
 		m_ActiveScene = CreateRef<Scene>();
 
@@ -52,7 +46,15 @@ namespace rhombus
 			}
 		}
 
+		// Framebuffer
+		FramebufferSpecification fbSpec;
+		fbSpec.Attachments = { FramebufferTextureFormat::RGBA8, FramebufferTextureFormat::RED_INTEGER, FramebufferTextureFormat::Depth };
+		fbSpec.Width = Project::GetGameWidth();
+		fbSpec.Height = Project::GetGameHeight();
+		m_Framebuffer = Framebuffer::Create(fbSpec);
+
 		m_EditorCamera = EditorCamera(30.0f, 1.778f, 0.1f, 10000.0f);	// 1.778 = 16/9
+		m_EditorCamera.SetDistance(Project::GetGameWidth() * 1.2f);
 
 		m_ViewportSize = { (float)fbSpec.Width, (float)fbSpec.Height };
 		m_ViewportBounds[0] = { 0.0f, 0.0f };
@@ -106,6 +108,8 @@ namespace rhombus
 #endif
 
 		m_sceneHierarchyPanel.SetContext(m_ActiveScene);
+
+		CalculateScreenResolutionPreset();
 	}
 
 	void EditorLayer::OnDetach()
@@ -292,11 +296,38 @@ namespace rhombus
 				ImGui::EndMenu();
 			}
 
+			if (ImGui::BeginMenu("Project"))
+			{
+				DisplayScreenResolutionMenu();
+
+				ImGui::EndMenu();
+			}
+
 			if (ImGui::BeginMenu("Editor"))
 			{
 				if (ImGui::MenuItem("Pixel Snapping", NULL, m_PixelSnapping)) 
 				{
 					TogglePixelSnapping();
+				}
+
+				if (ImGui::MenuItem("Show Colliders", NULL, m_ShowPhysicsColliders))
+				{
+					m_ShowPhysicsColliders = !m_ShowPhysicsColliders;
+				}
+
+				if (ImGui::MenuItem("Show Game Screen Size Rect", NULL, m_ShowGameScreenSizeRect))
+				{
+					m_ShowGameScreenSizeRect = !m_ShowGameScreenSizeRect;
+				}
+
+				if (ImGui::MenuItem("Show Editor Settings", NULL, m_ShowEditorSettings))
+				{
+					m_ShowEditorSettings = !m_ShowEditorSettings;
+				}
+
+				if (ImGui::MenuItem("Show Rendering Statistics", NULL, m_ShowRenderStats))
+				{
+					m_ShowRenderStats = !m_ShowRenderStats;
 				}
 
 				ImGui::EndMenu();
@@ -308,28 +339,35 @@ namespace rhombus
 		m_sceneHierarchyPanel.OnImGuiRender();
 		m_contentBrowserPanel->OnImGuiRender();
 
-		ImGui::Begin("Renderer Stats");
+		if (m_ShowRenderStats)
+		{
+			ImGui::Begin("Renderer Stats");
 
-		std::string name = "None";
-		if (m_HoveredEntity)
-			name = m_HoveredEntity.GetComponentRead<TagComponent>().m_tag;
+			std::string name = "None";
+			if (m_HoveredEntity)
+				name = m_HoveredEntity.GetComponentRead<TagComponent>().m_tag;
 
-		ImGui::Text("Hovered Entity: %s", name.c_str());
+			ImGui::Text("Hovered Entity: %s", name.c_str());
 
-		auto stats = Renderer2D::GetStats();
-		ImGui::Text("Draw Calls: %d", stats.DrawCalls);
-		ImGui::Text("Quads: %d", stats.QuadCount);
-		ImGui::Text("Vertices: %d", stats.GetTotalVertexCount());
-		ImGui::Text("Indices: %d", stats.GetTotalIndexCount());
-		ImGui::Text("FPS: %f", stats.FPS);
+			auto stats = Renderer2D::GetStats();
+			ImGui::Text("Draw Calls: %d", stats.DrawCalls);
+			ImGui::Text("Quads: %d", stats.QuadCount);
+			ImGui::Text("Vertices: %d", stats.GetTotalVertexCount());
+			ImGui::Text("Indices: %d", stats.GetTotalIndexCount());
+			ImGui::Text("FPS: %f", stats.FPS);
 
-		ImGui::End();
+			ImGui::End();
+		}
 
-		ImGui::Begin("Settings");
-		ImGui::Checkbox("Show physics colliders", &m_ShowPhysicsColliders);
-		ImGui::ColorEdit4("Physics colliders color", m_PhysicsColliderColor.ToPtr());
-		ImGui::ColorEdit4("Area color", m_AreaColor.ToPtr());
-		ImGui::End();
+		if (m_ShowEditorSettings)
+		{
+			ImGui::Begin("Settings");
+			ImGui::Checkbox("Show physics colliders", &m_ShowPhysicsColliders);
+			ImGui::Checkbox("Show game screen size rect", &m_ShowGameScreenSizeRect);
+			ImGui::ColorEdit4("Physics colliders color", m_PhysicsColliderColor.ToPtr());
+			ImGui::ColorEdit4("Area color", m_AreaColor.ToPtr());
+			ImGui::End();
+		}
 
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
 		ImGui::Begin("Viewport");
@@ -430,6 +468,60 @@ namespace rhombus
 
 		ImGui::End();
 
+	}
+
+	void EditorLayer::CalculateScreenResolutionPreset()
+	{
+		uint32_t width = Project::GetGameWidth();
+		uint32_t height = Project::GetGameHeight();
+
+		int i = 0;
+		for (ScreenResolutionPreset preset : g_ScreenResolutionPresets)
+		{
+			if (preset.width == width && preset.height == height)
+			{
+				m_ScreenResolutionPreset = i;
+				return;
+			}
+			i++;
+		}
+	}
+
+	void EditorLayer::DisplayScreenResolutionMenu()
+	{
+		if (ImGui::BeginMenu("Screen Resolution"))
+		{
+			int lastSelectedPreset = m_ScreenResolutionPreset;
+			uint32_t width = Project::GetGameWidth();
+			uint32_t height = Project::GetGameHeight();
+
+			int i = 0;
+			for (ScreenResolutionPreset preset : g_ScreenResolutionPresets)
+			{
+				if (ImGui::MenuItem(preset.name, NULL, m_ScreenResolutionPreset == i))
+				{
+					m_ScreenResolutionPreset = i;
+					width = preset.width;
+					height = preset.height;
+				};
+				i++;
+			}
+
+			static int customResolution[] = { 480, 270 };
+			ImGui::InputInt2("Custom Resolution", customResolution);
+			if (ImGui::MenuItem("Custom", NULL, m_ScreenResolutionPreset == -1))
+			{
+				m_ScreenResolutionPreset = -1;
+				width = customResolution[0];
+				height = customResolution[1];
+			}
+			ImGui::EndMenu();
+
+			if (lastSelectedPreset != m_ScreenResolutionPreset)
+			{
+				Project::SetGameResolution(width, height);
+			}
+		}
 	}
 
 	void EditorLayer::UI_Toolbar()
@@ -778,13 +870,16 @@ namespace rhombus
 		}
 
 #if RB_EDITOR
-		Vec3 translation = Vec3(0.0f);
-		Vec3 scale = Vec3(960.0f, 540.0f, 1.0f);
+		if (m_ShowGameScreenSizeRect)
+		{
+			Vec3 translation = Vec3(0.0f);
+			Vec3 scale = Vec3(Project::GetGameWidth(), Project::GetGameHeight(), 1.0f);
 
-		Mat4 transform = math::Translate(Mat4::Identity(), translation)
-			* math::Rotate(Mat4::Identity(), 0.0f, Vec3(0.0f, 0.0f, 1.0f))
-			* math::Scale(Mat4::Identity(), scale);
-		Renderer2D::DrawRect(transform, Color(1.0f, 1.0f, 1.0f, 0.5f));
+			Mat4 transform = math::Translate(Mat4::Identity(), translation)
+				* math::Rotate(Mat4::Identity(), 0.0f, Vec3(0.0f, 0.0f, 1.0f))
+				* math::Scale(Mat4::Identity(), scale);
+			Renderer2D::DrawRect(transform, Color(1.0f, 1.0f, 1.0f, 0.8f));
+		}
 #endif
 
 		if (m_ShowPhysicsColliders)

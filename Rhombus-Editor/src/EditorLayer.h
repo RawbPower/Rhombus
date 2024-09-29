@@ -6,7 +6,7 @@
 #include "Panels/ContentBrowerPanel.h";
 #include "Rhombus/Renderer/EditorCamera.h"
 
-#define RB_EDITOR 0
+#define RB_EDITOR 1
 
 namespace rhombus
 {
@@ -53,6 +53,9 @@ namespace rhombus
 
 		void OnOverlayRender();
 
+		void CalculateScreenResolutionPreset();
+		void DisplayScreenResolutionMenu();
+
 		// UI Panel
 		void UI_Toolbar();
 
@@ -88,7 +91,11 @@ namespace rhombus
 
 		int m_gizmoType = 7;		// ImGuizmo::OPERATION::TRANSLATE
 
+		bool m_ShowEditorSettings = false;
+		bool m_ShowRenderStats = false;
 		bool m_ShowPhysicsColliders = false;
+		bool m_ShowGameScreenSizeRect = true;
+		int m_ScreenResolutionPreset = -1;
 		Color m_PhysicsColliderColor = Color(0.0, 1.0, 0.0, 1.0);
 		Color m_AreaColor = Color(0.0, 0.0, 1.0, 1.0);
 

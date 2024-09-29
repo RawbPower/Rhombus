@@ -32,6 +32,9 @@ namespace rhombus {
 		std::string name = "Rhombus Application";
 		std::string workingDirectory;
 		ApplicationCommandLineArgs commandLineArgs;
+		uint32_t width;
+		uint32_t height;
+		bool fullscreen = false;
 	};
 
 	struct Viewport

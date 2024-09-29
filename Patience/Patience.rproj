@@ -1,5 +1,9 @@
 Project:
   Name: Solitaire
-  StartScene: "scenes/Main.rb"
-  AssetDirectory: "Assets"
-  ScriptDirectory: "scripts"
+  StartScene: scenes/Main.rb
+  AssetDirectory: Assets
+  ScriptDirectory: scripts
+  GameWidth: 960
+  GameHeight: 540
+  WindowWidth: 960
+  WindowHeight: 540

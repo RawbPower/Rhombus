@@ -12,11 +12,13 @@ namespace rhombus {
 		std::string Title;
 		uint32_t Width;
 		uint32_t Height;
+		bool Fullscreen;
 
 		WindowParams(const std::string& title = "Game Engine",
 			uint32_t width = 1920,
-			uint32_t height = 1080)
-			: Title(title), Width(width), Height(height)
+			uint32_t height = 1080,
+			bool fullscreen = false)
+			: Title(title), Width(width), Height(height), Fullscreen(fullscreen)
 		{
 
 		}

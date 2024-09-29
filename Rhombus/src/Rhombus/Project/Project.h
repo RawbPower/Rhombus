@@ -14,6 +14,11 @@ namespace rhombus
 
 		std::filesystem::path AssetDirectory;
 		std::filesystem::path ScriptDirectory;
+
+		uint32_t GameWidth = 480;
+		uint32_t GameHeight = 270;
+		uint32_t WindowWidth = 1920;
+		uint32_t WindowHeight = 1080;
 	};
 
 	class Project
@@ -55,6 +60,11 @@ namespace rhombus
 			return localPathString;
 		}
 
+		static uint32_t GetGameWidth() { return s_ActiveProject->m_Config.GameWidth; }
+		static uint32_t GetGameHeight() { return s_ActiveProject->m_Config.GameHeight; }
+
+		static void SetGameResolution(uint32_t width, uint32_t height);
+
 		ProjectConfig& GetConfig() { return m_Config; }
 
 		static Ref<Project> GetActive() { return s_ActiveProject; }
@@ -65,6 +75,7 @@ namespace rhombus
 
 	private:
 		ProjectConfig m_Config;
+		std::filesystem::path m_ProjectPath;
 		std::filesystem::path m_ProjectDirectory;
 
 		inline static Ref<Project> s_ActiveProject;

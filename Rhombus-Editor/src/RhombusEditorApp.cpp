@@ -29,6 +29,17 @@ namespace rhombus
 		spec.name = "Rhombus Editor";
 		spec.commandLineArgs = args;
 
+		// TODO: Get these from project data
+#if RB_EDITOR
+		spec.width = 960;
+		spec.height = 540;
+		spec.fullscreen = true;
+#else
+		spec.width = 960;
+		spec.height = 540;
+		spec.fullscreen = false;
+#endif
+
 		return new RhombusEditor(spec);
 	}
 }

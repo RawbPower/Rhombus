@@ -31,7 +31,7 @@ namespace rhombus {
 		if (!m_Specification.workingDirectory.empty())
 			std::filesystem::current_path(m_Specification.workingDirectory);
 
-		m_Window = std::unique_ptr<Window>(Window::Create(WindowParams(m_Specification.name)));
+		m_Window = std::unique_ptr<Window>(Window::Create(WindowParams(m_Specification.name, m_Specification.width, m_Specification.height, m_Specification.fullscreen)));
 		m_Window->SetEventCallback(BIND_EVENT_FN(OnEvent));
 		SetViewport(0.0f, 0.0f, (float)m_Window->GetWidth(), (float)m_Window->GetHeight());
 

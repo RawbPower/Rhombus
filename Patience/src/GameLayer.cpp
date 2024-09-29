@@ -19,12 +19,12 @@ void GameLayer::OnAttach()
 	// Framebuffer
 	FramebufferSpecification fbSpec;
 	fbSpec.Attachments = { FramebufferTextureFormat::RGBA8, FramebufferTextureFormat::RED_INTEGER, FramebufferTextureFormat::Depth };
-	fbSpec.Width = 960;
-	fbSpec.Height = 540;
+	fbSpec.Width = Project::GetGameWidth();
+	fbSpec.Height = Project::GetGameWidth();
 	m_Framebuffer = Framebuffer::Create(fbSpec);
 
 	m_ActiveScene = CreateRef<Scene>();
-	m_ActiveScene->OnViewportResize(960, 540);
+	m_ActiveScene->OnViewportResize(fbSpec.Width, fbSpec.Height);
 
 	auto commandLineArgs = Application::Get().GetSpecification().commandLineArgs;
 	if (commandLineArgs.count > 1)
@@ -153,7 +153,7 @@ void GameLayer::OpenScene(const std::filesystem::path& path)
 	if (serializer.Deserialize(path.string()))
 	{
 		m_ActiveScene = newScene;
-		m_ActiveScene->OnViewportResize(960, 540);
+		m_ActiveScene->OnViewportResize(Project::GetGameWidth(), Project::GetGameHeight());
 		m_ActiveScene->OnRuntimeStart();
 	}
 }

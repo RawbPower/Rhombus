@@ -27,6 +27,11 @@ namespace rhombus
 				out << YAML::Key << "StartScene" << YAML::Value << config.StartScene.string();
 				out << YAML::Key << "AssetDirectory" << YAML::Value << config.AssetDirectory.string();
 				out << YAML::Key << "ScriptDirectory" << YAML::Value << config.ScriptDirectory.string();
+
+				out << YAML::Key << "GameWidth" << YAML::Value << config.GameWidth;
+				out << YAML::Key << "GameHeight" << YAML::Value << config.GameHeight;
+				out << YAML::Key << "WindowWidth" << YAML::Value << config.WindowWidth;
+				out << YAML::Key << "WindowHeight" << YAML::Value << config.WindowHeight;
 				out << YAML::EndMap; // Project
 			}
 			out << YAML::EndMap; // Root
@@ -61,6 +66,11 @@ namespace rhombus
 		config.StartScene = projectNode["StartScene"].as<std::string>();
 		config.AssetDirectory = projectNode["AssetDirectory"].as<std::string>();
 		config.ScriptDirectory = projectNode["ScriptDirectory"].as<std::string>();
+
+		config.GameWidth = projectNode["GameWidth"].as<uint32_t>();
+		config.GameHeight = projectNode["GameHeight"].as<uint32_t>();
+		config.WindowWidth = projectNode["WindowWidth"].as<uint32_t>();
+		config.WindowHeight = projectNode["WindowHeight"].as<uint32_t>();
 		return true;
 	}
 }

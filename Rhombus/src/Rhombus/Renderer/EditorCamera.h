@@ -19,7 +19,7 @@ namespace rhombus {
 		void OnEvent(Event& e);
 
 		inline float GetDistance() const { return m_distance; }
-		inline void SetDistance(float distance) { m_distance = distance; }
+		inline void SetDistance(float distance) { m_distance = distance; UpdateView(); }
 
 		inline void SetViewportSize(float width, float height) { m_viewportWidth = width; m_viewportHeight = height; UpdateProjection(); }
 
@@ -58,7 +58,7 @@ namespace rhombus {
 
 		Vec2 m_initialMousePosition = { 0.0f, 0.0f };
 
-		float m_distance = 960.0f;
+		float m_distance = 100.0;
 		float m_pitch = 0.0f, m_yaw = 0.0f;
 
 		float m_viewportWidth = 1280, m_viewportHeight = 720;

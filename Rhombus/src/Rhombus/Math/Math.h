@@ -33,4 +33,8 @@ namespace rhombus::math
 	inline float Pow(float x, int a) { return pow(x, a); }
 	inline float Pow(float x, float a) { return pow(x, a); }
 	inline float Sqrt(float x) { return sqrt(x); }
+
+	inline float Round(float x) { return round(x); }
+	inline float Ceil(float x) { return ceil(x); }
+	inline float Floor(float x) { return floor(x); }
 }

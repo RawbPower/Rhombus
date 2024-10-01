@@ -13,7 +13,7 @@ Entities:
         PerspectiveFOV: 0.785398185
         PerspectiveNear: 0.00999999978
         PerspectiveFar: 1000
-        OrthographicSize: 729
+        OrthographicSize: 424
         OrthographicNear: -1
         OrthographicFar: 1
         PixelPerfect: true
@@ -24,7 +24,7 @@ Entities:
       Tag: Background
     TransformComponent:
       Position: [0, 0, -0.5]
-      Rotation: [0, 0, 0]
+      Rotation: [0, -0, 0]
       Scale: [1, 1, 1]
     SpriteRendererComponent:
       Color: [0.498650163, 0.700980425, 0.38828817, 1]
@@ -33,7 +33,7 @@ Entities:
     TagComponent:
       Tag: Site 1
     TransformComponent:
-      Position: [-322, 163.5, 0]
+      Position: [-252, 104.5, 0]
       Rotation: [0, -0, 0]
       Scale: [1, 1, 1]
     BoxArea2DComponent:
@@ -42,7 +42,7 @@ Entities:
       DebugColor: [0, 0, 0, 0]
     CardSlotComponent:
       SlotType: 1
-      SlotLayout: 2
+      SlotLayout: 1
       StaggeredOffset: [0, -10]
       MonsterBattleSite: 0
       Site:FoundationSuit: 5
@@ -55,7 +55,7 @@ Entities:
     TagComponent:
       Tag: Column 1
     TransformComponent:
-      Position: [-322.5, 37.5, 0]
+      Position: [-252, 5.5, 0]
       Rotation: [0, -0, 0]
       Scale: [1, 1, 1]
     SpriteRendererComponent:
@@ -68,7 +68,7 @@ Entities:
     CardSlotComponent:
       SlotType: 0
       SlotLayout: 2
-      StaggeredOffset: [0, -15]
+      StaggeredOffset: [0, -10]
       MonsterBattleSite: 0
       Site:FoundationSuit: 0
       Site:FoundationRank: -1
@@ -80,7 +80,7 @@ Entities:
     TagComponent:
       Tag: Column 2
     TransformComponent:
-      Position: [-234, 37, 0]
+      Position: [-180, 5.5, 0]
       Rotation: [0, -0, 0]
       Scale: [1, 1, 1]
     SpriteRendererComponent:
@@ -93,7 +93,7 @@ Entities:
     CardSlotComponent:
       SlotType: 0
       SlotLayout: 2
-      StaggeredOffset: [0, -15]
+      StaggeredOffset: [0, -10]
       MonsterBattleSite: 0
       Site:FoundationSuit: 0
       Site:FoundationRank: -1
@@ -105,7 +105,7 @@ Entities:
     TagComponent:
       Tag: Column 3
     TransformComponent:
-      Position: [-145, 38, 0]
+      Position: [-108, 5.5, 0]
       Rotation: [0, -0, 0]
       Scale: [1, 1, 1]
     SpriteRendererComponent:
@@ -118,7 +118,7 @@ Entities:
     CardSlotComponent:
       SlotType: 0
       SlotLayout: 2
-      StaggeredOffset: [0, -15]
+      StaggeredOffset: [0, -10]
       MonsterBattleSite: 0
       Site:FoundationSuit: 0
       Site:FoundationRank: -1
@@ -130,7 +130,7 @@ Entities:
     TagComponent:
       Tag: Column 4
     TransformComponent:
-      Position: [-51.5, 38.5, 0]
+      Position: [-36, 5.5, 0]
       Rotation: [0, -0, 0]
       Scale: [1, 1, 1]
     SpriteRendererComponent:
@@ -143,7 +143,7 @@ Entities:
     CardSlotComponent:
       SlotType: 0
       SlotLayout: 2
-      StaggeredOffset: [0, -15]
+      StaggeredOffset: [0, -10]
       MonsterBattleSite: 0
       Site:FoundationSuit: 0
       Site:FoundationRank: -1
@@ -155,7 +155,7 @@ Entities:
     TagComponent:
       Tag: Column 5
     TransformComponent:
-      Position: [48, 38.5, 0]
+      Position: [36, 5.5, 0]
       Rotation: [0, -0, 0]
       Scale: [1, 1, 1]
     SpriteRendererComponent:
@@ -168,7 +168,7 @@ Entities:
     CardSlotComponent:
       SlotType: 0
       SlotLayout: 2
-      StaggeredOffset: [0, -15]
+      StaggeredOffset: [0, -10]
       MonsterBattleSite: 0
       Site:FoundationSuit: 0
       Site:FoundationRank: -1
@@ -180,7 +180,7 @@ Entities:
     TagComponent:
       Tag: Column 6
     TransformComponent:
-      Position: [147, 40, 0]
+      Position: [106, 5.5, 0]
       Rotation: [0, -0, 0]
       Scale: [1, 1, 1]
     SpriteRendererComponent:
@@ -193,7 +193,7 @@ Entities:
     CardSlotComponent:
       SlotType: 0
       SlotLayout: 2
-      StaggeredOffset: [0, -15]
+      StaggeredOffset: [0, -10]
       MonsterBattleSite: 0
       Site:FoundationSuit: 0
       Site:FoundationRank: -1
@@ -205,7 +205,7 @@ Entities:
     TagComponent:
       Tag: Column 7
     TransformComponent:
-      Position: [243.5, 40, 0]
+      Position: [180, 5.5, 0]
       Rotation: [0, -0, 0]
       Scale: [1, 1, 1]
     SpriteRendererComponent:
@@ -218,7 +218,7 @@ Entities:
     CardSlotComponent:
       SlotType: 0
       SlotLayout: 2
-      StaggeredOffset: [0, -15]
+      StaggeredOffset: [0, -10]
       MonsterBattleSite: 0
       Site:FoundationSuit: 0
       Site:FoundationRank: -1
@@ -230,7 +230,7 @@ Entities:
     TagComponent:
       Tag: Column 8
     TransformComponent:
-      Position: [330, 39.5, 0]
+      Position: [252, 5.5, 0]
       Rotation: [0, -0, 0]
       Scale: [1, 1, 1]
     SpriteRendererComponent:
@@ -243,7 +243,7 @@ Entities:
     CardSlotComponent:
       SlotType: 0
       SlotLayout: 2
-      StaggeredOffset: [0, -15]
+      StaggeredOffset: [0, -10]
       MonsterBattleSite: 0
       Site:FoundationSuit: 0
       Site:FoundationRank: -1
@@ -255,7 +255,7 @@ Entities:
     TagComponent:
       Tag: Site 2
     TransformComponent:
-      Position: [-243, 164, 0]
+      Position: [-180, 104.5, 0]
       Rotation: [0, -0, 0]
       Scale: [1, 1, 1]
     BoxArea2DComponent:
@@ -264,7 +264,7 @@ Entities:
       DebugColor: [0, 0, 0, 0]
     CardSlotComponent:
       SlotType: 1
-      SlotLayout: 2
+      SlotLayout: 1
       StaggeredOffset: [0, -10]
       MonsterBattleSite: 0
       Site:FoundationSuit: 5
@@ -277,7 +277,7 @@ Entities:
     TagComponent:
       Tag: Site 3
     TransformComponent:
-      Position: [-165.5, 163, 0]
+      Position: [-108, 104.5, 0]
       Rotation: [0, -0, 0]
       Scale: [1, 1, 1]
     BoxArea2DComponent:
@@ -286,7 +286,7 @@ Entities:
       DebugColor: [0, 0, 0, 0]
     CardSlotComponent:
       SlotType: 1
-      SlotLayout: 2
+      SlotLayout: 1
       StaggeredOffset: [0, -10]
       MonsterBattleSite: 0
       Site:FoundationSuit: 5
@@ -299,7 +299,7 @@ Entities:
     TagComponent:
       Tag: Trump Site
     TransformComponent:
-      Position: [100.5, 205, 0]
+      Position: [36, 127.5, 0]
       Rotation: [0, -0, 0]
       Scale: [1, 1, 1]
     SpriteRendererComponent:
@@ -333,7 +333,7 @@ Entities:
     TagComponent:
       Tag: Graveyard
     TransformComponent:
-      Position: [332, 207, 0]
+      Position: [180, 127.5, 0]
       Rotation: [0, -0, 0]
       Scale: [1, 1, 1]
     SpriteRendererComponent:
@@ -358,7 +358,7 @@ Entities:
     TagComponent:
       Tag: Discard
     TransformComponent:
-      Position: [253.5, 206.5, 0]
+      Position: [108, 127.5, 0]
       Rotation: [0, -0, 0]
       Scale: [1, 1, 1]
     SpriteRendererComponent:
@@ -383,14 +383,14 @@ Entities:
     TagComponent:
       Tag: Monster Slot 1
     TransformComponent:
-      Position: [-322, 185.5, 0]
+      Position: [-252, 116, 0]
       Rotation: [0, -0, 0]
       Scale: [1, 1, 1]
     SpriteRendererComponent:
       Color: [1, 1, 1, 1]
       Texture: textures\MonsterBattle.png
     BoxArea2DComponent:
-      Offset: [0, 22]
+      Offset: [0, 11.5]
       Size: [32, 44.5]
       DebugColor: [0, 0, 0, 0]
     CardSlotComponent:
@@ -408,14 +408,14 @@ Entities:
     TagComponent:
       Tag: Monster Slot 2
     TransformComponent:
-      Position: [-243, 186, 0]
+      Position: [-180, 116, 0]
       Rotation: [0, -0, 0]
       Scale: [1, 1, 1]
     SpriteRendererComponent:
       Color: [1, 1, 1, 1]
       Texture: textures\MonsterBattle.png
     BoxArea2DComponent:
-      Offset: [0, 22]
+      Offset: [0, 11.5]
       Size: [32, 44.5]
       DebugColor: [0, 0, 0, 0]
     CardSlotComponent:
@@ -433,14 +433,14 @@ Entities:
     TagComponent:
       Tag: Monster Slot 3
     TransformComponent:
-      Position: [-165.5, 185, 0]
+      Position: [-108, 116, 0]
       Rotation: [0, -0, 0]
       Scale: [1, 1, 1]
     SpriteRendererComponent:
       Color: [1, 1, 1, 1]
       Texture: textures\MonsterBattle.png
     BoxArea2DComponent:
-      Offset: [0, 22]
+      Offset: [0, 11.5]
       Size: [32, 44.5]
       DebugColor: [0, 0, 0, 0]
     CardSlotComponent:
@@ -458,14 +458,14 @@ Entities:
     TagComponent:
       Tag: Monster Slot 4
     TransformComponent:
-      Position: [-91, 185.5, 0]
+      Position: [-36, 116, 0]
       Rotation: [0, -0, 0]
       Scale: [1, 1, 1]
     SpriteRendererComponent:
       Color: [1, 1, 1, 1]
       Texture: textures\MonsterBattle.png
     BoxArea2DComponent:
-      Offset: [0, 22]
+      Offset: [0, 11.5]
       Size: [32, 44.5]
       DebugColor: [1, 0.00490194559, 0.00490194559, 0]
     CardSlotComponent:
@@ -483,7 +483,7 @@ Entities:
     TagComponent:
       Tag: Site 4
     TransformComponent:
-      Position: [-91, 163.5, 0]
+      Position: [-36, 104.5, 0]
       Rotation: [0, -0, 0]
       Scale: [1, 1, 1]
     BoxArea2DComponent:
@@ -492,7 +492,7 @@ Entities:
       DebugColor: [0, 0, 0, 0]
     CardSlotComponent:
       SlotType: 1
-      SlotLayout: 2
+      SlotLayout: 1
       StaggeredOffset: [0, -10]
       MonsterBattleSite: 0
       Site:FoundationSuit: 5
@@ -505,7 +505,7 @@ Entities:
     TagComponent:
       Tag: Deck
     TransformComponent:
-      Position: [-415, 206, 0]
+      Position: [252, 127.5, 0]
       Rotation: [0, -0, 0]
       Scale: [1, 1, 1]
     SpriteRendererComponent:
@@ -530,7 +530,7 @@ Entities:
     TagComponent:
       Tag: Card Deck
     TransformComponent:
-      Position: [-415, 206, 0]
+      Position: [252, 127.5, 0]
       Rotation: [0, -0, 0]
       Scale: [1, 1, 1]
     SpriteRendererComponent:

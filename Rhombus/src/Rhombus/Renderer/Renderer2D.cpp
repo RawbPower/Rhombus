@@ -445,15 +445,17 @@ namespace rhombus
 		s_Data.Stats.QuadCount++;
 	}
 
-	void Renderer2D::DrawQuad(const Mat4& transform, const Ref<Texture2D>& texture, const Color& color, float tilingFactor, int entityID)
+	void Renderer2D::DrawQuad(const Mat4& transform, const Ref<Texture2D>& texture, const Color& color, float tilingFactor, int entityID, bool pixelPerfect)
 	{
 		RB_PROFILE_FUNCTION();
 
 		constexpr size_t quadVertexCount = 4;
 		const Vec2 textureCoords[] = { { 0.0f, 0.0f }, { 1.0f, 0.0f }, { 1.0f, 1.0f }, { 0.0f, 1.0f } };
+
+		Mat4 renderTransform = pixelPerfect ? CorrectTransformForPixelPerfect(transform, texture) : transform;
 		
 		// TODO: Add PPU
-		Mat4 scaledTransform = math::Scale(transform, Vec3((float)texture->GetWidth(), (float)texture->GetHeight(), 1.0f));
+		Mat4 scaledTransform = math::Scale(renderTransform, Vec3((float)texture->GetWidth(), (float)texture->GetHeight(), 1.0f));
 
 		if (s_Data.QuadIndexCount >= Renderer2DData::MaxIndices)
 		{
@@ -499,7 +501,7 @@ namespace rhombus
 		s_Data.Stats.QuadCount++;
 	}
 
-	void Renderer2D::DrawQuad(const Mat4& transform, const Ref<SubTexture2D>& subTexture, const Color& color, float tilingFactor, int entityID)
+	void Renderer2D::DrawQuad(const Mat4& transform, const Ref<SubTexture2D>& subTexture, const Color& color, float tilingFactor, int entityID, bool pixelPerfect)
 	{
 		RB_PROFILE_FUNCTION();
 
@@ -507,8 +509,10 @@ namespace rhombus
 		const Vec2* textureCoords = subTexture->GetTexCoords();
 		const Ref<Texture2D> texture = subTexture->GetTexture();
 
+		Mat4 renderTransform = pixelPerfect ? CorrectTransformForPixelPerfect(transform, texture) : transform;
+
 		// TODO: Add PPU
-		Mat4 scaledTransform = math::Scale(transform, Vec3((float)texture->GetWidth(), (float)texture->GetHeight(), 1.0f));
+		Mat4 scaledTransform = math::Scale(renderTransform, Vec3((float)texture->GetWidth(), (float)texture->GetHeight(), 1.0f));
 
 		if (s_Data.QuadIndexCount >= Renderer2DData::MaxIndices)
 		{
@@ -728,6 +732,43 @@ namespace rhombus
 		Mat4 viewProjection = Renderer2D::GetViewProjectionMatrix();
 		Vec4 worldCoords =  viewProjection.Inverse() * Vec4(ndc, 1.0f);
 		return worldCoords;
+	}
+
+	float RoundToNearestPixelCenter(float positionCoord)
+	{
+		float rounded = math::Round(positionCoord);
+		float decimel = positionCoord - rounded;
+		return decimel < 0.0f ? rounded - 0.5f : rounded + 0.5f;
+	}
+
+	float RoundToNearestPixelEdge(float positionCoord)
+	{
+		return math::Round(positionCoord);
+	}
+
+	Mat4 Renderer2D::CorrectTransformForPixelPerfect(Mat4 transform, const Ref<Texture2D>& texture)
+	{
+		Mat4 vCorrectedTransform = transform;
+
+		if (texture->GetWidth() % 2 == 1)
+		{
+			vCorrectedTransform.cols[3].x = RoundToNearestPixelCenter(vCorrectedTransform.d().x);
+		}
+		else
+		{
+			vCorrectedTransform.cols[3].x = RoundToNearestPixelEdge(vCorrectedTransform.d().x);
+		}
+
+		if (texture->GetHeight() % 2 == 1)
+		{
+			vCorrectedTransform.cols[3].y = RoundToNearestPixelCenter(vCorrectedTransform.d().y);
+		}
+		else
+		{
+			vCorrectedTransform.cols[3].y = RoundToNearestPixelEdge(vCorrectedTransform.d().y);
+		}
+
+		return vCorrectedTransform;
 	}
 
 	void Renderer2D::ResetStats()

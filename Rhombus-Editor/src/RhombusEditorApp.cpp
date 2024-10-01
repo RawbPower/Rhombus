@@ -31,12 +31,12 @@ namespace rhombus
 
 		// TODO: Get these from project data
 #if RB_EDITOR
-		spec.width = 960;
-		spec.height = 540;
+		spec.width = 1280;
+		spec.height = 720;
 		spec.fullscreen = true;
 #else
-		spec.width = 960;
-		spec.height = 540;
+		spec.width = 1280;
+		spec.height = 720;
 		spec.fullscreen = false;
 #endif
 

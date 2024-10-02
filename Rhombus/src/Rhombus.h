@@ -8,6 +8,7 @@
 
 #include "Rhombus/Core/DeltaTime.h"
 #include "Rhombus/Core/Color.h"
+#include "Rhombus/Core/Colors.h"
 
 #include "Rhombus/Core/Input.h"
 #include "Rhombus/Core/MouseButtonCodes.h"

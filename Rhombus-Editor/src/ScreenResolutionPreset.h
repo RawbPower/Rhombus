@@ -14,6 +14,7 @@ namespace rhombus
 	const ScreenResolutionPreset g_ScreenResolutionPresets[] = 
 	{ 
 		{"320x180", 320, 180},
+		{"384x216", 384, 216},
 		{"480x270", 480, 270},
 		{"640x360", 640, 360},
 		{"960x540", 960, 540},

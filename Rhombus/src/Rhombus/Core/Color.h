@@ -12,6 +12,7 @@ namespace rhombus
 		Color(const Color& rhs);
 		Color(const Vec4& rhs);
 		Color(float R, float G, float B, float A);
+		Color(float R, float G, float B);
 		Color(const float* rhs);
 		Color& operator = (const Color& rhs);
 
@@ -79,6 +80,14 @@ namespace rhombus
 		g(G),
 		b(B),
 		a(A)
+	{
+	}
+
+	inline Color::Color(float R, float G, float B) :
+		r(R),
+		g(G),
+		b(B),
+		a(1.0f)
 	{
 	}
 

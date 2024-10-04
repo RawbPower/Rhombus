@@ -41,7 +41,7 @@ namespace rhombus
 		void Serialize(const std::string& filepath);				// Serialize YAML text
 		void SerializeRuntime(const std::string& filepath);			// Serialize the binaries
 
-		bool Deserialize(const std::string& filepath);
+		bool Deserialize(const std::string& filepath, bool includeDisabledEntities = false);
 		bool DeserializeRuntime(const std::string& filepath);
 
 	private:

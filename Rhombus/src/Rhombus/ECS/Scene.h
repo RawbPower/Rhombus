@@ -88,6 +88,11 @@ namespace rhombus
 			return m_Registry;
 		}
 
+		const std::unordered_map<EntityID, bool>& GetEntityEnabledMap() const { return m_entityEnabledMap; }
+		std::unordered_map<EntityID, bool>& GetEntityEnabledMap() { return m_entityEnabledMap; }
+
+		bool IsEntityDisabled(EntityID entity) const;
+
 	protected:
 		// Component Registration
 		template<typename... Component>
@@ -115,6 +120,11 @@ namespace rhombus
 					for (auto e : view)
 					{
 						UUID uuid = src.GetComponent<IDComponent>(e).m_id;
+						if (entityMap.find(uuid) == entityMap.end())
+						{
+							continue;
+						}
+
 						EntityID destEntityID = entityMap.at(uuid);
 
 						auto& component = src.GetComponent<Component>(e);
@@ -154,6 +164,7 @@ namespace rhombus
 		Ref<TweeningSystem> tweeningSystem;
 
 		std::unordered_map<UUID, EntityID> m_EntityMap;
+		std::unordered_map<EntityID, bool> m_entityEnabledMap;
 
 		friend class Entity;
 		friend class SceneSerializer;

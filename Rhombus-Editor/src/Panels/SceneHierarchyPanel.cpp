@@ -23,22 +23,55 @@ namespace rhombus
 	{
 		m_context = context;
 		m_selectionContext = {};
+		m_selectionMask = 0;
 	}
 
-	void SceneHierarchyPanel::OnImGuiRender()
+	void SceneHierarchyPanel::OnImGuiRender(bool bIsInEditMode, std::unordered_map<EntityID, bool>& entityEnabledMap)
 	{
+		ReloadHieararchyEntities(entityEnabledMap);
 		ImGui::Begin("Scene Hierarchy");
 
-		std::vector<EntityID> entities = m_context->GetAllEntities();
-		for (EntityID entityID : entities)
+		if (ImGui::BeginTable("Scene Hierarchy Table", 2))
 		{
-			Entity entity(entityID, m_context.get());
-			DrawEntityNode(entity);
+			ImGuiStyle& style = ImGui::GetStyle();
+			ImGui::TableSetupColumn("##Entities", ImGuiTableColumnFlags_WidthFixed, ImGui::GetContentRegionAvail().x - style.IndentSpacing);
+			ImGui::TableSetupColumn("##Active", ImGuiTableColumnFlags_WidthFixed); 
+			int i = 0;
+			ImGui::TableNextRow();
+			for (EntityID entityID : m_hierarchyEntityOrder)
+			{
+				ImGui::TableSetColumnIndex(0);
+				Entity entity(entityID, m_context.get());
+				DrawEntityNode(entity, i++);
+
+				if (bIsInEditMode)
+				{
+					ImGui::TableSetColumnIndex(1);
+
+					ImGuiStyle& style = ImGui::GetStyle();
+					ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(style.FramePadding.x, (float)(int)(style.FramePadding.y * 0.3f)));
+
+					ImGui::PushID(i);
+					ImGui::Checkbox("##enabled", &entityEnabledMap[entityID]);
+
+					ImGui::PopID();
+
+					ImGui::PopStyleVar(1);
+				}
+
+				ImGui::TableNextRow();
+			}
+			ImGui::EndTable();
 		}
 
 		if (ImGui::IsMouseDown(0) && ImGui::IsWindowHovered())
 		{
 			m_selectionContext = {};
+
+			if (!ImGui::GetIO().KeyCtrl)
+			{
+				m_selectionMask = 0;
+			}
 		}
 
 		// Right-click on blank space
@@ -62,15 +95,70 @@ namespace rhombus
 		ImGui::End();
 	}
 
-	void SceneHierarchyPanel::DrawEntityNode(Entity entity)
+	void SceneHierarchyPanel::ReloadHieararchyEntities(std::unordered_map<EntityID, bool>& entityEnabledMap)
+	{
+		std::vector<EntityID> allEntities = m_context->GetAllEntities();
+
+		std::vector<EntityID>::iterator iter;
+		for (iter = m_hierarchyEntityOrder.begin(); iter != m_hierarchyEntityOrder.end(); )
+		{
+			if (std::find(allEntities.begin(), allEntities.end(), *iter) == allEntities.end())
+			{
+				entityEnabledMap.erase(*iter);
+				iter = m_hierarchyEntityOrder.erase(iter);
+			}
+			else
+			{
+				++iter;
+			}
+		}
+
+		for (EntityID entityID : allEntities)
+		{
+			bool bIsEntityInHierarchy = std::find(m_hierarchyEntityOrder.begin(), m_hierarchyEntityOrder.end(), entityID) != m_hierarchyEntityOrder.end();
+
+			if (!bIsEntityInHierarchy)
+			{
+				m_hierarchyEntityOrder.push_back(entityID);
+				if (entityEnabledMap.find(entityID) == entityEnabledMap.end())
+				{
+					entityEnabledMap[entityID] = true;
+				}
+			}
+		}
+	}
+
+	void SceneHierarchyPanel::GetAllSelectedEntities(std::vector<Entity>& selectedEntitiesInOut) const
+	{
+		std::vector<EntityID> entities = m_context->GetAllEntities();
+		int i = 0;
+		for (EntityID entityID : entities)
+		{
+			if (m_selectionMask & (1 << i))
+			{
+				Entity entity(entityID, m_context.get());
+				selectedEntitiesInOut.push_back(entity);
+			}
+		}
+	}
+
+	void SceneHierarchyPanel::DrawEntityNode(Entity entity, int i)
 	{
 		auto& tag = entity.GetComponent<TagComponent>().m_tag;
 		
-		ImGuiTreeNodeFlags flags = ((m_selectionContext == entity) ? ImGuiTreeNodeFlags_Selected : 0) | ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_SpanAvailWidth;
+		ImGuiTreeNodeFlags flags = ((m_selectionMask & (1 << i)) ? ImGuiTreeNodeFlags_Selected : 0) | ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_SpanAvailWidth;
 		bool opened = ImGui::TreeNodeEx((void*)(uint64_t)(uint32_t)entity, flags, tag.c_str());
 
 		if (ImGui::IsItemReleased())
 		{
+			if (ImGui::GetIO().KeyCtrl)
+			{
+				m_selectionMask ^= (1 << i);
+			}
+			else
+			{
+				m_selectionMask = (1 << i);
+			}
 			m_selectionContext = entity;
 		}
 
@@ -78,6 +166,7 @@ namespace rhombus
 		{
 			UUID* uuid = &entity.GetUUID();
 			ImGui::SetDragDropPayload("SCENE_HIERACHY_UUID", uuid, sizeof(UUID));
+			ImGui::Text(entity.GetName().c_str());
 			ImGui::EndDragDropSource();
 		}
 
@@ -120,7 +209,7 @@ namespace rhombus
 		}
 	}
 
-	static void DrawVec3Control(const std::string& label, Vec3& values, float resetValue = 0.0f, float columnWidth = 100.0f)
+	static void DrawVec3Control(const std::string& label, Vec3& values, float resetValue = 0.0f, float columnWidth = 70.0f)
 	{
 		ImGui::PushID(label.c_str());
 
@@ -216,7 +305,10 @@ namespace rhombus
 
 			if (open)
 			{
+				ImGuiStyle& style = ImGui::GetStyle();
+				ImGui::Indent(-0.8f*style.IndentSpacing);
 				uiFunction(component);
+				ImGui::Indent(0.8f*style.IndentSpacing);
 				ImGui::TreePop();
 			}
 

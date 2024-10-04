@@ -336,7 +336,7 @@ namespace rhombus
 			ImGui::EndMenuBar();
 		}
 
-		m_sceneHierarchyPanel.OnImGuiRender();
+		m_sceneHierarchyPanel.OnImGuiRender(m_SceneState == SceneState::Edit, m_ActiveScene->GetEntityEnabledMap());
 		m_contentBrowserPanel->OnImGuiRender();
 
 		if (m_ShowRenderStats)
@@ -741,7 +741,11 @@ namespace rhombus
 
 		Ref<Scene> newScene = CreateRef<PatienceScene>();
 		SceneSerializer serializer(newScene);
+#if RB_EDITOR
+		if (serializer.Deserialize(path.string(), true))
+#else
 		if (serializer.Deserialize(path.string()))
+#endif
 		{
 			if (m_SceneState == SceneState::Edit)
 			{
@@ -830,6 +834,7 @@ namespace rhombus
 	{
 		m_SceneState = SceneState::Play;
 		m_ActiveScene = CreateRef<PatienceScene>();
+
 		Scene::Copy(m_ActiveScene, m_EditorScene);
 		m_ActiveScene->OnRuntimeStart();
 
@@ -889,6 +894,11 @@ namespace rhombus
 				std::vector<EntityID> view = m_ActiveScene->GetAllEntitiesWith<BoxCollider2DComponent>();
 				for (EntityID e : view)
 				{
+					if (m_ActiveScene->IsEntityDisabled(e))
+					{
+						continue;
+					}
+
 					Entity entity = { e, m_ActiveScene.get()};
 					TransformComponent& tc = entity.GetComponent<TransformComponent>();
 					BoxCollider2DComponent& bc2d = entity.GetComponent<BoxCollider2DComponent>();
@@ -908,6 +918,11 @@ namespace rhombus
 				std::vector<EntityID> view = m_ActiveScene->GetAllEntitiesWith<CircleCollider2DComponent>();
 				for (EntityID e : view)
 				{
+					if (m_ActiveScene->IsEntityDisabled(e))
+					{
+						continue;
+					}
+
 					Entity entity = { e, m_ActiveScene.get() };
 					TransformComponent& tc = entity.GetComponent<TransformComponent>();
 					CircleCollider2DComponent& bc2d = entity.GetComponent<CircleCollider2DComponent>();
@@ -927,6 +942,11 @@ namespace rhombus
 				std::vector<EntityID> view = m_ActiveScene->GetAllEntitiesWith<BoxArea2DComponent>();
 				for (EntityID e : view)
 				{
+					if (m_ActiveScene->IsEntityDisabled(e))
+					{
+						continue;
+					}
+
 					Entity entity = { e, m_ActiveScene.get() };
 					TransformComponent& tc = entity.GetComponent<TransformComponent>();
 					BoxArea2DComponent& ba2d = entity.GetComponent<BoxArea2DComponent>();

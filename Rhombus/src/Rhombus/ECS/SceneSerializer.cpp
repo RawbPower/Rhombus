@@ -50,6 +50,7 @@ namespace rhombus
 
 		out << YAML::BeginMap; // Entity
 		out << YAML::Key << "Entity" << YAML::Value << entity.GetUUID();
+		out << YAML::Key << "Enabled" << YAML::Value << !scene->IsEntityDisabled(entity);
 
 		if (entity.HasComponent<TagComponent>())
 		{
@@ -229,7 +230,7 @@ namespace rhombus
 		RB_CORE_ASSERT(false, "");
 	}
 
-	bool SceneSerializer::Deserialize(const std::string& filepath)
+	bool SceneSerializer::Deserialize(const std::string& filepath, bool includeDisabledEntities)
 	{ 
 		YAML::Node data;
 		try
@@ -248,12 +249,20 @@ namespace rhombus
 		std::string sceneName = data["Scene"].as<std::string>();
 		RB_CORE_TRACE("Deserializing scene '{0}'", sceneName);
 
+		std::unordered_map<EntityID, bool>& entityEnabledMap = m_scene->GetEntityEnabledMap();
+
 		auto entities = data["Entities"];
 		if (entities)
 		{
 			for (auto entity : entities)
 			{
 				uint64_t uuid = entity["Entity"].as<uint64_t>();
+				bool enabled = entity["Enabled"].as<bool>();
+
+				if (!enabled && !includeDisabledEntities)
+				{
+					continue;
+				}
 
 				std::string name;
 				auto tagComponent = entity["TagComponent"];
@@ -263,6 +272,7 @@ namespace rhombus
 				RB_CORE_TRACE("Deserialized entity with ID = {0}, name = {1}", uuid, name);
 
 				Entity deserializedEntity = m_scene->CreateEntityWithUUID(uuid, name);
+				entityEnabledMap[(EntityID)deserializedEntity] = enabled;
 
 				auto transformComponent = entity["TransformComponent"];
 				if (transformComponent)

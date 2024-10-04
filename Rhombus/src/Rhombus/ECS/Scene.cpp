@@ -92,6 +92,11 @@ namespace rhombus
 		std::vector<EntityID> idView = srcSceneRegistry.GetEntityList<IDComponent>();		// Every entity
 		for (EntityID e : idView)
 		{
+			if (srcScene->IsEntityDisabled(e))
+			{
+				continue;
+			}
+
 			UUID uuid = srcSceneRegistry.GetComponent<IDComponent>(e).m_id;
 			const auto& name = srcSceneRegistry.GetComponent<TagComponent>(e).m_tag;
 			Entity newEntity = destScene->CreateEntityWithUUID(uuid, name);
@@ -315,8 +320,13 @@ namespace rhombus
 				return m_Registry.GetComponent<TransformComponent>(lhs).m_position.z < m_Registry.GetComponent<TransformComponent>(rhs).m_position.z;
 			});
 
-			for (auto entity : view)
+			for (EntityID entity : view)
 			{
+				if (IsEntityDisabled(entity))
+				{
+					continue;
+				}
+
 				auto spriteRendererComponent = m_Registry.GetComponent<SpriteRendererComponent>(entity);
 				auto transformComponent = m_Registry.GetComponent<TransformComponent>(entity);
 
@@ -335,6 +345,11 @@ namespace rhombus
 
 			for (auto entity : view)
 			{
+				if (IsEntityDisabled(entity))
+				{
+					continue;
+				}
+
 				auto circleRendererComponent = m_Registry.GetComponent<CircleRendererComponent>(entity);
 				auto transformComponent = m_Registry.GetComponent<TransformComponent>(entity);
 
@@ -631,5 +646,10 @@ namespace rhombus
 		}
 
 		return {};
+	}
+
+	bool Scene::IsEntityDisabled(EntityID entity) const
+	{
+		return m_entityEnabledMap.find(entity) != m_entityEnabledMap.end() && !m_entityEnabledMap.at(entity);
 	}
 }

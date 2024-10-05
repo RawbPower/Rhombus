@@ -826,8 +826,9 @@ namespace rhombus
 
 	void EditorLayer::SerializeScene(Ref<Scene> scene, const std::filesystem::path& path)
 	{
+		std::vector<EntityID> customOrdering = m_sceneHierarchyPanel.CalculateEntityOrdering();
 		SceneSerializer serializer(scene);
-		serializer.Serialize(path.string());
+		serializer.Serialize(path.string(), customOrdering);
 	}
 
 	void EditorLayer::OnScenePlay()
@@ -839,6 +840,7 @@ namespace rhombus
 		m_ActiveScene->OnRuntimeStart();
 
 		m_sceneHierarchyPanel.SetContext(m_ActiveScene);
+		m_sceneHierarchyPanel.SetHierarchyDirty();
 	}
 
 	void EditorLayer::OnSceneStop()
@@ -848,6 +850,7 @@ namespace rhombus
 		m_ActiveScene = m_EditorScene;
 
 		m_sceneHierarchyPanel.SetContext(m_ActiveScene);
+		m_sceneHierarchyPanel.SetHierarchyDirty();
 	}
 
 	void EditorLayer::DuplicateSelectedEntity()
@@ -859,6 +862,7 @@ namespace rhombus
 		if (selectedEntity)
 		{
 			m_EditorScene->DuplicateEntity(selectedEntity);
+			m_sceneHierarchyPanel.SetHierarchyDirty();
 		}
 	}
 

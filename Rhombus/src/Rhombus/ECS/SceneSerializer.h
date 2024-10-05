@@ -38,7 +38,8 @@ namespace rhombus
 	public:
 		SceneSerializer(const Ref<Scene>& scene);
 
-		void Serialize(const std::string& filepath);				// Serialize YAML text
+		void Serialize(const std::string& filepath);							// Serialize YAML text
+		void Serialize(const std::string& filepath, const std::vector<EntityID>& orderedEntities);		// Serialize YAML text
 		void SerializeRuntime(const std::string& filepath);			// Serialize the binaries
 
 		bool Deserialize(const std::string& filepath, bool includeDisabledEntities = false);

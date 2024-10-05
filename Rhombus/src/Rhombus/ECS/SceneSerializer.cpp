@@ -204,12 +204,16 @@ namespace rhombus
 
 	void SceneSerializer::Serialize(const std::string& filepath)
 	{
+		Serialize(filepath, m_scene->GetAllEntities());
+	}
+
+	void SceneSerializer::Serialize(const std::string& filepath, const std::vector<EntityID>& orderedEntities)
+	{
 		YAML::Emitter out;
 		out << YAML::BeginMap;
 		out << YAML::Key << "Scene" << YAML::Value << "Untitled";
 		out << YAML::Key << "Entities" << YAML::Value << YAML::BeginSeq;
-		std::vector<EntityID> entityList = m_scene->GetAllEntities();
-		for (EntityID e : entityList)
+		for (EntityID e : orderedEntities)
 		{
 			Entity entity = { e, m_scene.get() };
 			if (!entity)

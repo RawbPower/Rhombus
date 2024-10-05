@@ -16,6 +16,7 @@ namespace rhombus
 {
 	SceneHierarchyPanel::SceneHierarchyPanel(const Ref<Scene>& context)
 	{
+		SetHierarchyDirty();
 		SetContext(context);
 	}
 
@@ -28,7 +29,9 @@ namespace rhombus
 
 	void SceneHierarchyPanel::OnImGuiRender(bool bIsInEditMode, std::unordered_map<EntityID, bool>& entityEnabledMap)
 	{
+		m_handledReorderDragAndDrop = false;
 		ReloadHieararchyEntities(entityEnabledMap);
+
 		ImGui::Begin("Scene Hierarchy");
 
 		if (ImGui::BeginTable("Scene Hierarchy Table", 2))
@@ -38,11 +41,12 @@ namespace rhombus
 			ImGui::TableSetupColumn("##Active", ImGuiTableColumnFlags_WidthFixed); 
 			int i = 0;
 			ImGui::TableNextRow();
-			for (EntityID entityID : m_hierarchyEntityOrder)
+			for (HierarchyEntity& hierarchyEntity : m_hierarchyEntityOrder)
 			{
 				ImGui::TableSetColumnIndex(0);
-				Entity entity(entityID, m_context.get());
+				Entity entity(hierarchyEntity.m_entityID, m_context.get());
 				DrawEntityNode(entity, i++);
+				hierarchyEntity.m_yPos = ImGui::GetItemRectMin().y;
 
 				if (bIsInEditMode)
 				{
@@ -52,7 +56,7 @@ namespace rhombus
 					ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(style.FramePadding.x, (float)(int)(style.FramePadding.y * 0.3f)));
 
 					ImGui::PushID(i);
-					ImGui::Checkbox("##enabled", &entityEnabledMap[entityID]);
+					ImGui::Checkbox("##enabled", &entityEnabledMap[hierarchyEntity.m_entityID]);
 
 					ImGui::PopID();
 
@@ -78,9 +82,38 @@ namespace rhombus
 		if (ImGui::BeginPopupContextWindow(0, ImGuiPopupFlags_MouseButtonRight | ImGuiPopupFlags_NoOpenOverItems))
 		{
 			if (ImGui::MenuItem("Create New Entity"))
+			{
 				m_context->CreateEntity("Untitled Entity");
+				SetHierarchyDirty();
+			}
 
 			ImGui::EndPopup();
+		}
+
+		if (ImGui::BeginDragDropTarget())
+		{
+			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("SCENE_HIERACHY_UUID"))
+			{
+				if (!m_handledReorderDragAndDrop)
+				{
+					float cursorY = ImGui::GetMousePos().y;
+					int desiredOrdering = 0;
+					EntityID droppedID = m_context->GetEntityByUUID(*(UUID*)payload->Data);
+					for (HierarchyEntity hierarchyEntity : m_hierarchyEntityOrder)
+					{
+						// Find the new position for the entity by comparing to each entity tree position in the hierarchy
+						if (cursorY < hierarchyEntity.m_yPos)
+						{
+							break;
+						}
+						desiredOrdering++;
+					}
+					MoveEntityInHierarchyOrder(droppedID, desiredOrdering);
+					SetHierarchyDirty();
+					m_handledReorderDragAndDrop = true;
+				}
+			}
+			ImGui::EndDragDropTarget();
 		}
 
 		ImGui::End();
@@ -95,36 +128,61 @@ namespace rhombus
 		ImGui::End();
 	}
 
-	void SceneHierarchyPanel::ReloadHieararchyEntities(std::unordered_map<EntityID, bool>& entityEnabledMap)
+	void SceneHierarchyPanel::MoveEntityInHierarchyOrder(EntityID entityID, int newOrderIndex)
 	{
-		std::vector<EntityID> allEntities = m_context->GetAllEntities();
-
-		std::vector<EntityID>::iterator iter;
-		for (iter = m_hierarchyEntityOrder.begin(); iter != m_hierarchyEntityOrder.end(); )
+		int currentOrderIndex = 0;
+		for (HierarchyEntity hierarchyEntity : m_hierarchyEntityOrder)
 		{
-			if (std::find(allEntities.begin(), allEntities.end(), *iter) == allEntities.end())
+			if (hierarchyEntity.m_entityID == entityID)
 			{
-				entityEnabledMap.erase(*iter);
-				iter = m_hierarchyEntityOrder.erase(iter);
+				break;
 			}
-			else
-			{
-				++iter;
-			}
+			currentOrderIndex++;
 		}
 
-		for (EntityID entityID : allEntities)
-		{
-			bool bIsEntityInHierarchy = std::find(m_hierarchyEntityOrder.begin(), m_hierarchyEntityOrder.end(), entityID) != m_hierarchyEntityOrder.end();
+		if (currentOrderIndex > newOrderIndex)
+			std::rotate(m_hierarchyEntityOrder.rend() - currentOrderIndex - 1, m_hierarchyEntityOrder.rend() - currentOrderIndex, m_hierarchyEntityOrder.rend() - newOrderIndex);
+		else
+			std::rotate(m_hierarchyEntityOrder.begin() + currentOrderIndex, m_hierarchyEntityOrder.begin() + currentOrderIndex + 1, m_hierarchyEntityOrder.begin() + newOrderIndex + 1);
+	}
 
-			if (!bIsEntityInHierarchy)
+	bool SceneHierarchyPanel::IsEntityInHierarchy(EntityID entityID) const
+	{
+		return std::find_if(m_hierarchyEntityOrder.begin(), m_hierarchyEntityOrder.end(), [&](const auto& val) { return val.m_entityID == entityID; }) != m_hierarchyEntityOrder.end();
+	}
+
+	void SceneHierarchyPanel::ReloadHieararchyEntities(std::unordered_map<EntityID, bool>& entityEnabledMap)
+	{
+		if (m_hierarchyDirtyFlag)
+		{
+			std::vector<EntityID> allEntities = m_context->GetAllEntities();
+
+			std::vector<HierarchyEntity>::iterator iter;
+			for (iter = m_hierarchyEntityOrder.begin(); iter != m_hierarchyEntityOrder.end(); )
 			{
-				m_hierarchyEntityOrder.push_back(entityID);
-				if (entityEnabledMap.find(entityID) == entityEnabledMap.end())
+				if (std::find(allEntities.begin(), allEntities.end(), iter->m_entityID) == allEntities.end())
 				{
-					entityEnabledMap[entityID] = true;
+					entityEnabledMap.erase(iter->m_entityID);
+					iter = m_hierarchyEntityOrder.erase(iter);
+				}
+				else
+				{
+					++iter;
 				}
 			}
+
+			for (EntityID entityID : allEntities)
+			{
+				if (!IsEntityInHierarchy(entityID))
+				{
+					m_hierarchyEntityOrder.push_back(entityID);
+					if (entityEnabledMap.find(entityID) == entityEnabledMap.end())
+					{
+						entityEnabledMap[entityID] = true;
+					}
+				}
+			}
+			m_hierarchyDirtyFlag = false;
 		}
 	}
 
@@ -140,6 +198,18 @@ namespace rhombus
 				selectedEntitiesInOut.push_back(entity);
 			}
 		}
+	}
+
+	std::vector<EntityID> SceneHierarchyPanel::CalculateEntityOrdering() const
+	{
+		std::vector<EntityID> entityOrdering;
+
+		for (HierarchyEntity hierarchyEntity : m_hierarchyEntityOrder)
+		{
+			entityOrdering.push_back(hierarchyEntity.m_entityID);
+		}
+
+		return entityOrdering;
 	}
 
 	void SceneHierarchyPanel::DrawEntityNode(Entity entity, int i)
@@ -169,6 +239,16 @@ namespace rhombus
 			ImGui::Text(entity.GetName().c_str());
 			ImGui::EndDragDropSource();
 		}
+		
+		if (ImGui::BeginDragDropTarget())
+		{
+			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("SCENE_HIERACHY_UUID"))
+			{
+				// TODO: Make the entity a child of this one
+				m_handledReorderDragAndDrop = true;
+			}
+			ImGui::EndDragDropTarget();
+		}
 
 		bool entityDeleted = false;
 		bool entityDuplicated = false;
@@ -196,12 +276,14 @@ namespace rhombus
 		if (entityDuplicated)
 		{
 			m_context->DuplicateEntity(entity);
+			SetHierarchyDirty();
 		}
 
 		// Deferred deletion
 		if (entityDeleted)
 		{
 			m_context->DestroyEntity(entity);
+			SetHierarchyDirty();
 			if (m_selectionContext == entity)
 			{
 				m_selectionContext = {};
@@ -362,11 +444,11 @@ namespace rhombus
 
 		DrawComponent<TransformComponent>("Transform", entity, [](auto& component)
 		{
-				DrawVec3Control("Position", component.m_position);
-				Vec3 rotation = component.m_rotation * math::RadToDeg;
-				DrawVec3Control("Rotation", rotation);
-				component.m_rotation = rotation * math::DegToRad;
-				DrawVec3Control("Scale", component.m_scale, 1.0f);
+			DrawVec3Control("Position", component.m_position);
+			Vec3 rotation = component.m_rotation * math::RadToDeg;
+			DrawVec3Control("Rotation", rotation);
+			component.m_rotation = rotation * math::DegToRad;
+			DrawVec3Control("Scale", component.m_scale, 1.0f);
 		});
 
 		DrawComponent<ScriptComponent>("Script", entity, [](auto& component)

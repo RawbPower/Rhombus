@@ -17,6 +17,8 @@ namespace rhombus
 		Color GetColor() const { return m_color; }
 		void SetColor(Color color) { m_color = color; }
 
+		Vec2 GetSpriteSize() const { return Vec2(m_texture->GetWidth(), m_texture->GetHeight()); }
+
 		Ref<Texture2D> m_texture;
 
 	private:

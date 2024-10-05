@@ -408,8 +408,11 @@ namespace rhombus
 		
 		// Gimzos
 		// TODO: Get a independent selection from the mouse picker and use events to update different panels
+		std::vector<Entity> selectedEntities;
+		m_sceneHierarchyPanel.GetAllSelectedEntities(selectedEntities);
 		Entity selectedEntity = m_sceneHierarchyPanel.GetSelectedEntity();
-		if (selectedEntity && m_gizmoType != -1 && m_SceneState == SceneState::Edit)
+
+		if ((selectedEntities.size() > 0 || selectedEntity) && m_gizmoType != -1 && m_SceneState == SceneState::Edit)
 		{
 			ImGuizmo::SetOrthographic(false);
 			ImGuizmo::SetDrawlist();
@@ -426,10 +429,6 @@ namespace rhombus
 			const Mat4& cameraProjection = m_EditorCamera.GetProjection();
 			Mat4 cameraView = m_EditorCamera.GetViewMatrix();
 
-			// Entity transform
-			auto& transformComponent = selectedEntity.GetComponent<TransformComponent>();
-			Mat4 transform = transformComponent.GetTransform();
-
 			// Snapping
 			bool snap = Input::IsKeyPressed(RB_KEY_LEFT_CONTROL) || m_PixelSnapping;
 			float snapValue = 0.5f; // Snap to 0.5m for translation/scale
@@ -439,25 +438,81 @@ namespace rhombus
 
 			float snapValues[3] = { snapValue, snapValue, snapValue };
 
-			ImGuizmo::Manipulate(cameraView.ToPtr(), cameraProjection.ToPtr(),
-				(ImGuizmo::OPERATION)m_gizmoType, ImGuizmo::LOCAL, transform.ToPtr(),
-				nullptr, snap ? snapValues : nullptr);
-
-			if (ImGuizmo::IsUsing())
+			if (selectedEntities.size() > 1)
 			{
-				Vec4 row0 = Vec4(transform[0][0], transform[0][1], transform[0][2], transform[0][3]);
-				Vec4 row1 = Vec4(transform[1][0], transform[1][1], transform[1][2], transform[1][3]);
-				Vec4 row2 = Vec4(transform[2][0], transform[2][1], transform[2][2], transform[2][3]);
-				Vec4 row3 = Vec4(transform[3][0], transform[3][1], transform[3][2], transform[3][3]);
-				Mat4 transformMat(row0, row1, row2, row3);
+				Mat4 referenceTransform = Mat4::Identity();
+				Vec3 averagePosition = Vec3(0.0f);
+				for (Entity selectedEntity : selectedEntities)
+				{
+					averagePosition += selectedEntity.GetComponentRead<TransformComponent>().m_position;
+				}
+				averagePosition /= (float)selectedEntities.size();
+				referenceTransform.cols[3] = Vec4(averagePosition.x, averagePosition.y, 0.9f, 1.0f);
+				Mat4 initialTransform = referenceTransform;
 
-				Vec3 translation, rotation, scale;
+				ImGuizmo::Manipulate(cameraView.ToPtr(), cameraProjection.ToPtr(),
+					(ImGuizmo::OPERATION)m_gizmoType, ImGuizmo::LOCAL, referenceTransform.ToPtr(),
+					nullptr, snap ? snapValues : nullptr);
 
-				math::DecomposeTransform(transformMat, translation, rotation, scale);
+				if (ImGuizmo::IsUsing())
+				{
+					Vec4 row0 = Vec4(referenceTransform[0][0], referenceTransform[0][1], referenceTransform[0][2], referenceTransform[0][3]);
+					Vec4 row1 = Vec4(referenceTransform[1][0], referenceTransform[1][1], referenceTransform[1][2], referenceTransform[1][3]);
+					Vec4 row2 = Vec4(referenceTransform[2][0], referenceTransform[2][1], referenceTransform[2][2], referenceTransform[2][3]);
+					Vec4 row3 = Vec4(referenceTransform[3][0], referenceTransform[3][1], referenceTransform[3][2], referenceTransform[3][3]);
+					Mat4 transformMat(row0, row1, row2, row3);
 
-				transformComponent.m_position = translation;
-				transformComponent.m_rotation = rotation;		// TODO: Look into gimbal lock issue
-				transformComponent.m_scale = scale;
+					Vec3 translation, rotation, scale;
+					math::DecomposeTransform(transformMat, translation, rotation, scale);
+
+					row0 = Vec4(initialTransform[0][0], initialTransform[0][1], initialTransform[0][2], initialTransform[0][3]);
+					row1 = Vec4(initialTransform[1][0], initialTransform[1][1], initialTransform[1][2], initialTransform[1][3]);
+					row2 = Vec4(initialTransform[2][0], initialTransform[2][1], initialTransform[2][2], initialTransform[2][3]);
+					row3 = Vec4(initialTransform[3][0], initialTransform[3][1], initialTransform[3][2], initialTransform[3][3]);
+					transformMat = Mat4(row0, row1, row2, row3);
+
+					Vec3 initialTranslation, initialRotation, initialScale;
+					math::DecomposeTransform(transformMat, initialTranslation, initialRotation, initialScale);
+
+					Vec3 translationDelta = translation - initialTranslation;
+					Vec3 rotationDelta = rotation - initialRotation;
+					Vec3 scaleDelta = scale - initialScale;
+
+					for (Entity selectedEntity : selectedEntities)
+					{
+						auto& transformComponent = selectedEntity.GetComponent<TransformComponent>();
+						transformComponent.m_position += translationDelta;
+						transformComponent.m_rotation += rotationDelta;
+						transformComponent.m_scale += scaleDelta;
+					}
+				}
+			}
+			else if (selectedEntity && m_gizmoType != -1 && m_SceneState == SceneState::Edit)
+			{
+				// Entity transform
+				auto& transformComponent = selectedEntity.GetComponent<TransformComponent>();
+				Mat4 transform = transformComponent.GetTransform();
+
+				ImGuizmo::Manipulate(cameraView.ToPtr(), cameraProjection.ToPtr(),
+					(ImGuizmo::OPERATION)m_gizmoType, ImGuizmo::LOCAL, transform.ToPtr(),
+					nullptr, snap ? snapValues : nullptr);
+
+				if (ImGuizmo::IsUsing())
+				{
+					Vec4 row0 = Vec4(transform[0][0], transform[0][1], transform[0][2], transform[0][3]);
+					Vec4 row1 = Vec4(transform[1][0], transform[1][1], transform[1][2], transform[1][3]);
+					Vec4 row2 = Vec4(transform[2][0], transform[2][1], transform[2][2], transform[2][3]);
+					Vec4 row3 = Vec4(transform[3][0], transform[3][1], transform[3][2], transform[3][3]);
+					Mat4 transformMat(row0, row1, row2, row3);
+
+					Vec3 translation, rotation, scale;
+
+					math::DecomposeTransform(transformMat, translation, rotation, scale);
+
+					transformComponent.m_position = translation;
+					transformComponent.m_rotation = rotation;		// TODO: Look into gimbal lock issue
+					transformComponent.m_scale = scale;
+				}
 			}
 		}
 		
@@ -684,7 +739,10 @@ namespace rhombus
 			if (e.GetMouseButton() == RB_MOUSE_BUTTON_LEFT)
 			{
 				if (m_ViewportHovered && !ImGuizmo::IsOver() && !Input::IsKeyPressed(RB_KEY_LEFT_ALT))
+				{
 					m_sceneHierarchyPanel.SetSelectedEntity(m_HoveredEntity);
+					m_sceneHierarchyPanel.ResetSelectedEntities();
+				}
 			}
 		}
 
@@ -991,12 +1049,22 @@ namespace rhombus
 		}
 
 		// Draw selected entity outline 
-		if (Entity selectedEntity = m_sceneHierarchyPanel.GetSelectedEntity()) 
+		std::vector<Entity> selectedEntities;
+		m_sceneHierarchyPanel.GetAllSelectedEntities(selectedEntities);
+		for (Entity selectedEntity : selectedEntities)
 		{
 			TransformComponent transform = selectedEntity.GetComponent<TransformComponent>();
+			Mat4 scaledTransform = transform.GetTransform();
+
+			if (selectedEntity.HasComponent<SpriteRendererComponent>())
+			{
+				const SpriteRendererComponent& sprite = selectedEntity.GetComponentRead<SpriteRendererComponent>();
+				Vec2 spriteScale = sprite.GetSpriteSize();
+				scaledTransform = math::Scale(scaledTransform, Vec3(spriteScale, 1.0f));
+			}
 
 			//Red
-			Renderer2D::DrawRect(transform.GetTransform(), Color(0.9f, 0.9f, 0.9f, 1.0f));
+			Renderer2D::DrawRect(scaledTransform, Color(1.0f, 1.0f, 0.5f, 1.0f));
 		}
 
 		Renderer2D::EndScene();

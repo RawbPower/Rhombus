@@ -49,7 +49,8 @@ namespace rhombus
 		void OnScenePlay();
 		void OnSceneStop();
 
-		void DuplicateSelectedEntity();
+		void DuplicateSelectedEntities();
+		void DeleteSelectedEntities();
 
 		void OnOverlayRender();
 

@@ -22,6 +22,7 @@ namespace rhombus {
 		void Begin();
 		void End();
 
+		bool ShouldBlockEvents() const { return m_BlockEvents; }
 		void BlockEvents(bool block) { m_BlockEvents = block; }
 		void SetRhombusThemeColors();
 	private:

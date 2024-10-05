@@ -24,6 +24,7 @@ namespace rhombus
 		void SetSelectedEntity(Entity entity) { m_selectionContext = entity; }
 
 		void GetAllSelectedEntities(std::vector<Entity>& selectedEntitiesInOut) const;
+		void ResetSelectedEntities() { m_selectionContext = {}; m_selectionMask = 0; }
 		std::vector<EntityID> CalculateEntityOrdering() const;
 
 		void SetHierarchyDirty() { m_hierarchyDirtyFlag = true; }

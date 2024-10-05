@@ -197,6 +197,7 @@ namespace rhombus
 				Entity entity(entityID, m_context.get());
 				selectedEntitiesInOut.push_back(entity);
 			}
+			i++;
 		}
 	}
 

@@ -84,6 +84,12 @@ namespace rhombus {
 	{
 		RB_PROFILE_FUNCTION();
 
+		if (GetImGuiLayer()->ShouldBlockEvents())
+		{
+			bool deletePressed = Input::IsKeyPressed(RB_KEY_DELETE);
+			GetImGuiLayer()->BlockEvents(!deletePressed);
+		}
+
 		// Dispatch events
 		EventDispatcher dispatcher(e);
 		// Tell disptacher "If you see a window close event that dispatch it to this function"
@@ -222,7 +228,7 @@ namespace rhombus {
 			}
 		}
 
-		return true;
+		return false;
 	}
 
 	bool Application::OnKeyReleased(KeyReleasedEvent& e)
@@ -236,7 +242,7 @@ namespace rhombus {
 	{
 		RB_CORE_INFO(e.ToString());
 
-		return true;
+		return false;
 	}
 
 	bool Application::OnMouseButtonPressed(MouseButtonPressedEvent& e)

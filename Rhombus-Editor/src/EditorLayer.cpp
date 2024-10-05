@@ -619,10 +619,15 @@ namespace rhombus
 			{
 				if (ctrl)
 				{
-					DuplicateSelectedEntity();
+					DuplicateSelectedEntities();
 				}
 
 				break;
+			}
+			case RB_KEY_DELETE:
+			{
+				DeleteSelectedEntities();
+				m_sceneHierarchyPanel.ResetSelectedEntities();
 			}
 
 			// Gizmos
@@ -853,15 +858,30 @@ namespace rhombus
 		m_sceneHierarchyPanel.SetHierarchyDirty();
 	}
 
-	void EditorLayer::DuplicateSelectedEntity()
+	void EditorLayer::DuplicateSelectedEntities()
 	{
 		if (m_SceneState != SceneState::Edit)
 			return;
 
-		Entity selectedEntity = m_sceneHierarchyPanel.GetSelectedEntity();
-		if (selectedEntity)
+		std::vector<Entity> selectedEntities;
+		m_sceneHierarchyPanel.GetAllSelectedEntities(selectedEntities);
+		for (Entity& selectedEntity : selectedEntities)
 		{
 			m_EditorScene->DuplicateEntity(selectedEntity);
+			m_sceneHierarchyPanel.SetHierarchyDirty();
+		}
+	}
+
+	void EditorLayer::DeleteSelectedEntities()
+	{
+		if (m_SceneState != SceneState::Edit)
+			return;
+
+		std::vector<Entity> selectedEntities;
+		m_sceneHierarchyPanel.GetAllSelectedEntities(selectedEntities);
+		for (Entity& selectedEntity : selectedEntities)
+		{
+			m_EditorScene->DestroyEntity(selectedEntity);
 			m_sceneHierarchyPanel.SetHierarchyDirty();
 		}
 	}

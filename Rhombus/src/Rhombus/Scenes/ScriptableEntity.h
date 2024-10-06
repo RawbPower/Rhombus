@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Entity.h"
+#include "Rhombus/Scenes/Entity.h"
 
 namespace rhombus
 {

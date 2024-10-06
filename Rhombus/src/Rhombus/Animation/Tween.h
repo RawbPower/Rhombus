@@ -3,7 +3,7 @@
 #include "Rhombus/Math/Vector.h"
 #include "Rhombus/Core/DeltaTime.h"
 #include "EasingFunctions.h"
-#include "Rhombus/ECS/Entity.h"
+#include "Rhombus/Scenes/Entity.h"
 
 #include <queue>
 

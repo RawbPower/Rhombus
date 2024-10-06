@@ -3,7 +3,7 @@
 #include "Components/CardComponent.h"
 #include "Components/CardSlotComponent.h"
 #include "Components/PatienceComponent.h"
-#include "Rhombus/ECS/SceneSerializer.h"
+#include "Rhombus/Scenes/SceneSerializer.h"
 
 // Update this list when any new components are added
 // -----------------------------------------------------

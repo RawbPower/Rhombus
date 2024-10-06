@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Rhombus/ECS/Scene.h"
-#include "Rhombus/ECS/Entity.h"
+#include "Rhombus/Scenes/Scene.h"
+#include "Rhombus/Scenes/Entity.h"
 
 #include <list>
 

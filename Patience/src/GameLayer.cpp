@@ -1,7 +1,7 @@
 #include "GameLayer.h"
 
 #include "PatienceScene.h"
-#include "Rhombus/ECS/SceneSerializer.h"
+#include "Rhombus/Scenes/SceneSerializer.h"
 #include "Rhombus/Utils/PlatformUtils.h"
 
 #include "imgui/imgui.h"

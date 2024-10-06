@@ -1,7 +1,7 @@
 #include "rbpch.h"
 #include "System.h"
 
-#include "Entity.h"
+#include "Rhombus/Scenes/Entity.h"
 
 namespace rhombus
 {

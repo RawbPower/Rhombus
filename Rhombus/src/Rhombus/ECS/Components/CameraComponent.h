@@ -2,7 +2,7 @@
 
 #include "Component.h"
 
-#include "Rhombus/ECS/SceneCamera.h"
+#include "Rhombus/Scenes/SceneCamera.h"
 #include "Rhombus/Core/Application.h"
 
 namespace rhombus

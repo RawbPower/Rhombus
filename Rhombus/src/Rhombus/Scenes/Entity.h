@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ECSTypes.h"
+#include "Rhombus/ECS/ECSTypes.h"
 #include "Rhombus/Core/UUID.h"
 #include "Scene.h"
 

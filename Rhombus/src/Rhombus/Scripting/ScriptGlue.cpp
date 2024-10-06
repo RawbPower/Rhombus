@@ -3,7 +3,7 @@
 
 #include "Rhombus/Core/Input.h"
 #include "Rhombus/Core/KeyCodes.h"
-#include "Rhombus/ECS/Scene.h"
+#include "Rhombus/Scenes/Scene.h"
 #include "Rhombus/Scripting/ScriptEngine.h"
 #include "Rhombus/Renderer/Renderer2D.h"
 #include "Rhombus/ECS/Components/Rigidbody2DComponent.h"

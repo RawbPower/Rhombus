@@ -2,8 +2,8 @@
 
 #include "Rhombus/Core/Core.h"
 #include "Rhombus/Core/Log.h"
-#include "Rhombus/ECS/Scene.h"
-#include "Rhombus/ECS/Entity.h"
+#include "Rhombus/Scenes/Scene.h"
+#include "Rhombus/Scenes/Entity.h"
 
 namespace rhombus
 {

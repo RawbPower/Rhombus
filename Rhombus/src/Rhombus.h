@@ -17,9 +17,9 @@
 
 #include "Rhombus/ImGui/ImGuiLayer.h"
 
-#include "Rhombus/ECS/Scene.h"
-#include "Rhombus/ECS/Entity.h"
-#include "Rhombus/ECS/ScriptableEntity.h"
+#include "Rhombus/Scenes/Scene.h"
+#include "Rhombus/Scenes/Entity.h"
+#include "Rhombus/Scenes/ScriptableEntity.h"
 
 #include "Rhombus/ECS/Components/Component.h"
 #include "Rhombus/ECS/Components/Area2DComponent.h"

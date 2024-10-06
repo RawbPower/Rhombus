@@ -2,7 +2,7 @@
 
 #include "imgui/imgui.h"
 
-#include "Rhombus/ECS/SceneSerializer.h"
+#include "Rhombus/Scenes/SceneSerializer.h"
 #include "Rhombus/Utils/PlatformUtils.h"
 #include "Rhombus/Math/Math.h"
 #include "ScreenResolutionPreset.h"

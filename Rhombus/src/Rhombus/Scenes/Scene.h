@@ -1,7 +1,7 @@
 #pragma once
 
-#include "ECSTypes.h"
-#include "Registry.h"
+#include "Rhombus/ECS/ECSTypes.h"
+#include "Rhombus/ECS/Registry.h"
 
 #include "Rhombus/Core/DeltaTime.h"
 #include "Rhombus/Core/UUID.h"

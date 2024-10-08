@@ -1,5 +1,7 @@
 #include "rbpch.h"
 #include "Scene.h"
+
+#include "SceneGraphNode.h"
 #include "Rhombus/ECS/Components/Component.h"
 #include "Rhombus/ECS/Components/Rigidbody2DComponent.h"
 #include "Rhombus/Scenes/Entity.h"
@@ -77,6 +79,8 @@ namespace rhombus
 			signature.set(m_Registry.GetComponentType<TweenComponent>());
 			m_Registry.SetSystemSignature<TweeningSystem>(signature);
 		}
+
+		m_rootSceneNode = CreateRef<SceneGraphNode>();
 	}
 
 	void Scene::Copy(Ref<Scene> destScene, Ref<Scene> srcScene)
@@ -129,6 +133,7 @@ namespace rhombus
 		tag.m_tag = name.empty() ? "Entity" : name;
 
 		m_EntityMap[uuid] = entity;
+		entity.GetComponent<TransformComponent>().m_sceneGraphNode = m_rootSceneNode->AddChild(entity);
 
 		return entity;
 	}
@@ -239,6 +244,8 @@ namespace rhombus
 			}
 		}
 
+		m_rootSceneNode->Update();
+
 		// Render Sprites
 		if (mainCamera)
 		{
@@ -310,6 +317,7 @@ namespace rhombus
 		Renderer2D::BeginScene(camera);
 
 		// TODO: Account for all types of rendering when ordering the draw calls
+		m_rootSceneNode->Update();
 
 		// Draw Sprites
 		{

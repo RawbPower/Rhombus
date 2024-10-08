@@ -2,6 +2,7 @@
 #include "Entity.h"
 
 #include "Rhombus/ECS/Components/Component.h"
+#include "Rhombus/ECS/Components/TransformComponent.h"
 
 namespace rhombus
 {
@@ -11,13 +12,23 @@ namespace rhombus
 
 	}
 
-	UUID Entity::GetUUID() 
+	UUID Entity::GetUUID() const
 	{ 
-		return GetComponent<IDComponent>().m_id; 
+		return GetComponentRead<IDComponent>().m_id; 
 	}
 
-	const std::string Entity::GetName() 
+	const std::string Entity::GetName() const
 	{ 
-		return GetComponent<TagComponent>().m_tag; 
+		return GetComponentRead<TagComponent>().m_tag; 
+	}
+
+	Mat4 Entity::GetTransform() const
+	{
+		return GetComponentRead<TransformComponent>().GetTransform();
+	}
+
+	Ref<SceneGraphNode> Entity::GetSceneGraphNode() const
+	{
+		return GetComponentRead<TransformComponent>().m_sceneGraphNode;
 	}
 }

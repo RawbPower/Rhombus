@@ -96,9 +96,12 @@ namespace rhombus
 		operator bool() const { return m_entityId != -1; }
 		operator EntityID() const { return m_entityId; }
 
-		UUID GetUUID();
-		const std::string GetName();
+		UUID GetUUID() const;
+		const std::string GetName() const;
+		Mat4 GetTransform() const;
 		Scene* GetContext() const { return m_scene; }
+
+		Ref<SceneGraphNode> GetSceneGraphNode() const;
 
 	private:
 		EntityID m_rbEntityId;

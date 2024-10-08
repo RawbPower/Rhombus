@@ -2,6 +2,7 @@
 #include "SceneSerializer.h"
 
 #include "Entity.h"
+#include "SceneGraphNode.h"
 
 #include "Rhombus/Project/Project.h"
 
@@ -51,6 +52,13 @@ namespace rhombus
 		out << YAML::BeginMap; // Entity
 		out << YAML::Key << "Entity" << YAML::Value << entity.GetUUID();
 		out << YAML::Key << "Enabled" << YAML::Value << !scene->IsEntityDisabled(entity);
+
+		bool hasParent = entity.GetSceneGraphNode()->GetParent()->GetIsRootNode();
+		if (hasParent)
+		{
+			Entity parent = entity.GetSceneGraphNode()->GetParent()->GetEntity();
+			out << YAML::Key << "Parent" << YAML::Value << parent.GetUUID();
+		}
 
 		if (entity.HasComponent<TagComponent>())
 		{
@@ -277,6 +285,15 @@ namespace rhombus
 
 				Entity deserializedEntity = m_scene->CreateEntityWithUUID(uuid, name);
 				entityEnabledMap[(EntityID)deserializedEntity] = enabled;
+
+				if (entity["Parent"])
+				{
+					uint64_t parentUUID = entity["Parent"].as<uint64_t>();
+					Entity parentEntity = m_scene->GetEntityByUUID(parentUUID);
+					std::string parentName = parentEntity.GetName();
+					Ref<SceneGraphNode> parentSceneGraphNode = parentEntity.GetSceneGraphNode();
+					parentSceneGraphNode->AddChild(Ref<SceneGraphNode>(deserializedEntity.GetSceneGraphNode()));
+				}
 
 				auto transformComponent = entity["TransformComponent"];
 				if (transformComponent)

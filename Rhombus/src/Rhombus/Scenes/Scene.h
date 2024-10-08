@@ -18,6 +18,7 @@ namespace rhombus
 	class TweenParameterStep;
 	class TweenCallbackStep;
 	class TweenWaitStep;
+	class SceneGraphNode;
 
 	template <typename... Component>
 	struct ComponentGroup
@@ -159,6 +160,8 @@ namespace rhombus
 	protected:
 		Registry m_Registry;
 		uint32_t m_ViewportWidth = 0, m_ViewportHeight = 0;
+
+		Ref<SceneGraphNode> m_rootSceneNode;
 
 		b2World* m_PhysicsWorld = nullptr;
 		Ref<TweeningSystem> tweeningSystem;

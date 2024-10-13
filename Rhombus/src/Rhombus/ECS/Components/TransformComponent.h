@@ -18,6 +18,7 @@ namespace rhombus
 		TransformComponent(const TransformComponent&) = default;
 
 		Mat4 GetTransform() const;
+		Mat4 GetWorldTransform() const;
 
 		void SetLayer(Z_LAYER layer);
 		void SetPositionByLayerSection(Z_LAYER layer, int section, int numOfSections);

@@ -259,7 +259,7 @@ namespace rhombus
 				// most distant object first and the closest object last
 				std::vector<EntityID> view = m_Registry.GetEntityList<SpriteRendererComponent>();
 				std::sort(view.begin(), view.end(), [&](const EntityID lhs, const EntityID rhs) {
-					return m_Registry.GetComponent<TransformComponent>(lhs).m_position.z < m_Registry.GetComponent<TransformComponent>(rhs).m_position.z;
+					return m_Registry.GetComponent<TransformComponent>(lhs).GetWorldTransform().d().z < m_Registry.GetComponent<TransformComponent>(rhs).GetWorldTransform().d().z;
 				});
 
 				for (auto entity : view)
@@ -267,7 +267,7 @@ namespace rhombus
 					auto spriteRendererComponent = m_Registry.GetComponent<SpriteRendererComponent>(entity);
 					auto transformComponent = m_Registry.GetComponent<TransformComponent>(entity);
 
-					Renderer2D::DrawSprite(transformComponent.GetTransform(), spriteRendererComponent, (int)entity);
+					Renderer2D::DrawSprite(transformComponent.GetWorldTransform(), spriteRendererComponent, (int)entity);
 				}
 			}
 
@@ -277,7 +277,7 @@ namespace rhombus
 				// most distant object first and the closest object last
 				std::vector<EntityID> view = m_Registry.GetEntityList<CircleRendererComponent>();
 				std::sort(view.begin(), view.end(), [&](const EntityID lhs, const EntityID rhs) {
-					return m_Registry.GetComponent<TransformComponent>(lhs).m_position.z < m_Registry.GetComponent<TransformComponent>(rhs).m_position.z;
+					return m_Registry.GetComponent<TransformComponent>(lhs).GetWorldTransform().d().z < m_Registry.GetComponent<TransformComponent>(rhs).GetWorldTransform().d().z;
 				});
 
 				for (auto entity : view)
@@ -285,7 +285,7 @@ namespace rhombus
 					auto circleRendererComponent = m_Registry.GetComponent<CircleRendererComponent>(entity);
 					auto transformComponent = m_Registry.GetComponent<TransformComponent>(entity);
 
-					Renderer2D::DrawCircle(transformComponent.GetTransform(), circleRendererComponent.m_color,
+					Renderer2D::DrawCircle(transformComponent.GetWorldTransform(), circleRendererComponent.m_color,
 						circleRendererComponent.m_thickness, circleRendererComponent.m_fade, (int)entity);
 				}
 			}
@@ -325,7 +325,7 @@ namespace rhombus
 			// most distant object first and the closest object last
 			std::vector<EntityID> view = m_Registry.GetEntityList<SpriteRendererComponent>();
 			std::sort(view.begin(), view.end(), [&](const EntityID lhs, const EntityID rhs) {
-				return m_Registry.GetComponent<TransformComponent>(lhs).m_position.z < m_Registry.GetComponent<TransformComponent>(rhs).m_position.z;
+				return m_Registry.GetComponent<TransformComponent>(lhs).GetWorldTransform().d().z < m_Registry.GetComponent<TransformComponent>(rhs).GetWorldTransform().d().z;
 			});
 
 			for (EntityID entity : view)
@@ -338,7 +338,7 @@ namespace rhombus
 				auto spriteRendererComponent = m_Registry.GetComponent<SpriteRendererComponent>(entity);
 				auto transformComponent = m_Registry.GetComponent<TransformComponent>(entity);
 
-				Renderer2D::DrawSprite(transformComponent.GetTransform(), spriteRendererComponent, (int)entity);
+				Renderer2D::DrawSprite(transformComponent.GetWorldTransform(), spriteRendererComponent, (int)entity);
 			}
 		}
 
@@ -348,7 +348,7 @@ namespace rhombus
 			// most distant object first and the closest object last
 			std::vector<EntityID> view = m_Registry.GetEntityList<CircleRendererComponent>();
 			std::sort(view.begin(), view.end(), [&](const EntityID lhs, const EntityID rhs) {
-				return m_Registry.GetComponent<TransformComponent>(lhs).m_position.z < m_Registry.GetComponent<TransformComponent>(rhs).m_position.z;
+				return m_Registry.GetComponent<TransformComponent>(lhs).GetWorldTransform().d().z < m_Registry.GetComponent<TransformComponent>(rhs).GetWorldTransform().d().z;
 			});
 
 			for (auto entity : view)
@@ -361,7 +361,7 @@ namespace rhombus
 				auto circleRendererComponent = m_Registry.GetComponent<CircleRendererComponent>(entity);
 				auto transformComponent = m_Registry.GetComponent<TransformComponent>(entity);
 
-				Renderer2D::DrawCircle(transformComponent.GetTransform(), circleRendererComponent.m_color,
+				Renderer2D::DrawCircle(transformComponent.GetWorldTransform(), circleRendererComponent.m_color,
 					circleRendererComponent.m_thickness, circleRendererComponent.m_fade, (int)entity);
 			}
 		}

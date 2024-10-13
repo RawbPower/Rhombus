@@ -53,7 +53,7 @@ namespace rhombus
 		out << YAML::Key << "Entity" << YAML::Value << entity.GetUUID();
 		out << YAML::Key << "Enabled" << YAML::Value << !scene->IsEntityDisabled(entity);
 
-		bool hasParent = entity.GetSceneGraphNode()->GetParent()->GetIsRootNode();
+		bool hasParent = !entity.GetSceneGraphNode()->GetParent()->GetIsRootNode();
 		if (hasParent)
 		{
 			Entity parent = entity.GetSceneGraphNode()->GetParent()->GetEntity();

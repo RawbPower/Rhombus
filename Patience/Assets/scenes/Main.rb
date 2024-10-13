@@ -555,7 +555,7 @@ Entities:
     TagComponent:
       Tag: Card Deck
     TransformComponent:
-      Position: [252, 127.5, 0]
+      Position: [0, 0, 0]
       Rotation: [0, -0, 0]
       Scale: [1, 1, 1]
     SpriteRendererComponent:

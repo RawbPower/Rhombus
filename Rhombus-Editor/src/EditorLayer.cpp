@@ -4,6 +4,7 @@
 
 #include "Rhombus/Scenes/SceneSerializer.h"
 #include "Rhombus/Utils/PlatformUtils.h"
+#include "Rhombus/Scenes/SceneGraphNode.h"
 #include "Rhombus/Math/Math.h"
 #include "ScreenResolutionPreset.h"
 
@@ -444,7 +445,7 @@ namespace rhombus
 				Vec3 averagePosition = Vec3(0.0f);
 				for (Entity selectedEntity : selectedEntities)
 				{
-					averagePosition += selectedEntity.GetComponentRead<TransformComponent>().m_position;
+					averagePosition += selectedEntity.GetComponentRead<TransformComponent>().GetWorldTransform().d();
 				}
 				averagePosition /= (float)selectedEntities.size();
 				referenceTransform.cols[3] = Vec4(averagePosition.x, averagePosition.y, 0.9f, 1.0f);
@@ -470,6 +471,10 @@ namespace rhombus
 					row2 = Vec4(initialTransform[2][0], initialTransform[2][1], initialTransform[2][2], initialTransform[2][3]);
 					row3 = Vec4(initialTransform[3][0], initialTransform[3][1], initialTransform[3][2], initialTransform[3][3]);
 					transformMat = Mat4(row0, row1, row2, row3);
+					if (!selectedEntity.GetSceneGraphNode()->GetIsRootNode())
+					{
+						transformMat = selectedEntity.GetSceneGraphNode()->GetParent()->GetWorldTransform().Inverse() * transformMat;
+					}
 
 					Vec3 initialTranslation, initialRotation, initialScale;
 					math::DecomposeTransform(transformMat, initialTranslation, initialRotation, initialScale);
@@ -491,7 +496,7 @@ namespace rhombus
 			{
 				// Entity transform
 				auto& transformComponent = selectedEntity.GetComponent<TransformComponent>();
-				Mat4 transform = transformComponent.GetTransform();
+				Mat4 transform = transformComponent.GetWorldTransform();
 
 				ImGuizmo::Manipulate(cameraView.ToPtr(), cameraProjection.ToPtr(),
 					(ImGuizmo::OPERATION)m_gizmoType, ImGuizmo::LOCAL, transform.ToPtr(),
@@ -504,12 +509,16 @@ namespace rhombus
 					Vec4 row2 = Vec4(transform[2][0], transform[2][1], transform[2][2], transform[2][3]);
 					Vec4 row3 = Vec4(transform[3][0], transform[3][1], transform[3][2], transform[3][3]);
 					Mat4 transformMat(row0, row1, row2, row3);
+					if (!selectedEntity.GetSceneGraphNode()->GetIsRootNode())
+					{
+						transformMat = selectedEntity.GetSceneGraphNode()->GetParent()->GetWorldTransform().Inverse() * transformMat;
+					}
 
 					Vec3 translation, rotation, scale;
 
 					math::DecomposeTransform(transformMat, translation, rotation, scale);
 
-					transformComponent.m_position = translation;
+					transformComponent.m_position =  translation;
 					transformComponent.m_rotation = rotation;		// TODO: Look into gimbal lock issue
 					transformComponent.m_scale = scale;
 				}
@@ -1008,11 +1017,13 @@ namespace rhombus
 					Entity entity = { e, m_ActiveScene.get() };
 					TransformComponent& tc = entity.GetComponent<TransformComponent>();
 					CircleCollider2DComponent& bc2d = entity.GetComponent<CircleCollider2DComponent>();
-					Vec3 translation = tc.m_position + Vec3(bc2d.m_offset, 0.01f);
-					Vec3 scale = tc.m_scale * bc2d.m_radius * 2.0f;
+					Vec3 translationWorld, rotationWorld, scaleWorld;
+					math::DecomposeTransform(tc.GetWorldTransform(), translationWorld, rotationWorld, scaleWorld);
+					Vec3 translation = translationWorld + Vec3(bc2d.m_offset, 0.01f);
+					Vec3 scale = scaleWorld * bc2d.m_radius * 2.0f;
 
 					Mat4 transform = math::Translate(Mat4::Identity(), translation)
-						* math::Rotate(Mat4::Identity(), tc.m_rotation.z, Vec3(0.0f, 0.0f, 1.0f))
+						* math::Rotate(Mat4::Identity(), rotationWorld.z, Vec3(0.0f, 0.0f, 1.0f))
 						* math::Scale(Mat4::Identity(), scale);
 
 					Renderer2D::DrawCircle(transform, m_PhysicsColliderColor, 0.05f);
@@ -1032,11 +1043,13 @@ namespace rhombus
 					Entity entity = { e, m_ActiveScene.get() };
 					TransformComponent& tc = entity.GetComponent<TransformComponent>();
 					BoxArea2DComponent& ba2d = entity.GetComponent<BoxArea2DComponent>();
-					Vec3 translation = tc.m_position + Vec3(ba2d.m_offset, 0.01f);
-					Vec3 scale = tc.m_scale * Vec3(ba2d.m_size * 2.0f, 1.0f);
+					Vec3 translationWorld, rotationWorld, scaleWorld;
+					math::DecomposeTransform(tc.GetWorldTransform(), translationWorld, rotationWorld, scaleWorld);
+					Vec3 translation = translationWorld + Vec3(ba2d.m_offset, 0.01f);
+					Vec3 scale = scaleWorld * Vec3(ba2d.m_size * 2.0f, 1.0f);
 
 					Mat4 transform = math::Translate(Mat4::Identity(), translation)
-						* math::Rotate(Mat4::Identity(), tc.m_rotation.z, Vec3(0.0f, 0.0f, 1.0f))
+						* math::Rotate(Mat4::Identity(), rotationWorld.z, Vec3(0.0f, 0.0f, 1.0f))
 						* math::Scale(Mat4::Identity(), scale);
 
 					Color debugColor = ba2d.GetDebugColor().a > 0.0f ? ba2d.GetDebugColor() : m_AreaColor;
@@ -1054,7 +1067,7 @@ namespace rhombus
 		for (Entity selectedEntity : selectedEntities)
 		{
 			TransformComponent transform = selectedEntity.GetComponent<TransformComponent>();
-			Mat4 scaledTransform = transform.GetTransform();
+			Mat4 scaledTransform = transform.GetWorldTransform();
 
 			if (selectedEntity.HasComponent<SpriteRendererComponent>())
 			{

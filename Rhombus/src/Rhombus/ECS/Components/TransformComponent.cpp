@@ -1,6 +1,8 @@
 #include "rbpch.h"
 #include "TransformComponent.h"
 
+#include "Rhombus/Scenes/SceneGraphNode.h"
+
 #include "Rhombus/Math/Math.h"
 #include "Rhombus/Math/Matrix.h"
 #include "Rhombus/Math/Quat.h"
@@ -17,6 +19,11 @@ namespace rhombus
 			* math::Scale(Mat4::Identity(), m_scale);
 
 		return transform;
+	}
+
+	Mat4 TransformComponent::GetWorldTransform() const
+	{
+		return m_sceneGraphNode->GetWorldTransform();
 	}
 
 	void TransformComponent::SetLayer(Z_LAYER layer)

@@ -38,7 +38,7 @@ void CardPlacementSystem::OnMouseMoved(int x, int y)
 
 		if (card.GetIsHeld())
 		{
-			transform.m_position = Vec3(cursorCoords.x, cursorCoords.y, transform.m_position.z) + card.GetHeldOffset();
+			transform.SetWorldPosition(Vec3(cursorCoords.x, cursorCoords.y, transform.GetPosition().z) + card.GetHeldOffset());
 			transform.SetPositionByLayerSection(Z_LAYER::FOREGROUND_3_LAYER, card.GetHeldOffset().GetMagnitude() / cardSlot.m_staggeredOffset.GetMagnitude(), 10);
 
 			bIsCardHeld = true;
@@ -51,7 +51,7 @@ void CardPlacementSystem::OnMouseMoved(int x, int y)
 
 				if (ba2D.m_isMouseInArea)
 				{
-					if (!hoveredCard || hoveredCard->GetOwnerEntity().GetComponent<TransformComponent>().m_position.z < transform.m_position.z)
+					if (!hoveredCard || hoveredCard->GetOwnerEntity().GetComponent<TransformComponent>().GetPosition().z < transform.GetPosition().z)
 					{
 						hoveredCard = &card;
 					}
@@ -84,7 +84,7 @@ void CardPlacementSystem::OnMouseButtonPressed(int button)
 				auto& transform = nextCardInSequence.GetComponent<TransformComponent>();
 				nextCardInSequence.GetComponent<CardComponent>().SetIsHeld(true);
 				nextCardInSequence.GetComponent<CardComponent>().SetHeldOffset((float)(numCardInSequnce - cardSequence.size()) * cardSlot.m_staggeredOffset);
-				nextCardInSequence.GetComponent<CardComponent>().SetPreviousPosition(transform.m_position);
+				nextCardInSequence.GetComponent<CardComponent>().SetPreviousPosition(transform.GetPosition());
 				cardSequence.pop();
 			}
 			break;
@@ -148,7 +148,7 @@ void CardPlacementSystem::PlaceCard(Entity cardEntity, bool isInSequence, int da
 	{
 		CardComponent& card = cardEntity.GetComponent<CardComponent>();
 		TransformComponent& cardTransform = cardEntity.GetComponent<TransformComponent>();
-		cardTransform.m_position = Vec3(card.GetPreviousPosition());
+		cardTransform.SetPosition(Vec3(card.GetPreviousPosition()));
 	}
 	else
 	{
@@ -162,7 +162,7 @@ void CardPlacementSystem::PlaceCard(Entity cardEntity, bool isInSequence, int da
 			{
 				CardComponent& card = cardEntity.GetComponent<CardComponent>();
 				TransformComponent& cardTransform = cardEntity.GetComponent<TransformComponent>();
-				cardTransform.m_position = Vec3(card.GetPreviousPosition());
+				cardTransform.SetPosition(Vec3(card.GetPreviousPosition()));
 			}
 			else
 			{
@@ -183,7 +183,7 @@ void CardPlacementSystem::PlaceCard(Entity cardEntity, Entity slotEntity, bool i
 	if (updateTransform)
 	{
 		TransformComponent& slotTransform = slotEntity.GetComponent<TransformComponent>();
-		cardTransform.m_position = Vec3(slotTransform.m_position.x, slotTransform.m_position.y, slotTransform.m_position.z);
+		cardTransform.SetPosition(slotTransform.GetPosition());
 		cardTransform.SetLayer(Z_LAYER::FOREGROUND_1_LAYER);
 	}
 	CardSlotComponent& cardSlot = slotEntity.GetComponent<CardSlotComponent>();
@@ -201,7 +201,7 @@ void CardPlacementSystem::PlaceCard(Entity cardEntity, Entity slotEntity, bool i
 	}
 	else
 	{
-		cardTransform.m_position = Vec3(card.GetPreviousPosition());
+		cardTransform.SetPosition(Vec3(card.GetPreviousPosition()));
 	}
 }
 
@@ -286,8 +286,8 @@ EntityID CardPlacementSystem::CheckForCardSlot(Entity cardEntity)
 		const BoxArea2DComponent& slotArea = entity.GetComponent<BoxArea2DComponent>();
 		const TransformComponent& slotTransform = entity.GetComponent<TransformComponent>();
 
-		Vec3 cardPos = cardTransform.m_position + Vec3(cardBoxArea.m_offset, 0.0f);
-		Vec3 slotPos = slotTransform.m_position + Vec3(slotArea.m_offset, 0.0f);
+		Vec3 cardPos = cardTransform.GetPosition() + Vec3(cardBoxArea.m_offset, 0.0f);
+		Vec3 slotPos = slotTransform.GetPosition() + Vec3(slotArea.m_offset, 0.0f);
 
 		Vec2 separation = Vec2(abs(cardPos.x - slotPos.x), abs(cardPos.y - slotPos.y));
 		if (separation.GetMagnitude() < nearestSeparation || nearestSeparation < 0.0f)
@@ -304,8 +304,8 @@ EntityID CardPlacementSystem::CheckForCardSlot(Entity cardEntity)
 		const BoxArea2DComponent& slotArea = entity.GetComponent<BoxArea2DComponent>();
 		TransformComponent& slotTransform = entity.GetComponent<TransformComponent>();
 
-		Vec3 cardPos = cardTransform.m_position + Vec3(cardBoxArea.m_offset, 0.0f);
-		Vec3 slotPos = slotTransform.m_position + Vec3(slotArea.m_offset, 0.0f);
+		Vec3 cardPos = cardTransform.GetPosition() + Vec3(cardBoxArea.m_offset, 0.0f);
+		Vec3 slotPos = slotTransform.GetPosition() + Vec3(slotArea.m_offset, 0.0f);
 
 		Vec2 separation = Vec2(abs(cardPos.x - slotPos.x), abs(cardPos.y - slotPos.y));
 
@@ -369,9 +369,9 @@ void CardPlacementSystem::MoveCardToSlot(Entity card, Entity slot, bool flipCard
 {
 	TransformComponent& transform = card.GetComponent<TransformComponent>();
 	const TransformComponent& slotTransform = slot.GetComponentRead<TransformComponent>();
-	Vec3 final = Vec3(slotTransform.m_position.x, slotTransform.m_position.y, zLayers[FOREGROUND_3_LAYER]);
+	Vec3 final = Vec3(slotTransform.GetPosition().x, slotTransform.GetPosition().y, zLayers[FOREGROUND_3_LAYER]);
 
-	Ref<Tween> translationTween = m_scene->CreateTween(card, &transform.m_position, transform.m_position, final, 0.6f, EasingType::SINE_OUT);
+	Ref<Tween> translationTween = m_scene->CreateTween(card, &transform.GetPositionRef(), transform.GetPosition(), final, 0.6f, EasingType::SINE_OUT);
 	translationTween->Start();
 
 	if (flipCard)

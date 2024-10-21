@@ -70,11 +70,11 @@ void PatienceScene::OnDraw()
 			CardComponent& card = entity.GetComponent<CardComponent>();
 			if (card.GetIsHovered())
 			{
-				Vec3 translation = tc.m_position + Vec3(ba2d.m_offset, 0.01f);
-				Vec3 scale = tc.m_scale * Vec3(ba2d.m_size * 2.0f, 1.0f);
+				Vec3 translation = tc.GetWorldPosition() + Vec3(ba2d.m_offset, 0.01f);
+				Vec3 scale = tc.GetWorldScale() * Vec3(ba2d.m_size * 2.0f, 1.0f);
 
 				Mat4 transform = math::Translate(Mat4::Identity(), translation)
-					* math::Rotate(Mat4::Identity(), tc.m_rotation.z, Vec3(0.0f, 0.0f, 1.0f))
+					* math::Rotate(Mat4::Identity(), tc.GetWorldRotation().z, Vec3(0.0f, 0.0f, 1.0f))
 					* math::Scale(Mat4::Identity(), scale);
 				Renderer2D::DrawRect(transform, Color(0.0f, 0.8f, 0.1f, 1.0f));
 			}

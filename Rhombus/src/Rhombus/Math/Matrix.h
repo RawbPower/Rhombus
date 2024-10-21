@@ -297,10 +297,12 @@ namespace rhombus
 		Vec4& operator [] (const int idx);
 		~Mat4() {}
 
-		Vec3 a() { return cols[0].GetXYZ(); }
-		Vec3 b() { return cols[1].GetXYZ(); }
-		Vec3 c() { return cols[2].GetXYZ(); }
-		Vec3 d() { return cols[3].GetXYZ(); }
+		const Vec3 a() { return cols[0].GetXYZ(); }
+		const Vec3 b() { return cols[1].GetXYZ(); }
+		const Vec3 c() { return cols[2].GetXYZ(); }
+		const Vec3 d() { return cols[3].GetXYZ(); }
+
+		void SetD(Vec3 d);
 
 		static Mat4 Zero();
 		static Mat4 Identity();
@@ -380,6 +382,11 @@ namespace rhombus
 	inline Vec4& Mat4::operator [] (const int idx)
 	{
 		return cols[idx];
+	}
+
+	inline void Mat4::SetD(Vec3 d)
+	{
+		cols[3] = Vec4(d.x, d.y, d.z, cols[3].w);
 	}
 
 	inline Mat4 Mat4::Zero() 

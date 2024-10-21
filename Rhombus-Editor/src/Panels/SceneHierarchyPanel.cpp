@@ -445,11 +445,17 @@ namespace rhombus
 
 		DrawComponent<TransformComponent>("Transform", entity, [](auto& component)
 		{
-			DrawVec3Control("Position", component.m_position);
-			Vec3 rotation = component.m_rotation * math::RadToDeg;
+			Vec3 position = component.GetPosition();
+			Vec3 rotation = component.GetRotation() * math::RadToDeg;
+			Vec3 scale = component.GetScale();
+
+			DrawVec3Control("Position", position);
 			DrawVec3Control("Rotation", rotation);
-			component.m_rotation = rotation * math::DegToRad;
-			DrawVec3Control("Scale", component.m_scale, 1.0f);
+			DrawVec3Control("Scale", scale, 1.0f);
+
+			component.SetPosition(position);
+			component.SetRotation(rotation * math::DegToRad);
+			component.SetScale(scale);
 		});
 
 		DrawComponent<ScriptComponent>("Script", entity, [](auto& component)

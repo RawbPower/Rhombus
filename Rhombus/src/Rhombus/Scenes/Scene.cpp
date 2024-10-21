@@ -80,7 +80,7 @@ namespace rhombus
 			m_Registry.SetSystemSignature<TweeningSystem>(signature);
 		}
 
-		m_rootSceneNode = CreateRef<SceneGraphNode>();
+		m_rootSceneNode = CreateRef<SceneGraphNode>(this);
 	}
 
 	void Scene::Copy(Ref<Scene> destScene, Ref<Scene> srcScene)
@@ -103,13 +103,35 @@ namespace rhombus
 
 			UUID uuid = srcSceneRegistry.GetComponent<IDComponent>(e).m_id;
 			const auto& name = srcSceneRegistry.GetComponent<TagComponent>(e).m_tag;
-			Entity newEntity = destScene->CreateEntityWithUUID(uuid, name);
+			Entity newEntity = destScene->CreateEntityWithUUID(uuid, name, false);
 			entityMap[uuid] = (EntityID)newEntity;
 		}
 
 		// Copy components (TODO: Skip ID Component?)
 		//destScene->m_Registry.CopyComponents(srcScene->m_Registry);
 		srcScene->CopyAllComponents(destScene, entityMap);
+
+		// Build scene graph for new scene
+		std::vector<EntityID> transformView = destSceneRegistry.GetEntityList<TransformComponent>();
+		destScene->m_rootSceneNode->RemoveAllChildren();
+		for (EntityID e : transformView)
+		{
+			Entity destEntity = { e, destScene.get()};
+			auto& destTransform = destEntity.GetComponent<TransformComponent>();
+			destTransform.m_sceneGraphNode = destScene->m_rootSceneNode->AddChild(destEntity);
+			Entity srcEntity = srcScene->GetEntityByUUID(destSceneRegistry.GetComponent<IDComponent>(e).m_id);
+			auto& srcTransform = srcEntity.GetComponent<TransformComponent>();
+			if (srcTransform.m_sceneGraphNode->GetParent())
+			{
+				if (!srcTransform.m_sceneGraphNode->GetParent()->GetIsRootNode())
+				{
+					UUID parentUUID = srcTransform.m_sceneGraphNode->GetParent()->GetEntity().GetUUID();
+					Entity parentEntity = destScene->GetEntityByUUID(parentUUID);
+					Ref<SceneGraphNode> parentSceneGraphNode = parentEntity.GetSceneGraphNode();
+					parentSceneGraphNode->AddChild(Ref<SceneGraphNode>(destTransform.m_sceneGraphNode));
+				}
+			}
+		}
 	}
 
 	void Scene::CopyAllComponents(Ref<Scene> destScene, const std::unordered_map<UUID, EntityID>& entityMap)
@@ -122,18 +144,21 @@ namespace rhombus
 		return CreateEntityWithUUID(UUID(), name);
 	}
 
-	Entity Scene::CreateEntityWithUUID(UUID uuid, const std::string& name)
+	Entity Scene::CreateEntityWithUUID(UUID uuid, const std::string& name, bool bAddToSceneGraph)
 	{
 		Entity entity(m_Registry.CreateEntity(), this);
 		IDComponent& idComponent = entity.AddComponent(IDComponent(uuid));
 		//IDComponent& idComponent = entity.AddComponent<IDComponent>();
 		//idComponent.m_id = uuid;
-		entity.AddComponent<TransformComponent>();
+		auto& transform = entity.AddComponent<TransformComponent>();
 		auto& tag = entity.AddComponent<TagComponent>();
 		tag.m_tag = name.empty() ? "Entity" : name;
 
 		m_EntityMap[uuid] = entity;
-		entity.GetComponent<TransformComponent>().m_sceneGraphNode = m_rootSceneNode->AddChild(entity);
+		if (bAddToSceneGraph)
+		{
+			transform.m_sceneGraphNode = m_rootSceneNode->AddChild(entity);
+		}
 
 		return entity;
 	}
@@ -217,9 +242,8 @@ namespace rhombus
 
 					b2Body* body = (b2Body*)rb.m_runtimeBody;
 					const auto& position = body->GetPosition();
-					transform.m_position.x = position.x;
-					transform.m_position.y = position.y;
-					transform.m_rotation.z = body->GetAngle();
+					transform.SetPosition(Vec2(position.x, position.y));
+					transform.SetRotation(body->GetAngle());
 				}
 			}
 
@@ -243,8 +267,6 @@ namespace rhombus
 				}
 			}
 		}
-
-		m_rootSceneNode->Update();
 
 		// Render Sprites
 		if (mainCamera)
@@ -317,7 +339,6 @@ namespace rhombus
 		Renderer2D::BeginScene(camera);
 
 		// TODO: Account for all types of rendering when ordering the draw calls
-		m_rootSceneNode->Update();
 
 		// Draw Sprites
 		{
@@ -381,7 +402,7 @@ namespace rhombus
 				auto& transform = entity.GetComponent<TransformComponent>();
 				auto& ba2D = entity.GetComponent<BoxArea2DComponent>();
 
-				Vec2 offsetPosition = Vec2(transform.m_position) + ba2D.m_offset;
+				Vec2 offsetPosition = Vec2(transform.GetWorldPosition()) + ba2D.m_offset;
 				bool withinXLimit = (cursorCoords.x < offsetPosition.x + ba2D.m_size.x) && (cursorCoords.x > offsetPosition.x - ba2D.m_size.x);
 				bool withinYLimit = (cursorCoords.y < offsetPosition.y + ba2D.m_size.y) && (cursorCoords.y > offsetPosition.y - ba2D.m_size.y);
 				if (withinXLimit && withinYLimit)
@@ -465,8 +486,8 @@ namespace rhombus
 
 			b2BodyDef bodyDef;
 			bodyDef.type = Rigidbody2DTypetoBox2DType(rb.m_type);
-			bodyDef.position.Set(transform.m_position.x, transform.m_position.y);
-			bodyDef.angle = transform.m_rotation.z;
+			bodyDef.position.Set(transform.GetPosition().x, transform.GetPosition().y);
+			bodyDef.angle = transform.GetRotation().z;
 
 			b2Body* body = m_PhysicsWorld->CreateBody(&bodyDef);
 			body->SetFixedRotation(rb.m_fixedRotation);
@@ -477,7 +498,7 @@ namespace rhombus
 				auto& collider = entity.GetComponent<BoxCollider2DComponent>();
 
 				b2PolygonShape boxShape;
-				boxShape.SetAsBox(collider.m_size.x * transform.m_scale.x, collider.m_size.y * transform.m_scale.y);
+				boxShape.SetAsBox(collider.m_size.x * transform.GetScale().x, collider.m_size.y * transform.GetScale().y);
 
 				b2FixtureDef fixtureDef;
 				fixtureDef.shape = &boxShape;
@@ -494,7 +515,7 @@ namespace rhombus
 
 				b2CircleShape circleShape;
 				circleShape.m_p.Set(collider.m_offset.x, collider.m_offset.y);
-				circleShape.m_radius = transform.m_scale.x * collider.m_radius;
+				circleShape.m_radius = transform.GetScale().x * collider.m_radius;
 
 				b2FixtureDef fixtureDef;
 				fixtureDef.shape = &circleShape;

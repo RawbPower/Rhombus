@@ -13,19 +13,40 @@ namespace rhombus
 
 	class TransformComponent : public ComponentBase
 	{
+	private:
+		Vec3 m_position = { 0.0f, 0.0f, 0.0f };
+		Vec3 m_rotation = { 0.0f, 0.0f, 0.0f };
+		Vec3 m_scale = { 1.0f, 1.0f, 1.0f };
+
 	public:
 		TransformComponent() = default;
 		TransformComponent(const TransformComponent&) = default;
 
+		Vec3 GetPosition() const { return m_position; }
+		Vec3 GetRotation() const { return m_rotation; }
+		Vec3 GetScale() const { return m_scale; }
 		Mat4 GetTransform() const;
+
+		Vec3& GetPositionRef();
+		Vec3& GetRotationRef();
+		Vec3& GetScaleRef();
+
+		Vec3 GetWorldPosition() const;
+		Vec3 GetWorldRotation() const;
+		Vec3 GetWorldScale() const;
 		Mat4 GetWorldTransform() const;
+
+		void SetPosition(Vec2 position);
+		void SetPosition(Vec3 position);
+		void SetRotation(float rotation);
+		void SetRotation(Vec3 rotation);
+		void SetScale(Vec3 scale);
+		void SetTransform(Mat4 transform);
+
+		void SetWorldPosition(Vec3 position);
 
 		void SetLayer(Z_LAYER layer);
 		void SetPositionByLayerSection(Z_LAYER layer, int section, int numOfSections);
-
-		Vec3 m_position = { 0.0f, 0.0f, 0.0f };
-		Vec3 m_rotation = { 0.0f, 0.0f, 0.0f };
-		Vec3 m_scale = { 1.0f, 1.0f, 1.0f };
 
 		Ref<SceneGraphNode> m_sceneGraphNode;
 	};

@@ -77,9 +77,9 @@ namespace rhombus
 			out << YAML::BeginMap; // TransformComponent
 
 			auto& tc = entity.GetComponent<TransformComponent>();
-			out << YAML::Key << "Position" << YAML::Value << tc.m_position;
-			out << YAML::Key << "Rotation" << YAML::Value << tc.m_rotation;
-			out << YAML::Key << "Scale" << YAML::Value << tc.m_scale;
+			out << YAML::Key << "Position" << YAML::Value << tc.GetPosition();
+			out << YAML::Key << "Rotation" << YAML::Value << tc.GetRotation();
+			out << YAML::Key << "Scale" << YAML::Value << tc.GetScale();
 
 			out << YAML::EndMap; // TransformComponent
 		}
@@ -300,9 +300,9 @@ namespace rhombus
 				{
 					// Entities always have transforms
 					auto& tc = deserializedEntity.GetComponent<TransformComponent>();
-					tc.m_position = transformComponent["Position"].as<Vec3>();
-					tc.m_rotation = transformComponent["Rotation"].as<Vec3>();
-					tc.m_scale = transformComponent["Scale"].as<Vec3>();
+					tc.SetPosition(transformComponent["Position"].as<Vec3>());
+					tc.SetRotation(transformComponent["Rotation"].as<Vec3>());
+					tc.SetScale(transformComponent["Scale"].as<Vec3>());
 				}
 
 				auto cameraComponent = entity["CameraComponent"];

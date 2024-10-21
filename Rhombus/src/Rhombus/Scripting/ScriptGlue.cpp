@@ -109,7 +109,7 @@ namespace rhombus
 		std::string name = entity.GetComponent<TagComponent>().m_tag;
 
 		auto& transformComponent = entity.GetComponent<TransformComponent>();
-		transformComponent.m_position += Vec3(translateX, translateY, 0.0f);
+		transformComponent.SetPosition(transformComponent.GetPosition() + Vec3(translateX, translateY, 0.0f));
 
 		return 0;						// Number of return values that lua is expecting
 	}
@@ -128,7 +128,7 @@ namespace rhombus
 		std::string name = entity.GetComponent<TagComponent>().m_tag;
 
 		auto& transformComponent = entity.GetComponent<TransformComponent>();
-		transformComponent.m_position = Vec3(positionX, positionY, positionZ);
+		transformComponent.SetPosition(Vec3(positionX, positionY, positionZ));
 
 		return 0;						// Number of return values that lua is expecting
 	}
@@ -144,9 +144,9 @@ namespace rhombus
 		std::string name = entity.GetComponent<TagComponent>().m_tag;
 
 		auto& transformComponent = entity.GetComponent<TransformComponent>();
-		lua_pushnumber(state, transformComponent.m_position.x);
-		lua_pushnumber(state, transformComponent.m_position.y);
-		lua_pushnumber(state, transformComponent.m_position.z);
+		lua_pushnumber(state, transformComponent.GetPosition().x);
+		lua_pushnumber(state, transformComponent.GetPosition().y);
+		lua_pushnumber(state, transformComponent.GetPosition().z);
 
 		return 3;
 	}

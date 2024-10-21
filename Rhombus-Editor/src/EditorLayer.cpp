@@ -348,7 +348,7 @@ namespace rhombus
 			if (m_HoveredEntity)
 				name = m_HoveredEntity.GetComponentRead<TagComponent>().m_tag;
 
-			ImGui::Text("Hovered Entity: %s", name.c_str());
+			ImGui::Text("Hovered Entity: %s (%i)", name.c_str(), (EntityID)m_HoveredEntity);
 
 			auto stats = Renderer2D::GetStats();
 			ImGui::Text("Draw Calls: %d", stats.DrawCalls);
@@ -486,9 +486,9 @@ namespace rhombus
 					for (Entity selectedEntity : selectedEntities)
 					{
 						auto& transformComponent = selectedEntity.GetComponent<TransformComponent>();
-						transformComponent.m_position += translationDelta;
-						transformComponent.m_rotation += rotationDelta;
-						transformComponent.m_scale += scaleDelta;
+						transformComponent.SetPosition(transformComponent.GetPosition() + translationDelta);
+						transformComponent.SetRotation(transformComponent.GetRotation() + rotationDelta);
+						transformComponent.SetScale(transformComponent.GetScale() + scaleDelta);
 					}
 				}
 			}
@@ -514,13 +514,7 @@ namespace rhombus
 						transformMat = selectedEntity.GetSceneGraphNode()->GetParent()->GetWorldTransform().Inverse() * transformMat;
 					}
 
-					Vec3 translation, rotation, scale;
-
-					math::DecomposeTransform(transformMat, translation, rotation, scale);
-
-					transformComponent.m_position =  translation;
-					transformComponent.m_rotation = rotation;		// TODO: Look into gimbal lock issue
-					transformComponent.m_scale = scale;
+					transformComponent.SetTransform(transformMat);
 				}
 			}
 		}
@@ -993,11 +987,11 @@ namespace rhombus
 					Entity entity = { e, m_ActiveScene.get()};
 					TransformComponent& tc = entity.GetComponent<TransformComponent>();
 					BoxCollider2DComponent& bc2d = entity.GetComponent<BoxCollider2DComponent>();
-					Vec3 translation = tc.m_position + Vec3(bc2d.m_offset, 0.01f);
-					Vec3 scale = tc.m_scale * Vec3(bc2d.m_size * 2.0f, 1.0f);
+					Vec3 translation = tc.GetWorldPosition() + Vec3(bc2d.m_offset, 0.01f);
+					Vec3 scale = tc.GetWorldScale() * Vec3(bc2d.m_size * 2.0f, 1.0f);
 
 					Mat4 transform = math::Translate(Mat4::Identity(), translation)
-						* math::Rotate(Mat4::Identity(), tc.m_rotation.z, Vec3(0.0f, 0.0f, 1.0f))
+						* math::Rotate(Mat4::Identity(), tc.GetWorldRotation().z, Vec3(0.0f, 0.0f, 1.0f))
 						* math::Scale(Mat4::Identity(), scale);
 
 					Renderer2D::DrawRect(transform, m_PhysicsColliderColor);

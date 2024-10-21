@@ -257,15 +257,13 @@ void CardSlotComponent::UpdateCardStack()
 		if (m_slotType == SLOT_TYPE_MONSTER)
 		{
 			const BoxArea2DComponent& slotArea = GetOwnerEntity().GetComponent<BoxArea2DComponent>();
-			Vec3 slotPlacementPosition = slotTransform.m_position + slotArea.m_offset;
-			transform.m_position.x = slotPlacementPosition.x;
-			transform.m_position.y = slotPlacementPosition.y;
+			Vec3 slotPlacementPosition = slotTransform.GetPosition() + slotArea.m_offset;
+			transform.SetPosition(Vec2(slotPlacementPosition.x, slotPlacementPosition.y));
 		}
 
 		if (m_slotLayout == SLOT_LAYOUT_STAGGERED)
 		{
-			transform.m_position.x = slotTransform.m_position.x + i * m_staggeredOffset.x;
-			transform.m_position.y = slotTransform.m_position.y + i * m_staggeredOffset.y;
+			transform.SetPosition(Vec2(slotTransform.GetPosition().x + i * m_staggeredOffset.x, slotTransform.GetPosition().y + i * m_staggeredOffset.y));
 		}
 		transform.SetPositionByLayerSection(Z_LAYER::FOREGROUND_2_LAYER, i, numOfCards);
 		if (m_slotType == SLOT_TYPE_MONSTER)

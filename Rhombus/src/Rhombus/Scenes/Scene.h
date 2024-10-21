@@ -39,7 +39,7 @@ namespace rhombus
 		virtual void CopyEntityComponents(Entity dest, Entity src);
 
 		Entity CreateEntity(const std::string& name = std::string());
-		Entity CreateEntityWithUUID(UUID uuid, const std::string& name = std::string());
+		Entity CreateEntityWithUUID(UUID uuid, const std::string& name = std::string(), bool bAddToSceneGraph = true);
 		void DestroyEntity(Entity entity);
 
 		virtual void OnRuntimeStart();

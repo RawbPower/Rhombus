@@ -11,18 +11,19 @@ namespace rhombus
 	class SceneGraphNode
 	{
 	public:
-		SceneGraphNode();
+		SceneGraphNode(Scene* scene);
 		SceneGraphNode(Entity entity);
 
 		void SetLocalTransform(const Mat4& matrix) { m_localTransform = matrix; }
 		const Mat4& GetLocalTransform() const { return m_localTransform; }
-		Mat4 GetWorldTransform() const { return m_worldTransform; }
+		Mat4 GetWorldTransform();
 
 		void SetParent(SceneGraphNode* parentNode) { m_parent = parentNode; }
 
 		Ref<SceneGraphNode> AddChild(Entity entity);
 		void AddChild(Ref<SceneGraphNode> sceneGraphNode);
 		void RemoveChild(Ref<SceneGraphNode> sceneGraphNode);
+		void RemoveAllChildren();
 
 		SceneGraphNode* GetParent() { return m_parent; }
 		const Entity GetEntity() const { return m_entity; }
@@ -31,11 +32,15 @@ namespace rhombus
 		std::vector<Ref<SceneGraphNode>>::const_iterator GetChildIteratorStart() { return m_children.begin(); }
 		std::vector<Ref<SceneGraphNode>>::const_iterator GetChildIteratorEnd() { return m_children.end(); }
 
-		void Update();
+		void SetIsDirty(bool dirty);
+		bool GetIsDirty() const { return m_isDirty; }
+
+		void UpdateDirtyTransforms();
 
 	private:
 		SceneGraphNode* m_parent;
 		Entity m_entity;
+		Scene* m_rootScene;
 		bool m_isDirty;
 		Mat4 m_localTransform;
 		Mat4 m_worldTransform;

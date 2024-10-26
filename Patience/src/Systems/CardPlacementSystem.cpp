@@ -183,7 +183,7 @@ void CardPlacementSystem::PlaceCard(Entity cardEntity, Entity slotEntity, bool i
 	if (updateTransform)
 	{
 		TransformComponent& slotTransform = slotEntity.GetComponent<TransformComponent>();
-		cardTransform.SetPosition(slotTransform.GetPosition());
+		cardTransform.SetWorldPosition(slotTransform.GetWorldPosition());
 		cardTransform.SetLayer(Z_LAYER::FOREGROUND_1_LAYER);
 	}
 	CardSlotComponent& cardSlot = slotEntity.GetComponent<CardSlotComponent>();
@@ -286,8 +286,8 @@ EntityID CardPlacementSystem::CheckForCardSlot(Entity cardEntity)
 		const BoxArea2DComponent& slotArea = entity.GetComponent<BoxArea2DComponent>();
 		const TransformComponent& slotTransform = entity.GetComponent<TransformComponent>();
 
-		Vec3 cardPos = cardTransform.GetPosition() + Vec3(cardBoxArea.m_offset, 0.0f);
-		Vec3 slotPos = slotTransform.GetPosition() + Vec3(slotArea.m_offset, 0.0f);
+		Vec3 cardPos = cardTransform.GetWorldPosition() + Vec3(cardBoxArea.m_offset, 0.0f);
+		Vec3 slotPos = slotTransform.GetWorldPosition() + Vec3(slotArea.m_offset, 0.0f);
 
 		Vec2 separation = Vec2(abs(cardPos.x - slotPos.x), abs(cardPos.y - slotPos.y));
 		if (separation.GetMagnitude() < nearestSeparation || nearestSeparation < 0.0f)
@@ -304,8 +304,8 @@ EntityID CardPlacementSystem::CheckForCardSlot(Entity cardEntity)
 		const BoxArea2DComponent& slotArea = entity.GetComponent<BoxArea2DComponent>();
 		TransformComponent& slotTransform = entity.GetComponent<TransformComponent>();
 
-		Vec3 cardPos = cardTransform.GetPosition() + Vec3(cardBoxArea.m_offset, 0.0f);
-		Vec3 slotPos = slotTransform.GetPosition() + Vec3(slotArea.m_offset, 0.0f);
+		Vec3 cardPos = cardTransform.GetWorldPosition() + Vec3(cardBoxArea.m_offset, 0.0f);
+		Vec3 slotPos = slotTransform.GetWorldPosition() + Vec3(slotArea.m_offset, 0.0f);
 
 		Vec2 separation = Vec2(abs(cardPos.x - slotPos.x), abs(cardPos.y - slotPos.y));
 

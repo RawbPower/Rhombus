@@ -25,6 +25,7 @@ namespace rhombus
 		void OnEvent(Event& e) override;
 
 		void RenderInWindow();
+		bool AreSelectedEntitiesValidForTranform(std::vector<Entity> entities);
 
 	private:
 		bool OnKeyPressed(KeyPressedEvent& e);

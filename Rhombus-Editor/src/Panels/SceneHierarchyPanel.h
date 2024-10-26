@@ -16,9 +16,10 @@ namespace rhombus
 		void SetContext(const Ref<Scene>& context);
 
 		void OnImGuiRender(bool bIsInEditMode, std::unordered_map<EntityID, bool>& entityEnabledMap);
+		void CreateEntityHierarchyTable(const char* label, const Ref<SceneGraphNode> parentNode, bool bIsInEditMode, std::unordered_map<EntityID, bool>& entityEnabledMap);
 
-		void MoveEntityInHierarchyOrder(EntityID entityID, int newOrderIndex);
-		void ReloadHieararchyEntities(std::unordered_map<EntityID, bool>& entityEnabledMap);
+		static void MoveEntityInHierarchyOrder(Entity entity, int newOrderIndex);
+		static void SetEntityAsChild(Entity entity, Ref<SceneGraphNode> parentNode);
 
 		Entity GetSelectedEntity() const { return m_selectionContext; }
 		void SetSelectedEntity(Entity entity) { m_selectionContext = entity; }
@@ -26,35 +27,23 @@ namespace rhombus
 		void GetAllSelectedEntities(std::vector<Entity>& selectedEntitiesInOut) const;
 		void ResetSelectedEntities() { m_selectionContext = {}; m_selectionMask = 0; }
 		std::vector<EntityID> CalculateEntityOrdering() const;
-
-		void SetHierarchyDirty() { m_hierarchyDirtyFlag = true; }
 	private:
-		struct HierarchyEntity
-		{
-			EntityID m_entityID;
-			float m_yPos;
-
-			HierarchyEntity(EntityID entityID)
-				: m_entityID(entityID)
-			{
-
-			}
-		};
 
 		template<typename T>
 		void DisplayAddComponentEntry(const std::string& entryName);
 
-		void DrawEntityNode(Entity entity, int i);
+		void DrawEntityNode(Entity entity, Ref<SceneGraphNode> parentNode, bool bIsInEditMode, std::unordered_map<EntityID, bool>& entityEnabledMap);
 		void DrawComponents(Entity entity);
 
-		bool IsEntityInHierarchy(EntityID entityID) const;
-
 		Ref<Scene> m_context;
-		std::vector<HierarchyEntity> m_hierarchyEntityOrder;
-		//std::unordered_map<EntityID, bool> m_entityEnabledMap;
+		std::unordered_map<EntityID, float> m_hierarchyEntityPositionMap;
 		Entity m_selectionContext;		// Main selected entity (shown in Property View)
 		int m_selectionMask;			// All selected entities (can all be dragged at once)
+		int m_currentEntityIndex;
 		bool m_handledReorderDragAndDrop;
-		bool m_hierarchyDirtyFlag;
+
+		// Add child as a callback to be called after all the entities are iterated through
+		// This is to avoid invalidating the iterator while going through it
+		std::function<void()> m_addChildCallback;
 	};
 }

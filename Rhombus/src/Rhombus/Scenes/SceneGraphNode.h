@@ -24,11 +24,13 @@ namespace rhombus
 		void AddChild(Ref<SceneGraphNode> sceneGraphNode);
 		void RemoveChild(Ref<SceneGraphNode> sceneGraphNode);
 		void RemoveAllChildren();
+		void MoveChild(Ref<SceneGraphNode> sceneGraphNode, int newOrderIndex);
 
 		SceneGraphNode* GetParent() { return m_parent; }
 		const Entity GetEntity() const { return m_entity; }
 		bool GetIsRootNode() const { return m_entity.GetContext() == nullptr; }
 
+		const std::vector<Ref<SceneGraphNode>>& GetChildren() { return m_children; }
 		std::vector<Ref<SceneGraphNode>>::const_iterator GetChildIteratorStart() { return m_children.begin(); }
 		std::vector<Ref<SceneGraphNode>>::const_iterator GetChildIteratorEnd() { return m_children.end(); }
 

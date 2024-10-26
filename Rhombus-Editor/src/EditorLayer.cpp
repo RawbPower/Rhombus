@@ -415,106 +415,109 @@ namespace rhombus
 
 		if ((selectedEntities.size() > 0 || selectedEntity) && m_gizmoType != -1 && m_SceneState == SceneState::Edit)
 		{
-			ImGuizmo::SetOrthographic(false);
-			ImGuizmo::SetDrawlist();
-
-			ImGuizmo::SetRect(m_ViewportBounds[0].x, m_ViewportBounds[0].y, m_ViewportBounds[1].x - m_ViewportBounds[0].x, m_ViewportBounds[1].y - m_ViewportBounds[0].y);
-
-			// Runtime Camera
-			// auto cameraEntity = m_ActiveScene->GetPrimaryCameraEntity();
-			// const auto& camera = cameraEntity.GetComponent<CameraComponent>().GetCamera();
-			// const glm::mat4& cameraProjection = camera.GetProjection();
-			// glm::mat4 cameraView = glm::inverse(cameraEntity.GetComponent<TransformComponent>().GetTransform());
-
-			// Editor Camera
-			const Mat4& cameraProjection = m_EditorCamera.GetProjection();
-			Mat4 cameraView = m_EditorCamera.GetViewMatrix();
-
-			// Snapping
-			bool snap = Input::IsKeyPressed(RB_KEY_LEFT_CONTROL) || m_PixelSnapping;
-			float snapValue = 0.5f; // Snap to 0.5m for translation/scale
-			// Snap to 45 degrees for rotation
-			if (m_gizmoType == ImGuizmo::OPERATION::ROTATE)
-				snapValue = 45.0f;
-
-			float snapValues[3] = { snapValue, snapValue, snapValue };
-
-			if (selectedEntities.size() > 1)
+			if (AreSelectedEntitiesValidForTranform(selectedEntities))
 			{
-				Mat4 referenceTransform = Mat4::Identity();
-				Vec3 averagePosition = Vec3(0.0f);
-				for (Entity selectedEntity : selectedEntities)
+				ImGuizmo::SetOrthographic(false);
+				ImGuizmo::SetDrawlist();
+
+				ImGuizmo::SetRect(m_ViewportBounds[0].x, m_ViewportBounds[0].y, m_ViewportBounds[1].x - m_ViewportBounds[0].x, m_ViewportBounds[1].y - m_ViewportBounds[0].y);
+
+				// Runtime Camera
+				// auto cameraEntity = m_ActiveScene->GetPrimaryCameraEntity();
+				// const auto& camera = cameraEntity.GetComponent<CameraComponent>().GetCamera();
+				// const glm::mat4& cameraProjection = camera.GetProjection();
+				// glm::mat4 cameraView = glm::inverse(cameraEntity.GetComponent<TransformComponent>().GetTransform());
+
+				// Editor Camera
+				const Mat4& cameraProjection = m_EditorCamera.GetProjection();
+				Mat4 cameraView = m_EditorCamera.GetViewMatrix();
+
+				// Snapping
+				bool snap = Input::IsKeyPressed(RB_KEY_LEFT_CONTROL) || m_PixelSnapping;
+				float snapValue = 0.5f; // Snap to 0.5m for translation/scale
+				// Snap to 45 degrees for rotation
+				if (m_gizmoType == ImGuizmo::OPERATION::ROTATE)
+					snapValue = 45.0f;
+
+				float snapValues[3] = { snapValue, snapValue, snapValue };
+
+				if (selectedEntities.size() > 1)
 				{
-					averagePosition += selectedEntity.GetComponentRead<TransformComponent>().GetWorldTransform().d();
-				}
-				averagePosition /= (float)selectedEntities.size();
-				referenceTransform.cols[3] = Vec4(averagePosition.x, averagePosition.y, 0.9f, 1.0f);
-				Mat4 initialTransform = referenceTransform;
-
-				ImGuizmo::Manipulate(cameraView.ToPtr(), cameraProjection.ToPtr(),
-					(ImGuizmo::OPERATION)m_gizmoType, ImGuizmo::LOCAL, referenceTransform.ToPtr(),
-					nullptr, snap ? snapValues : nullptr);
-
-				if (ImGuizmo::IsUsing())
-				{
-					Vec4 row0 = Vec4(referenceTransform[0][0], referenceTransform[0][1], referenceTransform[0][2], referenceTransform[0][3]);
-					Vec4 row1 = Vec4(referenceTransform[1][0], referenceTransform[1][1], referenceTransform[1][2], referenceTransform[1][3]);
-					Vec4 row2 = Vec4(referenceTransform[2][0], referenceTransform[2][1], referenceTransform[2][2], referenceTransform[2][3]);
-					Vec4 row3 = Vec4(referenceTransform[3][0], referenceTransform[3][1], referenceTransform[3][2], referenceTransform[3][3]);
-					Mat4 transformMat(row0, row1, row2, row3);
-
-					Vec3 translation, rotation, scale;
-					math::DecomposeTransform(transformMat, translation, rotation, scale);
-
-					row0 = Vec4(initialTransform[0][0], initialTransform[0][1], initialTransform[0][2], initialTransform[0][3]);
-					row1 = Vec4(initialTransform[1][0], initialTransform[1][1], initialTransform[1][2], initialTransform[1][3]);
-					row2 = Vec4(initialTransform[2][0], initialTransform[2][1], initialTransform[2][2], initialTransform[2][3]);
-					row3 = Vec4(initialTransform[3][0], initialTransform[3][1], initialTransform[3][2], initialTransform[3][3]);
-					transformMat = Mat4(row0, row1, row2, row3);
-					if (!selectedEntity.GetSceneGraphNode()->GetIsRootNode())
-					{
-						transformMat = selectedEntity.GetSceneGraphNode()->GetParent()->GetWorldTransform().Inverse() * transformMat;
-					}
-
-					Vec3 initialTranslation, initialRotation, initialScale;
-					math::DecomposeTransform(transformMat, initialTranslation, initialRotation, initialScale);
-
-					Vec3 translationDelta = translation - initialTranslation;
-					Vec3 rotationDelta = rotation - initialRotation;
-					Vec3 scaleDelta = scale - initialScale;
-
+					Mat4 referenceTransform = Mat4::Identity();
+					Vec3 averagePosition = Vec3(0.0f);
 					for (Entity selectedEntity : selectedEntities)
 					{
-						auto& transformComponent = selectedEntity.GetComponent<TransformComponent>();
-						transformComponent.SetPosition(transformComponent.GetPosition() + translationDelta);
-						transformComponent.SetRotation(transformComponent.GetRotation() + rotationDelta);
-						transformComponent.SetScale(transformComponent.GetScale() + scaleDelta);
+						averagePosition += selectedEntity.GetComponentRead<TransformComponent>().GetWorldTransform().d();
+					}
+					averagePosition /= (float)selectedEntities.size();
+					referenceTransform.cols[3] = Vec4(averagePosition.x, averagePosition.y, 0.9f, 1.0f);
+					Mat4 initialTransform = referenceTransform;
+
+					ImGuizmo::Manipulate(cameraView.ToPtr(), cameraProjection.ToPtr(),
+						(ImGuizmo::OPERATION)m_gizmoType, ImGuizmo::LOCAL, referenceTransform.ToPtr(),
+						nullptr, snap ? snapValues : nullptr);
+
+					if (ImGuizmo::IsUsing())
+					{
+						Vec4 row0 = Vec4(referenceTransform[0][0], referenceTransform[0][1], referenceTransform[0][2], referenceTransform[0][3]);
+						Vec4 row1 = Vec4(referenceTransform[1][0], referenceTransform[1][1], referenceTransform[1][2], referenceTransform[1][3]);
+						Vec4 row2 = Vec4(referenceTransform[2][0], referenceTransform[2][1], referenceTransform[2][2], referenceTransform[2][3]);
+						Vec4 row3 = Vec4(referenceTransform[3][0], referenceTransform[3][1], referenceTransform[3][2], referenceTransform[3][3]);
+						Mat4 transformMat(row0, row1, row2, row3);
+
+						Vec3 translation, rotation, scale;
+						math::DecomposeTransform(transformMat, translation, rotation, scale);
+
+						row0 = Vec4(initialTransform[0][0], initialTransform[0][1], initialTransform[0][2], initialTransform[0][3]);
+						row1 = Vec4(initialTransform[1][0], initialTransform[1][1], initialTransform[1][2], initialTransform[1][3]);
+						row2 = Vec4(initialTransform[2][0], initialTransform[2][1], initialTransform[2][2], initialTransform[2][3]);
+						row3 = Vec4(initialTransform[3][0], initialTransform[3][1], initialTransform[3][2], initialTransform[3][3]);
+						transformMat = Mat4(row0, row1, row2, row3);
+						if (!selectedEntity.GetSceneGraphNode()->GetIsRootNode())
+						{
+							transformMat = selectedEntity.GetSceneGraphNode()->GetParent()->GetWorldTransform().Inverse() * transformMat;
+						}
+
+						Vec3 initialTranslation, initialRotation, initialScale;
+						math::DecomposeTransform(transformMat, initialTranslation, initialRotation, initialScale);
+
+						Vec3 translationDelta = translation - initialTranslation;
+						Vec3 rotationDelta = rotation - initialRotation;
+						Vec3 scaleDelta = scale - initialScale;
+
+						for (Entity selectedEntity : selectedEntities)
+						{
+							auto& transformComponent = selectedEntity.GetComponent<TransformComponent>();
+							transformComponent.SetPosition(transformComponent.GetPosition() + translationDelta);
+							transformComponent.SetRotation(transformComponent.GetRotation() + rotationDelta);
+							transformComponent.SetScale(transformComponent.GetScale() + scaleDelta);
+						}
 					}
 				}
-			}
-			else if (selectedEntity && m_gizmoType != -1 && m_SceneState == SceneState::Edit)
-			{
-				// Entity transform
-				auto& transformComponent = selectedEntity.GetComponent<TransformComponent>();
-				Mat4 transform = transformComponent.GetWorldTransform();
-
-				ImGuizmo::Manipulate(cameraView.ToPtr(), cameraProjection.ToPtr(),
-					(ImGuizmo::OPERATION)m_gizmoType, ImGuizmo::LOCAL, transform.ToPtr(),
-					nullptr, snap ? snapValues : nullptr);
-
-				if (ImGuizmo::IsUsing())
+				else if (selectedEntity && m_gizmoType != -1 && m_SceneState == SceneState::Edit)
 				{
-					Vec4 row0 = Vec4(transform[0][0], transform[0][1], transform[0][2], transform[0][3]);
-					Vec4 row1 = Vec4(transform[1][0], transform[1][1], transform[1][2], transform[1][3]);
-					Vec4 row2 = Vec4(transform[2][0], transform[2][1], transform[2][2], transform[2][3]);
-					Vec4 row3 = Vec4(transform[3][0], transform[3][1], transform[3][2], transform[3][3]);
-					Mat4 transformMat(row0, row1, row2, row3);
-					if (!selectedEntity.GetSceneGraphNode()->GetIsRootNode())
-					{
-						transformMat = selectedEntity.GetSceneGraphNode()->GetParent()->GetWorldTransform().Inverse() * transformMat;
-					}
+					// Entity transform
+					auto& transformComponent = selectedEntity.GetComponent<TransformComponent>();
+					Mat4 transform = transformComponent.GetWorldTransform();
 
-					transformComponent.SetTransform(transformMat);
+					ImGuizmo::Manipulate(cameraView.ToPtr(), cameraProjection.ToPtr(),
+						(ImGuizmo::OPERATION)m_gizmoType, ImGuizmo::LOCAL, transform.ToPtr(),
+						nullptr, snap ? snapValues : nullptr);
+
+					if (ImGuizmo::IsUsing())
+					{
+						Vec4 row0 = Vec4(transform[0][0], transform[0][1], transform[0][2], transform[0][3]);
+						Vec4 row1 = Vec4(transform[1][0], transform[1][1], transform[1][2], transform[1][3]);
+						Vec4 row2 = Vec4(transform[2][0], transform[2][1], transform[2][2], transform[2][3]);
+						Vec4 row3 = Vec4(transform[3][0], transform[3][1], transform[3][2], transform[3][3]);
+						Mat4 transformMat(row0, row1, row2, row3);
+						if (!selectedEntity.GetSceneGraphNode()->GetIsRootNode())
+						{
+							transformMat = selectedEntity.GetSceneGraphNode()->GetParent()->GetWorldTransform().Inverse() * transformMat;
+						}
+
+						transformComponent.SetTransform(transformMat);
+					}
 				}
 			}
 		}
@@ -526,6 +529,26 @@ namespace rhombus
 
 		ImGui::End();
 
+	}
+
+	bool EditorLayer::AreSelectedEntitiesValidForTranform(std::vector<Entity> entities)
+	{
+		if (entities.size() <= 1)
+		{
+			return true;
+		}
+
+		SceneGraphNode* firstSceneGraphNodeParent = entities[0].GetSceneGraphNode()->GetParent();
+
+		for (int i = 1; i < entities.size(); i++)
+		{
+			if (entities[i].GetSceneGraphNode()->GetParent() != firstSceneGraphNodeParent)
+			{
+				return false;
+			}
+		}
+
+		return true;
 	}
 
 	void EditorLayer::CalculateScreenResolutionPreset()
@@ -906,7 +929,6 @@ namespace rhombus
 		m_ActiveScene->OnRuntimeStart();
 
 		m_sceneHierarchyPanel.SetContext(m_ActiveScene);
-		m_sceneHierarchyPanel.SetHierarchyDirty();
 	}
 
 	void EditorLayer::OnSceneStop()
@@ -916,7 +938,6 @@ namespace rhombus
 		m_ActiveScene = m_EditorScene;
 
 		m_sceneHierarchyPanel.SetContext(m_ActiveScene);
-		m_sceneHierarchyPanel.SetHierarchyDirty();
 	}
 
 	void EditorLayer::DuplicateSelectedEntities()
@@ -929,7 +950,6 @@ namespace rhombus
 		for (Entity& selectedEntity : selectedEntities)
 		{
 			m_EditorScene->DuplicateEntity(selectedEntity);
-			m_sceneHierarchyPanel.SetHierarchyDirty();
 		}
 	}
 
@@ -943,7 +963,6 @@ namespace rhombus
 		for (Entity& selectedEntity : selectedEntities)
 		{
 			m_EditorScene->DestroyEntity(selectedEntity);
-			m_sceneHierarchyPanel.SetHierarchyDirty();
 		}
 	}
 

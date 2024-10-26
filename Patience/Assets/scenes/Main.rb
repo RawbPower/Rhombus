@@ -275,6 +275,30 @@ Entities:
       Site:SuitOrdering: 0
       Site:CanLoop: false
       Site:LoopMax: 13
+  - Entity: 8084451237944974462
+    Enabled: true
+    Parent: 12787628317176038056
+    TagComponent:
+      Tag: Site 1
+    TransformComponent:
+      Position: [0, -11.5, 0]
+      Rotation: [0, -0, 0]
+      Scale: [1, 1, 1]
+    BoxArea2DComponent:
+      Offset: [0, 0]
+      Size: [32, 44.5]
+      DebugColor: [0, 0, 0, 0]
+    CardSlotComponent:
+      SlotType: 1
+      SlotLayout: 1
+      StaggeredOffset: [0, -10]
+      MonsterBattleSite: 0
+      Site:FoundationSuit: 5
+      Site:FoundationRank: -1
+      Site:RankOrdering: 1
+      Site:SuitOrdering: 0
+      Site:CanLoop: true
+      Site:LoopMax: 10
   - Entity: 18327124517942167182
     Enabled: true
     TagComponent:
@@ -301,6 +325,30 @@ Entities:
       Site:SuitOrdering: 0
       Site:CanLoop: false
       Site:LoopMax: 13
+  - Entity: 17103678135621629686
+    Enabled: true
+    Parent: 18327124517942167182
+    TagComponent:
+      Tag: Site 2
+    TransformComponent:
+      Position: [0, -11.5, 0]
+      Rotation: [0, -0, 0]
+      Scale: [1, 1, 1]
+    BoxArea2DComponent:
+      Offset: [0, 0]
+      Size: [32, 44.5]
+      DebugColor: [0, 0, 0, 0]
+    CardSlotComponent:
+      SlotType: 1
+      SlotLayout: 1
+      StaggeredOffset: [0, -10]
+      MonsterBattleSite: 0
+      Site:FoundationSuit: 5
+      Site:FoundationRank: -1
+      Site:RankOrdering: 1
+      Site:SuitOrdering: 0
+      Site:CanLoop: true
+      Site:LoopMax: 10
   - Entity: 16734684856214597296
     Enabled: true
     TagComponent:
@@ -327,6 +375,30 @@ Entities:
       Site:SuitOrdering: 0
       Site:CanLoop: false
       Site:LoopMax: 13
+  - Entity: 7817693968346137392
+    Enabled: true
+    Parent: 16734684856214597296
+    TagComponent:
+      Tag: Site 3
+    TransformComponent:
+      Position: [0, -11.5, 0]
+      Rotation: [0, -0, 0]
+      Scale: [1, 1, 1]
+    BoxArea2DComponent:
+      Offset: [0, 0]
+      Size: [32, 44.5]
+      DebugColor: [0, 0, 0, 0]
+    CardSlotComponent:
+      SlotType: 1
+      SlotLayout: 1
+      StaggeredOffset: [0, -10]
+      MonsterBattleSite: 0
+      Site:FoundationSuit: 5
+      Site:FoundationRank: -1
+      Site:RankOrdering: 1
+      Site:SuitOrdering: 0
+      Site:CanLoop: true
+      Site:LoopMax: 10
   - Entity: 7334499350773271843
     Enabled: true
     TagComponent:
@@ -353,81 +425,13 @@ Entities:
       Site:SuitOrdering: 0
       Site:CanLoop: false
       Site:LoopMax: 13
-  - Entity: 8084451237944974462
-    Enabled: true
-    TagComponent:
-      Tag: Site 1
-    TransformComponent:
-      Position: [-252, 104.5, 0]
-      Rotation: [0, -0, 0]
-      Scale: [1, 1, 1]
-    BoxArea2DComponent:
-      Offset: [0, 0]
-      Size: [32, 44.5]
-      DebugColor: [0, 0, 0, 0]
-    CardSlotComponent:
-      SlotType: 1
-      SlotLayout: 1
-      StaggeredOffset: [0, -10]
-      MonsterBattleSite: 0
-      Site:FoundationSuit: 5
-      Site:FoundationRank: -1
-      Site:RankOrdering: 1
-      Site:SuitOrdering: 0
-      Site:CanLoop: true
-      Site:LoopMax: 10
-  - Entity: 17103678135621629686
-    Enabled: true
-    TagComponent:
-      Tag: Site 2
-    TransformComponent:
-      Position: [-180, 104.5, 0]
-      Rotation: [0, -0, 0]
-      Scale: [1, 1, 1]
-    BoxArea2DComponent:
-      Offset: [0, 0]
-      Size: [32, 44.5]
-      DebugColor: [0, 0, 0, 0]
-    CardSlotComponent:
-      SlotType: 1
-      SlotLayout: 1
-      StaggeredOffset: [0, -10]
-      MonsterBattleSite: 0
-      Site:FoundationSuit: 5
-      Site:FoundationRank: -1
-      Site:RankOrdering: 1
-      Site:SuitOrdering: 0
-      Site:CanLoop: true
-      Site:LoopMax: 10
-  - Entity: 7817693968346137392
-    Enabled: true
-    TagComponent:
-      Tag: Site 3
-    TransformComponent:
-      Position: [-108, 104.5, 0]
-      Rotation: [0, -0, 0]
-      Scale: [1, 1, 1]
-    BoxArea2DComponent:
-      Offset: [0, 0]
-      Size: [32, 44.5]
-      DebugColor: [0, 0, 0, 0]
-    CardSlotComponent:
-      SlotType: 1
-      SlotLayout: 1
-      StaggeredOffset: [0, -10]
-      MonsterBattleSite: 0
-      Site:FoundationSuit: 5
-      Site:FoundationRank: -1
-      Site:RankOrdering: 1
-      Site:SuitOrdering: 0
-      Site:CanLoop: true
-      Site:LoopMax: 10
   - Entity: 1884100701556230925
     Enabled: true
+    Parent: 7334499350773271843
     TagComponent:
       Tag: Site 4
     TransformComponent:
-      Position: [-36, 104.5, 0]
+      Position: [0, -11.5, 0]
       Rotation: [0, -0, 0]
       Scale: [1, 1, 1]
     BoxArea2DComponent:

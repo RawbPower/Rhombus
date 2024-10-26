@@ -109,6 +109,23 @@ namespace rhombus
 		m_sceneGraphNode->SetIsDirty(true);
 	}
 
+	void TransformComponent::SetWorldTransform(Mat4 transform)
+	{
+		Mat4 localTransform;
+		if (m_sceneGraphNode->GetParent())
+		{
+			localTransform = m_sceneGraphNode->GetParent()->GetWorldTransform().Inverse() * transform;
+		}
+		else
+		{
+			localTransform = transform;
+		}
+
+		SetTransform(localTransform);
+
+		m_sceneGraphNode->SetIsDirty(true);
+	}
+
 	void TransformComponent::SetWorldPosition(Vec3 position)
 	{
 		if (m_sceneGraphNode->GetParent())

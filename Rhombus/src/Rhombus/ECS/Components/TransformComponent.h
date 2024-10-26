@@ -43,6 +43,7 @@ namespace rhombus
 		void SetScale(Vec3 scale);
 		void SetTransform(Mat4 transform);
 
+		void SetWorldTransform(Mat4 transform);
 		void SetWorldPosition(Vec3 position);
 
 		void SetLayer(Z_LAYER layer);

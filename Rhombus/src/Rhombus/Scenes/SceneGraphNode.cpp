@@ -68,6 +68,24 @@ namespace rhombus
 		m_children.clear();
 	}
 
+	void SceneGraphNode::MoveChild(Ref<SceneGraphNode> sceneGraphNode, int newOrderIndex)
+	{
+		int currentOrderIndex = 0;
+		for (const Ref<SceneGraphNode> child : GetChildren())
+		{
+			if (child == sceneGraphNode)
+			{
+				break;
+			}
+			currentOrderIndex++;
+		}
+
+		if (currentOrderIndex > newOrderIndex)
+			std::rotate(m_children.rend() - currentOrderIndex - 1, m_children.rend() - currentOrderIndex, m_children.rend() - newOrderIndex);
+		else
+			std::rotate(m_children.begin() + currentOrderIndex, m_children.begin() + currentOrderIndex + 1, m_children.begin() + newOrderIndex + 1);
+	}
+
 	void SceneGraphNode::SetIsDirty(bool dirty) 
 	{ 
 		m_isDirty = dirty; 

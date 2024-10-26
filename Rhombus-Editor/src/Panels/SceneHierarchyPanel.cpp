@@ -5,6 +5,7 @@
 #include "Components/CardComponent.h"
 #include "Components/CardSlotComponent.h"
 #include "Components/PatienceComponent.h"
+#include "Rhombus/Scenes/SceneGraphNode.h"
 
 #include "Rhombus/ImGui/ImGuiWidgets.h"
 #include <imgui/imgui.h>
@@ -16,7 +17,6 @@ namespace rhombus
 {
 	SceneHierarchyPanel::SceneHierarchyPanel(const Ref<Scene>& context)
 	{
-		SetHierarchyDirty();
 		SetContext(context);
 	}
 
@@ -25,48 +25,17 @@ namespace rhombus
 		m_context = context;
 		m_selectionContext = {};
 		m_selectionMask = 0;
+		m_currentEntityIndex = 0;
 	}
 
 	void SceneHierarchyPanel::OnImGuiRender(bool bIsInEditMode, std::unordered_map<EntityID, bool>& entityEnabledMap)
 	{
 		m_handledReorderDragAndDrop = false;
-		ReloadHieararchyEntities(entityEnabledMap);
 
 		ImGui::Begin("Scene Hierarchy");
 
-		if (ImGui::BeginTable("Scene Hierarchy Table", 2))
-		{
-			ImGuiStyle& style = ImGui::GetStyle();
-			ImGui::TableSetupColumn("##Entities", ImGuiTableColumnFlags_WidthFixed, ImGui::GetContentRegionAvail().x - style.IndentSpacing);
-			ImGui::TableSetupColumn("##Active", ImGuiTableColumnFlags_WidthFixed); 
-			int i = 0;
-			ImGui::TableNextRow();
-			for (HierarchyEntity& hierarchyEntity : m_hierarchyEntityOrder)
-			{
-				ImGui::TableSetColumnIndex(0);
-				Entity entity(hierarchyEntity.m_entityID, m_context.get());
-				DrawEntityNode(entity, i++);
-				hierarchyEntity.m_yPos = ImGui::GetItemRectMin().y;
-
-				if (bIsInEditMode)
-				{
-					ImGui::TableSetColumnIndex(1);
-
-					ImGuiStyle& style = ImGui::GetStyle();
-					ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(style.FramePadding.x, (float)(int)(style.FramePadding.y * 0.3f)));
-
-					ImGui::PushID(i);
-					ImGui::Checkbox("##enabled", &entityEnabledMap[hierarchyEntity.m_entityID]);
-
-					ImGui::PopID();
-
-					ImGui::PopStyleVar(1);
-				}
-
-				ImGui::TableNextRow();
-			}
-			ImGui::EndTable();
-		}
+		m_currentEntityIndex = 0;
+		CreateEntityHierarchyTable("Scene Hiearchy Table", m_context->m_rootSceneNode, bIsInEditMode, entityEnabledMap);
 
 		if (ImGui::IsMouseDown(0) && ImGui::IsWindowHovered())
 		{
@@ -84,7 +53,6 @@ namespace rhombus
 			if (ImGui::MenuItem("Create New Entity"))
 			{
 				m_context->CreateEntity("Untitled Entity");
-				SetHierarchyDirty();
 			}
 
 			ImGui::EndPopup();
@@ -99,17 +67,17 @@ namespace rhombus
 					float cursorY = ImGui::GetMousePos().y;
 					int desiredOrdering = 0;
 					EntityID droppedID = m_context->GetEntityByUUID(*(UUID*)payload->Data);
-					for (HierarchyEntity hierarchyEntity : m_hierarchyEntityOrder)
+					for (const Ref<SceneGraphNode> child : m_context->m_rootSceneNode->GetChildren())
 					{
 						// Find the new position for the entity by comparing to each entity tree position in the hierarchy
-						if (cursorY < hierarchyEntity.m_yPos)
+						if (cursorY < m_hierarchyEntityPositionMap[child->GetEntity()])
 						{
 							break;
 						}
 						desiredOrdering++;
 					}
-					MoveEntityInHierarchyOrder(droppedID, desiredOrdering);
-					SetHierarchyDirty();
+					Entity droppedEntity = { droppedID, m_context.get() };
+					MoveEntityInHierarchyOrder(droppedEntity, desiredOrdering);
 					m_handledReorderDragAndDrop = true;
 				}
 			}
@@ -128,67 +96,49 @@ namespace rhombus
 		ImGui::End();
 	}
 
-	void SceneHierarchyPanel::MoveEntityInHierarchyOrder(EntityID entityID, int newOrderIndex)
+	void SceneHierarchyPanel::CreateEntityHierarchyTable(const char* label, const Ref<SceneGraphNode> parentNode, bool bIsInEditMode, std::unordered_map<EntityID, bool>& entityEnabledMap)
 	{
-		int currentOrderIndex = 0;
-		for (HierarchyEntity hierarchyEntity : m_hierarchyEntityOrder)
+		if (ImGui::BeginTable(label, 2))
 		{
-			if (hierarchyEntity.m_entityID == entityID)
+			ImGuiStyle& style = ImGui::GetStyle();
+			ImGui::TableSetupColumn("##Entities", ImGuiTableColumnFlags_WidthFixed, ImGui::GetContentRegionAvail().x - style.IndentSpacing);
+			ImGui::TableSetupColumn("##Active", ImGuiTableColumnFlags_WidthFixed);
+			ImGui::TableNextRow();
+			int i = 0;
+			//for (const Ref<SceneGraphNode> sceneGraphNode : parentNode->GetChildren())
+			for (std::vector<Ref<SceneGraphNode>>::const_iterator it = parentNode->GetChildIteratorStart(); it != parentNode->GetChildIteratorEnd(); ++it)
 			{
-				break;
+				const Ref<SceneGraphNode> sceneGraphNode = *it;
+				DrawEntityNode(sceneGraphNode->GetEntity(), parentNode, bIsInEditMode, entityEnabledMap);
+				i++;
 			}
-			currentOrderIndex++;
+			ImGui::EndTable();
 		}
 
-		if (currentOrderIndex > newOrderIndex)
-			std::rotate(m_hierarchyEntityOrder.rend() - currentOrderIndex - 1, m_hierarchyEntityOrder.rend() - currentOrderIndex, m_hierarchyEntityOrder.rend() - newOrderIndex);
-		else
-			std::rotate(m_hierarchyEntityOrder.begin() + currentOrderIndex, m_hierarchyEntityOrder.begin() + currentOrderIndex + 1, m_hierarchyEntityOrder.begin() + newOrderIndex + 1);
-	}
-
-	bool SceneHierarchyPanel::IsEntityInHierarchy(EntityID entityID) const
-	{
-		return std::find_if(m_hierarchyEntityOrder.begin(), m_hierarchyEntityOrder.end(), [&](const auto& val) { return val.m_entityID == entityID; }) != m_hierarchyEntityOrder.end();
-	}
-
-	void SceneHierarchyPanel::ReloadHieararchyEntities(std::unordered_map<EntityID, bool>& entityEnabledMap)
-	{
-		if (m_hierarchyDirtyFlag)
+		if (m_addChildCallback)
 		{
-			std::vector<EntityID> allEntities = m_context->GetAllEntities();
-
-			std::vector<HierarchyEntity>::iterator iter;
-			for (iter = m_hierarchyEntityOrder.begin(); iter != m_hierarchyEntityOrder.end(); )
-			{
-				if (std::find(allEntities.begin(), allEntities.end(), iter->m_entityID) == allEntities.end())
-				{
-					entityEnabledMap.erase(iter->m_entityID);
-					iter = m_hierarchyEntityOrder.erase(iter);
-				}
-				else
-				{
-					++iter;
-				}
-			}
-
-			for (EntityID entityID : allEntities)
-			{
-				if (!IsEntityInHierarchy(entityID))
-				{
-					m_hierarchyEntityOrder.push_back(entityID);
-					if (entityEnabledMap.find(entityID) == entityEnabledMap.end())
-					{
-						entityEnabledMap[entityID] = true;
-					}
-				}
-			}
-			m_hierarchyDirtyFlag = false;
+			m_addChildCallback();
+			m_addChildCallback = nullptr;
 		}
+	}
+
+	void SceneHierarchyPanel::MoveEntityInHierarchyOrder(Entity entity, int newOrderIndex)
+	{
+		SceneGraphNode* parentNode = entity.GetSceneGraphNode()->GetParent();
+		parentNode->MoveChild(entity.GetSceneGraphNode(), newOrderIndex);
+	}
+
+	void SceneHierarchyPanel::SetEntityAsChild(Entity entity, Ref<SceneGraphNode> parentNode)
+	{
+		Ref<SceneGraphNode> sceneGraphNode = entity.GetSceneGraphNode();
+		Mat4 worldTransform = sceneGraphNode->GetWorldTransform();
+		parentNode->AddChild(Ref<SceneGraphNode>(entity.GetSceneGraphNode()));
+		entity.GetComponent<TransformComponent>().SetWorldTransform(worldTransform);
 	}
 
 	void SceneHierarchyPanel::GetAllSelectedEntities(std::vector<Entity>& selectedEntitiesInOut) const
 	{
-		std::vector<EntityID> entities = m_context->GetAllEntities();
+		std::vector<EntityID> entities = CalculateEntityOrdering();
 		int i = 0;
 		for (EntityID entityID : entities)
 		{
@@ -201,37 +151,52 @@ namespace rhombus
 		}
 	}
 
+	void CreateOrderingFromSceneGraph(const Ref<SceneGraphNode> sceneGraphNode, std::vector<EntityID>& entityOrdering)
+	{
+		for (const Ref<SceneGraphNode> child : sceneGraphNode->GetChildren())
+		{
+			entityOrdering.push_back(child->GetEntity());
+			CreateOrderingFromSceneGraph(child, entityOrdering);
+		}
+	}
+
 	std::vector<EntityID> SceneHierarchyPanel::CalculateEntityOrdering() const
 	{
 		std::vector<EntityID> entityOrdering;
 
-		for (HierarchyEntity hierarchyEntity : m_hierarchyEntityOrder)
-		{
-			entityOrdering.push_back(hierarchyEntity.m_entityID);
-		}
+		CreateOrderingFromSceneGraph(m_context->m_rootSceneNode, entityOrdering);
 
 		return entityOrdering;
 	}
 
-	void SceneHierarchyPanel::DrawEntityNode(Entity entity, int i)
+	void SceneHierarchyPanel::DrawEntityNode(Entity entity, Ref<SceneGraphNode> parentNode, bool bIsInEditMode, std::unordered_map<EntityID, bool>& entityEnabledMap)
 	{
+		if (entity.GetSceneGraphNode()->GetParent() != parentNode.get())
+		{
+			return;
+		}
+
+		ImGui::TableSetColumnIndex(0);
+
 		auto& tag = entity.GetComponent<TagComponent>().m_tag;
 		
-		ImGuiTreeNodeFlags flags = ((m_selectionMask & (1 << i)) ? ImGuiTreeNodeFlags_Selected : 0) | ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_SpanAvailWidth;
+		ImGuiTreeNodeFlags flags = ((m_selectionMask & (1 << m_currentEntityIndex)) ? ImGuiTreeNodeFlags_Selected : 0) | ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_SpanAvailWidth;
 		bool opened = ImGui::TreeNodeEx((void*)(uint64_t)(uint32_t)entity, flags, tag.c_str());
 
 		if (ImGui::IsItemReleased())
 		{
 			if (ImGui::GetIO().KeyCtrl)
 			{
-				m_selectionMask ^= (1 << i);
+				m_selectionMask ^= (1 << m_currentEntityIndex);
 			}
 			else
 			{
-				m_selectionMask = (1 << i);
+				m_selectionMask = (1 << m_currentEntityIndex);
 			}
 			m_selectionContext = entity;
 		}
+
+		m_currentEntityIndex++;
 
 		if (ImGui::BeginDragDropSource())
 		{
@@ -245,8 +210,13 @@ namespace rhombus
 		{
 			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("SCENE_HIERACHY_UUID"))
 			{
-				// TODO: Make the entity a child of this one
-				m_handledReorderDragAndDrop = true;
+				if (!m_handledReorderDragAndDrop)
+				{
+					EntityID droppedID = m_context->GetEntityByUUID(*(UUID*)payload->Data);
+					Entity droppedEntity = { droppedID, m_context.get() };
+					m_addChildCallback = std::bind(&SceneHierarchyPanel::SetEntityAsChild, droppedEntity, entity.GetSceneGraphNode());
+					m_handledReorderDragAndDrop = true;
+				}
 			}
 			ImGui::EndDragDropTarget();
 		}
@@ -264,32 +234,53 @@ namespace rhombus
 			ImGui::EndPopup();
 		}
 
-		if (opened)
-		{
-			ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_SpanAvailWidth;
-			bool childOpened = ImGui::TreeNodeEx((void*)((uint64_t)(uint32_t)(entity) + 1000), flags, "Child");
-			if (childOpened)
-				ImGui::TreePop();
-			ImGui::TreePop();
-		}
-
 		// Duplicate entity
 		if (entityDuplicated)
 		{
 			m_context->DuplicateEntity(entity);
-			SetHierarchyDirty();
 		}
 
 		// Deferred deletion
 		if (entityDeleted)
 		{
 			m_context->DestroyEntity(entity);
-			SetHierarchyDirty();
 			if (m_selectionContext == entity)
 			{
 				m_selectionContext = {};
 			}
 		}
+
+		m_hierarchyEntityPositionMap[entity] = ImGui::GetItemRectMin().y;
+
+		if (bIsInEditMode)
+		{
+			ImGui::TableSetColumnIndex(1);
+
+			ImGuiStyle& style = ImGui::GetStyle();
+			ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(style.FramePadding.x, (float)(int)(style.FramePadding.y * 0.3f)));
+
+			ImGui::PushID(m_currentEntityIndex);
+			ImGui::Checkbox("##enabled", &entityEnabledMap[entity]);
+
+			ImGui::PopID();
+
+			ImGui::PopStyleVar(1);
+		}
+
+		if (opened)
+		{
+			if (entity.GetSceneGraphNode()->GetChildren().size() > 0)
+			{
+				ImGui::TableNextRow();
+				for (const Ref<SceneGraphNode> sceneGraphNode : entity.GetSceneGraphNode()->GetChildren())
+				{
+					DrawEntityNode(sceneGraphNode->GetEntity(), entity.GetSceneGraphNode(), bIsInEditMode, entityEnabledMap);
+				}
+			}
+			ImGui::TreePop();
+		}
+
+		ImGui::TableNextRow();
 	}
 
 	static void DrawVec3Control(const std::string& label, Vec3& values, float resetValue = 0.0f, float columnWidth = 70.0f)

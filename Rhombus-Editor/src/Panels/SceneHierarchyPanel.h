@@ -15,11 +15,7 @@ namespace rhombus
 
 		void SetContext(const Ref<Scene>& context);
 
-		void OnImGuiRender(bool bIsInEditMode, std::unordered_map<EntityID, bool>& entityEnabledMap);
-		void CreateEntityHierarchyTable(const char* label, const Ref<SceneGraphNode> parentNode, bool bIsInEditMode, std::unordered_map<EntityID, bool>& entityEnabledMap);
-
-		static void MoveEntityInHierarchyOrder(Entity entity, int newOrderIndex);
-		static void SetEntityAsChild(Entity entity, Ref<SceneGraphNode> parentNode);
+		void OnImGuiRender(bool bIsInEditMode, std::unordered_map<EntityID, bool>& entityEnabledMap);;
 
 		Entity GetSelectedEntity() const { return m_selectionContext; }
 		void SetSelectedEntity(Entity entity) { m_selectionContext = entity; }
@@ -35,6 +31,13 @@ namespace rhombus
 		void DrawEntityNode(Entity entity, Ref<SceneGraphNode> parentNode, bool bIsInEditMode, std::unordered_map<EntityID, bool>& entityEnabledMap);
 		void DrawComponents(Entity entity);
 
+		void CreateEntityHierarchyTable(const char* label, const Ref<SceneGraphNode> parentNode, bool bIsInEditMode, std::unordered_map<EntityID, bool>& entityEnabledMap);
+		int FindOrderingAndParentFromMousePosition(float cursorY, EntityID movingEntity, Ref<SceneGraphNode>& parentNodeInOut);
+
+		static void MoveEntityInHierarchyOrder(Entity entity, Ref<SceneGraphNode>& parentNode, int newOrderIndex);
+		static void SetEntityAsChild(Entity entity, Ref<SceneGraphNode>& parentNode);
+
+	private:
 		Ref<Scene> m_context;
 		std::unordered_map<EntityID, float> m_hierarchyEntityPositionMap;
 		Entity m_selectionContext;		// Main selected entity (shown in Property View)

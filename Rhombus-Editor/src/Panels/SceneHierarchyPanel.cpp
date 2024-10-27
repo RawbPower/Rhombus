@@ -65,19 +65,20 @@ namespace rhombus
 				if (!m_handledReorderDragAndDrop)
 				{
 					float cursorY = ImGui::GetMousePos().y;
-					int desiredOrdering = 0;
 					EntityID droppedID = m_context->GetEntityByUUID(*(UUID*)payload->Data);
-					for (const Ref<SceneGraphNode> child : m_context->m_rootSceneNode->GetChildren())
-					{
-						// Find the new position for the entity by comparing to each entity tree position in the hierarchy
-						if (cursorY < m_hierarchyEntityPositionMap[child->GetEntity()])
-						{
-							break;
-						}
-						desiredOrdering++;
-					}
+					Ref<SceneGraphNode> desiredParentNode = m_context->m_rootSceneNode;
+					int desiredOrdering = FindOrderingAndParentFromMousePosition(cursorY, droppedID, desiredParentNode) ;
 					Entity droppedEntity = { droppedID, m_context.get() };
-					MoveEntityInHierarchyOrder(droppedEntity, desiredOrdering);
+					if (desiredParentNode)
+					{
+						// If the desired parent is different to the current parent then update the parent first
+						if (desiredParentNode.get() != droppedEntity.GetSceneGraphNode()->GetParent())
+						{
+							SetEntityAsChild(droppedEntity, desiredParentNode);
+						}
+
+						MoveEntityInHierarchyOrder(droppedEntity, desiredParentNode, desiredOrdering);
+					}
 					m_handledReorderDragAndDrop = true;
 				}
 			}
@@ -96,6 +97,49 @@ namespace rhombus
 		ImGui::End();
 	}
 
+	int SceneHierarchyPanel::FindOrderingAndParentFromMousePosition(float cursorY, EntityID movingEntity, Ref<SceneGraphNode>& parentNodeInOut)
+	{
+		int desiredOrdering = 0;
+		bool moveBelowCurrentPosition = false;
+		Ref<SceneGraphNode> upperNode = nullptr;
+		for (const Ref<SceneGraphNode> child : parentNodeInOut->GetChildren())
+		{
+			// Find the new position for the entity by comparing to each entity tree position in the hierarchy
+			std::string name = child->GetEntity().GetName();
+			if (cursorY < m_hierarchyEntityPositionMap[child->GetEntity()])
+			{
+				// If moving the entity lower we need to decrease it's ordering
+				// by one (since it is being removed from the ordering itself)
+				if (moveBelowCurrentPosition)
+				{
+					desiredOrdering--;
+				}
+				break;
+			}
+
+			if ((EntityID)child->GetEntity() == movingEntity)
+			{
+				moveBelowCurrentPosition = true;
+			}
+
+			upperNode = child;
+			desiredOrdering++;
+		}
+
+		if (upperNode && upperNode->HasChildren())
+		{
+			Ref<SceneGraphNode> potentialParent = upperNode;
+			int desiredOrderingInChildren = FindOrderingAndParentFromMousePosition(cursorY, movingEntity, potentialParent);
+			if (desiredOrderingInChildren < upperNode->GetChildrenCount() - 1)
+			{
+				desiredOrdering = desiredOrderingInChildren;
+				parentNodeInOut = potentialParent;
+			}
+		}
+
+		return desiredOrdering;
+	}
+
 	void SceneHierarchyPanel::CreateEntityHierarchyTable(const char* label, const Ref<SceneGraphNode> parentNode, bool bIsInEditMode, std::unordered_map<EntityID, bool>& entityEnabledMap)
 	{
 		if (ImGui::BeginTable(label, 2))
@@ -110,6 +154,7 @@ namespace rhombus
 			{
 				const Ref<SceneGraphNode> sceneGraphNode = *it;
 				DrawEntityNode(sceneGraphNode->GetEntity(), parentNode, bIsInEditMode, entityEnabledMap);
+				ImGui::TableNextRow();
 				i++;
 			}
 			ImGui::EndTable();
@@ -122,13 +167,12 @@ namespace rhombus
 		}
 	}
 
-	void SceneHierarchyPanel::MoveEntityInHierarchyOrder(Entity entity, int newOrderIndex)
+	void SceneHierarchyPanel::MoveEntityInHierarchyOrder(Entity entity, Ref<SceneGraphNode>& parentNode, int newOrderIndex)
 	{
-		SceneGraphNode* parentNode = entity.GetSceneGraphNode()->GetParent();
 		parentNode->MoveChild(entity.GetSceneGraphNode(), newOrderIndex);
 	}
 
-	void SceneHierarchyPanel::SetEntityAsChild(Entity entity, Ref<SceneGraphNode> parentNode)
+	void SceneHierarchyPanel::SetEntityAsChild(Entity entity, Ref<SceneGraphNode>& parentNode)
 	{
 		Ref<SceneGraphNode> sceneGraphNode = entity.GetSceneGraphNode();
 		Mat4 worldTransform = sceneGraphNode->GetWorldTransform();
@@ -271,16 +315,14 @@ namespace rhombus
 		{
 			if (entity.GetSceneGraphNode()->GetChildren().size() > 0)
 			{
-				ImGui::TableNextRow();
 				for (const Ref<SceneGraphNode> sceneGraphNode : entity.GetSceneGraphNode()->GetChildren())
 				{
+					ImGui::TableNextRow();
 					DrawEntityNode(sceneGraphNode->GetEntity(), entity.GetSceneGraphNode(), bIsInEditMode, entityEnabledMap);
 				}
 			}
 			ImGui::TreePop();
 		}
-
-		ImGui::TableNextRow();
 	}
 
 	static void DrawVec3Control(const std::string& label, Vec3& values, float resetValue = 0.0f, float columnWidth = 70.0f)

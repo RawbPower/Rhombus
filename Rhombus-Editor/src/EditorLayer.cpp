@@ -415,7 +415,7 @@ namespace rhombus
 
 		if ((selectedEntities.size() > 0 || selectedEntity) && m_gizmoType != -1 && m_SceneState == SceneState::Edit)
 		{
-			if (AreSelectedEntitiesValidForTranform(selectedEntities))
+			if (const SceneGraphNode* pCommonParent = GetCommonParentOfEntities(selectedEntities))
 			{
 				ImGuizmo::SetOrthographic(false);
 				ImGuizmo::SetDrawlist();
@@ -445,9 +445,9 @@ namespace rhombus
 				{
 					Mat4 referenceTransform = Mat4::Identity();
 					Vec3 averagePosition = Vec3(0.0f);
-					for (Entity selectedEntity : selectedEntities)
+					for (Entity selectedEntityElement : selectedEntities)
 					{
-						averagePosition += selectedEntity.GetComponentRead<TransformComponent>().GetWorldTransform().d();
+						averagePosition += selectedEntityElement.GetComponentRead<TransformComponent>().GetWorldTransform().d();
 					}
 					averagePosition /= (float)selectedEntities.size();
 					referenceTransform.cols[3] = Vec4(averagePosition.x, averagePosition.y, 0.9f, 1.0f);
@@ -473,7 +473,7 @@ namespace rhombus
 						row2 = Vec4(initialTransform[2][0], initialTransform[2][1], initialTransform[2][2], initialTransform[2][3]);
 						row3 = Vec4(initialTransform[3][0], initialTransform[3][1], initialTransform[3][2], initialTransform[3][3]);
 						transformMat = Mat4(row0, row1, row2, row3);
-						if (!selectedEntity.GetSceneGraphNode()->GetIsRootNode())
+						if (!pCommonParent->GetIsRootNode())
 						{
 							transformMat = selectedEntity.GetSceneGraphNode()->GetParent()->GetWorldTransform().Inverse() * transformMat;
 						}
@@ -485,9 +485,9 @@ namespace rhombus
 						Vec3 rotationDelta = rotation - initialRotation;
 						Vec3 scaleDelta = scale - initialScale;
 
-						for (Entity selectedEntity : selectedEntities)
+						for (Entity selectedEntityElement : selectedEntities)
 						{
-							auto& transformComponent = selectedEntity.GetComponent<TransformComponent>();
+							auto& transformComponent = selectedEntityElement.GetComponent<TransformComponent>();
 							transformComponent.SetPosition(transformComponent.GetPosition() + translationDelta);
 							transformComponent.SetRotation(transformComponent.GetRotation() + rotationDelta);
 							transformComponent.SetScale(transformComponent.GetScale() + scaleDelta);
@@ -531,24 +531,24 @@ namespace rhombus
 
 	}
 
-	bool EditorLayer::AreSelectedEntitiesValidForTranform(std::vector<Entity> entities)
+	SceneGraphNode* EditorLayer::GetCommonParentOfEntities(std::vector<Entity> entities)
 	{
+		SceneGraphNode* firstSceneGraphNodeParent = entities[0].GetSceneGraphNode()->GetParent();
+
 		if (entities.size() <= 1)
 		{
-			return true;
+			return firstSceneGraphNodeParent;
 		}
-
-		SceneGraphNode* firstSceneGraphNodeParent = entities[0].GetSceneGraphNode()->GetParent();
 
 		for (int i = 1; i < entities.size(); i++)
 		{
 			if (entities[i].GetSceneGraphNode()->GetParent() != firstSceneGraphNodeParent)
 			{
-				return false;
+				return nullptr;
 			}
 		}
 
-		return true;
+		return firstSceneGraphNodeParent;
 	}
 
 	void EditorLayer::CalculateScreenResolutionPreset()

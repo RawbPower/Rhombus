@@ -9,6 +9,7 @@
 #include "ScreenResolutionPreset.h"
 
 #include "PatienceScene.h"
+#include "GameEditorExtension.h"
 
 #include "ImGuizmo.h"
 
@@ -108,7 +109,9 @@ namespace rhombus
 		m_CameraEntity.AddComponent<NativeScriptComponent>().Bind<CameraController>();
 #endif
 
+		m_editorExtension = CreateRef<GameEditorExtension>();
 		m_sceneHierarchyPanel.SetContext(m_ActiveScene);
+		m_sceneHierarchyPanel.SetEditorExtension(m_editorExtension);
 
 		CalculateScreenResolutionPreset();
 	}

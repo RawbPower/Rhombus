@@ -4,6 +4,7 @@
 #include "Rhombus/Core/Log.h"
 #include "Rhombus/Scenes/Scene.h"
 #include "Rhombus/Scenes/Entity.h"
+#include "EditorExtension.h"
 
 namespace rhombus
 {
@@ -14,6 +15,7 @@ namespace rhombus
 		SceneHierarchyPanel(const Ref<Scene>& context);
 
 		void SetContext(const Ref<Scene>& context);
+		void SetEditorExtension(const Ref<EditorExtension>& extension);
 
 		void OnImGuiRender(bool bIsInEditMode, std::unordered_map<EntityID, bool>& entityEnabledMap);;
 
@@ -23,6 +25,9 @@ namespace rhombus
 		void GetAllSelectedEntities(std::vector<Entity>& selectedEntitiesInOut) const;
 		void ResetSelectedEntities() { m_selectionContext = {}; m_selectionMask = 0; }
 		std::vector<EntityID> CalculateEntityOrdering() const;
+
+		template<typename T>
+		static void DisplayAddComponentEntry(const std::string& entryName, Entity entity);
 	private:
 
 		template<typename T>
@@ -39,6 +44,7 @@ namespace rhombus
 
 	private:
 		Ref<Scene> m_context;
+		Ref<EditorExtension> m_editorExtension;
 		std::unordered_map<EntityID, float> m_hierarchyEntityPositionMap;
 		Entity m_selectionContext;		// Main selected entity (shown in Property View)
 		int m_selectionMask;			// All selected entities (can all be dragged at once)

@@ -2,6 +2,7 @@
 
 #include "Rhombus.h"
 
+#include "EditorExtension.h"
 #include "Panels/SceneHierarchyPanel.h"
 #include "Panels/ContentBrowerPanel.h";
 #include "Rhombus/Renderer/EditorCamera.h"
@@ -116,6 +117,7 @@ namespace rhombus
 		// Panels
 		SceneHierarchyPanel m_sceneHierarchyPanel;
 		Scope<ContentBrowserPanel> m_contentBrowserPanel;
+		Ref<EditorExtension> m_editorExtension;
 
 		// Editor resources
 		Ref<Texture2D> m_IconPlay, m_IconStop;

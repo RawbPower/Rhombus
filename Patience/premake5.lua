@@ -19,6 +19,7 @@ project "Patience"
 		"%{wks.location}/Rhombus/vendor/spdlog/include",
 		"%{wks.location}/Rhombus/src",
 		"%{wks.location}/Rhombus/vendor",
+		"%{wks.location}/Rhombus-Editor/src",
 		"%{IncludeDir.yaml_cpp}"
 	}
 

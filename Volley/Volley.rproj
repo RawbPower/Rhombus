@@ -1,9 +1,9 @@
 Project:
-  Name: Solitaire
+  Name: Volley
   StartScene: scenes/Main.rmb
   AssetDirectory: Assets
   ScriptDirectory: scripts
-  GameWidth: 640
-  GameHeight: 360
+  GameWidth: 320
+  GameHeight: 180
   WindowWidth: 1280
   WindowHeight: 720

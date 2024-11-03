@@ -15,7 +15,9 @@ namespace rhombus
 		RhombusEditor(const ApplicationSpecification& specification)
 			: Application(specification)
 		{
-			PushLayer(new EditorLayer());
+			std::function<Ref<Scene>()> sceneCreationCB = []() { return CreateRef<Scene>(); };
+			std::function<Ref<EditorExtension>()> editorExtensionCB = []() { return CreateRef<EditorExtension>(); };
+			PushLayer(new EditorLayer(sceneCreationCB, editorExtensionCB));
 		}
 
 		~RhombusEditor() {

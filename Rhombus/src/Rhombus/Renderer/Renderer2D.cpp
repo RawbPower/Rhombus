@@ -190,16 +190,16 @@ namespace rhombus
 		for (uint32_t i = 0; i < s_Data.MaxTextureSlots; i++)
 			samplers[i] = i;
 
-		s_Data.ScreenShader = Shader::Create("assets/shaders/Renderer2D_Screen.glsl");
+		s_Data.ScreenShader = Shader::Create(Application::Get().GetPathRelativeToEngineDirectory("resources/shaders/Renderer2D_Screen.glsl"));
 		s_Data.ScreenShader->Bind();
 		s_Data.ScreenShader->SetInt("u_ScreenTexture", 0);
 
-		s_Data.QuadShader = Shader::Create("assets/shaders/Renderer2D_Quad.glsl");
+		s_Data.QuadShader = Shader::Create(Application::Get().GetPathRelativeToEngineDirectory("resources/shaders/Renderer2D_Quad.glsl"));
 		s_Data.QuadShader->Bind();
 		s_Data.QuadShader->SetIntArray("u_Textures", samplers, s_Data.MaxTextureSlots);
 
-		s_Data.CircleShader = Shader::Create("assets/shaders/Renderer2D_Circle.glsl");
-		s_Data.LineShader = Shader::Create("assets/shaders/Renderer2D_Line.glsl");
+		s_Data.CircleShader = Shader::Create(Application::Get().GetPathRelativeToEngineDirectory("resources/shaders/Renderer2D_Circle.glsl"));
+		s_Data.LineShader = Shader::Create(Application::Get().GetPathRelativeToEngineDirectory("resources/shaders/Renderer2D_Line.glsl"));
 
 		s_Data.TextureSlots[0] = s_Data.BlankTexture;
 

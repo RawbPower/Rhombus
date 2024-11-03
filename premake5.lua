@@ -44,7 +44,7 @@ group "Dependencies"
 group ""
 
 include "Rhombus"
+include "Rhombus-Editor"
 include "Sandbox"
 include "Patience"
-include "Rhombus-Editor"
 include "Rhombus-ScriptRegistry"

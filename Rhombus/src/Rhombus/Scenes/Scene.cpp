@@ -321,7 +321,7 @@ namespace rhombus
 			if (Application::Get().GetIsDebugPaused())
 			{
 				Vec2 position = Vec2(0.9f, 0.9f);
-				Ref<Texture2D> texture = Texture2D::Create("Resources/Icons/Pause.png");
+				Ref<Texture2D> texture = Texture2D::Create(Application::Get().GetPathRelativeToEngineDirectory("resources/icons/Pause.png"));
 				Renderer2D::DrawQuadOverlay(position, 0.0f, 1.0f, texture);
 			}
 

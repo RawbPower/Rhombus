@@ -1,6 +1,7 @@
 #include "rbpch.h"
 #include "WindowsWindow.h"
 
+#include "Rhombus/Core/Application.h"
 #include "Rhombus/Events/ApplicationEvent.h"
 #include "Rhombus/Events/MouseEvent.h"
 #include "Rhombus/Events/KeyEvent.h"
@@ -97,7 +98,7 @@ namespace rhombus
 			}
 			else
 			{
-				m_IconSurface = SDL_LoadBMP("Resources/Icons/RhombusIconBlueLarge.bmp");	
+				m_IconSurface = SDL_LoadBMP(Application::Get().GetPathRelativeToEngineDirectory("resources/icons/RhombusIconBlueLarge.bmp").c_str());
 				if (m_IconSurface == NULL)
 				{
 					RB_CORE_ERROR("Unable to load image {0}! SDL Error: {1}\n", "Resourcse/Icons/RhombusIconBlueLarge.bmp", SDL_GetError());

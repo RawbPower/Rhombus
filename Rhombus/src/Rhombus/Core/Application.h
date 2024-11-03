@@ -31,6 +31,8 @@ namespace rhombus {
 	{
 		std::string name = "Rhombus Application";
 		std::string workingDirectory;
+		std::string engineDirectory = "../Rhombus";
+		std::string editorDirectory = "../Rhombus-Editor";
 		ApplicationCommandLineArgs commandLineArgs;
 		uint32_t width;
 		uint32_t height;
@@ -68,6 +70,9 @@ namespace rhombus {
 		inline static Application& Get() { return *s_Instance; }
 
 		const ApplicationSpecification& GetSpecification() const { return m_Specification; }
+
+		std::string GetPathRelativeToEngineDirectory(const std::string& path) const { return m_Specification.engineDirectory + "/" + path; }
+		std::string GetPathRelativeToEditorDirectory(const std::string& path) const { return m_Specification.editorDirectory + "/" + path; }
 
 		bool GetIsDebugPaused() const { return m_DebugPause; }
 	private:

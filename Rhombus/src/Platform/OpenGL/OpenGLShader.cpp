@@ -29,7 +29,7 @@ namespace rhombus {
 		Compile(shaderSources);
 
 		// Extract name from filepath
-		// assets/shaders/Texture.glsl
+		// resources/shaders/Texture.glsl
 		auto lastSlash = filepath.find_last_of("/\\");
 		lastSlash = lastSlash == std::string::npos ? 0 : lastSlash + 1;
 		auto lastDot = filepath.rfind('.');

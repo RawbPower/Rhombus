@@ -39,7 +39,7 @@ namespace rhombus {
 		//io.ConfigFlags |= ImGuiConfigFlags_ViewportsNoTaskBarIcons;
 		//io.ConfigFlags |= ImGuiConfigFlags_ViewportsNoMerge;
 
-		io.FontDefault = io.Fonts->AddFontFromFileTTF("assets/fonts/ProggyClean.ttf", 13.0f);
+		io.FontDefault = io.Fonts->AddFontFromFileTTF(Application::Get().GetPathRelativeToEngineDirectory("resources/fonts/ProggyClean.ttf").c_str(), 13.0f);
 
 		// Setup Dear ImGui
 		//ImGui::StyleColorsDark();

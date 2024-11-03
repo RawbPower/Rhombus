@@ -1,5 +1,5 @@
 project "Rhombus-Editor"
-	kind "ConsoleApp"
+	kind "StaticLib"
 	language "C++"
 	cppdialect "C++17"
 	staticruntime "off"
@@ -19,21 +19,14 @@ project "Rhombus-Editor"
 		"%{wks.location}/Rhombus/src",
 		"%{wks.location}/Rhombus/vendor",
 		"%{wks.location}/Rhombus-Editor/src",
-		"%{wks.location}/Patience/src",
 		"%{IncludeDir.glm}",
 		"%{IncludeDir.yaml_cpp}",
 		"%{IncludeDir.ImGuizmo}"
-	}
-	
-	libdirs
-	{
-		"%{wks.location}/bin/" .. outputdir .. "/Patience"
 	}
 
 	links
 	{
 		"Rhombus",
-		"Patience",
 		"yaml-cpp"
 	}
 

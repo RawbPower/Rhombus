@@ -2,6 +2,7 @@
 
 #include "ContentBrowerPanel.h"
 
+#include "Rhombus/Core/Application.h"
 #include "Rhombus/Project/Project.h"
 
 #include <imgui/imgui.h>
@@ -11,8 +12,8 @@ namespace rhombus
 	ContentBrowserPanel::ContentBrowserPanel()
 		: m_baseDirectory(Project::GetAssetDirectory()), m_currentDirectory(m_baseDirectory)
 	{
-		m_FolderIcon = Texture2D::Create("Resources/Icons/ContentBrowser/Folder.png");
-		m_FileIcon = Texture2D::Create("Resources/Icons/ContentBrowser/File.png");
+		m_FolderIcon = Texture2D::Create(Application::Get().GetPathRelativeToEditorDirectory("resources/icons/ContentBrowser/Folder.png"));
+		m_FileIcon = Texture2D::Create(Application::Get().GetPathRelativeToEditorDirectory("resources/icons/ContentBrowser/File.png"));
 	}
 
 	void ContentBrowserPanel::OnImGuiRender()

@@ -8,15 +8,12 @@
 #include "Rhombus/Math/Math.h"
 #include "ScreenResolutionPreset.h"
 
-#include "PatienceScene.h"
-#include "GameEditorExtension.h"
-
 #include "ImGuizmo.h"
 
 namespace rhombus
 {
-	EditorLayer::EditorLayer()
-		: Layer("Editor"), m_CameraController(1920.0f / 1080.0f, true), m_SquareColor({0.2f, 0.3f, 0.8f, 1.0f})
+	EditorLayer::EditorLayer(std::function<Ref<Scene>()> sceneCB, std::function<Ref<EditorExtension>()> editorCB)
+		: Layer("Editor"), m_sceneCreationCallback(sceneCB), m_editorExtensionCreationCallback(editorCB), m_CameraController(1920.0f / 1080.0f, true), m_SquareColor({0.2f, 0.3f, 0.8f, 1.0f})
 	{
 
 	}
@@ -26,8 +23,8 @@ namespace rhombus
 		RB_PROFILE_FUNCTION();
 
 		m_CheckerboardTexture = Texture2D::Create("assets/textures/Checkerboard.png");
-		m_IconPlay = Texture2D::Create("Resources/Icons/Play.png");
-		m_IconStop = Texture2D::Create("Resources/Icons/Stop.png");
+		m_IconPlay = Texture2D::Create(Application::Get().GetPathRelativeToEditorDirectory("resources/icons/Play.png"));
+		m_IconStop = Texture2D::Create(Application::Get().GetPathRelativeToEditorDirectory("resources/icons/Stop.png"));
 
 		m_ActiveScene = CreateRef<Scene>();
 
@@ -109,7 +106,7 @@ namespace rhombus
 		m_CameraEntity.AddComponent<NativeScriptComponent>().Bind<CameraController>();
 #endif
 
-		m_editorExtension = CreateRef<GameEditorExtension>();
+		m_editorExtension = m_editorExtensionCreationCallback();
 		m_sceneHierarchyPanel.SetContext(m_ActiveScene);
 		m_sceneHierarchyPanel.SetEditorExtension(m_editorExtension);
 
@@ -831,7 +828,7 @@ namespace rhombus
 		}
 #endif
 
-		Ref<Scene> newScene = CreateRef<PatienceScene>();
+		Ref<Scene> newScene = m_sceneCreationCallback();
 		SceneSerializer serializer(newScene);
 #if RB_EDITOR
 		if (serializer.Deserialize(path.string(), true))
@@ -926,7 +923,7 @@ namespace rhombus
 	void EditorLayer::OnScenePlay()
 	{
 		m_SceneState = SceneState::Play;
-		m_ActiveScene = CreateRef<PatienceScene>();
+		m_ActiveScene = m_sceneCreationCallback();
 
 		Scene::Copy(m_ActiveScene, m_EditorScene);
 		m_ActiveScene->OnRuntimeStart();

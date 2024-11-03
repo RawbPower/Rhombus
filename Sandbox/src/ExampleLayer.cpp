@@ -140,7 +140,7 @@ ExampleLayer::ExampleLayer()
 
 	m_FlatColorShader = rhombus::Shader::Create("FlatColor", flatColorShaderVertexSrc, flatColorShaderPixelSrc);
 
-	auto textureShader = m_ShaderLibrary.Load("assets/shaders/Texture.glsl");
+	auto textureShader = m_ShaderLibrary.Load("resources/shaders/Texture.glsl");
 
 	m_Texture = rhombus::Texture2D::Create("assets/textures/Checkerboard.png");
 	m_BlendTexture = rhombus::Texture2D::Create("assets/textures/ChernoLogo.png");

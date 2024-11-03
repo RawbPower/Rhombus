@@ -1,7 +1,7 @@
 Project:
   Name: Solitaire
   StartScene: scenes/Main.rmb
-  AssetDirectory: Assets
+  AssetDirectory: assets
   ScriptDirectory: scripts
   GameWidth: 640
   GameHeight: 360

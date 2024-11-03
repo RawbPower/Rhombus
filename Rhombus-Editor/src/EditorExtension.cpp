@@ -1,9 +1,5 @@
 #include "EditorExtension.h"
 
-#include "Rhombus/ImGui/ImGuiWidgets.h"
-#include <imgui/imgui.h>
-#include <imgui/imgui_internal.h>
-
 namespace rhombus
 {
 	/*template<typename T>

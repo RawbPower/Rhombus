@@ -15,7 +15,7 @@ namespace rhombus
 	{
 
 	public:
-		EditorLayer();
+		EditorLayer(std::function<Ref<Scene>()> sceneCB, std::function<Ref<EditorExtension>()> editorCB);
 		virtual ~EditorLayer() = default;
 
 		virtual void OnAttach() override;
@@ -118,6 +118,10 @@ namespace rhombus
 		SceneHierarchyPanel m_sceneHierarchyPanel;
 		Scope<ContentBrowserPanel> m_contentBrowserPanel;
 		Ref<EditorExtension> m_editorExtension;
+
+		// Callbacks
+		std::function<Ref<Scene>()> m_sceneCreationCallback;
+		std::function<Ref<EditorExtension>()> m_editorExtensionCreationCallback;
 
 		// Editor resources
 		Ref<Texture2D> m_IconPlay, m_IconStop;

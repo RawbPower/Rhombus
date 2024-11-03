@@ -1,6 +1,6 @@
 #include "GameLayer.h"
 
-#include "PatienceScene.h"
+#include "GameScene.h"
 #include "Rhombus/Scenes/SceneSerializer.h"
 #include "Rhombus/Utils/PlatformUtils.h"
 
@@ -148,7 +148,7 @@ void GameLayer::OpenScene()
 
 void GameLayer::OpenScene(const std::filesystem::path& path)
 {
-	Ref<Scene> newScene = CreateRef<PatienceScene>();
+	Ref<Scene> newScene = CreateRef<GameScene>();
 	SceneSerializer serializer(newScene);
 	if (serializer.Deserialize(path.string()))
 	{

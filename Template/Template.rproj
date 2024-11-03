@@ -1,7 +1,7 @@
 Project:
-  Name: Volley
+  Name: Template
   StartScene: scenes/Main.rmb
-  AssetDirectory: assets
+  AssetDirectory: Assets
   ScriptDirectory: scripts
   GameWidth: 320
   GameHeight: 180

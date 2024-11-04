@@ -16,15 +16,7 @@ void GameLayer::OnAttach()
 {
 	RB_PROFILE_FUNCTION();
 
-	// Framebuffer
-	FramebufferSpecification fbSpec;
-	fbSpec.Attachments = { FramebufferTextureFormat::RGBA8, FramebufferTextureFormat::RED_INTEGER, FramebufferTextureFormat::Depth };
-	fbSpec.Width = Project::GetGameWidth();
-	fbSpec.Height = Project::GetGameWidth();
-	m_Framebuffer = Framebuffer::Create(fbSpec);
-
 	m_ActiveScene = CreateRef<Scene>();
-	m_ActiveScene->OnViewportResize(fbSpec.Width, fbSpec.Height);
 
 	auto commandLineArgs = Application::Get().GetSpecification().commandLineArgs;
 	if (commandLineArgs.count > 1)
@@ -39,6 +31,15 @@ void GameLayer::OnAttach()
 			Application::Get().Close();
 		}
 	}
+
+	// Framebuffer
+	FramebufferSpecification fbSpec;
+	fbSpec.Attachments = { FramebufferTextureFormat::RGBA8, FramebufferTextureFormat::RED_INTEGER, FramebufferTextureFormat::Depth };
+	fbSpec.Width = Project::GetGameWidth();
+	fbSpec.Height = Project::GetGameHeight();
+	m_Framebuffer = Framebuffer::Create(fbSpec);
+
+	m_ActiveScene->OnViewportResize(fbSpec.Width, fbSpec.Height);
 }
 
 void GameLayer::OnDetach()

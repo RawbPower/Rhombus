@@ -19,4 +19,15 @@ Entities:
         OrthographicFar: 1
         PixelPerfect: true
       Primary: true
-      FixedAspectRatio: true
+      FixedAspectRatio: false
+  - Entity: 2704317611656077983
+    Enabled: true
+    TagComponent:
+      Tag: Background
+    TransformComponent:
+      Position: [0, 0, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    SpriteRendererComponent:
+      Color: [1, 1, 1, 1]
+      Texture: sprites\320x180.png

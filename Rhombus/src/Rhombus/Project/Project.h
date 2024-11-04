@@ -60,8 +60,13 @@ namespace rhombus
 			return localPathString;
 		}
 
+		static std::string GetName() { return s_ActiveProject->m_Config.Name; }
+
 		static uint32_t GetGameWidth() { return s_ActiveProject->m_Config.GameWidth; }
 		static uint32_t GetGameHeight() { return s_ActiveProject->m_Config.GameHeight; }
+
+		static uint32_t GetWindowWidth() { return s_ActiveProject->m_Config.WindowWidth; }
+		static uint32_t GetWindowHeight() { return s_ActiveProject->m_Config.WindowHeight; }
 
 		static void SetGameResolution(uint32_t width, uint32_t height);
 

@@ -53,7 +53,7 @@ namespace rhombus
 		m_Framebuffer = Framebuffer::Create(fbSpec);
 
 		m_EditorCamera = EditorCamera(30.0f, 1.778f, 0.1f, 10000.0f);	// 1.778 = 16/9
-		m_EditorCamera.SetDistance(Project::GetGameWidth() * 1.2f);
+		m_EditorCamera.SetDistance(Project::GetGameWidth() * 1.5f);
 
 		m_ViewportSize = { (float)fbSpec.Width, (float)fbSpec.Height };
 		m_ViewportBounds[0] = { 0.0f, 0.0f };
@@ -137,7 +137,7 @@ namespace rhombus
 		Renderer2D::ResetStats();
 		Renderer2D::SetFPDStat(dt);
 		m_Framebuffer->Bind();
-		RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
+		RenderCommand::SetClearColor({ 0.15f, 0.15f, 0.15f, 1 });
 		RenderCommand::Clear();
 
 		// Clear our entity ID attachment to -1
@@ -199,7 +199,7 @@ namespace rhombus
 
 	void EditorLayer::RenderInWindow()
 	{
-		RenderCommand::SetClearColor({ 0.6f, 0.1f, 0.1f, 1 });
+		RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
 		RenderCommand::Clear();
 		RenderCommand::SetViewport(0, 0, Application::Get().GetWindow().GetWidth(), Application::Get().GetWindow().GetHeight());
 		Renderer2D::DrawFrambuffer(m_Framebuffer);
@@ -388,12 +388,25 @@ namespace rhombus
 
 		ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
 
-		m_ViewportSize = { viewportPanelSize.x, viewportPanelSize.y };
+		if (m_SceneState == SceneState::Edit)
+		{
+			m_ViewportSize = { viewportPanelSize.x, viewportPanelSize.y };
+		}
 
 		Application::Get().SetViewport(m_ViewportBounds[0].x, m_ViewportBounds[0].y, viewportPanelSize.x, viewportPanelSize.y);
 
+		ImVec2 imageSize = { viewportPanelSize.x, viewportPanelSize.y };
+		if (m_SceneState == SceneState::Play)
+		{
+			const int panelScaleX = math::Floor(viewportPanelSize.x / Project::GetGameWidth());
+			const int panelScaleY = math::Floor(viewportPanelSize.y / Project::GetGameHeight());
+			const int panelScale = panelScaleX <= panelScaleY ? panelScaleX : panelScaleY;
+			imageSize = { (float)Project::GetGameWidth() * panelScale, (float)Project::GetGameHeight() * panelScale };
+		}
+
+		ImGui::SetCursorPos({ (ImGui::GetWindowSize().x - imageSize.x) * 0.5f, (ImGui::GetWindowSize().y - imageSize.y) * 0.5f });		// Center image
 		uint32_t textureID = m_Framebuffer->GetColorAttachmentRendererID();
-		ImGui::Image((void*)textureID, ImVec2{ m_ViewportSize.x, m_ViewportSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+		ImGui::Image((void*)textureID, imageSize, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 
 		// TODO: Might be better to open a scene from double clicking in the content browser
 		// Would need to listen to some even though
@@ -923,6 +936,7 @@ namespace rhombus
 	void EditorLayer::OnScenePlay()
 	{
 		m_SceneState = SceneState::Play;
+		m_ViewportSize = { (float)Project::GetGameWidth(), (float)Project::GetGameHeight() };
 		m_ActiveScene = m_sceneCreationCallback();
 
 		Scene::Copy(m_ActiveScene, m_EditorScene);
@@ -979,7 +993,7 @@ namespace rhombus
 		}
 
 #if RB_EDITOR
-		if (m_ShowGameScreenSizeRect)
+		if (m_SceneState == SceneState::Edit && m_ShowGameScreenSizeRect)
 		{
 			Vec3 translation = Vec3(0.0f);
 			Vec3 scale = Vec3(Project::GetGameWidth(), Project::GetGameHeight(), 1.0f);

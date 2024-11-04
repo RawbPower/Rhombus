@@ -45,7 +45,6 @@ group ""
 
 include "Rhombus"
 include "Rhombus-Editor"
-include "Sandbox"
-include "Patience"
 include "Volley"
+include "Patience"
 include "Rhombus-ScriptRegistry"

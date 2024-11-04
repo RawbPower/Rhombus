@@ -3,6 +3,7 @@
 #include <Rhombus/Core/EntryPoint.h>
 
 #include "GameLayer.h"
+#include "Rhombus/Core/Log.h"
 
 #define GAME_EDITOR 1
 
@@ -47,8 +48,25 @@ namespace rhombus
 		spec.height = 720;
 		spec.fullscreen = true;
 #else
-		ApplicationSpecification spec;
-		spec.name = "Patience";
+		auto commandLineArgs = args;
+		bool bLoadedProject = false;
+		if (commandLineArgs.count > 1)
+		{
+			auto projectFilePath = commandLineArgs[1];
+			if (Project::Load(projectFilePath))
+			{
+				spec.name = Project::GetName();
+				spec.width = Project::GetWindowWidth();
+				spec.height = Project::GetWindowHeight();
+				spec.fullscreen = false;
+				bLoadedProject = true;
+			}
+		}
+
+		if (!bLoadedProject)
+		{
+			RB_CORE_ERROR("Invalid project file!\n");
+		}
 #endif
 
 		return new Game(spec);

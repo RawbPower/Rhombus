@@ -155,6 +155,7 @@ namespace rhombus
 		tag.m_tag = name.empty() ? "Entity" : name;
 
 		m_EntityMap[uuid] = entity;
+		m_entityEnabledMap[(EntityID)entity] = true;
 		if (bAddToSceneGraph)
 		{
 			transform.m_sceneGraphNode = m_rootSceneNode->AddChild(entity);

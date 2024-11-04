@@ -47,8 +47,10 @@ namespace rhombus
 		spec.height = 720;
 		spec.fullscreen = true;
 #else
-		ApplicationSpecification spec;
 		spec.name = "Patience";
+		spec.width = 1280;
+		spec.height = 720;
+		spec.fullscreen = false;
 #endif
 
 		return new Game(spec);

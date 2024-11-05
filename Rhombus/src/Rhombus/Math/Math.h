@@ -37,4 +37,6 @@ namespace rhombus::math
 	inline float Round(float x) { return round(x); }
 	inline float Ceil(float x) { return ceil(x); }
 	inline float Floor(float x) { return floor(x); }
+
+	inline float Abs(float x) { return abs(x); }
 }

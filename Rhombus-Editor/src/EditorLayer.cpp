@@ -339,6 +339,7 @@ namespace rhombus
 
 		m_sceneHierarchyPanel.OnImGuiRender(m_SceneState == SceneState::Edit, m_ActiveScene->GetEntityEnabledMap());
 		m_contentBrowserPanel->OnImGuiRender();
+		m_tilesetPanel->OnImGuiRender();
 
 		if (m_ShowRenderStats)
 		{
@@ -918,6 +919,7 @@ namespace rhombus
 			auto startScenePath = Project::GetAssetFileSystemPath(Project::GetActive()->GetConfig().StartScene);
 			OpenScene(startScenePath);
 			m_contentBrowserPanel = CreateScope<ContentBrowserPanel>();
+			m_tilesetPanel = CreateScope<TilesetPanel>();
 		}
 	}
 

@@ -5,6 +5,7 @@
 #include "EditorExtension.h"
 #include "Panels/SceneHierarchyPanel.h"
 #include "Panels/ContentBrowerPanel.h";
+#include "Panels/TilesetPanel.h";
 #include "Rhombus/Renderer/EditorCamera.h"
 
 #define RB_EDITOR 1
@@ -117,6 +118,7 @@ namespace rhombus
 		// Panels
 		SceneHierarchyPanel m_sceneHierarchyPanel;
 		Scope<ContentBrowserPanel> m_contentBrowserPanel;
+		Scope<TilesetPanel> m_tilesetPanel;
 		Ref<EditorExtension> m_editorExtension;
 
 		// Callbacks

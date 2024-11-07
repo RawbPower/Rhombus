@@ -23,4 +23,25 @@ namespace rhombus
 
 		return std::make_shared<SubTexture2D>(texture, min, max);
 	}
+
+	Ref<SubTexture2D> SubTexture2D::CreateFromCoords(const Ref<Texture2D>& texture, const Vec2& coords, const Vec2& cellSize, float padding, const Vec2& spriteSize)
+	{
+		Vec2 min = { (coords.x * cellSize.x + s_textureBleedMargin + (1.0f + 2.0f * coords.x) * padding) / texture->GetWidth(), (coords.y * cellSize.y + s_textureBleedMargin + (1.0f + 2.0f * coords.y) * padding) / texture->GetHeight() };
+		Vec2 max = { ((coords.x + spriteSize.x) * cellSize.x - s_textureBleedMargin + (1.0f + 2.0f * coords.x) * padding) / texture->GetWidth(), ((coords.y + spriteSize.y) * cellSize.y - s_textureBleedMargin + (1.0f + 2.0f * coords.y) * padding) / texture->GetHeight() };
+
+		return std::make_shared<SubTexture2D>(texture, min, max);
+	}
+
+	void SubTexture2D::SubTexture2D::SliceTexture(const Ref<Texture2D>& texture, int rows, int cols, int padding, std::vector<Ref<SubTexture2D>>& tiles)
+	{
+		tiles.clear();
+		const Vec2 cellsize = Vec2(((float)texture->GetWidth() / (float)cols) - 2.0f * padding, ((float)texture->GetHeight() / (float)rows) - 2.0f * padding);
+		for (int r = 0; r < rows; r++)
+		{
+			for (int c = 0; c < cols; c++)
+			{
+				tiles.push_back(CreateFromCoords(texture, Vec2(c, rows - 1 - r), cellsize, padding));
+			}
+		}
+	}
 }

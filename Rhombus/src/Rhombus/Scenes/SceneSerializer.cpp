@@ -14,6 +14,7 @@
 #include "Rhombus/ECS/Components/ScriptComponent.h"
 #include "Rhombus/ECS/Components/SpriteRendererComponent.h"
 #include "Rhombus/ECS/Components/TransformComponent.h"
+#include "Rhombus/ECS/Components/TileMapComponent.h"
 
 namespace rhombus
 {
@@ -203,6 +204,14 @@ namespace rhombus
 			out << YAML::Key << "DebugColor" << YAML::Value << area2DComponent.GetDebugColor();
 
 			out << YAML::EndMap; // BoxArea2DComponent
+		}
+
+		if (entity.HasComponent<TileMapComponent>())
+		{
+			out << YAML::Key << "TileMapComponent";
+			out << YAML::BeginMap; // TileMapComponent
+
+			out << YAML::EndMap; // TileMapComponent
 		}
 
 		scene->SerializeEntity(&out, entity);
@@ -404,6 +413,12 @@ namespace rhombus
 					coll.m_offset = boxArea2DComponent["Offset"].as<Vec2>();
 					coll.m_size = boxArea2DComponent["Size"].as<Vec2>();
 					coll.GetDebugColor() = boxArea2DComponent["DebugColor"].as<Vec4>();
+				}
+
+				auto tileMapComponent = entity["TileMapComponent"];
+				if (tileMapComponent)
+				{
+					auto& tilemap = deserializedEntity.AddComponent<TileMapComponent>();
 				}
 
 				m_scene->DeserializeEntity(&entity, deserializedEntity);

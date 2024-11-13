@@ -724,6 +724,7 @@ namespace rhombus
 		Viewport viewport = Application::Get().GetViewport();
 		Vec3 fC = Vec3(x - viewport.x, y - viewport.y, 0.0f);
 		Vec3 ndc = Vec3(fC.x / viewport.width, 1.0 - fC.y / viewport.height, fC.z) * 2.0f - 1.0f;
+		ndc.z = 0.0f;
 		return ConvertScreenToWorldSpace(ndc);
 	}
 
@@ -731,6 +732,37 @@ namespace rhombus
 	{
 		Mat4 viewProjection = Renderer2D::GetViewProjectionMatrix();
 		Vec4 worldCoords =  viewProjection.Inverse() * Vec4(ndc, 1.0f);
+		return worldCoords;
+	}
+
+	Vec3 Renderer2D::RaycastScreenPositionToWorldSpace(int x, int y, float planeDepth, const Mat4 projectionMatrix, const Mat4 viewMatrix)
+	{
+		Viewport viewport = Application::Get().GetViewport();
+		Vec3 fC = Vec3(x - viewport.x, y - viewport.y, 0.0f);
+		Vec3 ndc = Vec3(fC.x / viewport.width, 1.0 - fC.y / viewport.height, fC.z) * 2.0f - 1.0f;
+		ndc.z = 1.0f;
+		return RaycastScreenPositionToWorldSpace(ndc, planeDepth, projectionMatrix, viewMatrix);
+	}
+
+	Vec3 Renderer2D::RaycastScreenPositionToWorldSpace(Vec3 ndc, float planeDepth, const Mat4 projectionMatrix, const Mat4 viewMatrix)
+	{
+		Vec3 worldRaycast = CalculateScreenRaycast(ndc, projectionMatrix, viewMatrix);
+		Vec3 cameraPosition = viewMatrix.Inverse().d();
+		Vec3 projectionNormal = Vec3(0.0f, 0.0f, 1.0f);
+		Vec3 projectionPlane = Vec3(0.0f, 0.0f, planeDepth);
+		float t = -(cameraPosition.Dot(projectionNormal) + projectionPlane.GetMagnitude()) / (worldRaycast.Dot(projectionNormal));
+		Vec3 cursorCoords = cameraPosition + worldRaycast * t;
+		return cursorCoords;
+	}
+
+	Vec3 Renderer2D::CalculateScreenRaycast(Vec3 ndc, const Mat4 projectionMatrix, const Mat4 viewMatrix)
+	{
+		Vec4 homogeneousClipCoords = Vec4(ndc.x, ndc.y, -1.0f, 1.0f);
+		Vec4 eyeCoords = projectionMatrix.Inverse() * homogeneousClipCoords;
+		eyeCoords = Vec4(eyeCoords.x, eyeCoords.y, -1.0f, 0.0f);			// Set zw to mean "forwards, and not a point"
+		Vec4 worldCoords4d = viewMatrix.Inverse() * eyeCoords;
+		Vec3 worldCoords = Vec3(worldCoords4d.x, worldCoords4d.y, worldCoords4d.z);
+		worldCoords.Normalize();
 		return worldCoords;
 	}
 

@@ -51,6 +51,8 @@ namespace rhombus
 		int m_currentEntityIndex;
 		bool m_handledReorderDragAndDrop;
 
+		std::queue<Entity> m_destroyQueue;
+
 		// Add child as a callback to be called after all the entities are iterated through
 		// This is to avoid invalidating the iterator while going through it
 		std::function<void()> m_addChildCallback;

@@ -25,7 +25,7 @@ namespace rhombus
 		return (b & SDL_BUTTON(button)) != 0;
 	}
 
-	std::pair<float, float> Input::GetMousePosition()
+	Vec2 Input::GetMousePosition()
 	{
 		int x, y;
 

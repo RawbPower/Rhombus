@@ -12,6 +12,7 @@
 #include "Rhombus/ECS/Components/SpriteRendererComponent.h"
 #include "Rhombus/ECS/Components/TransformComponent.h"
 #include "Rhombus/ECS/Components/TweenComponent.h"
+#include "Rhombus/ECS/Components/TileMapComponent.h"
 #include "Rhombus/Scenes/SceneGraphNode.h"
 
 #include "Rhombus/ImGui/ImGuiWidgets.h"
@@ -48,6 +49,19 @@ namespace rhombus
 
 		m_currentEntityIndex = 0;
 		CreateEntityHierarchyTable("Scene Hiearchy Table", m_context->m_rootSceneNode, bIsInEditMode, entityEnabledMap);
+
+		while (!m_destroyQueue.empty())
+		{
+			Entity entity = m_destroyQueue.front();
+			m_destroyQueue.pop();
+
+			m_context->DestroyEntity(entity);
+			m_selectionMask = 0;
+			if (m_selectionContext == entity)
+			{
+				m_selectionContext = {};
+			}
+		}
 
 		if (ImGui::IsMouseDown(0) && ImGui::IsWindowHovered())
 		{
@@ -299,11 +313,7 @@ namespace rhombus
 		// Deferred deletion
 		if (entityDeleted)
 		{
-			m_context->DestroyEntity(entity);
-			if (m_selectionContext == entity)
-			{
-				m_selectionContext = {};
-			}
+			m_destroyQueue.push(entity);
 		}
 
 		m_hierarchyEntityPositionMap[entity] = ImGui::GetItemRectMin().y;
@@ -477,6 +487,7 @@ namespace rhombus
 			DisplayAddComponentEntry<BoxCollider2DComponent>("Box Collider 2D");
 			DisplayAddComponentEntry<CircleCollider2DComponent>("Circle Collider 2D");
 			DisplayAddComponentEntry<BoxArea2DComponent>("Box Area 2D");
+			DisplayAddComponentEntry<TileMapComponent>("Tile Map");
 
 			// Game
 			if (m_editorExtension)
@@ -637,6 +648,10 @@ namespace rhombus
 			ImGui::DragFloat2("Offset", component.m_offset.ToPtr(), 0.01f);
 			ImGui::DragFloat2("Size", component.m_size.ToPtr());
 			ImGui::ColorEdit4("Debug Colour", component.GetDebugColor().ToPtr());
+		});
+
+		DrawComponent<TileMapComponent>("Tile Map", entity, [](auto& component)
+		{
 		});
 
 		m_editorExtension->DisplayComponentProperties(entity);

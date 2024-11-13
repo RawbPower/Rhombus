@@ -31,6 +31,7 @@
 #include "Rhombus/ECS/Components/SpriteRendererComponent.h"
 #include "Rhombus/ECS/Components/TransformComponent.h"
 #include "Rhombus/ECS/Components/TweenComponent.h"
+#include "Rhombus/ECS/Components/TileMapComponent.h"
 
 #include "Rhombus/Math/Quat.h"
 #include "Rhombus/Math/Matrix.h"

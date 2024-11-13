@@ -57,7 +57,7 @@ namespace rhombus
 
 		static Mat4 GetViewProjectionMatrix();
 		static Vec3 ConvertScreenToWorldSpace(int x, int y);
-		static Vec3 ConvertScreenToWorldSpace(Vec3 ndc);
+		static Vec3 RaycastScreenPositionToWorldSpace(int x, int y, float planeDepth, const Mat4 projectionMatrix, const Mat4 viewMatrix);
 
 		static Mat4 CorrectTransformForPixelPerfect(Mat4 transform, const Ref<Texture2D>& texture);
 
@@ -78,5 +78,9 @@ namespace rhombus
 	private:
 		static void StartBatch();
 		static void NextBatch();
+
+		static Vec3 ConvertScreenToWorldSpace(Vec3 ndc);
+		static Vec3 RaycastScreenPositionToWorldSpace(Vec3 ndc, float planeDepth, const Mat4 projectionMatrix, const Mat4 viewMatrix);
+		static Vec3 CalculateScreenRaycast(Vec3 ndc, const Mat4 projectionMatrix, const Mat4 viewMatrix);
 	};
 }

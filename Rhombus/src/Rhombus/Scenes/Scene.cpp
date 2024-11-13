@@ -20,6 +20,7 @@
 #include "Rhombus/ECS/Components/SpriteRendererComponent.h"
 #include "Rhombus/ECS/Components/TransformComponent.h"
 #include "Rhombus/ECS/Components/TweenComponent.h"
+#include "Rhombus/ECS/Components/TileMapComponent.h"
 
 // Box2d
 #include <box2d/b2_world.h>
@@ -35,7 +36,8 @@ namespace rhombus
 	using RhombusComponents =
 		ComponentGroup<TransformComponent, SpriteRendererComponent,
 		CircleRendererComponent, CameraComponent, ScriptComponent, NativeScriptComponent,
-		Rigidbody2DComponent, BoxCollider2DComponent, CircleCollider2DComponent, BoxArea2DComponent, TweenComponent>;
+		Rigidbody2DComponent, BoxCollider2DComponent, CircleCollider2DComponent, BoxArea2DComponent, 
+		TweenComponent, TileMapComponent>;
 	// -----------------------------------------------------
 
 	static b2BodyType Rigidbody2DTypetoBox2DType(Rigidbody2DComponent::BodyType bodyType)
@@ -166,6 +168,17 @@ namespace rhombus
 
 	void Scene::DestroyEntity(Entity entity)
 	{
+		// Fix the scene graph before destroying
+		Ref<SceneGraphNode>& sceneGraphNode = entity.GetSceneGraphNode();
+		SceneGraphNode* parentNode = sceneGraphNode->GetParent();
+		parentNode->RemoveChild(sceneGraphNode);	// Remove this entity as the child of it's parent
+		for (Ref<SceneGraphNode>& childNode : sceneGraphNode->GetChildrenNonConst())
+		{
+			parentNode->AddChild(childNode);	// Move this entity's children to the parent
+		}
+		sceneGraphNode->SetParent(false);		// Remove this entity's parent
+
+		// Destroy Entity
 		UUID entityUUID = entity.GetUUID();
 		m_Registry.DestroyEntity(entity);
 		m_EntityMap.erase(entityUUID);

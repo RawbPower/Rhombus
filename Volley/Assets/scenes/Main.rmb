@@ -31,3 +31,13 @@ Entities:
     SpriteRendererComponent:
       Color: [1, 1, 1, 1]
       Texture: sprites\320x180.png
+  - Entity: 2638669005170392757
+    Enabled: true
+    TagComponent:
+      Tag: Tilemap
+    TransformComponent:
+      Position: [0, 10, 0]
+      Rotation: [0, -0, 0]
+      Scale: [1, 1, 1]
+    TileMapComponent:
+      {}

@@ -99,6 +99,7 @@ namespace rhombus
 		bool m_ShowRenderStats = false;
 		bool m_ShowPhysicsColliders = false;
 		bool m_ShowGameScreenSizeRect = true;
+		bool m_ShowTileMapGrid = true;
 		int m_ScreenResolutionPreset = -1;
 		Color m_PhysicsColliderColor = Color(0.0, 1.0, 0.0, 1.0);
 		Color m_AreaColor = Color(0.0, 0.0, 1.0, 1.0);

@@ -250,6 +250,8 @@ namespace rhombus
 		ImGui::Begin("DockSpace Demo", &dockspaceOpen, window_flags);
 		ImGui::PopStyleVar();
 
+		ImVec2 docSpaceOffset = ImGui::GetWindowPos();
+
 		if (opt_fullscreen)
 			ImGui::PopStyleVar(2);
 
@@ -321,6 +323,11 @@ namespace rhombus
 					m_ShowGameScreenSizeRect = !m_ShowGameScreenSizeRect;
 				}
 
+				if (ImGui::MenuItem("Show Tile Map Grid", NULL, m_ShowTileMapGrid))
+				{
+					m_ShowTileMapGrid = !m_ShowTileMapGrid;
+				}
+
 				if (ImGui::MenuItem("Show Editor Settings", NULL, m_ShowEditorSettings))
 				{
 					m_ShowEditorSettings = !m_ShowEditorSettings;
@@ -366,6 +373,7 @@ namespace rhombus
 			ImGui::Begin("Settings");
 			ImGui::Checkbox("Show physics colliders", &m_ShowPhysicsColliders);
 			ImGui::Checkbox("Show game screen size rect", &m_ShowGameScreenSizeRect);
+			ImGui::Checkbox("Show tile map grid", &m_ShowTileMapGrid);
 			ImGui::ColorEdit4("Physics colliders color", m_PhysicsColliderColor.ToPtr());
 			ImGui::ColorEdit4("Area color", m_AreaColor.ToPtr());
 			ImGui::End();
@@ -394,8 +402,6 @@ namespace rhombus
 			m_ViewportSize = { viewportPanelSize.x, viewportPanelSize.y };
 		}
 
-		Application::Get().SetViewport(m_ViewportBounds[0].x, m_ViewportBounds[0].y, viewportPanelSize.x, viewportPanelSize.y);
-
 		ImVec2 imageSize = { viewportPanelSize.x, viewportPanelSize.y };
 		if (m_SceneState == SceneState::Play)
 		{
@@ -405,7 +411,11 @@ namespace rhombus
 			imageSize = { (float)Project::GetGameWidth() * panelScale, (float)Project::GetGameHeight() * panelScale };
 		}
 
-		ImGui::SetCursorPos({ (ImGui::GetWindowSize().x - imageSize.x) * 0.5f, (ImGui::GetWindowSize().y - imageSize.y) * 0.5f });		// Center image
+		Vec2 imageOffset = Vec2((ImGui::GetWindowSize().x - imageSize.x) * 0.5f, (ImGui::GetWindowSize().y - imageSize.y) * 0.5f);
+		ImGui::SetCursorPos({ imageOffset.x, imageOffset.y });		// Center image
+
+		Application::Get().SetViewport(m_ViewportBounds[0].x + docSpaceOffset.x + imageOffset.x, m_ViewportBounds[0].y - docSpaceOffset.y + imageOffset.y, imageSize.x, imageSize.y);
+
 		uint32_t textureID = m_Framebuffer->GetColorAttachmentRendererID();
 		ImGui::Image((void*)textureID, imageSize, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 
@@ -994,19 +1004,6 @@ namespace rhombus
 			Renderer2D::BeginScene(m_EditorCamera);
 		}
 
-#if RB_EDITOR
-		if (m_SceneState == SceneState::Edit && m_ShowGameScreenSizeRect)
-		{
-			Vec3 translation = Vec3(0.0f);
-			Vec3 scale = Vec3(Project::GetGameWidth(), Project::GetGameHeight(), 1.0f);
-
-			Mat4 transform = math::Translate(Mat4::Identity(), translation)
-				* math::Rotate(Mat4::Identity(), 0.0f, Vec3(0.0f, 0.0f, 1.0f))
-				* math::Scale(Mat4::Identity(), scale);
-			Renderer2D::DrawRect(transform, Color(1.0f, 1.0f, 1.0f, 0.8f));
-		}
-#endif
-
 		if (m_ShowPhysicsColliders)
 		{
 			// Box Collider
@@ -1105,9 +1102,77 @@ namespace rhombus
 				scaledTransform = math::Scale(scaledTransform, Vec3(spriteScale, 1.0f));
 			}
 
-			//Red
 			Renderer2D::DrawRect(scaledTransform, Color(1.0f, 1.0f, 0.5f, 1.0f));
 		}
+
+#if RB_EDITOR
+		// Tilemap Grid
+		if (m_ShowTileMapGrid)
+		{
+			std::vector<EntityID> view = m_ActiveScene->GetAllEntitiesWith<TileMapComponent>();
+			for (EntityID e : view)
+			{
+				Entity entity = { e, m_ActiveScene.get() };
+
+				TransformComponent transform = entity.GetComponent<TransformComponent>();
+				Mat4 topLeftTileTransform = transform.GetWorldTransform();
+				topLeftTileTransform = math::Scale(topLeftTileTransform, Vec3(16.0f, 16.0f, 1.0f));
+				float tileMapHalfWidth = (32.0f * 16.0f) / 2.0f;
+				float tileMapHalfHeight = (32.0f * 16.0f) / 2.0f;
+				topLeftTileTransform.SetD(topLeftTileTransform.d() + Vec3(-tileMapHalfWidth + 8.0f, tileMapHalfHeight - 8.0f, 0.0f));
+				for (int i = 0; i < 32; i++)
+				{
+					for (int j = 0; j < 32; j++)
+					{
+						Mat4 tileTransform = topLeftTileTransform;
+						tileTransform.SetD(topLeftTileTransform.d() + Vec3(j * 16.0f, -i * 16.0f, 0.0f));
+						Renderer2D::DrawRect(tileTransform, Color(1.0f, 1.0f, 1.0f, 0.9f));
+
+						Vec2 mousePos = Input::GetMousePosition();
+
+						Vec3 cursorCoords;
+						if (m_SceneState == SceneState::Play)
+						{
+							Entity camera = m_ActiveScene->GetPrimaryCameraEntity();
+							const SceneCamera& sceneCamera = camera.GetComponentRead<CameraComponent>().GetCamera();
+							if (sceneCamera.GetProjectionType() == SceneCamera::ProjectionType::Perspective)
+							{
+								cursorCoords = Renderer2D::RaycastScreenPositionToWorldSpace(mousePos.x, mousePos.y, transform.GetPosition().z, sceneCamera.GetProjection(), camera.GetTransform());
+							}
+							else
+							{
+								cursorCoords = Renderer2D::ConvertScreenToWorldSpace(mousePos.x, mousePos.y);
+							}
+						}
+						else
+						{
+							cursorCoords = Renderer2D::RaycastScreenPositionToWorldSpace(mousePos.x, mousePos.y, transform.GetPosition().z, m_EditorCamera.GetProjection(), m_EditorCamera.GetViewMatrix());
+						}
+
+						if ((cursorCoords.x < tileTransform.d().x + 8.0f) && (cursorCoords.x > tileTransform.d().x - 8.0f))
+						{
+							if ((cursorCoords.y < tileTransform.d().y + 8.0f) && (cursorCoords.y > tileTransform.d().y - 8.0f))
+							{
+								Renderer2D::DrawQuad(tileTransform, Color(1.0f, 0.0f, 0.0f, 0.9f));
+							}
+						}
+					}
+				}
+			}
+		}
+
+		// Camera Rect
+		if (m_SceneState == SceneState::Edit && m_ShowGameScreenSizeRect)
+		{
+			Vec3 translation = Vec3(0.0f);
+			Vec3 scale = Vec3(Project::GetGameWidth(), Project::GetGameHeight(), 1.0f);
+
+			Mat4 transform = math::Translate(Mat4::Identity(), translation)
+				* math::Rotate(Mat4::Identity(), 0.0f, Vec3(0.0f, 0.0f, 1.0f))
+				* math::Scale(Mat4::Identity(), scale);
+			Renderer2D::DrawRect(transform, Color(0.9f, 0.9f, 0.4f, 0.8f));
+		}
+#endif
 
 		Renderer2D::EndScene();
 	}

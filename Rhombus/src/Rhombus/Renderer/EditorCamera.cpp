@@ -9,6 +9,7 @@
 
 #include <SDL.h>
 
+// TODO: Add orthographic camera
 namespace rhombus {
 
 	EditorCamera::EditorCamera(float fov, float aspectRatio, float nearClip, float farClip)

@@ -23,6 +23,7 @@ namespace rhombus
 		}
 
 		SceneCamera& GetCamera() { return m_camera; }
+		const SceneCamera& GetCamera() const { return m_camera; }
 		void SetIsPrimaryCamera(bool primary) { m_primary = primary; }
 		bool& GetIsPrimaryCamera() { return m_primary; }
 

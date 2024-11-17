@@ -719,6 +719,15 @@ namespace rhombus
 		return s_Data.ViewProjectionMatrix; 
 	}
 
+	bool Renderer2D::IsScreenPositionWithViewPort(int x, int y)
+	{
+		Viewport viewport = Application::Get().GetViewport();
+		Vec3 fC = Vec3(x - viewport.x, y - viewport.y, 0.0f);
+		Vec3 ndc = Vec3(fC.x / viewport.width, 1.0 - fC.y / viewport.height, fC.z) * 2.0f - 1.0f;
+
+		return ndc.x >= -1.0f && ndc.x <= 1.0f && ndc.y >= -1.0f && ndc.y <= 1.0f;
+	}
+
 	Vec3 Renderer2D::ConvertScreenToWorldSpace(int x, int y)
 	{
 		Viewport viewport = Application::Get().GetViewport();

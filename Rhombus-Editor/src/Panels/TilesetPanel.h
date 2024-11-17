@@ -13,6 +13,8 @@ namespace rhombus
 
 		void OnImGuiRender();
 
+		const Ref<SubTexture2D> GetSelectedTile() const { return m_iSelectedTileIndex >= 0 ? m_Tiles[m_iSelectedTileIndex] : nullptr; }
+
 	private:
 		Ref<Texture2D> m_Tileset;
 		std::vector<Ref<SubTexture2D>> m_Tiles;

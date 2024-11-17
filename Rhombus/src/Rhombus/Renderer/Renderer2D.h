@@ -36,8 +36,8 @@ namespace rhombus
 		static void DrawQuad(const Vec3& position, const float& angle, const Vec2& scale, const Ref<SubTexture2D>& subTexture, const Color& color, float tilingFactor = 1.0f);
 
 		static void DrawQuad(const Mat4& transform, const Color& color, int entityID = -1);
-		static void DrawQuad(const Mat4& transform, const Ref<Texture2D>& texture, const Color& color, float tilingFactor = 1.0f, int entityID = -1, bool pixelPerfect = true);
-		static void DrawQuad(const Mat4& transform, const Ref<SubTexture2D>& subTexture, const Color& color, float tilingFactor = 1.0f, int entityID = -1, bool pixelPerfect = true);
+		static void DrawQuad(const Mat4& transform, const Ref<Texture2D>& texture, const Color& color = Color(1.0f), float tilingFactor = 1.0f, int entityID = -1, bool pixelPerfect = true);
+		static void DrawQuad(const Mat4& transform, const Ref<SubTexture2D>& subTexture, const Color& color = Color(1.0f), float tilingFactor = 1.0f, int entityID = -1, bool pixelPerfect = true);
 
 		static void DrawQuadOverlay(const Vec2& position, const float& angle, const Vec2& scale, const Ref<Texture2D>& texture, const Color& color = Color(1.0f), float tilingFactor = 1.0f);
 
@@ -56,6 +56,7 @@ namespace rhombus
 		static void SetLineWidth(float width);
 
 		static Mat4 GetViewProjectionMatrix();
+		static bool IsScreenPositionWithViewPort(int x, int y);
 		static Vec3 ConvertScreenToWorldSpace(int x, int y);
 		static Vec3 RaycastScreenPositionToWorldSpace(int x, int y, float planeDepth, const Mat4 projectionMatrix, const Mat4 viewMatrix);
 

@@ -1113,13 +1113,28 @@ namespace rhombus
 			for (EntityID e : view)
 			{
 				Entity entity = { e, m_ActiveScene.get() };
+				TileMapComponent& tilemap = entity.GetComponent<TileMapComponent>();
 
-				TransformComponent transform = entity.GetComponent<TransformComponent>();
+				TransformComponent& transform = entity.GetComponent<TransformComponent>();
 				Mat4 topLeftTileTransform = transform.GetWorldTransform();
 				topLeftTileTransform = math::Scale(topLeftTileTransform, Vec3(16.0f, 16.0f, 1.0f));
 				float tileMapHalfWidth = (32.0f * 16.0f) / 2.0f;
 				float tileMapHalfHeight = (32.0f * 16.0f) / 2.0f;
 				topLeftTileTransform.SetD(topLeftTileTransform.d() + Vec3(-tileMapHalfWidth + 8.0f, tileMapHalfHeight - 8.0f, 0.0f));
+
+				for (int i = 0; i < 32; i++)
+				{
+					for (int j = 0; j < 32; j++)
+					{
+						if (tilemap.m_tilemap[i][j])
+						{
+							Mat4 tileTransform = topLeftTileTransform;
+							tileTransform.SetD(topLeftTileTransform.d() + Vec3(j * 16.0f, -i * 16.0f, 0.0f));
+							Renderer2D::DrawQuad(tileTransform, tilemap.m_tilemap[i][j]);
+						}
+					}
+				}
+
 				for (int i = 0; i < 32; i++)
 				{
 					for (int j = 0; j < 32; j++)
@@ -1129,6 +1144,11 @@ namespace rhombus
 						Renderer2D::DrawRect(tileTransform, Color(1.0f, 1.0f, 1.0f, 0.9f));
 
 						Vec2 mousePos = Input::GetMousePosition();
+
+						if (!Renderer2D::IsScreenPositionWithViewPort(mousePos.x, mousePos.y))
+						{
+							continue;
+						}
 
 						Vec3 cursorCoords;
 						if (m_SceneState == SceneState::Play)
@@ -1153,7 +1173,28 @@ namespace rhombus
 						{
 							if ((cursorCoords.y < tileTransform.d().y + 8.0f) && (cursorCoords.y > tileTransform.d().y - 8.0f))
 							{
-								Renderer2D::DrawQuad(tileTransform, Color(1.0f, 0.0f, 0.0f, 0.9f));
+								if (m_tilesetPanel->GetSelectedTile())
+								{
+									Renderer2D::DrawQuad(tileTransform, m_tilesetPanel->GetSelectedTile());
+									if (Input::IsMouseButtonPressed(RB_MOUSE_BUTTON_1))
+									{
+										if (tilemap.m_tilemap[i][j] != m_tilesetPanel->GetSelectedTile())
+										{
+											tilemap.m_tilemap[i][j] = m_tilesetPanel->GetSelectedTile();
+										}
+									}
+									else if (Input::IsMouseButtonPressed(RB_MOUSE_BUTTON_3))
+									{
+										if (tilemap.m_tilemap[i][j])
+										{
+											tilemap.m_tilemap[i][j] = nullptr;
+										}
+									}
+								}
+								else
+								{
+									Renderer2D::DrawQuad(tileTransform, Color(1.0f, 0.0f, 0.0f, 0.9f));
+								}
 							}
 						}
 					}

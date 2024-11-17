@@ -4,7 +4,7 @@
 
 namespace rhombus
 {
-	// TODO: Add a Area2DComponent base class
+	class SubTexture2D;
 
 	class TileMapComponent : public ComponentBase
 	{
@@ -12,7 +12,8 @@ namespace rhombus
 		TileMapComponent() = default;
 		TileMapComponent(const TileMapComponent& other) = default;
 
+		Ref<SubTexture2D> m_tilemap[32][32] = { nullptr };
+
 	private:
-		uint32_t m_tilemap[32][32];
 	};
 }

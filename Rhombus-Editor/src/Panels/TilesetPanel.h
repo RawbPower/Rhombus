@@ -2,6 +2,7 @@
 
 #include "Rhombus/Renderer/Texture.h"
 #include "Rhombus/Renderer/SubTexture2D.h"
+#include "Rhombus/Renderer/Tileset.h"
 
 namespace rhombus
 {
@@ -13,14 +14,11 @@ namespace rhombus
 
 		void OnImGuiRender();
 
-		const Ref<SubTexture2D> GetSelectedTile() const { return m_iSelectedTileIndex >= 0 ? m_Tiles[m_iSelectedTileIndex] : nullptr; }
+		const Ref<SubTexture2D> GetSelectedTile() const { return m_iSelectedTileIndex >= 0 ? m_Tileset->GetTile(m_iSelectedTileIndex) : nullptr; }
 
 	private:
-		Ref<Texture2D> m_Tileset;
-		std::vector<Ref<SubTexture2D>> m_Tiles;
+		Ref<Tileset> m_Tileset;
 
-		uint32_t m_iRowCount;
-		uint32_t m_iColumnCount;
 		int m_iSelectedTileIndex;
 	};
 }

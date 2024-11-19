@@ -11,13 +11,9 @@ namespace rhombus
 {
 	TilesetPanel::TilesetPanel()
 	{
-		m_Tileset = Texture2D::Create("assets/sprites/VolleyTiles.png");
-		
-		m_iRowCount = 3;
-		m_iColumnCount = 4;
-		m_iSelectedTileIndex = -1;
+		m_Tileset = CreateRef<Tileset>(Texture2D::Create("assets/sprites/VolleyTiles.png"), 3, 4);
 
-		SubTexture2D::SliceTexture(m_Tileset, m_iRowCount, m_iColumnCount, 1, m_Tiles);
+		m_iSelectedTileIndex = -1;
 	}
 
 	void TilesetPanel::OnImGuiRender()
@@ -29,20 +25,20 @@ namespace rhombus
 		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0, 0));
 
 		static ImGuiTableFlags flags = ImGuiTableFlags_NoPadInnerX | ImGuiTableFlags_NoPadOuterX;
-		if (ImGui::BeginTable("Tileset", m_iColumnCount, flags))
+		if (ImGui::BeginTable("Tileset", m_Tileset->GetColumnCount(), flags))
 		{
 			ImGuiStyle& style = ImGui::GetStyle();
 			auto& colors = style.Colors;
-			for (int row = 0; row < m_iRowCount; row++)
+			for (int row = 0; row < m_Tileset->GetRowCount(); row++)
 			{
 				ImGui::PushStyleVar(ImGuiStyleVar_CellPadding, ImVec2(style.CellPadding.x, 0.0f));
 				ImGui::TableNextRow();
-				for (int column = 0; column < m_iColumnCount; column++)
+				for (int column = 0; column < m_Tileset->GetColumnCount(); column++)
 				{
 					ImGui::TableSetColumnIndex(column);
-					int tileIndex = column + row * m_iColumnCount;
+					int tileIndex = column + row * m_Tileset->GetColumnCount();
 					ImGui::PushID(tileIndex);
-					const Ref<SubTexture2D>& tileTexture = m_Tiles[tileIndex];
+					const Ref<SubTexture2D> tileTexture = m_Tileset->GetTile(tileIndex);
 
 					// Whe tile is selected, switch the button color to active
 					if (tileIndex == m_iSelectedTileIndex)

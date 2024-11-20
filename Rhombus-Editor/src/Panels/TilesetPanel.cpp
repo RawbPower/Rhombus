@@ -9,71 +9,77 @@
 
 namespace rhombus
 {
-	TilesetPanel::TilesetPanel()
+	TilesetPanel::TilesetPanel() : m_Tileset(nullptr), m_iSelectedTileIndex(-1)
 	{
-		m_Tileset = CreateRef<Tileset>(Texture2D::Create("assets/sprites/VolleyTiles.png"), 3, 4);
-
-		m_iSelectedTileIndex = -1;
 	}
 
 	void TilesetPanel::OnImGuiRender()
 	{
 		ImGui::Begin("Tileset");
-
-		float thumbnailSize = 48.0f;
-
-		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0, 0));
-
-		static ImGuiTableFlags flags = ImGuiTableFlags_NoPadInnerX | ImGuiTableFlags_NoPadOuterX;
-		if (ImGui::BeginTable("Tileset", m_Tileset->GetColumnCount(), flags))
+		if (m_Tileset)
 		{
-			ImGuiStyle& style = ImGui::GetStyle();
-			auto& colors = style.Colors;
-			for (int row = 0; row < m_Tileset->GetRowCount(); row++)
+			float thumbnailSize = 48.0f;
+
+			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0, 0));
+
+			static ImGuiTableFlags flags = ImGuiTableFlags_NoPadInnerX | ImGuiTableFlags_NoPadOuterX;
+			if (ImGui::BeginTable("Tileset", m_Tileset->GetColumnCount(), flags))
 			{
-				ImGui::PushStyleVar(ImGuiStyleVar_CellPadding, ImVec2(style.CellPadding.x, 0.0f));
-				ImGui::TableNextRow();
-				for (int column = 0; column < m_Tileset->GetColumnCount(); column++)
+				ImGuiStyle& style = ImGui::GetStyle();
+				auto& colors = style.Colors;
+				for (int row = 0; row < m_Tileset->GetRowCount(); row++)
 				{
-					ImGui::TableSetColumnIndex(column);
-					int tileIndex = column + row * m_Tileset->GetColumnCount();
-					ImGui::PushID(tileIndex);
-					const Ref<SubTexture2D> tileTexture = m_Tileset->GetTile(tileIndex);
+					ImGui::PushStyleVar(ImGuiStyleVar_CellPadding, ImVec2(style.CellPadding.x, 0.0f));
+					ImGui::TableNextRow();
+					for (int column = 0; column < m_Tileset->GetColumnCount(); column++)
+					{
+						ImGui::TableSetColumnIndex(column);
+						int tileIndex = column + row * m_Tileset->GetColumnCount();
+						ImGui::PushID(tileIndex);
+						const Ref<SubTexture2D> tileTexture = m_Tileset->GetTile(tileIndex);
 
-					// Whe tile is selected, switch the button color to active
-					if (tileIndex == m_iSelectedTileIndex)
-					{
-						ImGui::PopStyleColor();
-						ImGui::PushStyleColor(ImGuiCol_Button, style.Colors[ImGuiCol_ButtonActive]);
-					}
+						// Whe tile is selected, switch the button color to active
+						if (tileIndex == m_iSelectedTileIndex)
+						{
+							ImGui::PopStyleColor();
+							ImGui::PushStyleColor(ImGuiCol_Button, style.Colors[ImGuiCol_ButtonActive]);
+						}
 
-					if (ImGui::ImageButton((ImTextureID)tileTexture->GetTexture()->GetRendererID(), { thumbnailSize, thumbnailSize }, ImVec2(tileTexture->GetTexCoords()[3].x, tileTexture->GetTexCoords()[3].y), ImVec2(tileTexture->GetTexCoords()[1].x, tileTexture->GetTexCoords()[1].y)))
-					{
-						if (tileIndex != m_iSelectedTileIndex)
+						if (ImGui::ImageButton((ImTextureID)tileTexture->GetTexture()->GetRendererID(), { thumbnailSize, thumbnailSize }, ImVec2(tileTexture->GetTexCoords()[3].x, tileTexture->GetTexCoords()[3].y), ImVec2(tileTexture->GetTexCoords()[1].x, tileTexture->GetTexCoords()[1].y)))
 						{
-							m_iSelectedTileIndex = tileIndex;
+							if (tileIndex != m_iSelectedTileIndex)
+							{
+								m_iSelectedTileIndex = tileIndex;
+							}
+							else
+							{
+								m_iSelectedTileIndex = -1;
+							}
 						}
-						else
+
+						// Don't forget to switch the color back
+						if (tileIndex == m_iSelectedTileIndex)
 						{
-							m_iSelectedTileIndex = -1;
+							ImGui::PopStyleColor();
+							ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0, 0));
 						}
+						ImGui::PopID();
 					}
-					
-					// Don't forget to switch the color back
-					if (tileIndex == m_iSelectedTileIndex)
-					{
-						ImGui::PopStyleColor();
-						ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0, 0));
-					}
-					ImGui::PopID();
+					ImGui::PopStyleVar();
 				}
-				ImGui::PopStyleVar();
+
+				ImGui::EndTable();
 			}
-			ImGui::EndTable();
+
+			ImGui::PopStyleColor();
 		}
 
-		ImGui::PopStyleColor();
-
 		ImGui::End();
+	}
+
+	void TilesetPanel::SetTileset(const std::string& path)
+	{
+		m_Tileset = Tileset::Load(path);
+		m_iSelectedTileIndex = -1;
 	}
 }

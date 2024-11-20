@@ -13,6 +13,7 @@ namespace rhombus
 		TilesetPanel();
 
 		void OnImGuiRender();
+		void SetTileset(const std::string& path);
 
 		const Ref<SubTexture2D> GetSelectedTile() const { return m_iSelectedTileIndex >= 0 ? m_Tileset->GetTile(m_iSelectedTileIndex) : nullptr; }
 

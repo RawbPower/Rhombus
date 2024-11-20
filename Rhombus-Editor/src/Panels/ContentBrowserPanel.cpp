@@ -103,7 +103,21 @@ namespace rhombus
 				}
 				else
 				{
-
+				}
+			}
+			else if (ImGui::IsItemHovered() && ImGui::IsMouseClicked(ImGuiMouseButton_Left))
+			{
+				if (!directoryEntry.is_directory())
+				{
+					const bool bIsTilesetFile = filenameString.compare(filenameString.size() - 3, 3, ".rt") == 0;
+					if (bIsTilesetFile)
+					{
+						if (m_TileSetSelectedCallback)
+						{
+							std::string tilesetFilepath = m_currentDirectory.string() + "\\" + filenameString;
+							m_TileSetSelectedCallback(tilesetFilepath);
+						}
+					}
 				}
 			}
 

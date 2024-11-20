@@ -24,6 +24,8 @@ namespace rhombus
 		const uint32_t GetRowCount() const { return m_iRowCount; }
 		const uint32_t GetColumnCount() const { return m_iColumnCount; }
 
+		static Ref<Tileset> Load(const std::string& path);
+
 	private:
 		Ref<Texture2D> m_Tileset;
 

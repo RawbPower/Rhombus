@@ -930,6 +930,7 @@ namespace rhombus
 			OpenScene(startScenePath);
 			m_contentBrowserPanel = CreateScope<ContentBrowserPanel>();
 			m_tilesetPanel = CreateScope<TilesetPanel>();
+			m_contentBrowserPanel->SetTilesetSelectedCallback(std::bind(&TilesetPanel::SetTileset, m_tilesetPanel.get(), std::placeholders::_1));
 		}
 	}
 

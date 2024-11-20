@@ -1,0 +1,4 @@
+Tileset:
+  TileSheet: sprites\VolleyTiles.png
+  Rows: 3
+  Columns: 4

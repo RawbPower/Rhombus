@@ -46,8 +46,8 @@ namespace rhombus
 		virtual void OnRuntimeStop();
 
 		virtual void OnUpdateRuntime(DeltaTime dt);
-		virtual void OnDraw();
 		void OnUpdateEditor(DeltaTime dt, EditorCamera& camera);
+		virtual void OnDraw();
 		virtual void OnMouseMoved(int x, int y);
 		virtual void OnMouseButtonPressed(int button);
 		virtual void OnMouseButtonReleased(int button);
@@ -93,6 +93,12 @@ namespace rhombus
 		std::unordered_map<EntityID, bool>& GetEntityEnabledMap() { return m_entityEnabledMap; }
 
 		bool IsEntityDisabled(EntityID entity) const;
+
+	private:
+		void DrawScene();
+		void DrawSprite(EntityID entity, Mat4 transform);
+		void DrawCircle(EntityID entity, Mat4 transform);
+		void DrawTilemap(EntityID entity, Mat4 transform);
 
 	protected:
 		// Component Registration
@@ -158,6 +164,20 @@ namespace rhombus
 		}
 
 	protected:
+
+		enum DrawType { SPRITE, TILEMAP, CIRCLE };
+
+		struct DrawEntity
+		{
+			EntityID m_entityID;
+			DrawType m_drawType;
+
+			DrawEntity(EntityID entityID, DrawType drawType)
+				: m_entityID(entityID), m_drawType(drawType)
+			{
+			}
+		};
+
 		Registry m_Registry;
 		uint32_t m_ViewportWidth = 0, m_ViewportHeight = 0;
 

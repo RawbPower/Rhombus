@@ -14,7 +14,7 @@ Entities:
         PerspectiveFOV: 0.785385013
         PerspectiveNear: 0.00999999978
         PerspectiveFar: 1000
-        OrthographicSize: 964
+        OrthographicSize: 613
         OrthographicNear: -1
         OrthographicFar: 1
         PixelPerfect: true
@@ -25,7 +25,7 @@ Entities:
     TagComponent:
       Tag: Background
     TransformComponent:
-      Position: [0, 0, 0]
+      Position: [0, 0, -1]
       Rotation: [0, 0, 0]
       Scale: [1, 1, 1]
     SpriteRendererComponent:

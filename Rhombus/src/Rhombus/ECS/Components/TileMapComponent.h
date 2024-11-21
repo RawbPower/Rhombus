@@ -1,11 +1,10 @@
 #pragma once
 
 #include "Component.h"
+#include "Rhombus/Renderer/Tileset.h"
 
 namespace rhombus
 {
-	class SubTexture2D;
-
 	class TileMapComponent : public ComponentBase
 	{
 	public:
@@ -15,5 +14,6 @@ namespace rhombus
 		Ref<SubTexture2D> m_tilemap[32][32] = { nullptr };
 
 	private:
+		std::vector<Tileset> m_tilesets;
 	};
 }

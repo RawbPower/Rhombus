@@ -7,9 +7,6 @@
 
 #include <vector>
 
-class Texture2D;
-class SubTexture2D;
-
 namespace rhombus
 {
 	class Tileset

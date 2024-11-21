@@ -287,46 +287,7 @@ namespace rhombus
 		{
 			Renderer2D::BeginScene(*mainCamera, cameraTransform);
 
-			// TODO: Account for all types of rendering when ordering the draw calls
-
-			// Draw sprites
-			{
-				// To make blending work for multiple objects we have to draw the
-				// most distant object first and the closest object last
-				std::vector<EntityID> view = m_Registry.GetEntityList<SpriteRendererComponent>();
-				std::sort(view.begin(), view.end(), [&](const EntityID lhs, const EntityID rhs) {
-					return m_Registry.GetComponent<TransformComponent>(lhs).GetWorldTransform().d().z < m_Registry.GetComponent<TransformComponent>(rhs).GetWorldTransform().d().z;
-				});
-
-				for (auto entity : view)
-				{
-					auto spriteRendererComponent = m_Registry.GetComponent<SpriteRendererComponent>(entity);
-					auto transformComponent = m_Registry.GetComponent<TransformComponent>(entity);
-
-					Renderer2D::DrawSprite(transformComponent.GetWorldTransform(), spriteRendererComponent, (int)entity);
-				}
-			}
-
-			// Draw circles
-			{
-				// To make blending work for multiple objects we have to draw the
-				// most distant object first and the closest object last
-				std::vector<EntityID> view = m_Registry.GetEntityList<CircleRendererComponent>();
-				std::sort(view.begin(), view.end(), [&](const EntityID lhs, const EntityID rhs) {
-					return m_Registry.GetComponent<TransformComponent>(lhs).GetWorldTransform().d().z < m_Registry.GetComponent<TransformComponent>(rhs).GetWorldTransform().d().z;
-				});
-
-				for (auto entity : view)
-				{
-					auto circleRendererComponent = m_Registry.GetComponent<CircleRendererComponent>(entity);
-					auto transformComponent = m_Registry.GetComponent<TransformComponent>(entity);
-
-					Renderer2D::DrawCircle(transformComponent.GetWorldTransform(), circleRendererComponent.m_color,
-						circleRendererComponent.m_thickness, circleRendererComponent.m_fade, (int)entity);
-				}
-			}
-
-			OnDraw();
+			DrawScene();
 
 			Renderer2D::EndScene();
 
@@ -343,65 +304,115 @@ namespace rhombus
 		}
 	}
 
-	void Scene::OnDraw()
-	{
-	
-	}
-
 	void Scene::OnUpdateEditor(DeltaTime dt, EditorCamera& camera)
 	{
 		Renderer2D::BeginScene(camera);
 
-		// TODO: Account for all types of rendering when ordering the draw calls
-
-		// Draw Sprites
-		{
-			// To make blending work for multiple objects we have to draw the
-			// most distant object first and the closest object last
-			std::vector<EntityID> view = m_Registry.GetEntityList<SpriteRendererComponent>();
-			std::sort(view.begin(), view.end(), [&](const EntityID lhs, const EntityID rhs) {
-				return m_Registry.GetComponent<TransformComponent>(lhs).GetWorldTransform().d().z < m_Registry.GetComponent<TransformComponent>(rhs).GetWorldTransform().d().z;
-			});
-
-			for (EntityID entity : view)
-			{
-				if (IsEntityDisabled(entity))
-				{
-					continue;
-				}
-
-				auto spriteRendererComponent = m_Registry.GetComponent<SpriteRendererComponent>(entity);
-				auto transformComponent = m_Registry.GetComponent<TransformComponent>(entity);
-
-				Renderer2D::DrawSprite(transformComponent.GetWorldTransform(), spriteRendererComponent, (int)entity);
-			}
-		}
-
-		// Draw circles
-		{
-			// To make blending work for multiple objects we have to draw the
-			// most distant object first and the closest object last
-			std::vector<EntityID> view = m_Registry.GetEntityList<CircleRendererComponent>();
-			std::sort(view.begin(), view.end(), [&](const EntityID lhs, const EntityID rhs) {
-				return m_Registry.GetComponent<TransformComponent>(lhs).GetWorldTransform().d().z < m_Registry.GetComponent<TransformComponent>(rhs).GetWorldTransform().d().z;
-			});
-
-			for (auto entity : view)
-			{
-				if (IsEntityDisabled(entity))
-				{
-					continue;
-				}
-
-				auto circleRendererComponent = m_Registry.GetComponent<CircleRendererComponent>(entity);
-				auto transformComponent = m_Registry.GetComponent<TransformComponent>(entity);
-
-				Renderer2D::DrawCircle(transformComponent.GetWorldTransform(), circleRendererComponent.m_color,
-					circleRendererComponent.m_thickness, circleRendererComponent.m_fade, (int)entity);
-			}
-		}
-
+		DrawScene();
+		
 		Renderer2D::EndScene();
+	}
+
+	void Scene::DrawScene()
+	{
+		// To make blending work for multiple objects we have to draw the
+		// most distant object first and the closest object last
+		std::vector<DrawEntity> drawOrder;
+
+		for (EntityID tileMapEntity : m_Registry.GetEntityList<TileMapComponent>())
+		{
+			drawOrder.push_back(DrawEntity(tileMapEntity, DrawType::TILEMAP));
+		}
+
+		for (EntityID spriteEntity : m_Registry.GetEntityList<SpriteRendererComponent>())
+		{
+			drawOrder.push_back(DrawEntity(spriteEntity, DrawType::SPRITE));
+		}
+
+		for (EntityID circleEntity : m_Registry.GetEntityList<CircleRendererComponent>())
+		{
+			drawOrder.push_back(DrawEntity(circleEntity, DrawType::CIRCLE));
+		}
+
+		std::sort(drawOrder.begin(), drawOrder.end(), [&](const DrawEntity lhs, const DrawEntity rhs) {
+			return m_Registry.GetComponent<TransformComponent>(lhs.m_entityID).GetWorldTransform().d().z < m_Registry.GetComponent<TransformComponent>(rhs.m_entityID).GetWorldTransform().d().z;
+		});
+
+		for (DrawEntity drawEntity : drawOrder)
+		{
+			EntityID entity = drawEntity.m_entityID;
+			auto transformComponent = m_Registry.GetComponent<TransformComponent>(entity);
+
+			if (IsEntityDisabled(entity))
+			{
+				continue;
+			}
+
+			switch (drawEntity.m_drawType)
+			{
+			case DrawType::SPRITE:
+			{
+				DrawSprite(entity, transformComponent.GetWorldTransform());
+				break;
+			}
+			case DrawType::CIRCLE:
+			{
+				DrawCircle(entity, transformComponent.GetWorldTransform());
+				break;
+			}
+			case DrawType::TILEMAP:
+			{
+				DrawTilemap(entity, transformComponent.GetWorldTransform());
+				break;
+			}
+			default:
+			{
+				break;
+			}
+			}
+		}
+
+		OnDraw();
+	}
+
+	void Scene::DrawSprite(EntityID entity, Mat4 transform)
+	{
+		auto spriteRendererComponent = m_Registry.GetComponent<SpriteRendererComponent>(entity);
+		Renderer2D::DrawSprite(transform, spriteRendererComponent, (int)entity);
+	}
+
+	void Scene::DrawCircle(EntityID entity, Mat4 transform)
+	{
+		auto circleRendererComponent = m_Registry.GetComponent<CircleRendererComponent>(entity);
+		Renderer2D::DrawCircle(transform, circleRendererComponent.m_color, circleRendererComponent.m_thickness, circleRendererComponent.m_fade, (int)entity);
+	}
+
+	void Scene::DrawTilemap(EntityID entity, Mat4 transform)
+	{
+		TileMapComponent& tilemap = m_Registry.GetComponent<TileMapComponent>(entity);
+		Mat4 topLeftTileTransform = transform;
+		topLeftTileTransform = math::Scale(topLeftTileTransform, Vec3(16.0f, 16.0f, 1.0f));
+		float tileMapHalfWidth = (32.0f * 16.0f) / 2.0f;
+		float tileMapHalfHeight = (32.0f * 16.0f) / 2.0f;
+		topLeftTileTransform.SetD(topLeftTileTransform.d() + Vec3(-tileMapHalfWidth + 8.0f, tileMapHalfHeight - 8.0f, 0.0f));
+
+		for (int i = 0; i < 32; i++)
+		{
+			for (int j = 0; j < 32; j++)
+			{
+				if (tilemap.m_tilemap[i][j])
+				{
+					Mat4 tileTransform = topLeftTileTransform;
+					tileTransform.SetD(topLeftTileTransform.d() + Vec3(j * 16.0f, -i * 16.0f, 0.0f));
+					Renderer2D::DrawQuad(tileTransform, tilemap.m_tilemap[i][j]);
+				}
+			}
+		}
+	}
+
+	void Scene::OnDraw()
+	{
+
 	}
 
 	void Scene::OnMouseMoved(int x, int y)

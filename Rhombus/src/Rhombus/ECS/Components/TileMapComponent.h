@@ -13,7 +13,11 @@ namespace rhombus
 
 		Ref<SubTexture2D> m_tilemap[32][32] = { nullptr };
 
+		bool ContainsTileset(std::string id) const;
+		const Tileset& GetTileset(std::string id) const;
+		Tileset* CreateTileset(Ref<Tileset>& tileset);
+
 	private:
-		std::vector<Tileset> m_tilesets;
+		std::unordered_map<std::string, Tileset> m_tilesets;
 	};
 }

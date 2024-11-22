@@ -8,8 +8,8 @@
 
 namespace rhombus 
 {
-	Tileset::Tileset(Ref<Texture2D> tileset, uint32_t rows, uint32_t cols)
-		: m_Tileset(tileset), m_iRowCount(rows), m_iColumnCount(cols)
+	Tileset::Tileset(std::string name, Ref<Texture2D> tileset, uint32_t rows, uint32_t cols)
+		: m_name(name), m_Tileset(tileset), m_iRowCount(rows), m_iColumnCount(cols)
 	{
 		SubTexture2D::SliceTexture(m_Tileset, m_iRowCount, m_iColumnCount, 1, m_Tiles);
 	}
@@ -41,9 +41,10 @@ namespace rhombus
 			tileSheet = Texture2D::Create(texturePath.string());
 		}
 
+		std::string name = tilesetNode["Name"].as<std::string>();
 		rows = tilesetNode["Rows"].as<uint32_t>();
 		columns = tilesetNode["Columns"].as<uint32_t>();
 
-		return CreateRef<Tileset>(tileSheet, rows, columns);
+		return CreateRef<Tileset>(name, tileSheet, rows, columns);
 	}
 }

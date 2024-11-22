@@ -1168,7 +1168,17 @@ namespace rhombus
 									{
 										if (tilemap.m_tilemap[i][j] != m_tilesetPanel->GetSelectedTile())
 										{
-											tilemap.m_tilemap[i][j] = m_tilesetPanel->GetSelectedTile();
+											const Tileset* selectedTileset = nullptr;
+											if (tilemap.ContainsTileset(m_tilesetPanel->GetTilesetID()))
+											{
+												selectedTileset = &tilemap.GetTileset(m_tilesetPanel->GetTilesetID());
+											}
+											else
+											{
+												selectedTileset = tilemap.CreateTileset(m_tilesetPanel->GetTileset());
+											}
+
+											tilemap.m_tilemap[i][j] = selectedTileset->GetTile(m_tilesetPanel->GetSelectedTileIndex());
 										}
 									}
 									else if (Input::IsMouseButtonPressed(RB_MOUSE_BUTTON_3))

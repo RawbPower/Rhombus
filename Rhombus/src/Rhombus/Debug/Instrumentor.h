@@ -2,7 +2,7 @@
 
 #include <algorithm>
 #include <chrono>
-#include <fstream>
+#include <fstream>w
 #include <iomanip>
 #include <string>
 #include <thread>
@@ -180,7 +180,7 @@ namespace rhombus
 	};
 }
 
-#define RB_PROFILE 0
+#define RB_PROFILE 1
 #if RB_PROFILE
 // Resolve which function signature macro will be used. Note that this only
 // is resolved when the (pre)compiler starts, so the syntax highlighting

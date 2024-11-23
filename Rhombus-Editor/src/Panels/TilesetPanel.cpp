@@ -4,6 +4,7 @@
 
 #include "Rhombus/Core/Application.h"
 #include "Rhombus/Project/Project.h"
+#include "Rhombus/Tiles/TileSerializer.h"
 
 #include <imgui/imgui.h>
 
@@ -77,9 +78,9 @@ namespace rhombus
 		ImGui::End();
 	}
 
-	void TilesetPanel::SetTileset(const std::string& path)
+	void TilesetPanel::LoadTileset(const std::string& path)
 	{
-		m_Tileset = Tileset::Load(path);
+		m_Tileset = TileSerializer::DeserializeTileset(path);
 		m_iSelectedTileIndex = -1;
 	}
 }

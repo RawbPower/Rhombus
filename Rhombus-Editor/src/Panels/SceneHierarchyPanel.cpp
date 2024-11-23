@@ -652,6 +652,13 @@ namespace rhombus
 
 		DrawComponent<TileMapComponent>("Tile Map", entity, [](auto& component)
 		{
+			if (!component.m_tilemap)
+			{
+				if (ImGui::Button("Create TileMap"))
+				{
+					component.m_tilemap = TileMap::Create();
+				}
+			}
 		});
 
 		m_editorExtension->DisplayComponentProperties(entity);

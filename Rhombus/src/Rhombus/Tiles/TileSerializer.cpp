@@ -1,29 +1,32 @@
 #include "rbpch.h"
-#include "Tileset.h"
+#include "TileSerializer.h"
 
 #include "Rhombus/Project/Project.h"
+#include "Rhombus/Renderer/Texture.h"
+#include "Rhombus/Renderer/SubTexture2D.h"
+
+#include <fstream>
 
 #define YAML_CPP_STATIC_DEFINE		// Needed for yaml static library to work for some reason
 #include <yaml-cpp/yaml.h>
 
-namespace rhombus 
+namespace rhombus
 {
-	Tileset::Tileset(std::string name, Ref<Texture2D> tileset, uint32_t rows, uint32_t cols)
-		: m_name(name), m_Tileset(tileset), m_iRowCount(rows), m_iColumnCount(cols)
+	bool TileSerializer::SerializeTileset(const std::filesystem::path& filepath)
 	{
-		SubTexture2D::SliceTexture(m_Tileset, m_iRowCount, m_iColumnCount, 1, m_Tiles);
+		return false;
 	}
 
-	Ref<Tileset> Tileset::Load(const std::string& path)
+	Ref<Tileset> TileSerializer::DeserializeTileset(const std::string& filepath)
 	{
 		YAML::Node data;
 		try
 		{
-			data = YAML::LoadFile(path);
+			data = YAML::LoadFile(filepath);
 		}
 		catch (YAML::ParserException e)
 		{
-			RB_CORE_ERROR("Failed to load tileset file '{0}'\n     {1}", path, e.what());
+			RB_CORE_ERROR("Failed to load tileset file '{0}'\n     {1}", filepath, e.what());
 			return nullptr;
 		}
 
@@ -46,5 +49,15 @@ namespace rhombus
 		columns = tilesetNode["Columns"].as<uint32_t>();
 
 		return CreateRef<Tileset>(name, tileSheet, rows, columns);
+	}
+
+	bool TileSerializer::SerializeTileMap(const std::filesystem::path& filepath)
+	{
+		return false;
+	}
+
+	bool TileSerializer::DeserializeTileMap(const std::filesystem::path& filepath)
+	{
+		return false;
 	}
 }

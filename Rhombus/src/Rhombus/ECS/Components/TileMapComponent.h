@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Component.h"
-#include "Rhombus/Renderer/Tileset.h"
+#include "Rhombus/Tiles/TileMap.h"
 
 namespace rhombus
 {
@@ -11,13 +11,12 @@ namespace rhombus
 		TileMapComponent() = default;
 		TileMapComponent(const TileMapComponent& other) = default;
 
-		Ref<SubTexture2D> m_tilemap[32][32] = { nullptr };
+		Ref<TileMap> GetTileMap() { return m_tilemap; }
+		void CreateTileMap() { m_tilemap = CreateRef<TileMap>(); };
 
-		bool ContainsTileset(std::string id) const;
-		const Tileset& GetTileset(std::string id) const;
-		Tileset* CreateTileset(Ref<Tileset>& tileset);
+		Ref<TileMap> m_tilemap;
 
 	private:
-		std::unordered_map<std::string, Tileset> m_tilesets;
+		//Ref<TileMap> m_tilemap;
 	};
 }

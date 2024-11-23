@@ -2,8 +2,8 @@
 
 #include "Rhombus/Core/Core.h"
 
-#include "Texture.h"
-#include "SubTexture2D.h"
+#include "Rhombus/Renderer/Texture.h"
+#include "Rhombus/Renderer/SubTexture2D.h"
 
 #include <vector>
 
@@ -18,12 +18,10 @@ namespace rhombus
 		virtual ~Tileset() = default;
 
 		const Ref<Texture2D> GetTileset() const { return m_Tileset; }
-		const Ref<SubTexture2D> GetTile(uint32_t index) const { return m_Tiles[index]; }
+		Ref<SubTexture2D> GetTile(uint32_t index) const { return m_Tiles[index]; }
 		const std::string GetID() const { return m_name; }
 		const uint32_t GetRowCount() const { return m_iRowCount; }
 		const uint32_t GetColumnCount() const { return m_iColumnCount; }
-
-		static Ref<Tileset> Load(const std::string& path);
 
 	private:
 		Ref<Texture2D> m_Tileset;

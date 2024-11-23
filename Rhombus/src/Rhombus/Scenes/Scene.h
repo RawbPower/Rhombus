@@ -114,6 +114,7 @@ namespace rhombus
 		template<typename... Component>
 		inline void RegisterComponents(ComponentGroup<Component...>)
 		{
+			RB_PROFILE_FUNCTION();
 			RegisterComponents<Component...>();
 		}
 

@@ -2,7 +2,7 @@
 
 #include "Rhombus/Renderer/Texture.h"
 #include "Rhombus/Renderer/SubTexture2D.h"
-#include "Rhombus/Renderer/Tileset.h"
+#include "Rhombus/Tiles/Tileset.h"
 
 namespace rhombus
 {
@@ -13,7 +13,7 @@ namespace rhombus
 		TilesetPanel();
 
 		void OnImGuiRender();
-		void SetTileset(const std::string& path);
+		void LoadTileset(const std::string& path);
 
 		const Ref<SubTexture2D> GetSelectedTile() const { return m_iSelectedTileIndex >= 0 ? m_Tileset->GetTile(m_iSelectedTileIndex) : nullptr; }
 		int GetSelectedTileIndex() const { return m_iSelectedTileIndex; }

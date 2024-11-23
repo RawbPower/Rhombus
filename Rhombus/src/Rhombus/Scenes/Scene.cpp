@@ -9,6 +9,7 @@
 #include "Rhombus/Renderer/Renderer2D.h"
 #include "Rhombus/Scripting/ScriptEngine.h"
 #include "Rhombus/Core/Application.h"
+#include "Rhombus/Tiles/TileMap.h"
 
 // To Remove
 #include "Rhombus/ECS/Components/Area2DComponent.h"
@@ -65,6 +66,8 @@ namespace rhombus
 
 	void Scene::InitScene()
 	{
+		RB_PROFILE_FUNCTION();
+
 		m_Registry.Init();
 		
 		// ID and tag components are unique so shouldn't be grouped with 
@@ -87,6 +90,8 @@ namespace rhombus
 
 	void Scene::Copy(Ref<Scene> destScene, Ref<Scene> srcScene)
 	{
+		RB_PROFILE_FUNCTION();
+
 		destScene->m_ViewportHeight = srcScene->m_ViewportHeight;
 		destScene->m_ViewportWidth = srcScene->m_ViewportWidth;
 
@@ -186,6 +191,8 @@ namespace rhombus
 
 	void Scene::OnRuntimeStart()
 	{
+		RB_PROFILE_FUNCTION();
+
 		InitPhyics2D();
 
 		// Scripting
@@ -389,22 +396,26 @@ namespace rhombus
 
 	void Scene::DrawTilemap(EntityID entity, Mat4 transform)
 	{
-		TileMapComponent& tilemap = m_Registry.GetComponent<TileMapComponent>(entity);
-		Mat4 topLeftTileTransform = transform;
-		topLeftTileTransform = math::Scale(topLeftTileTransform, Vec3(16.0f, 16.0f, 1.0f));
-		float tileMapHalfWidth = (32.0f * 16.0f) / 2.0f;
-		float tileMapHalfHeight = (32.0f * 16.0f) / 2.0f;
-		topLeftTileTransform.SetD(topLeftTileTransform.d() + Vec3(-tileMapHalfWidth + 8.0f, tileMapHalfHeight - 8.0f, 0.0f));
-
-		for (int i = 0; i < 32; i++)
+		TileMapComponent& tileMapComponent = m_Registry.GetComponent<TileMapComponent>(entity);
+		Ref<TileMap> tilemap = tileMapComponent.GetTileMap();
+		if (tilemap)
 		{
-			for (int j = 0; j < 32; j++)
+			Mat4 topLeftTileTransform = transform;
+			topLeftTileTransform = math::Scale(topLeftTileTransform, Vec3(16.0f, 16.0f, 1.0f));
+			float tileMapHalfWidth = (32.0f * 16.0f) / 2.0f;
+			float tileMapHalfHeight = (32.0f * 16.0f) / 2.0f;
+			topLeftTileTransform.SetD(topLeftTileTransform.d() + Vec3(-tileMapHalfWidth + 8.0f, tileMapHalfHeight - 8.0f, 0.0f));
+
+			for (int i = 0; i < 32; i++)
 			{
-				if (tilemap.m_tilemap[i][j])
+				for (int j = 0; j < 32; j++)
 				{
-					Mat4 tileTransform = topLeftTileTransform;
-					tileTransform.SetD(topLeftTileTransform.d() + Vec3(j * 16.0f, -i * 16.0f, 0.0f));
-					Renderer2D::DrawQuad(tileTransform, tilemap.m_tilemap[i][j]);
+					if (tilemap->GetTile(i, j))
+					{
+						Mat4 tileTransform = topLeftTileTransform;
+						tileTransform.SetD(topLeftTileTransform.d() + Vec3(j * 16.0f, -i * 16.0f, 0.0f));
+						Renderer2D::DrawQuad(tileTransform, tilemap->GetTile(i, j));
+					}
 				}
 			}
 		}

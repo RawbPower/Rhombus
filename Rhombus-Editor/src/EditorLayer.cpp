@@ -18,7 +18,7 @@ namespace rhombus
 
 	}
 
-	void EditorLayer::OnAttach()
+	void EditorLayer::OnAttach() 
 	{
 		RB_PROFILE_FUNCTION();
 
@@ -631,6 +631,8 @@ namespace rhombus
 
 	void EditorLayer::UI_Toolbar()
 	{
+		RB_PROFILE_FUNCTION();
+
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 2));
 		ImGui::PushStyleVar(ImGuiStyleVar_ItemInnerSpacing, ImVec2(0, 0));
 		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0, 0));
@@ -930,7 +932,7 @@ namespace rhombus
 			OpenScene(startScenePath);
 			m_contentBrowserPanel = CreateScope<ContentBrowserPanel>();
 			m_tilesetPanel = CreateScope<TilesetPanel>();
-			m_contentBrowserPanel->SetTilesetSelectedCallback(std::bind(&TilesetPanel::SetTileset, m_tilesetPanel.get(), std::placeholders::_1));
+			m_contentBrowserPanel->SetTilesetSelectedCallback(std::bind(&TilesetPanel::LoadTileset, m_tilesetPanel.get(), std::placeholders::_1));
 		}
 	}
 
@@ -948,6 +950,8 @@ namespace rhombus
 
 	void EditorLayer::OnScenePlay()
 	{
+		RB_PROFILE_FUNCTION();
+
 		m_SceneState = SceneState::Play;
 		m_ViewportSize = { (float)Project::GetGameWidth(), (float)Project::GetGameHeight() };
 		m_ActiveScene = m_sceneCreationCallback();
@@ -1114,7 +1118,13 @@ namespace rhombus
 			for (EntityID e : view)
 			{
 				Entity entity = { e, m_ActiveScene.get() };
-				TileMapComponent& tilemap = entity.GetComponent<TileMapComponent>();
+				TileMapComponent& tileMapComponent = entity.GetComponent<TileMapComponent>();
+				Ref<TileMap> tilemap = tileMapComponent.GetTileMap();
+
+				if (!tilemap)
+				{
+					continue;
+				}
 
 				TransformComponent& transform = entity.GetComponent<TransformComponent>();
 				Mat4 topLeftTileTransform = transform.GetWorldTransform();
@@ -1166,26 +1176,26 @@ namespace rhombus
 									Renderer2D::DrawQuad(tileTransform, m_tilesetPanel->GetSelectedTile());
 									if (Input::IsMouseButtonPressed(RB_MOUSE_BUTTON_1))
 									{
-										if (tilemap.m_tilemap[i][j] != m_tilesetPanel->GetSelectedTile())
+										if (tilemap->GetTile(i, j) != m_tilesetPanel->GetSelectedTile())
 										{
 											const Tileset* selectedTileset = nullptr;
-											if (tilemap.ContainsTileset(m_tilesetPanel->GetTilesetID()))
+											if (tilemap->ContainsTileset(m_tilesetPanel->GetTilesetID()))
 											{
-												selectedTileset = &tilemap.GetTileset(m_tilesetPanel->GetTilesetID());
+												selectedTileset = &tilemap->GetTileset(m_tilesetPanel->GetTilesetID());
 											}
 											else
 											{
-												selectedTileset = tilemap.CreateTileset(m_tilesetPanel->GetTileset());
+												selectedTileset = tilemap->CreateTileset(m_tilesetPanel->GetTileset());
 											}
 
-											tilemap.m_tilemap[i][j] = selectedTileset->GetTile(m_tilesetPanel->GetSelectedTileIndex());
+											tilemap->SetTile(selectedTileset->GetTile(m_tilesetPanel->GetSelectedTileIndex()), i, j);
 										}
 									}
 									else if (Input::IsMouseButtonPressed(RB_MOUSE_BUTTON_3))
 									{
-										if (tilemap.m_tilemap[i][j])
+										if (tilemap->GetTile(i, j))
 										{
-											tilemap.m_tilemap[i][j] = nullptr;
+											tilemap->ClearTile(i, j);
 										}
 									}
 								}

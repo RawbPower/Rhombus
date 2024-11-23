@@ -419,6 +419,7 @@ namespace rhombus
 				if (tileMapComponent)
 				{
 					auto& tilemap = deserializedEntity.AddComponent<TileMapComponent>();
+					tilemap.m_tilemap = TileMap::Create();
 				}
 
 				m_scene->DeserializeEntity(&entity, deserializedEntity);

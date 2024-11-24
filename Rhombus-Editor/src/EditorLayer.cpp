@@ -1195,17 +1195,18 @@ namespace rhombus
 											tilemap->SetTile(selectedTileset->GetID(), m_tilesetPanel->GetSelectedTileIndex(), i, j);
 										}
 									}
-									else if (Input::IsMouseButtonPressed(RB_MOUSE_BUTTON_3))
-									{
-										if (tilemap->GetTile(i, j))
-										{
-											tilemap->ClearTile(i, j);
-										}
-									}
 								}
 								else
 								{
 									Renderer2D::DrawQuad(tileTransform, Color(1.0f, 0.0f, 0.0f, 0.9f));
+								}
+
+								if (Input::IsMouseButtonPressed(RB_MOUSE_BUTTON_3))
+								{
+									if (tilemap->GetTile(i, j))
+									{
+										tilemap->ClearTile(i, j);
+									}
 								}
 							}
 						}

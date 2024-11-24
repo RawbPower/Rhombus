@@ -508,11 +508,13 @@ namespace rhombus
 		constexpr size_t quadVertexCount = 4;
 		const Vec2* textureCoords = subTexture->GetTexCoords();
 		const Ref<Texture2D> texture = subTexture->GetTexture();
+		const float width = (float)subTexture->GetWidth();
+		const float height = (float)subTexture->GetHeight();
 
 		Mat4 renderTransform = pixelPerfect ? CorrectTransformForPixelPerfect(transform, texture) : transform;
 
 		// TODO: Add PPU
-		Mat4 scaledTransform = math::Scale(renderTransform, Vec3((float)texture->GetWidth(), (float)texture->GetHeight(), 1.0f));
+		Mat4 scaledTransform = math::Scale(renderTransform, Vec3(width, height, 1.0f));
 
 		if (s_Data.QuadIndexCount >= Renderer2DData::MaxIndices)
 		{
@@ -544,7 +546,7 @@ namespace rhombus
 
 		for (size_t i = 0; i < quadVertexCount; i++)
 		{
-			s_Data.QuadVertexBufferPtr->Position = transform * s_Data.QuadVertexPosition[i];
+			s_Data.QuadVertexBufferPtr->Position = scaledTransform * s_Data.QuadVertexPosition[i];
 			s_Data.QuadVertexBufferPtr->Color = color;
 			s_Data.QuadVertexBufferPtr->TexCoord = textureCoords[i];
 			s_Data.QuadVertexBufferPtr->TextureIndex = textureIndex;
@@ -690,10 +692,18 @@ namespace rhombus
 
 	void Renderer2D::DrawSprite(const Mat4& transform, const SpriteRendererComponent& src, int entityID)
 	{
-		if (src.m_texture)
+		if (src.UseSubTexture())
+		{
+			DrawQuad(transform, src.m_subtexture, src.GetColor(), 1.0f, entityID);
+		}
+		else if (src.m_texture)
+		{
 			DrawQuad(transform, src.m_texture, src.GetColor(), 1.0f, entityID);
+		}
 		else
+		{
 			DrawQuad(transform, src.GetColor(), entityID);
+		}
 	}
 
 	void Renderer2D::DrawFrambuffer(Ref<Framebuffer> frameBuffer)

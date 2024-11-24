@@ -21,7 +21,7 @@ Entities:
       Primary: true
       FixedAspectRatio: false
   - Entity: 2704317611656077983
-    Enabled: true
+    Enabled: false
     TagComponent:
       Tag: Background
     TransformComponent:
@@ -30,6 +30,10 @@ Entities:
       Scale: [1, 1, 1]
     SpriteRendererComponent:
       Color: [1, 1, 1, 1]
+      Rows: 1
+      Columns: 1
+      Padding: 0
+      Frame: 0
       Texture: sprites\320x180.png
   - Entity: 4881368709875859125
     Enabled: true
@@ -41,3 +45,33 @@ Entities:
       Scale: [1, 1, 1]
     TileMapComponent:
       TileMap: assets\tilemaps\Tilemap.rtm
+  - Entity: 1518676097947835220
+    Enabled: true
+    TagComponent:
+      Tag: Player
+    TransformComponent:
+      Position: [-37.5, -62, 0]
+      Rotation: [0, -0, 0]
+      Scale: [1, 1, 1]
+    SpriteRendererComponent:
+      Color: [1, 1, 1, 1]
+      Rows: 3
+      Columns: 7
+      Padding: 1
+      Frame: 0
+      Texture: sprites\Player.png
+  - Entity: 4524564654659932807
+    Enabled: true
+    TagComponent:
+      Tag: Ball
+    TransformComponent:
+      Position: [-6.5, -54, 0]
+      Rotation: [0, -0, 0]
+      Scale: [1, 1, 1]
+    SpriteRendererComponent:
+      Color: [1, 1, 1, 1]
+      Rows: 1
+      Columns: 1
+      Padding: 0
+      Frame: 0
+      Texture: sprites\Ball.png

@@ -129,6 +129,10 @@ namespace rhombus
 
 			auto& spriteRendererComponent = entity.GetComponent<SpriteRendererComponent>();
 			out << YAML::Key << "Color" << YAML::Value << spriteRendererComponent.GetColor();
+			out << YAML::Key << "Rows" << YAML::Value << spriteRendererComponent.GetRows();
+			out << YAML::Key << "Columns" << YAML::Value << spriteRendererComponent.GetColumns();
+			out << YAML::Key << "Padding" << YAML::Value << spriteRendererComponent.GetPadding();
+			out << YAML::Key << "Frame" << YAML::Value << spriteRendererComponent.GetFrame();
 			if (spriteRendererComponent.m_texture)
 			{
 				out << YAML::Key << "Texture" << YAML::Value << Project::GetAssetFileLocalPath(spriteRendererComponent.m_texture->GetPath());
@@ -367,6 +371,11 @@ namespace rhombus
 						std::string texturePath = spriteRendererComponent["Texture"].as<std::string>();
 						auto path = Project::GetAssetFileSystemPath(texturePath);
 						src.m_texture = Texture2D::Create(path.string());
+
+						src.SetRows(spriteRendererComponent["Rows"].as<int>());
+						src.SetColumns(spriteRendererComponent["Columns"].as<int>());
+						src.SetPadding(spriteRendererComponent["Padding"].as<int>());
+						src.SetFrame(spriteRendererComponent["Frame"].as<int>());
 					}
 				}
 

@@ -527,9 +527,37 @@ namespace rhombus
 
 		DrawComponent<SpriteRendererComponent>("Sprite Renderer", entity, [](auto& component)
 		{
-			ImGui::ColorEdit4("Colour", component.GetColor().ToPtr());
+			ImGui::SeparatorText("Texture");
 
-			ImGui::Button("Texture", ImVec2(100.0f, 0.0f));
+			if (component.m_texture)
+			{
+				ImGui::Spacing();
+				// Caclulate image size
+				const float thumbnailSize = 128.0f;
+				const float fAspectRatio = (float)component.m_texture->GetWidth() / (float)component.m_texture->GetHeight();
+				const bool bWideImage = fAspectRatio >= 1.0f;
+				const ImVec2 iconSize = bWideImage ? ImVec2(thumbnailSize, thumbnailSize * (1.0f / fAspectRatio)) : ImVec2(thumbnailSize * fAspectRatio, thumbnailSize);
+
+				// Caclulate image padding needed to make square button
+				const float fDimensionDifference = math::Abs(component.m_texture->GetWidth() - component.m_texture->GetHeight());
+				const float fMaxDimension = bWideImage ? component.m_texture->GetWidth() : component.m_texture->GetHeight();
+				const float fSmallDimensionPadding = (fDimensionDifference / fMaxDimension) * thumbnailSize * 0.5f;
+				const ImVec2 iconPadding = bWideImage ? ImVec2(0.0f, fSmallDimensionPadding) : ImVec2(fSmallDimensionPadding, 0.0f);
+
+				ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, iconPadding);
+				ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0, 0));
+				ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0, 0, 0, 0));
+				ImGui::ImageButton((ImTextureID)component.m_texture->GetRendererID(), iconSize, { 0,1 }, { 1,0 });
+				ImGui::PopStyleColor();
+				ImGui::PopStyleColor();
+				ImGui::PopStyleVar();
+				ImGui::Spacing();
+			}
+			else
+			{
+				ImGui::Button("Drag Texture", ImVec2(100.0f, 0.0f));
+			}
+
 			if (ImGui::BeginDragDropTarget())
 			{
 				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
@@ -543,6 +571,35 @@ namespace rhombus
 						RB_WARN("Could not load texture {0}", texturePath.filename().string());
 				}
 				ImGui::EndDragDropTarget();
+			}
+
+			ImGui::ColorEdit4("Colour", component.GetColor().ToPtr());
+
+			if (component.m_texture)
+			{
+				int columns = component.GetColumns();
+				if (ImGui::InputInt("Columns", &columns) && columns >= 1)
+				{
+					component.SetColumns(columns);
+				}
+
+				int rows = component.GetRows();
+				if (ImGui::InputInt("Rows", &rows) && rows >= 1)
+				{
+					component.SetRows(rows);
+				}
+
+				int padding = component.GetPadding();
+				if (ImGui::InputInt("Padding", &padding) && padding >= 0)
+				{
+					component.SetPadding(padding);
+				}
+
+				int frame = component.GetFrame();
+				if (ImGui::InputInt("Frame", &frame) && frame >= 0)
+				{
+					component.SetFrame(frame);
+				}
 			}
 		});
 

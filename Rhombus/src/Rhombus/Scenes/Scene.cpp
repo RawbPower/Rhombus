@@ -404,7 +404,6 @@ namespace rhombus
 			Vec2 tileHalfSize = tilemap->GetTileSize() * 0.5f;
 			Vec2 gridSize = Vec2(tilemap->GetGridWidth(), tilemap->GetGridHeight());
 			Mat4 topLeftTileTransform = transform;
-			topLeftTileTransform = math::Scale(topLeftTileTransform, Vec3(tileSize.x, tileSize.y, 1.0f));
 			float tileMapHalfWidth = (gridSize.x * tileSize.x) / 2.0f;
 			float tileMapHalfHeight = (gridSize.y * tileSize.y) / 2.0f;
 			topLeftTileTransform.SetD(topLeftTileTransform.d() + Vec3(-tileMapHalfWidth + tileHalfSize.x, tileMapHalfHeight - tileHalfSize.y, 0.0f));

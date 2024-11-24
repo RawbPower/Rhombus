@@ -5,6 +5,7 @@
 #include "SceneGraphNode.h"
 
 #include "Rhombus/Project/Project.h"
+#include "Rhombus/Tiles/TileSerializer.h"
 
 #include "Rhombus/ECS/Components/Area2DComponent.h"
 #include "Rhombus/ECS/Components/CameraComponent.h"
@@ -208,9 +209,13 @@ namespace rhombus
 
 		if (entity.HasComponent<TileMapComponent>())
 		{
+			auto& tilemapComponent = entity.GetComponent<TileMapComponent>();
+			std::string path = "assets\\tilemaps\\" + entity.GetName() + ".rtm";
+			TileSerializer::SerializeTileMap(path, tilemapComponent.m_tilemap);
+
 			out << YAML::Key << "TileMapComponent";
 			out << YAML::BeginMap; // TileMapComponent
-
+			out << YAML::Key << "TileMap" << YAML::Value << path;
 			out << YAML::EndMap; // TileMapComponent
 		}
 
@@ -419,7 +424,10 @@ namespace rhombus
 				if (tileMapComponent)
 				{
 					auto& tilemap = deserializedEntity.AddComponent<TileMapComponent>();
-					tilemap.m_tilemap = TileMap::Create();
+					if (tileMapComponent["TileMap"].Type() != YAML::NodeType::Undefined)
+					{
+						tilemap.m_tilemap = TileSerializer::DeserializeTileMap(tileMapComponent["TileMap"].as<std::string>());
+					}
 				}
 
 				m_scene->DeserializeEntity(&entity, deserializedEntity);

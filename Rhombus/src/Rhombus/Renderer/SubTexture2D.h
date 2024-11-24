@@ -18,7 +18,7 @@ namespace rhombus
 		static Ref<SubTexture2D> CreateFromCoords(const Ref<Texture2D>& texture, const Vec2& coords, const Vec2& cellSize, float padding, const Vec2& spriteSize = { 1, 1 });
 
 		// Slice texture into a vector of subtexure row by row
-		static void SubTexture2D::SliceTexture(const Ref<Texture2D>& texture, int rows, int cols, int padding, std::vector<Ref<SubTexture2D>>& tiles);
+		static void SubTexture2D::SliceTexture(const Ref<Texture2D>& texture, Vec2 tileSize, int rows, int cols, int padding, std::vector<Ref<SubTexture2D>>& tiles);
 
 	private:
 		Ref<Texture2D> m_Texture;

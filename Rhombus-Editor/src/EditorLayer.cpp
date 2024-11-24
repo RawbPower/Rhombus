@@ -1126,19 +1126,23 @@ namespace rhombus
 					continue;
 				}
 
+				Vec2 tileSize = tilemap->GetTileSize();
+				Vec2 tileHalfSize = tilemap->GetTileSize() * 0.5f;
+				Vec2 gridSize = Vec2(tilemap->GetGridWidth(), tilemap->GetGridHeight());
+
 				TransformComponent& transform = entity.GetComponent<TransformComponent>();
 				Mat4 topLeftTileTransform = transform.GetWorldTransform();
-				topLeftTileTransform = math::Scale(topLeftTileTransform, Vec3(16.0f, 16.0f, 1.0f));
-				float tileMapHalfWidth = (32.0f * 16.0f) / 2.0f;
-				float tileMapHalfHeight = (32.0f * 16.0f) / 2.0f;
-				topLeftTileTransform.SetD(topLeftTileTransform.d() + Vec3(-tileMapHalfWidth + 8.0f, tileMapHalfHeight - 8.0f, 0.0f));
+				topLeftTileTransform = math::Scale(topLeftTileTransform, Vec3(tileSize.x, tileSize.y, 1.0f));
+				float tileMapHalfWidth = (gridSize.x * tileSize.x) / 2.0f;
+				float tileMapHalfHeight = (gridSize.y * tileSize.y) / 2.0f;
+				topLeftTileTransform.SetD(topLeftTileTransform.d() + Vec3(-tileMapHalfWidth + tileHalfSize.x, tileMapHalfHeight - tileHalfSize.y, 0.0f));
 
-				for (int i = 0; i < 32; i++)
+				for (int i = 0; i < gridSize.y; i++)
 				{
-					for (int j = 0; j < 32; j++)
+					for (int j = 0; j < gridSize.x; j++)
 					{
 						Mat4 tileTransform = topLeftTileTransform;
-						tileTransform.SetD(topLeftTileTransform.d() + Vec3(j * 16.0f, -i * 16.0f, 0.0f));
+						tileTransform.SetD(topLeftTileTransform.d() + Vec3(j * tileSize.x, -i * tileSize.y, 0.0f));
 						Renderer2D::DrawRect(tileTransform, Color(1.0f, 1.0f, 1.0f, 0.9f));
 
 						Vec2 mousePos = Input::GetMousePosition();
@@ -1167,9 +1171,9 @@ namespace rhombus
 							cursorCoords = Renderer2D::RaycastScreenPositionToWorldSpace(mousePos.x, mousePos.y, transform.GetPosition().z, m_EditorCamera.GetProjection(), m_EditorCamera.GetViewMatrix());
 						}
 
-						if ((cursorCoords.x < tileTransform.d().x + 8.0f) && (cursorCoords.x > tileTransform.d().x - 8.0f))
+						if ((cursorCoords.x < tileTransform.d().x + tileHalfSize.x) && (cursorCoords.x > tileTransform.d().x - tileHalfSize.x))
 						{
-							if ((cursorCoords.y < tileTransform.d().y + 8.0f) && (cursorCoords.y > tileTransform.d().y - 8.0f))
+							if ((cursorCoords.y < tileTransform.d().y + tileHalfSize.y) && (cursorCoords.y > tileTransform.d().y - tileHalfSize.y))
 							{
 								if (m_tilesetPanel->GetSelectedTile())
 								{
@@ -1178,17 +1182,17 @@ namespace rhombus
 									{
 										if (tilemap->GetTile(i, j) != m_tilesetPanel->GetSelectedTile())
 										{
-											const Tileset* selectedTileset = nullptr;
+											Ref<Tileset> selectedTileset = nullptr;
 											if (tilemap->ContainsTileset(m_tilesetPanel->GetTilesetID()))
 											{
-												selectedTileset = &tilemap->GetTileset(m_tilesetPanel->GetTilesetID());
+												selectedTileset = tilemap->GetTileset(m_tilesetPanel->GetTilesetID());
 											}
 											else
 											{
 												selectedTileset = tilemap->CreateTileset(m_tilesetPanel->GetTileset());
 											}
 
-											tilemap->SetTile(selectedTileset->GetTile(m_tilesetPanel->GetSelectedTileIndex()), i, j);
+											tilemap->SetTile(selectedTileset->GetID(), m_tilesetPanel->GetSelectedTileIndex(), i, j);
 										}
 									}
 									else if (Input::IsMouseButtonPressed(RB_MOUSE_BUTTON_3))

@@ -14,7 +14,7 @@ Entities:
         PerspectiveFOV: 0.785385013
         PerspectiveNear: 0.00999999978
         PerspectiveFar: 1000
-        OrthographicSize: 613
+        OrthographicSize: 964
         OrthographicNear: -1
         OrthographicFar: 1
         PixelPerfect: true
@@ -31,13 +31,13 @@ Entities:
     SpriteRendererComponent:
       Color: [1, 1, 1, 1]
       Texture: sprites\320x180.png
-  - Entity: 2638669005170392757
+  - Entity: 4881368709875859125
     Enabled: true
     TagComponent:
       Tag: Tilemap
     TransformComponent:
-      Position: [0, 10, 0]
+      Position: [0, -6, 0]
       Rotation: [0, -0, 0]
       Scale: [1, 1, 1]
     TileMapComponent:
-      {}
+      TileMap: assets\tilemaps\Tilemap.rtm

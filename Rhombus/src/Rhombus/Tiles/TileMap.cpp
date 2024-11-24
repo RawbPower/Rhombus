@@ -3,35 +3,36 @@
 
 namespace rhombus
 {
-	TileMap::TileMap()
+	TileMap::TileMap() : m_gridWidth(DEFAULT_GRID_DIMENSIONS), m_gridHeight(DEFAULT_GRID_DIMENSIONS), m_tileSize(DEFAULT_TILE_SIZE)
 	{
-		for (int i = 0; i < 32; i++)
-		{
-			for (int j = 0; j < 32; j++)
-			{
-				m_tileGrid[i][j] = nullptr;
-			}
-		}
 	}
 
 	bool TileMap::ContainsTileset(std::string id) const
 	{
-		return m_tilesets.find(id) != m_tilesets.end();
+		return m_idToIndexMap.find(id) != m_idToIndexMap.end();
 	}
 
-	const Tileset& TileMap::GetTileset(std::string id) const
+	const Ref<Tileset> TileMap::GetTileset(std::string id) const
 	{
-		return m_tilesets.at(id);
+		return m_tilesets[m_idToIndexMap.at(id)];
 	}
 
-	Tileset* TileMap::CreateTileset(Ref<Tileset>& tileset)
+	const Ref<Tileset> TileMap::GetTileset(int i) const
 	{
-		m_tilesets[tileset->GetID()] = Tileset(tileset->GetID(), tileset->GetTileset(), tileset->GetRowCount(), tileset->GetColumnCount());
-		return &m_tilesets.at(tileset->GetID());
+		return m_tilesets[i];
+	}
+
+	Ref<Tileset> TileMap::CreateTileset(Ref<Tileset>& tileset)
+	{
+		m_tilesets.push_back(CreateRef<Tileset>(tileset->GetID(), tileset->GetPath(), tileset->GetTileset(), tileset->GetRowCount(), tileset->GetColumnCount(), tileset->GetPadding()));
+		m_idToIndexMap[tileset->GetID()] = m_tilesets.size() - 1;;
+		return m_tilesets.back();
 	}
 
 	Ref<TileMap> TileMap::Create()
 	{
-		return std::make_shared<TileMap>();
+		Ref<TileMap> tilemap = CreateRef<TileMap>();
+		tilemap->m_tileGrid.resize(DEFAULT_GRID_DIMENSIONS, std::vector<int>(DEFAULT_GRID_DIMENSIONS, -1));
+		return tilemap;
 	}
 }

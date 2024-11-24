@@ -32,15 +32,14 @@ namespace rhombus
 		return std::make_shared<SubTexture2D>(texture, min, max);
 	}
 
-	void SubTexture2D::SubTexture2D::SliceTexture(const Ref<Texture2D>& texture, int rows, int cols, int padding, std::vector<Ref<SubTexture2D>>& tiles)
+	void SubTexture2D::SubTexture2D::SliceTexture(const Ref<Texture2D>& texture, Vec2 tileSize, int rows, int cols, int padding, std::vector<Ref<SubTexture2D>>& tiles)
 	{
 		tiles.clear();
-		const Vec2 cellsize = Vec2(((float)texture->GetWidth() / (float)cols) - 2.0f * padding, ((float)texture->GetHeight() / (float)rows) - 2.0f * padding);
 		for (int r = 0; r < rows; r++)
 		{
 			for (int c = 0; c < cols; c++)
 			{
-				tiles.push_back(CreateFromCoords(texture, Vec2(c, rows - 1 - r), cellsize, padding));
+				tiles.push_back(CreateFromCoords(texture, Vec2(c, rows - 1 - r), tileSize, padding));
 			}
 		}
 	}

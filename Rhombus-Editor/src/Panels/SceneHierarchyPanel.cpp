@@ -14,6 +14,7 @@
 #include "Rhombus/ECS/Components/TweenComponent.h"
 #include "Rhombus/ECS/Components/TileMapComponent.h"
 #include "Rhombus/Scenes/SceneGraphNode.h"
+#include "Rhombus/Tiles/TileSerializer.h"
 
 #include "Rhombus/ImGui/ImGuiWidgets.h"
 #include <imgui/imgui.h>
@@ -657,6 +658,14 @@ namespace rhombus
 				if (ImGui::Button("Create TileMap"))
 				{
 					component.m_tilemap = TileMap::Create();
+				}
+			}
+			else
+			{
+				if (ImGui::Button("Save Tile Map"))
+				{
+					std::string path = "assets\\tilemaps\\" + component.GetOwnerEntity().GetName() + ".rtm";
+					TileSerializer::SerializeTileMap(path, component.m_tilemap);
 				}
 			}
 		});

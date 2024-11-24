@@ -400,20 +400,23 @@ namespace rhombus
 		Ref<TileMap> tilemap = tileMapComponent.GetTileMap();
 		if (tilemap)
 		{
+			Vec2 tileSize = tilemap->GetTileSize();
+			Vec2 tileHalfSize = tilemap->GetTileSize() * 0.5f;
+			Vec2 gridSize = Vec2(tilemap->GetGridWidth(), tilemap->GetGridHeight());
 			Mat4 topLeftTileTransform = transform;
-			topLeftTileTransform = math::Scale(topLeftTileTransform, Vec3(16.0f, 16.0f, 1.0f));
-			float tileMapHalfWidth = (32.0f * 16.0f) / 2.0f;
-			float tileMapHalfHeight = (32.0f * 16.0f) / 2.0f;
-			topLeftTileTransform.SetD(topLeftTileTransform.d() + Vec3(-tileMapHalfWidth + 8.0f, tileMapHalfHeight - 8.0f, 0.0f));
+			topLeftTileTransform = math::Scale(topLeftTileTransform, Vec3(tileSize.x, tileSize.y, 1.0f));
+			float tileMapHalfWidth = (gridSize.x * tileSize.x) / 2.0f;
+			float tileMapHalfHeight = (gridSize.y * tileSize.y) / 2.0f;
+			topLeftTileTransform.SetD(topLeftTileTransform.d() + Vec3(-tileMapHalfWidth + tileHalfSize.x, tileMapHalfHeight - tileHalfSize.y, 0.0f));
 
-			for (int i = 0; i < 32; i++)
+			for (int i = 0; i < gridSize.y; i++)
 			{
-				for (int j = 0; j < 32; j++)
+				for (int j = 0; j < gridSize.x; j++)
 				{
 					if (tilemap->GetTile(i, j))
 					{
 						Mat4 tileTransform = topLeftTileTransform;
-						tileTransform.SetD(topLeftTileTransform.d() + Vec3(j * 16.0f, -i * 16.0f, 0.0f));
+						tileTransform.SetD(topLeftTileTransform.d() + Vec3(j * tileSize.x, -i * tileSize.y, 0.0f));
 						Renderer2D::DrawQuad(tileTransform, tilemap->GetTile(i, j));
 					}
 				}

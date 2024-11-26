@@ -8,6 +8,7 @@
 #include "Rhombus/ECS/Components/CircleRendererComponent.h"
 #include "Rhombus/ECS/Components/Collider2DComponent.h"
 #include "Rhombus/ECS/Components/Rigidbody2DComponent.h"
+#include "Rhombus/ECS/Components/PixelPlatformerBodyComponent.h"
 #include "Rhombus/ECS/Components/ScriptComponent.h"
 #include "Rhombus/ECS/Components/SpriteRendererComponent.h"
 #include "Rhombus/ECS/Components/TransformComponent.h"
@@ -485,6 +486,7 @@ namespace rhombus
 			DisplayAddComponentEntry<SpriteRendererComponent>("Sprite Renderer");
 			DisplayAddComponentEntry<CircleRendererComponent>("Circle Renderer");
 			DisplayAddComponentEntry<Rigidbody2DComponent>("Rigidbody 2D");
+			DisplayAddComponentEntry<PixelPlatformerBodyComponent>("Pixel Platformer Body");
 			DisplayAddComponentEntry<BoxCollider2DComponent>("Box Collider 2D");
 			DisplayAddComponentEntry<CircleCollider2DComponent>("Circle Collider 2D");
 			DisplayAddComponentEntry<BoxArea2DComponent>("Box Area 2D");
@@ -674,6 +676,14 @@ namespace rhombus
 		});
 
 		DrawComponent<Rigidbody2DComponent>("Rigidbody 2D", entity, [](auto& component)
+		{
+			const char* bodyTypeStrings[] = { "Static", "Dynamic", "Kinematic" };
+			ImGui::SelectableEnum("Body Type", bodyTypeStrings, 3, &((int)component.m_type));
+
+			ImGui::Checkbox("Fixed Rotation", &component.m_fixedRotation);
+		});
+
+		DrawComponent<PixelPlatformerBodyComponent>("Pixel Platformer Body", entity, [](auto& component)
 		{
 			const char* bodyTypeStrings[] = { "Static", "Dynamic", "Kinematic" };
 			ImGui::SelectableEnum("Body Type", bodyTypeStrings, 3, &((int)component.m_type));

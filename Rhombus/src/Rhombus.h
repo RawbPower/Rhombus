@@ -27,6 +27,7 @@
 #include "Rhombus/ECS/Components/CircleRendererComponent.h"
 #include "Rhombus/ECS/Components/Collider2DComponent.h"
 #include "Rhombus/ECS/Components/Rigidbody2DComponent.h"
+#include "Rhombus/ECS/Components/PixelPlatformerBodyComponent.h"
 #include "Rhombus/ECS/Components/ScriptComponent.h"
 #include "Rhombus/ECS/Components/SpriteRendererComponent.h"
 #include "Rhombus/ECS/Components/TransformComponent.h"

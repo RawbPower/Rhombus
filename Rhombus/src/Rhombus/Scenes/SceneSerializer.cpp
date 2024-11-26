@@ -12,6 +12,7 @@
 #include "Rhombus/ECS/Components/CircleRendererComponent.h"
 #include "Rhombus/ECS/Components/Collider2DComponent.h"
 #include "Rhombus/ECS/Components/Rigidbody2DComponent.h"
+#include "Rhombus/ECS/Components/PixelPlatformerBodyComponent.h"
 #include "Rhombus/ECS/Components/ScriptComponent.h"
 #include "Rhombus/ECS/Components/SpriteRendererComponent.h"
 #include "Rhombus/ECS/Components/TransformComponent.h"
@@ -40,6 +41,29 @@ namespace rhombus
 
 		RB_CORE_ASSERT(false, "Unknown body type");
 		return Rigidbody2DComponent::BodyType::Static;
+	}
+
+	static std::string PixelPlatformerBodyTypeToString(PixelPlatformerBodyComponent::BodyType bodyType)
+	{
+		switch (bodyType)
+		{
+		case PixelPlatformerBodyComponent::BodyType::Static:    return "Static";
+		case PixelPlatformerBodyComponent::BodyType::Dynamic:   return "Dynamic";
+		case PixelPlatformerBodyComponent::BodyType::Kinematic: return "Kinematic";
+		}
+
+		RB_CORE_ASSERT(false, "Unknown body type");
+		return {};
+	}
+
+	static PixelPlatformerBodyComponent::BodyType PixelPlatformerBodyTypeFromString(const std::string& bodyTypeString)
+	{
+		if (bodyTypeString == "Static")    return PixelPlatformerBodyComponent::BodyType::Static;
+		if (bodyTypeString == "Dynamic")   return PixelPlatformerBodyComponent::BodyType::Dynamic;
+		if (bodyTypeString == "Kinematic") return PixelPlatformerBodyComponent::BodyType::Kinematic;
+
+		RB_CORE_ASSERT(false, "Unknown body type");
+		return PixelPlatformerBodyComponent::BodyType::Static;
 	}
 
 	SceneSerializer::SceneSerializer(const Ref<Scene>& scene)
@@ -164,6 +188,18 @@ namespace rhombus
 			out << YAML::Key << "FixedRotation" << YAML::Value << rigidbody2DComponent.m_fixedRotation;
 
 			out << YAML::EndMap; // Rigidbody2DComponent
+		}
+
+		if (entity.HasComponent<PixelPlatformerBodyComponent>())
+		{
+			out << YAML::Key << "PixelPlatformerBodyComponent";
+			out << YAML::BeginMap; // PixelPlatformerBodyComponent
+
+			auto& pixelPlatformerBodyComponent = entity.GetComponent<PixelPlatformerBodyComponent>();
+			out << YAML::Key << "BodyType" << YAML::Value << PixelPlatformerBodyTypeToString(pixelPlatformerBodyComponent.m_type);
+			out << YAML::Key << "FixedRotation" << YAML::Value << pixelPlatformerBodyComponent.m_fixedRotation;
+
+			out << YAML::EndMap; // PixelPlatformerBodyComponent
 		}
 
 		if (entity.HasComponent<BoxCollider2DComponent>())
@@ -394,6 +430,14 @@ namespace rhombus
 					auto& rb = deserializedEntity.AddComponent<Rigidbody2DComponent>();
 					rb.m_type = RigidBody2DBodyTypeFromString(rigidbody2DComponent["BodyType"].as<std::string>());
 					rb.m_fixedRotation = rigidbody2DComponent["FixedRotation"].as<bool>();
+				}
+
+				auto pixelPlatformerBodyComponent = entity["PixelPlatformerBodyComponent"];
+				if (pixelPlatformerBodyComponent)
+				{
+					auto& ppb = deserializedEntity.AddComponent<PixelPlatformerBodyComponent>();
+					ppb.m_type = PixelPlatformerBodyTypeFromString(pixelPlatformerBodyComponent["BodyType"].as<std::string>());
+					ppb.m_fixedRotation = pixelPlatformerBodyComponent["FixedRotation"].as<bool>();
 				}
 
 				auto boxCollider2DComponent = entity["BoxCollider2DComponent"];

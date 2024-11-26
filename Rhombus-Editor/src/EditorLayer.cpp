@@ -1032,6 +1032,10 @@ namespace rhombus
 						* math::Scale(Mat4::Identity(), scale);
 
 					Renderer2D::DrawRect(transform, m_PhysicsColliderColor);
+
+					Color fillColor = m_PhysicsColliderColor;
+					fillColor.a = m_PhysicsColliderAlpha;
+					Renderer2D::DrawQuad(transform, fillColor);
 				}
 			}
 
@@ -1057,7 +1061,11 @@ namespace rhombus
 						* math::Rotate(Mat4::Identity(), rotationWorld.z, Vec3(0.0f, 0.0f, 1.0f))
 						* math::Scale(Mat4::Identity(), scale);
 
-					Renderer2D::DrawCircle(transform, m_PhysicsColliderColor, 0.05f);
+					Renderer2D::DrawCircle(transform, m_PhysicsColliderColor, 0.1f);
+
+					Color fillColor = m_PhysicsColliderColor;
+					fillColor.a = m_PhysicsColliderAlpha;
+					Renderer2D::DrawCircle(transform, fillColor, 1.0f);
 				}
 			}
 
@@ -1112,101 +1120,104 @@ namespace rhombus
 
 #if RB_EDITOR
 		// Tilemap Grid
-		if (m_ShowTileMapGrid)
+		std::vector<EntityID> view = m_ActiveScene->GetAllEntitiesWith<TileMapComponent>();
+		for (EntityID e : view)
 		{
-			std::vector<EntityID> view = m_ActiveScene->GetAllEntitiesWith<TileMapComponent>();
-			for (EntityID e : view)
+			Entity entity = { e, m_ActiveScene.get() };
+
+			if (!m_ShowTileMapGrid && entity != m_sceneHierarchyPanel.GetSelectedEntity())
 			{
-				Entity entity = { e, m_ActiveScene.get() };
-				TileMapComponent& tileMapComponent = entity.GetComponent<TileMapComponent>();
-				Ref<TileMap> tilemap = tileMapComponent.GetTileMap();
+				continue;
+			}
 
-				if (!tilemap)
+			TileMapComponent& tileMapComponent = entity.GetComponent<TileMapComponent>();
+			Ref<TileMap> tilemap = tileMapComponent.GetTileMap();
+
+			if (!tilemap)
+			{
+				continue;
+			}
+
+			Vec2 tileSize = tilemap->GetTileSize();
+			Vec2 tileHalfSize = tilemap->GetTileSize() * 0.5f;
+			Vec2 gridSize = Vec2(tilemap->GetGridWidth(), tilemap->GetGridHeight());
+
+			TransformComponent& transform = entity.GetComponent<TransformComponent>();
+			Mat4 topLeftTileTransform = transform.GetWorldTransform();
+			topLeftTileTransform = math::Scale(topLeftTileTransform, Vec3(tileSize.x, tileSize.y, 1.0f));
+			float tileMapHalfWidth = (gridSize.x * tileSize.x) / 2.0f;
+			float tileMapHalfHeight = (gridSize.y * tileSize.y) / 2.0f;
+			topLeftTileTransform.SetD(topLeftTileTransform.d() + Vec3(-tileMapHalfWidth + tileHalfSize.x, tileMapHalfHeight - tileHalfSize.y, 0.0f));
+
+			for (int i = 0; i < gridSize.y; i++)
+			{
+				for (int j = 0; j < gridSize.x; j++)
 				{
-					continue;
-				}
+					Mat4 tileTransform = topLeftTileTransform;
+					tileTransform.SetD(topLeftTileTransform.d() + Vec3(j * tileSize.x, -i * tileSize.y, 0.0f));
+					Renderer2D::DrawRect(tileTransform, Color(1.0f, 1.0f, 1.0f, 0.9f));
 
-				Vec2 tileSize = tilemap->GetTileSize();
-				Vec2 tileHalfSize = tilemap->GetTileSize() * 0.5f;
-				Vec2 gridSize = Vec2(tilemap->GetGridWidth(), tilemap->GetGridHeight());
+					Vec2 mousePos = Input::GetMousePosition();
 
-				TransformComponent& transform = entity.GetComponent<TransformComponent>();
-				Mat4 topLeftTileTransform = transform.GetWorldTransform();
-				topLeftTileTransform = math::Scale(topLeftTileTransform, Vec3(tileSize.x, tileSize.y, 1.0f));
-				float tileMapHalfWidth = (gridSize.x * tileSize.x) / 2.0f;
-				float tileMapHalfHeight = (gridSize.y * tileSize.y) / 2.0f;
-				topLeftTileTransform.SetD(topLeftTileTransform.d() + Vec3(-tileMapHalfWidth + tileHalfSize.x, tileMapHalfHeight - tileHalfSize.y, 0.0f));
-
-				for (int i = 0; i < gridSize.y; i++)
-				{
-					for (int j = 0; j < gridSize.x; j++)
+					if (!Renderer2D::IsScreenPositionWithViewPort(mousePos.x, mousePos.y))
 					{
-						Mat4 tileTransform = topLeftTileTransform;
-						tileTransform.SetD(topLeftTileTransform.d() + Vec3(j * tileSize.x, -i * tileSize.y, 0.0f));
-						Renderer2D::DrawRect(tileTransform, Color(1.0f, 1.0f, 1.0f, 0.9f));
+						continue;
+					}
 
-						Vec2 mousePos = Input::GetMousePosition();
-
-						if (!Renderer2D::IsScreenPositionWithViewPort(mousePos.x, mousePos.y))
+					Vec3 cursorCoords;
+					if (m_SceneState == SceneState::Play)
+					{
+						Entity camera = m_ActiveScene->GetPrimaryCameraEntity();
+						const SceneCamera& sceneCamera = camera.GetComponentRead<CameraComponent>().GetCamera();
+						if (sceneCamera.GetProjectionType() == SceneCamera::ProjectionType::Perspective)
 						{
-							continue;
-						}
-
-						Vec3 cursorCoords;
-						if (m_SceneState == SceneState::Play)
-						{
-							Entity camera = m_ActiveScene->GetPrimaryCameraEntity();
-							const SceneCamera& sceneCamera = camera.GetComponentRead<CameraComponent>().GetCamera();
-							if (sceneCamera.GetProjectionType() == SceneCamera::ProjectionType::Perspective)
-							{
-								cursorCoords = Renderer2D::RaycastScreenPositionToWorldSpace(mousePos.x, mousePos.y, transform.GetPosition().z, sceneCamera.GetProjection(), camera.GetTransform());
-							}
-							else
-							{
-								cursorCoords = Renderer2D::ConvertScreenToWorldSpace(mousePos.x, mousePos.y);
-							}
+							cursorCoords = Renderer2D::RaycastScreenPositionToWorldSpace(mousePos.x, mousePos.y, transform.GetPosition().z, sceneCamera.GetProjection(), camera.GetTransform());
 						}
 						else
 						{
-							cursorCoords = Renderer2D::RaycastScreenPositionToWorldSpace(mousePos.x, mousePos.y, transform.GetPosition().z, m_EditorCamera.GetProjection(), m_EditorCamera.GetViewMatrix());
+							cursorCoords = Renderer2D::ConvertScreenToWorldSpace(mousePos.x, mousePos.y);
 						}
+					}
+					else
+					{
+						cursorCoords = Renderer2D::RaycastScreenPositionToWorldSpace(mousePos.x, mousePos.y, transform.GetPosition().z, m_EditorCamera.GetProjection(), m_EditorCamera.GetViewMatrix());
+					}
 
-						if ((cursorCoords.x < tileTransform.d().x + tileHalfSize.x) && (cursorCoords.x > tileTransform.d().x - tileHalfSize.x))
+					if ((cursorCoords.x < tileTransform.d().x + tileHalfSize.x) && (cursorCoords.x > tileTransform.d().x - tileHalfSize.x))
+					{
+						if ((cursorCoords.y < tileTransform.d().y + tileHalfSize.y) && (cursorCoords.y > tileTransform.d().y - tileHalfSize.y))
 						{
-							if ((cursorCoords.y < tileTransform.d().y + tileHalfSize.y) && (cursorCoords.y > tileTransform.d().y - tileHalfSize.y))
+							if (m_tilesetPanel->GetSelectedTile())
 							{
-								if (m_tilesetPanel->GetSelectedTile())
+								Renderer2D::DrawQuad(tileTransform, m_tilesetPanel->GetSelectedTile());
+								if (Input::IsMouseButtonPressed(RB_MOUSE_BUTTON_1))
 								{
-									Renderer2D::DrawQuad(tileTransform, m_tilesetPanel->GetSelectedTile());
-									if (Input::IsMouseButtonPressed(RB_MOUSE_BUTTON_1))
+									if (tilemap->GetTile(i, j) != m_tilesetPanel->GetSelectedTile())
 									{
-										if (tilemap->GetTile(i, j) != m_tilesetPanel->GetSelectedTile())
+										Ref<Tileset> selectedTileset = nullptr;
+										if (tilemap->ContainsTileset(m_tilesetPanel->GetTilesetID()))
 										{
-											Ref<Tileset> selectedTileset = nullptr;
-											if (tilemap->ContainsTileset(m_tilesetPanel->GetTilesetID()))
-											{
-												selectedTileset = tilemap->GetTileset(m_tilesetPanel->GetTilesetID());
-											}
-											else
-											{
-												selectedTileset = tilemap->CreateTileset(m_tilesetPanel->GetTileset());
-											}
-
-											tilemap->SetTile(selectedTileset->GetID(), m_tilesetPanel->GetSelectedTileIndex(), i, j);
+											selectedTileset = tilemap->GetTileset(m_tilesetPanel->GetTilesetID());
 										}
-									}
-								}
-								else
-								{
-									Renderer2D::DrawQuad(tileTransform, Color(1.0f, 0.0f, 0.0f, 0.9f));
-								}
+										else
+										{
+											selectedTileset = tilemap->CreateTileset(m_tilesetPanel->GetTileset());
+										}
 
-								if (Input::IsMouseButtonPressed(RB_MOUSE_BUTTON_3))
-								{
-									if (tilemap->GetTile(i, j))
-									{
-										tilemap->ClearTile(i, j);
+										tilemap->SetTile(selectedTileset->GetID(), m_tilesetPanel->GetSelectedTileIndex(), i, j);
 									}
+								}
+							}
+							else
+							{
+								Renderer2D::DrawQuad(tileTransform, Color(1.0f, 0.0f, 0.0f, 0.9f));
+							}
+
+							if (Input::IsMouseButtonPressed(RB_MOUSE_BUTTON_3))
+							{
+								if (tilemap->GetTile(i, j))
+								{
+									tilemap->ClearTile(i, j);
 								}
 							}
 						}

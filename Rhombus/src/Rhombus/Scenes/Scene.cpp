@@ -3,7 +3,6 @@
 
 #include "SceneGraphNode.h"
 #include "Rhombus/ECS/Components/Component.h"
-#include "Rhombus/ECS/Components/Rigidbody2DComponent.h"
 #include "Rhombus/Scenes/Entity.h"
 #include "ScriptableEntity.h"
 #include "Rhombus/Renderer/Renderer2D.h"
@@ -16,7 +15,8 @@
 #include "Rhombus/ECS/Components/CameraComponent.h"
 #include "Rhombus/ECS/Components/CircleRendererComponent.h"
 #include "Rhombus/ECS/Components/Collider2DComponent.h"
-//#include "Rhombus/ECS/Components/Rigidbody2DComponent.h"
+#include "Rhombus/ECS/Components/PixelPlatformerBodyComponent.h"
+#include "Rhombus/ECS/Components/Rigidbody2DComponent.h"
 #include "Rhombus/ECS/Components/ScriptComponent.h"
 #include "Rhombus/ECS/Components/SpriteRendererComponent.h"
 #include "Rhombus/ECS/Components/TransformComponent.h"
@@ -37,7 +37,7 @@ namespace rhombus
 	using RhombusComponents =
 		ComponentGroup<TransformComponent, SpriteRendererComponent,
 		CircleRendererComponent, CameraComponent, ScriptComponent, NativeScriptComponent,
-		Rigidbody2DComponent, BoxCollider2DComponent, CircleCollider2DComponent, BoxArea2DComponent, 
+		Rigidbody2DComponent, PixelPlatformerBodyComponent, BoxCollider2DComponent, CircleCollider2DComponent, BoxArea2DComponent,
 		TweenComponent, TileMapComponent>;
 	// -----------------------------------------------------
 

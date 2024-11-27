@@ -50,7 +50,7 @@ Entities:
     TagComponent:
       Tag: Player
     TransformComponent:
-      Position: [-37.5, -40, 0]
+      Position: [-37.5, 30.5, 0]
       Rotation: [0, -0, 0]
       Scale: [1, 1, 1]
     SpriteRendererComponent:

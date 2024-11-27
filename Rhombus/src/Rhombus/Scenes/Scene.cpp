@@ -85,6 +85,13 @@ namespace rhombus
 			m_Registry.SetSystemSignature<TweeningSystem>(signature);
 		}
 
+		pixelPlatformerPhysicsSystem = m_Registry.RegisterSystem<PixelPlatformerPhysicsSystem>(this);
+		{
+			Signature signature;
+			signature.set(m_Registry.GetComponentType<PixelPlatformerBodyComponent>());
+			m_Registry.SetSystemSignature<PixelPlatformerPhysicsSystem>(signature);
+		}
+
 		m_rootSceneNode = CreateRef<SceneGraphNode>(this);
 	}
 
@@ -267,6 +274,8 @@ namespace rhombus
 					transform.SetRotation(body->GetAngle());
 				}
 			}
+
+			pixelPlatformerPhysicsSystem->Update(dt);
 
 			tweeningSystem->UpdateTweens(dt);
 		}

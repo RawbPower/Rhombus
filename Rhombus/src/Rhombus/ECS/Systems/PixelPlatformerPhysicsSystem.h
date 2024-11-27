@@ -13,6 +13,10 @@ namespace rhombus
 		}
 
 		void Update(DeltaTime dt);
+
+	private:
+		void UpdateDynamicBody(Entity entity, DeltaTime dt);
+		void Move(Entity entity, Vec2 translation);
 	};
 
 }

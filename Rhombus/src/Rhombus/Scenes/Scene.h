@@ -6,6 +6,7 @@
 #include "Rhombus/Core/DeltaTime.h"
 #include "Rhombus/Core/UUID.h"
 #include "Rhombus/Renderer/EditorCamera.h"
+#include "Rhombus/ECS/Systems/PixelPlatformerPhysicsSystem.h"
 #include "Rhombus/ECS/Systems/TweeningSystem.h"
 #include "Rhombus/Animation/EasingFunctions.h"
 
@@ -186,6 +187,7 @@ namespace rhombus
 
 		b2World* m_PhysicsWorld = nullptr;
 		Ref<TweeningSystem> tweeningSystem;
+		Ref<PixelPlatformerPhysicsSystem> pixelPlatformerPhysicsSystem;
 
 		std::unordered_map<UUID, EntityID> m_EntityMap;
 		std::unordered_map<EntityID, bool> m_entityEnabledMap;

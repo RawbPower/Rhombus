@@ -14,7 +14,7 @@ Entities:
         PerspectiveFOV: 0.785385013
         PerspectiveNear: 0.00999999978
         PerspectiveFar: 1000
-        OrthographicSize: 613
+        OrthographicSize: 964
         OrthographicNear: -1
         OrthographicFar: 1
         PixelPerfect: true
@@ -50,7 +50,7 @@ Entities:
     TagComponent:
       Tag: Player
     TransformComponent:
-      Position: [-37.5, 30.5, 0]
+      Position: [-38, 31, 0]
       Rotation: [0, -0, 0]
       Scale: [1, 1, 1]
     SpriteRendererComponent:
@@ -64,7 +64,7 @@ Entities:
       BodyType: Dynamic
       FixedRotation: true
     BoxCollider2DComponent:
-      Offset: [0, 0]
+      Offset: [0.5, 0]
       Size: [5.5, 8]
       Density: 1
       Friction: 0.5
@@ -75,7 +75,7 @@ Entities:
     TagComponent:
       Tag: Ball
     TransformComponent:
-      Position: [4.5, 8, 0]
+      Position: [4, 8, 0]
       Rotation: [0, -0, 0]
       Scale: [1, 1, 1]
     SpriteRendererComponent:
@@ -85,9 +85,9 @@ Entities:
       Padding: 0
       Frame: 0
       Texture: sprites\Ball.png
-    CircleCollider2DComponent:
-      Offset: [0.5, 0]
-      Radius: 6.5
+    BoxCollider2DComponent:
+      Offset: [0, 0]
+      Size: [6, 6]
       Density: 1
       Friction: 0.5
       Restitution: 0
@@ -110,3 +110,18 @@ Entities:
       Friction: 0.5
       Restitution: 0
       RestitutionThreshold: 0.5
+  - Entity: 1840413731707872603
+    Enabled: true
+    TagComponent:
+      Tag: Pixel
+    TransformComponent:
+      Position: [-127.5, 73.5, 0]
+      Rotation: [0, -0, 0]
+      Scale: [1, 1, 1]
+    SpriteRendererComponent:
+      Color: [1, 1, 1, 1]
+      Rows: 1
+      Columns: 1
+      Padding: 0
+      Frame: 0
+      Texture: sprites\Pixel.png

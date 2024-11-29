@@ -1,8 +1,9 @@
 #include "rbpch.h"
 #include "PixelPlatformerPhysicsSystem.h"
+#include "Rhombus/ECS/Components/Collider2DComponent.h"
 #include "Rhombus/ECS/Components/PixelPlatformerBodyComponent.h"
 #include "Rhombus/ECS/Components/TransformComponent.h"
-
+#include "Rhombus/Physics/AABB.h"
 
 namespace rhombus
 {
@@ -43,6 +44,7 @@ namespace rhombus
 	{
 		TransformComponent& transformComponent = entity.GetComponent<TransformComponent>();
 		PixelPlatformerBodyComponent& ppbComponent = entity.GetComponent<PixelPlatformerBodyComponent>();
+		Vec3 position = transformComponent.GetWorldPosition();
 		Vec2& remainder = ppbComponent.m_translationRemainder;
 		Vec2 appliedTranslation = Vec2(0.0f);
 
@@ -57,8 +59,7 @@ namespace rhombus
 
 			while (xTranslation != 0)
 			{
-				bool collide = false;
-				if (!collide)
+				if (!Collide(entity, position + appliedTranslation + Vec2(step, 0.0f)))
 				{
 					appliedTranslation.x += step;
 					xTranslation -= step;
@@ -77,8 +78,7 @@ namespace rhombus
 
 			while (yTranslation != 0)
 			{
-				bool collide = false;
-				if (!collide)
+				if (!Collide(entity, position + appliedTranslation + Vec2(0.0f, step)))
 				{
 					appliedTranslation.y += step;
 					yTranslation -= step;
@@ -91,5 +91,34 @@ namespace rhombus
 		}
 
 		transformComponent.SetWorldPosition(transformComponent.GetWorldPosition() + appliedTranslation);
+	}
+
+	bool PixelPlatformerPhysicsSystem::Collide(Entity entity, Vec2 position)
+	{
+		BoxCollider2DComponent& myColliderComponent = entity.GetComponent<BoxCollider2DComponent>();
+		AABB myAABB;
+		myAABB.c = Vec3(position.x, position.y, 0.0f) + myColliderComponent.m_offset;
+		myAABB.r = Vec3(myColliderComponent.m_size.x, myColliderComponent.m_size.y, 10.0f);
+		for (Entity other : GetEntities())
+		{
+			BoxCollider2DComponent& otherColliderComponent = other.GetComponent<BoxCollider2DComponent>();
+
+			if (&myColliderComponent == &otherColliderComponent)
+			{
+				continue;
+			}
+
+			TransformComponent& otherTransformComponent = other.GetComponent<TransformComponent>();
+			AABB otherAABB;
+			otherAABB.c = otherTransformComponent.GetWorldPosition() + otherColliderComponent.m_offset;
+			otherAABB.r = Vec3(otherColliderComponent.m_size.x, otherColliderComponent.m_size.y, 10.0f);
+
+			if (AABB::TestAABBAABB(myAABB, otherAABB))
+			{
+				return true;
+			}
+		}
+
+		return false;
 	}
 }

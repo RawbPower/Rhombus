@@ -17,6 +17,7 @@ namespace rhombus
 	private:
 		void UpdateDynamicBody(Entity entity, DeltaTime dt);
 		void Move(Entity entity, Vec2 translation);
+		bool Collide(Entity entity, Vec2 position);
 	};
 
 }

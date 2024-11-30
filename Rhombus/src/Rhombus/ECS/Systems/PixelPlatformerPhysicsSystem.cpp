@@ -52,8 +52,14 @@ namespace rhombus
 		int xTranslation = math::RoundInt(remainder.x);
 		int yTranslation = math::RoundInt(remainder.y);
 
+		// We are going to step forward per pixel. We can afford to do this
+		// since there are generally very few entities simulating on screen
+		// Note: We can optimize as it become required
+
+		// X direction
 		if (xTranslation != 0)
 		{
+			// Remove the whole translation from the remainer once we move (even if we collide)
 			remainder.x -= (float)xTranslation;
 			int step = math::Sign(xTranslation);
 
@@ -71,8 +77,10 @@ namespace rhombus
 			}
 		}
 
+		// Y direction
 		if (yTranslation != 0)
 		{
+			// Remove the whole translation from the remainer once we move (even if we collide)
 			remainder.y -= (float)yTranslation;
 			int step = math::Sign(yTranslation);
 
@@ -95,27 +103,51 @@ namespace rhombus
 
 	bool PixelPlatformerPhysicsSystem::Collide(Entity entity, Vec2 position)
 	{
-		BoxCollider2DComponent& myColliderComponent = entity.GetComponent<BoxCollider2DComponent>();
-		AABB myAABB;
-		myAABB.c = Vec3(position.x, position.y, 0.0f) + myColliderComponent.m_offset;
-		myAABB.r = Vec3(myColliderComponent.m_size.x, myColliderComponent.m_size.y, 10.0f);
 		for (Entity other : GetEntities())
 		{
-			BoxCollider2DComponent& otherColliderComponent = other.GetComponent<BoxCollider2DComponent>();
-
-			if (&myColliderComponent == &otherColliderComponent)
+			if (entity == other)
 			{
 				continue;
 			}
+
+			// We only want to collide with static objects (for now)
+			PixelPlatformerBodyComponent& otherPhysicsBody = other.GetComponent<PixelPlatformerBodyComponent>();
+			if (otherPhysicsBody.m_type != PixelPlatformerBodyComponent::BodyType::Static)
+			{
+				continue;
+			}
+
+			BoxCollider2DComponent& otherColliderComponent = other.GetComponent<BoxCollider2DComponent>();
 
 			TransformComponent& otherTransformComponent = other.GetComponent<TransformComponent>();
 			AABB otherAABB;
 			otherAABB.c = otherTransformComponent.GetWorldPosition() + otherColliderComponent.m_offset;
 			otherAABB.r = Vec3(otherColliderComponent.m_size.x, otherColliderComponent.m_size.y, 10.0f);
 
-			if (AABB::TestAABBAABB(myAABB, otherAABB))
+			// Check the type of collider that the dyanamic body has, and do the appropriate test
+			if (entity.HasComponent<BoxCollider2DComponent>())
 			{
-				return true;
+				BoxCollider2DComponent& myColliderComponent = entity.GetComponent<BoxCollider2DComponent>();
+				AABB myAABB;
+				myAABB.c = Vec3(position.x, position.y, 0.0f) + myColliderComponent.m_offset;
+				myAABB.r = Vec3(myColliderComponent.m_size.x, myColliderComponent.m_size.y, 10.0f);
+
+				if (AABB::TestAABBAABB(myAABB, otherAABB))
+				{
+					return true;
+				}
+			}
+			else if (entity.HasComponent<CircleCollider2DComponent>())
+			{
+				CircleCollider2DComponent& myColliderComponent = entity.GetComponent<CircleCollider2DComponent>();
+				Sphere mySphere;
+				mySphere.c = Vec3(position.x, position.y, 0.0f) + myColliderComponent.m_offset;
+				mySphere.r = myColliderComponent.m_radius;
+
+				if (AABB::TestSphereAABB(mySphere, otherAABB))
+				{
+					return true;
+				}
 			}
 		}
 

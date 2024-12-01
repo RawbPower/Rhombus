@@ -13,6 +13,7 @@
 #include "Rhombus/ECS/Components/Collider2DComponent.h"
 #include "Rhombus/ECS/Components/Rigidbody2DComponent.h"
 #include "Rhombus/ECS/Components/PixelPlatformerBodyComponent.h"
+#include "Rhombus/ECS/Components/PlatformerPlayerControllerComponent.h"
 #include "Rhombus/ECS/Components/ScriptComponent.h"
 #include "Rhombus/ECS/Components/SpriteRendererComponent.h"
 #include "Rhombus/ECS/Components/TransformComponent.h"
@@ -259,6 +260,18 @@ namespace rhombus
 			out << YAML::EndMap; // TileMapComponent
 		}
 
+		if (entity.HasComponent<PlatformerPlayerControllerComponent>())
+		{
+			out << YAML::Key << "PlatformerPlayerControllerComponent";
+			out << YAML::BeginMap; // PlatformerPlayerControllerComponent
+
+			auto& controller = entity.GetComponent<PlatformerPlayerControllerComponent>();
+			out << YAML::Key << "Speed" << YAML::Value << controller.m_speed;
+			out << YAML::Key << "JumpHeight" << YAML::Value << controller.m_jumpHeight;
+
+			out << YAML::EndMap; // PlatformerPlayerControllerComponent
+		}
+
 		scene->SerializeEntity(&out, entity);
 
 		out << YAML::EndMap; // Entity
@@ -481,6 +494,14 @@ namespace rhombus
 					{
 						tilemap.m_tilemap = TileSerializer::DeserializeTileMap(tileMapComponent["TileMap"].as<std::string>());
 					}
+				}
+
+				auto platformerPlayerControllerComponent = entity["PlatformerPlayerControllerComponent"];
+				if (platformerPlayerControllerComponent)
+				{
+					auto& controller = deserializedEntity.AddComponent<PlatformerPlayerControllerComponent>();
+					controller.m_speed = platformerPlayerControllerComponent["Speed"].as<float>();
+					controller.m_jumpHeight = platformerPlayerControllerComponent["JumpHeight"].as<float>();
 				}
 
 				m_scene->DeserializeEntity(&entity, deserializedEntity);

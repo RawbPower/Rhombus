@@ -8,6 +8,6 @@ namespace rhombus
 	{
 	public:
 		Vec3 c;		// Sphere center
-		float r;		// Sphere radius
+		float r;	// Sphere radius
 	};
 }

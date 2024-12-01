@@ -13,10 +13,11 @@ namespace rhombus
 
 		PixelPlatformerBodyComponent() = default;
 		PixelPlatformerBodyComponent(const PixelPlatformerBodyComponent& other) = default;
+
+		Vec2 m_velocity = Vec2(0.0f);
 	private:
 		friend class PixelPlatformerPhysicsSystem;
 
-		Vec2 m_velocity = Vec2(0.0f);
 		Vec2 m_translationRemainder = Vec2(0.0f);
 	};
 }

@@ -353,7 +353,7 @@ namespace rhombus
 			ImGui::Begin("Renderer Stats");
 
 			std::string name = "None";
-			if (m_HoveredEntity)
+			if ((EntityID)m_HoveredEntity != INVALID_ENTITY)
 				name = m_HoveredEntity.GetComponentRead<TagComponent>().m_tag;
 
 			ImGui::Text("Hovered Entity: %s (%i)", name.c_str(), (EntityID)m_HoveredEntity);
@@ -439,7 +439,8 @@ namespace rhombus
 
 		if ((selectedEntities.size() > 0 || selectedEntity) && m_gizmoType != -1 && m_SceneState == SceneState::Edit)
 		{
-			if (const SceneGraphNode* pCommonParent = GetCommonParentOfEntities(selectedEntities))
+			const SceneGraphNode* pCommonParent = selectedEntities.size() > 0 ? GetCommonParentOfEntities(selectedEntities) : nullptr;
+			if (pCommonParent)
 			{
 				ImGuizmo::SetOrthographic(false);
 				ImGuizmo::SetDrawlist();
@@ -683,15 +684,21 @@ namespace rhombus
 	// Try KeyTypedEvent
 	bool EditorLayer::OnKeyPressed(KeyPressedEvent& e)
 	{
-		// Shortcuts
-		if (e.IsRepeat())
-			return false;
-
-		bool ctrl = Input::IsKeyPressed(RB_KEY_LEFT_CONTROL) || Input::IsKeyPressed(RB_KEY_RIGHT_CONTROL);
-		bool shift = Input::IsKeyPressed(RB_KEY_LEFT_SHIFT) || Input::IsKeyPressed(RB_KEY_RIGHT_SHIFT);
-
-		switch (e.GetKeyCode())
+		if (m_SceneState == SceneState::Play && !Application::Get().GetIsDebugPaused())
 		{
+			m_ActiveScene->OnKeyPressed(e.GetKeyCode(), e.IsRepeat());
+		}
+		else
+		{
+			// Shortcuts
+			if (e.IsRepeat())
+				return false;
+
+			bool ctrl = Input::IsKeyPressed(RB_KEY_LEFT_CONTROL) || Input::IsKeyPressed(RB_KEY_RIGHT_CONTROL);
+			bool shift = Input::IsKeyPressed(RB_KEY_LEFT_SHIFT) || Input::IsKeyPressed(RB_KEY_RIGHT_SHIFT);
+
+			switch (e.GetKeyCode())
+			{
 			case RB_KEY_N:
 			{
 				if (ctrl)
@@ -774,6 +781,7 @@ namespace rhombus
 			{
 				// Do nothing
 			}
+			}
 		}
 
 		return false;
@@ -790,10 +798,10 @@ namespace rhombus
 			// Mouse picking
 			if (e.GetMouseButton() == RB_MOUSE_BUTTON_LEFT)
 			{
-				if (m_ViewportHovered && !ImGuizmo::IsOver() && !Input::IsKeyPressed(RB_KEY_LEFT_ALT))
+				if (m_ViewportHovered && !ImGuizmo::IsOver() && !Input::IsKeyPressed(RB_KEY_LEFT_ALT) && (EntityID)m_HoveredEntity != INVALID_ENTITY)
 				{
-					m_sceneHierarchyPanel.SetSelectedEntity(m_HoveredEntity);
 					m_sceneHierarchyPanel.ResetSelectedEntities();
+					m_sceneHierarchyPanel.SetSelectedEntity(m_HoveredEntity);
 				}
 			}
 		}
@@ -1144,7 +1152,6 @@ namespace rhombus
 
 			TransformComponent& transform = entity.GetComponent<TransformComponent>();
 			Mat4 topLeftTileTransform = transform.GetWorldTransform();
-			topLeftTileTransform = math::Scale(topLeftTileTransform, Vec3(tileSize.x, tileSize.y, 1.0f));
 			float tileMapHalfWidth = (gridSize.x * tileSize.x) / 2.0f;
 			float tileMapHalfHeight = (gridSize.y * tileSize.y) / 2.0f;
 			topLeftTileTransform.SetD(topLeftTileTransform.d() + Vec3(-tileMapHalfWidth + tileHalfSize.x, tileMapHalfHeight - tileHalfSize.y, 0.0f));
@@ -1155,7 +1162,10 @@ namespace rhombus
 				{
 					Mat4 tileTransform = topLeftTileTransform;
 					tileTransform.SetD(topLeftTileTransform.d() + Vec3(j * tileSize.x, -i * tileSize.y, 0.0f));
-					Renderer2D::DrawRect(tileTransform, Color(1.0f, 1.0f, 1.0f, 0.9f));
+
+					Mat4 tileGridCellTransform = tileTransform;
+					tileGridCellTransform = math::Scale(tileGridCellTransform, Vec3(tileSize.x, tileSize.y, 1.0f));
+					Renderer2D::DrawRect(tileGridCellTransform, Color(1.0f, 1.0f, 1.0f, 0.9f));
 
 					Vec2 mousePos = Input::GetMousePosition();
 
@@ -1210,7 +1220,7 @@ namespace rhombus
 							}
 							else
 							{
-								Renderer2D::DrawQuad(tileTransform, Color(1.0f, 0.0f, 0.0f, 0.9f));
+								Renderer2D::DrawQuad(tileGridCellTransform, Color(1.0f, 0.0f, 0.0f, 0.9f));
 							}
 
 							if (Input::IsMouseButtonPressed(RB_MOUSE_BUTTON_3))

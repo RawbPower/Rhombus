@@ -88,6 +88,8 @@ void GameLayer::OnEvent(rhombus::Event& e)
 // Try KeyTypedEvent
 bool GameLayer::OnKeyPressed(KeyPressedEvent& e)
 {
+	m_ActiveScene->OnKeyPressed(e.GetKeyCode(), e.IsRepeat());
+
 	return false;
 }
 

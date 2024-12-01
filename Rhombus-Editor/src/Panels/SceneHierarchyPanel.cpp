@@ -9,6 +9,7 @@
 #include "Rhombus/ECS/Components/Collider2DComponent.h"
 #include "Rhombus/ECS/Components/Rigidbody2DComponent.h"
 #include "Rhombus/ECS/Components/PixelPlatformerBodyComponent.h"
+#include "Rhombus/ECS/Components/PlatformerPlayerControllerComponent.h"
 #include "Rhombus/ECS/Components/ScriptComponent.h"
 #include "Rhombus/ECS/Components/SpriteRendererComponent.h"
 #include "Rhombus/ECS/Components/TransformComponent.h"
@@ -176,14 +177,11 @@ namespace rhombus
 			ImGui::TableSetupColumn("##Entities", ImGuiTableColumnFlags_WidthFixed, ImGui::GetContentRegionAvail().x - style.IndentSpacing);
 			ImGui::TableSetupColumn("##Active", ImGuiTableColumnFlags_WidthFixed);
 			ImGui::TableNextRow();
-			int i = 0;
-			//for (const Ref<SceneGraphNode> sceneGraphNode : parentNode->GetChildren())
-			for (std::vector<Ref<SceneGraphNode>>::const_iterator it = parentNode->GetChildIteratorStart(); it != parentNode->GetChildIteratorEnd(); ++it)
+			for (int i = 0; i < parentNode->GetChildren().size(); i++)
 			{
-				const Ref<SceneGraphNode> sceneGraphNode = *it;
+				const Ref<SceneGraphNode> sceneGraphNode = parentNode->GetChildren()[i];
 				DrawEntityNode(sceneGraphNode->GetEntity(), parentNode, bIsInEditMode, entityEnabledMap);
 				ImGui::TableNextRow();
-				i++;
 			}
 			ImGui::EndTable();
 		}
@@ -491,6 +489,7 @@ namespace rhombus
 			DisplayAddComponentEntry<CircleCollider2DComponent>("Circle Collider 2D");
 			DisplayAddComponentEntry<BoxArea2DComponent>("Box Area 2D");
 			DisplayAddComponentEntry<TileMapComponent>("Tile Map");
+			DisplayAddComponentEntry<PlatformerPlayerControllerComponent>("Platformer Player Controller");
 
 			// Game
 			if (m_editorExtension)
@@ -735,6 +734,12 @@ namespace rhombus
 					TileSerializer::SerializeTileMap(path, component.m_tilemap);
 				}
 			}
+		});
+
+		DrawComponent<PlatformerPlayerControllerComponent>("Platformer Player Controller", entity, [](auto& component)
+		{
+			ImGui::DragFloat("Speed", &component.m_speed, 0.025f, 0.0f, 100.0f);
+			ImGui::DragFloat("Jump Height", &component.m_jumpHeight, 0.025f, 0.0f, 100.0f);
 		});
 
 		m_editorExtension->DisplayComponentProperties(entity);

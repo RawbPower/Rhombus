@@ -70,6 +70,9 @@ Entities:
       Friction: 0.5
       Restitution: 0
       RestitutionThreshold: 0.5
+    PlatformerPlayerControllerComponent:
+      Speed: 72
+      JumpHeight: 48
   - Entity: 4524564654659932807
     Enabled: true
     TagComponent:
@@ -113,18 +116,75 @@ Entities:
       Friction: 0.5
       Restitution: 0
       RestitutionThreshold: 0.5
-  - Entity: 1840413731707872603
+  - Entity: 1817313217798741984
     Enabled: true
     TagComponent:
-      Tag: Pixel
+      Tag: Ceiling
     TransformComponent:
-      Position: [-127.5, 73.5, 0]
+      Position: [0, 82, 0]
       Rotation: [0, -0, 0]
       Scale: [1, 1, 1]
-    SpriteRendererComponent:
-      Color: [1, 1, 1, 1]
-      Rows: 1
-      Columns: 1
-      Padding: 0
-      Frame: 0
-      Texture: sprites\Pixel.png
+    PixelPlatformerBodyComponent:
+      BodyType: Static
+      FixedRotation: true
+    BoxCollider2DComponent:
+      Offset: [0, 0]
+      Size: [130, 8]
+      Density: 1
+      Friction: 0.5
+      Restitution: 0
+      RestitutionThreshold: 0.5
+  - Entity: 6343066084218061346
+    Enabled: true
+    TagComponent:
+      Tag: Wall 1
+    TransformComponent:
+      Position: [-136, 1.5, 0]
+      Rotation: [0, -0, 0]
+      Scale: [1, 1, 1]
+    PixelPlatformerBodyComponent:
+      BodyType: Static
+      FixedRotation: true
+    BoxCollider2DComponent:
+      Offset: [0, 0]
+      Size: [8, 86]
+      Density: 1
+      Friction: 0.5
+      Restitution: 0
+      RestitutionThreshold: 0.5
+  - Entity: 225571545328772407
+    Enabled: true
+    TagComponent:
+      Tag: Wall 2
+    TransformComponent:
+      Position: [136, 1.5, 0]
+      Rotation: [0, -0, 0]
+      Scale: [1, 1, 1]
+    PixelPlatformerBodyComponent:
+      BodyType: Static
+      FixedRotation: true
+    BoxCollider2DComponent:
+      Offset: [0, 0]
+      Size: [8, 86]
+      Density: 1
+      Friction: 0.5
+      Restitution: 0
+      RestitutionThreshold: 0.5
+  - Entity: 6601449967907552928
+    Enabled: true
+    TagComponent:
+      Tag: Platform
+    TransformComponent:
+      Position: [56, 2, 0]
+      Rotation: [0, -0, 0]
+      Scale: [1, 1, 1]
+    PixelPlatformerBodyComponent:
+      BodyType: Static
+      FixedRotation: true
+    BoxCollider2DComponent:
+      Offset: [0, 0]
+      Size: [24, 8]
+      Density: 1
+      Friction: 0.5
+      Restitution: 0
+      RestitutionThreshold: 0.5

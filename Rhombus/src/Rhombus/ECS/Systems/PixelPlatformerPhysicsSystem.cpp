@@ -7,8 +7,6 @@
 
 namespace rhombus
 {
-	const float GRAVITY = -16.0f * 9.8f;			// 16 pixels -> 1 meter
-
 	void PixelPlatformerPhysicsSystem::Update(DeltaTime dt)
 	{
 		for (Entity entity : GetEntities())
@@ -72,6 +70,7 @@ namespace rhombus
 				}
 				else
 				{
+					ppbComponent.m_velocity.x = 0.0f;
 					break;
 				}
 			}
@@ -93,6 +92,7 @@ namespace rhombus
 				}
 				else
 				{
+					ppbComponent.m_velocity.y = 0.0f;
 					break;
 				}
 			}

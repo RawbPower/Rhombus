@@ -16,6 +16,7 @@
 #include "Rhombus/ECS/Components/CircleRendererComponent.h"
 #include "Rhombus/ECS/Components/Collider2DComponent.h"
 #include "Rhombus/ECS/Components/PixelPlatformerBodyComponent.h"
+#include "Rhombus/ECS/Components/PlatformerPlayerControllerComponent.h"
 #include "Rhombus/ECS/Components/Rigidbody2DComponent.h"
 #include "Rhombus/ECS/Components/ScriptComponent.h"
 #include "Rhombus/ECS/Components/SpriteRendererComponent.h"
@@ -38,7 +39,7 @@ namespace rhombus
 		ComponentGroup<TransformComponent, SpriteRendererComponent,
 		CircleRendererComponent, CameraComponent, ScriptComponent, NativeScriptComponent,
 		Rigidbody2DComponent, PixelPlatformerBodyComponent, BoxCollider2DComponent, CircleCollider2DComponent, BoxArea2DComponent,
-		TweenComponent, TileMapComponent>;
+		TweenComponent, TileMapComponent, PlatformerPlayerControllerComponent>;
 	// -----------------------------------------------------
 
 	static b2BodyType Rigidbody2DTypetoBox2DType(Rigidbody2DComponent::BodyType bodyType)
@@ -91,6 +92,14 @@ namespace rhombus
 			signature.set(m_Registry.GetComponentType<PixelPlatformerBodyComponent>());
 			m_Registry.SetSystemSignature<PixelPlatformerPhysicsSystem>(signature);
 		}
+
+		platformerPlayerControllerSystem = m_Registry.RegisterSystem<PlatformerPlayerControllerSystem>(this);
+		{
+			Signature signature;
+			signature.set(m_Registry.GetComponentType<PlatformerPlayerControllerComponent>());
+			m_Registry.SetSystemSignature<PlatformerPlayerControllerSystem>(signature);
+		}
+
 
 		m_rootSceneNode = CreateRef<SceneGraphNode>(this);
 	}
@@ -275,8 +284,8 @@ namespace rhombus
 				}
 			}
 
+			platformerPlayerControllerSystem->Update(dt);
 			pixelPlatformerPhysicsSystem->Update(dt);
-
 			tweeningSystem->UpdateTweens(dt);
 		}
 
@@ -493,6 +502,11 @@ namespace rhombus
 		}
 	}
 
+	void Scene::OnKeyPressed(int keycode, bool isRepeat)
+	{
+		platformerPlayerControllerSystem->OnKeyPressed(keycode, isRepeat);
+	}
+
 	void Scene::OnViewportResize(uint32_t width, uint32_t height)
 	{
 		m_ViewportWidth = width;
@@ -629,7 +643,12 @@ namespace rhombus
 		std::string name = GetNameForDuplicate(entity);
 		Entity newEntity = CreateEntity(name);
 
+		Ref<SceneGraphNode> sceneGraphNode = newEntity.GetSceneGraphNode();
 		CopyEntityComponents(newEntity, entity);
+		if (sceneGraphNode != newEntity.GetSceneGraphNode())
+		{
+			newEntity.GetComponent<TransformComponent>().m_sceneGraphNode = sceneGraphNode;
+		}
 	}
 
 	void Scene::CopyEntityComponents(Entity dest, Entity src)

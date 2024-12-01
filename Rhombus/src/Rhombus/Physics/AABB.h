@@ -48,12 +48,21 @@ namespace rhombus
 			return sqDist;
 		}
 
-		static bool TestAABBAABB(AABB a, AABB b)
+		// Not working for collisions where b is above a
+		/*static bool TestAABBAABB(AABB a, AABB b)
 		{
 			int r;
 			r = a.r.x + b.r.x; if ((uint32_t)(a.c.x - b.c.x + r) >= r + r) return false;
 			r = a.r.y + b.r.y; if ((uint32_t)(a.c.y - b.c.y + r) >= r + r) return false;
 			r = a.r.z + b.r.z; if ((uint32_t)(a.c.z - b.c.z + r) >= r + r) return false;
+			return true;
+		}*/
+
+		static bool TestAABBAABB(AABB a, AABB b)
+		{
+			if (math::Abs(a.c.x - b.c.x) >= (a.r.x + b.r.x)) return false;
+			if (math::Abs(a.c.y - b.c.y) >= (a.r.y + b.r.y)) return false;
+			if (math::Abs(a.c.z - b.c.z) >= (a.r.z + b.r.z)) return false;
 			return true;
 		}
 

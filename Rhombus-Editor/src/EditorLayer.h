@@ -6,6 +6,7 @@
 #include "Panels/SceneHierarchyPanel.h"
 #include "Panels/ContentBrowerPanel.h";
 #include "Panels/TilesetPanel.h";
+#include "Panels/EntityViewPanel.h";
 #include "Rhombus/Renderer/EditorCamera.h"
 
 #define RB_EDITOR 1
@@ -51,6 +52,7 @@ namespace rhombus
 
 		void OnScenePlay();
 		void OnSceneStop();
+		void OnEntitySelected(Entity entity);
 
 		void DuplicateSelectedEntities();
 		void DeleteSelectedEntities();
@@ -97,7 +99,7 @@ namespace rhombus
 
 		bool m_ShowEditorSettings = false;
 		bool m_ShowRenderStats = false;
-		bool m_ShowPhysicsColliders = true;
+		bool m_ShowPhysicsColliders = false;
 		bool m_ShowGameScreenSizeRect = true;
 		bool m_ShowTileMapGrid = false;
 		int m_ScreenResolutionPreset = -1;
@@ -119,9 +121,13 @@ namespace rhombus
 
 		// Panels
 		SceneHierarchyPanel m_sceneHierarchyPanel;
+		EntityViewPanel m_entityViewPanel;
 		Scope<ContentBrowserPanel> m_contentBrowserPanel;
 		Scope<TilesetPanel> m_tilesetPanel;
 		Ref<EditorExtension> m_editorExtension;
+
+		// To be used when storing separate entity view panels for each entity
+		//std::unordered_map<EntityID, Ref<EntityViewPanel>> m_entityViewPanels;
 
 		// Callbacks
 		std::function<Ref<Scene>()> m_sceneCreationCallback;

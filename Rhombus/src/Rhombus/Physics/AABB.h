@@ -65,29 +65,5 @@ namespace rhombus
 			if (math::Abs(a.c.z - b.c.z) >= (a.r.z + b.r.z)) return false;
 			return true;
 		}
-
-		// Retrun true if sphere s intersects AABB b, false otherwise
-		static bool TestSphereAABB(Sphere s, AABB b)
-		{
-			// Compute square distance between sphere center and AABB
-			float sqDist = SqDistPointAABB(s.c, b);
-
-			// Sphere and AABB intersect if the (squared) distance
-			// between them is less than the (squared) sphere radius
-			return sqDist < s.r * s.r;
-		}
-
-		// Retrun true if sphere s intersects AABB b, false otherwise
-		// The point p on the AABB closest to the sphere center is also returned
-		static bool TestSphereAABB(Sphere s, AABB b, Vec3& p)
-		{
-			// Find point p on AABB closest the the sphere center
-			ClosestPtPointAABB(s.c, b, p);
-
-			// Sphere and AABB intersect if the (squared) distance
-			// between them is less than the (squared) sphere radius
-			Vec3 v = p - s.c;
-			return Vec3::Dot(v, v) < s.r * s.r;
-		}
 	};
 }

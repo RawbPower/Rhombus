@@ -151,10 +151,10 @@ namespace rhombus {
 		colors[ImGuiCol_FrameBgActive] = orangeLight2;
 
 		// Tabs
-		colors[ImGuiCol_Tab] = orangeLight2;
-		colors[ImGuiCol_TabHovered] = orange;
+		colors[ImGuiCol_Tab] = orange;
+		colors[ImGuiCol_TabHovered] = orangeLight2;
 		colors[ImGuiCol_TabActive] = orangeDark;
-		colors[ImGuiCol_TabUnfocused] = orangeLight2;
+		colors[ImGuiCol_TabUnfocused] = orange;
 		colors[ImGuiCol_TabUnfocusedActive] = orangeDark;
 
 		// Title

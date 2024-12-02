@@ -15,7 +15,7 @@ namespace rhombus
 	EditorLayer::EditorLayer(std::function<Ref<Scene>()> sceneCB, std::function<Ref<EditorExtension>()> editorCB)
 		: Layer("Editor"), m_sceneCreationCallback(sceneCB), m_editorExtensionCreationCallback(editorCB), m_CameraController(1920.0f / 1080.0f, true), m_SquareColor({0.2f, 0.3f, 0.8f, 1.0f})
 	{
-
+		m_sceneHierarchyPanel.SetSelectEntityCallback(std::bind(&EditorLayer::OnEntitySelected, this, std::placeholders::_1));
 	}
 
 	void EditorLayer::OnAttach() 
@@ -345,6 +345,7 @@ namespace rhombus
 		}
 
 		m_sceneHierarchyPanel.OnImGuiRender(m_SceneState == SceneState::Edit, m_ActiveScene->GetEntityEnabledMap());
+		m_entityViewPanel.OnImGuiRender();
 		m_contentBrowserPanel->OnImGuiRender();
 		m_tilesetPanel->OnImGuiRender();
 
@@ -380,6 +381,13 @@ namespace rhombus
 		}
 
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
+
+		/*for (auto& it : m_entityViewPanels)
+		{
+			Ref<EntityViewPanel> entityViewPanel = it.second;
+			entityViewPanel->OnImGuiRender();
+		}*/
+
 		ImGui::Begin("Viewport");
 		
 		auto viewportMinRegion = ImGui::GetWindowContentRegionMin();
@@ -790,6 +798,7 @@ namespace rhombus
 	bool EditorLayer::OnMouseButtonPressed(MouseButtonPressedEvent& e)
 	{
 		if (m_SceneState == SceneState::Play && !Application::Get().GetIsDebugPaused())
+		if (m_SceneState == SceneState::Play && !Application::Get().GetIsDebugPaused())
 		{
 			m_ActiveScene->OnMouseButtonPressed(e.GetMouseButton());
 		}
@@ -977,6 +986,18 @@ namespace rhombus
 		m_ActiveScene = m_EditorScene;
 
 		m_sceneHierarchyPanel.SetContext(m_ActiveScene);
+	}
+
+	void EditorLayer::OnEntitySelected(Entity entity)
+	{
+		// To be used to open entity panels when an entity is selected
+		/*EntityID entityID = (EntityID)entity;
+		if (m_entityViewPanels.find(entityID) == m_entityViewPanels.end())
+		{
+			m_entityViewPanels[entityID] = CreateRef<EntityViewPanel>(entity.GetName());
+		}*/
+
+		m_entityViewPanel.SetCurrentEntity(entity);
 	}
 
 	void EditorLayer::DuplicateSelectedEntities()

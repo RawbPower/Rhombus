@@ -263,7 +263,7 @@ namespace rhombus
 			{
 				m_selectionMask = (1 << m_currentEntityIndex);
 			}
-			m_selectionContext = entity;
+			SetSelectedEntity(entity);
 		}
 
 		m_currentEntityIndex++;
@@ -533,25 +533,10 @@ namespace rhombus
 			if (component.m_texture)
 			{
 				ImGui::Spacing();
-				// Caclulate image size
+
 				const float thumbnailSize = 128.0f;
-				const float fAspectRatio = (float)component.m_texture->GetWidth() / (float)component.m_texture->GetHeight();
-				const bool bWideImage = fAspectRatio >= 1.0f;
-				const ImVec2 iconSize = bWideImage ? ImVec2(thumbnailSize, thumbnailSize * (1.0f / fAspectRatio)) : ImVec2(thumbnailSize * fAspectRatio, thumbnailSize);
+				ImGui::SpriteButton(component, thumbnailSize);
 
-				// Caclulate image padding needed to make square button
-				const float fDimensionDifference = math::Abs(component.m_texture->GetWidth() - component.m_texture->GetHeight());
-				const float fMaxDimension = bWideImage ? component.m_texture->GetWidth() : component.m_texture->GetHeight();
-				const float fSmallDimensionPadding = (fDimensionDifference / fMaxDimension) * thumbnailSize * 0.5f;
-				const ImVec2 iconPadding = bWideImage ? ImVec2(0.0f, fSmallDimensionPadding) : ImVec2(fSmallDimensionPadding, 0.0f);
-
-				ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, iconPadding);
-				ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0, 0));
-				ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0, 0, 0, 0));
-				ImGui::ImageButton((ImTextureID)component.m_texture->GetRendererID(), iconSize, { 0,1 }, { 1,0 });
-				ImGui::PopStyleColor();
-				ImGui::PopStyleColor();
-				ImGui::PopStyleVar();
 				ImGui::Spacing();
 			}
 			else

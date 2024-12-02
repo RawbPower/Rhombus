@@ -8,6 +8,9 @@
 
 namespace rhombus
 {
+	typedef std::function<void()> AddChildCallback;
+	typedef std::function<void(Entity)> SelectEntityCallback;
+
 	class SceneHierarchyPanel
 	{
 	public:
@@ -16,11 +19,12 @@ namespace rhombus
 
 		void SetContext(const Ref<Scene>& context);
 		void SetEditorExtension(const Ref<EditorExtension>& extension);
+		void SetSelectEntityCallback(SelectEntityCallback callback) { m_selectEntityCallback = callback; }
 
-		void OnImGuiRender(bool bIsInEditMode, std::unordered_map<EntityID, bool>& entityEnabledMap);;
+		void OnImGuiRender(bool bIsInEditMode, std::unordered_map<EntityID, bool>& entityEnabledMap);
 
 		Entity GetSelectedEntity() const { return m_selectionContext; }
-		void SetSelectedEntity(Entity entity) { m_selectionContext = entity; }
+		void SetSelectedEntity(Entity entity) { m_selectionContext = entity; if (m_selectEntityCallback) m_selectEntityCallback(m_selectionContext); }
 
 		void GetAllSelectedEntities(std::vector<Entity>& selectedEntitiesInOut) const;
 		void ResetSelectedEntities() { m_selectionContext = {}; m_selectionMask = 0; }
@@ -55,6 +59,7 @@ namespace rhombus
 
 		// Add child as a callback to be called after all the entities are iterated through
 		// This is to avoid invalidating the iterator while going through it
-		std::function<void()> m_addChildCallback;
+		AddChildCallback m_addChildCallback;
+		SelectEntityCallback m_selectEntityCallback;
 	};
 }

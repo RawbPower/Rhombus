@@ -4,6 +4,7 @@
 #include "Rhombus/ECS/Components/PixelPlatformerBodyComponent.h"
 #include "Rhombus/ECS/Components/TransformComponent.h"
 #include "Rhombus/Physics/AABB.h"
+#include "Rhombus/Physics/PrimitiveTests.h"
 
 namespace rhombus
 {
@@ -144,7 +145,7 @@ namespace rhombus
 				mySphere.c = Vec3(position.x, position.y, 0.0f) + myColliderComponent.m_offset;
 				mySphere.r = myColliderComponent.m_radius;
 
-				if (AABB::TestSphereAABB(mySphere, otherAABB))
+				if (PrimitiveTests::TestSphereAABB(mySphere, otherAABB))
 				{
 					return true;
 				}

@@ -6,6 +6,8 @@
 
 namespace rhombus
 {
+	typedef std::function<void(const std::string&)> TileSetSelectedCallback;
+
 	class ContentBrowserPanel
 	{
 	public:
@@ -16,7 +18,7 @@ namespace rhombus
 		void OnCurrentDirectoryhChanged();
 
 		Ref<Texture2D> GetImageInCache(const std::string& filepath);
-		void SetTilesetSelectedCallback(std::function<void(const std::string&)> callback) { m_TileSetSelectedCallback = callback; }
+		void SetTilesetSelectedCallback(TileSetSelectedCallback callback) { m_TileSetSelectedCallback = callback; }
 
 	private:
 		std::filesystem::path m_baseDirectory;

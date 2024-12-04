@@ -264,6 +264,7 @@ namespace rhombus
 				m_selectionMask = (1 << m_currentEntityIndex);
 			}
 			SetSelectedEntity(entity);
+			ImGui::RhombusDebugLog("Selected Entity: %s", entity.GetName().c_str());
 		}
 
 		m_currentEntityIndex++;

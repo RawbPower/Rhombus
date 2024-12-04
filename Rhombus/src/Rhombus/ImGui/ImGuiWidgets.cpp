@@ -2,6 +2,7 @@
 #include "ImGuiWidgets.h"
 
 #include "imgui.h"
+#include "imgui_internal.h"
 
 #include "Rhombus/Math/Vector.h"
 #include "Rhombus/ECS/Components/SpriteRendererComponent.h"
@@ -108,5 +109,76 @@ namespace ImGui
 		ImGui::PopStyleColor();
 		ImGui::PopStyleColor();
 		ImGui::PopStyleVar();
+	}
+
+	enum RhmobusDebugLogFlags
+	{
+		// Event types
+		RhombusDebugLogFlags_None = 0,
+		RhombusDebugLogFlags_Trace = 1 << 0,
+		RhombusDebugLogFlags_Debug = 1 << 1,
+		RhombusDebugLogFlags_Info = 1 << 2,
+		RhombusDebugLogFlags_Warn = 1 << 3,
+		RhombusDebugLogFlags_Error = 1 << 4,
+		RhombusDebugLogFlags_Critical = 1 << 5,
+		RhombusDebugLogFlags_All = RhombusDebugLogFlags_Trace | RhombusDebugLogFlags_Debug | RhombusDebugLogFlags_Info | RhombusDebugLogFlags_Warn | RhombusDebugLogFlags_Error | RhombusDebugLogFlags_Critical
+	};
+
+	void ShowRhombusDebugLogWindow()
+	{
+		ImGuiContext& g = *GImGui;
+		ImGui::Begin("Debug Log");
+
+		static int placeholder = RhombusDebugLogFlags_All;
+
+		ImGui::CheckboxFlags("All", &placeholder, RhombusDebugLogFlags_All);
+		ImGui::SameLine(); ImGui::CheckboxFlags("Trace", &placeholder, RhombusDebugLogFlags_Trace);
+		ImGui::SameLine(); ImGui::CheckboxFlags("Debug", &placeholder, RhombusDebugLogFlags_Debug);
+		ImGui::SameLine(); ImGui::CheckboxFlags("Info", &placeholder, RhombusDebugLogFlags_Info);
+		ImGui::SameLine(); ImGui::CheckboxFlags("Warn", &placeholder, RhombusDebugLogFlags_Warn);
+		ImGui::SameLine(); ImGui::CheckboxFlags("Error", &placeholder, RhombusDebugLogFlags_Error);
+		ImGui::SameLine(); ImGui::CheckboxFlags("Critical", &placeholder, RhombusDebugLogFlags_Critical);
+
+		if (ImGui::SmallButton("Clear"))
+		{
+			g.DebugLogBuf.clear();
+			g.DebugLogIndex.clear();
+		}
+		ImGui::SameLine();
+		if (ImGui::SmallButton("Copy"))
+			ImGui::SetClipboardText(g.DebugLogBuf.c_str());
+		ImGui::BeginChild("##log", ImVec2(0.0f, 0.0f), ImGuiChildFlags_Border, ImGuiWindowFlags_AlwaysVerticalScrollbar | ImGuiWindowFlags_AlwaysHorizontalScrollbar);
+
+		ImGuiListClipper clipper;
+		clipper.Begin(g.DebugLogIndex.size());
+		while (clipper.Step())
+			for (int line_no = clipper.DisplayStart; line_no < clipper.DisplayEnd; line_no++)
+			{
+				const char* line_begin = g.DebugLogIndex.get_line_begin(g.DebugLogBuf.c_str(), line_no);
+				const char* line_end = g.DebugLogIndex.get_line_end(g.DebugLogBuf.c_str(), line_no);
+				ImGui::TextUnformatted(line_begin, line_end);
+			}
+		if (ImGui::GetScrollY() >= ImGui::GetScrollMaxY())
+			ImGui::SetScrollHereY(1.0f);
+		ImGui::EndChild();
+
+		ImGui::End();
+	}
+
+	void RhombusDebugLog(const char* fmt, ...)
+	{
+		va_list args;
+		va_start(args, fmt);
+		ImGuiContext& g = *GImGui;
+		const int old_size = g.DebugLogBuf.size();
+		g.DebugLogBuf.appendf("[%05d] ", g.FrameCount);
+		g.DebugLogBuf.appendfv(fmt, args);
+		g.DebugLogBuf.appendf("\n");
+		g.DebugLogIndex.append(g.DebugLogBuf.c_str(), old_size, g.DebugLogBuf.size());
+		if (g.DebugLogFlags & ImGuiDebugLogFlags_OutputToTTY)
+		{
+			IMGUI_DEBUG_PRINTF("%s", g.DebugLogBuf.begin() + old_size);
+		}
+		va_end(args);
 	}
 }

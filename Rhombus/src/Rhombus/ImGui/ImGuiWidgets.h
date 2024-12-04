@@ -11,4 +11,6 @@ namespace ImGui
 	bool SelectableEnum(const char* label, const char** enumStrings, int enumCount, int* currentEnumValue);
 	void Sprite(const rhombus::SpriteRendererComponent& src, float height, bool center = true);
 	void SpriteButton(const rhombus::SpriteRendererComponent& src, float size);
+	void ShowRhombusDebugLogWindow();
+	void RhombusDebugLog(const char* fmt, ...);
 }

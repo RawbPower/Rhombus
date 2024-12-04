@@ -344,6 +344,7 @@ namespace rhombus
 			ImGui::EndMenuBar();
 		}
 
+		ImGui::ShowRhombusDebugLogWindow();
 		m_sceneHierarchyPanel.OnImGuiRender(m_SceneState == SceneState::Edit, m_ActiveScene->GetEntityEnabledMap());
 		m_entityViewPanel.OnImGuiRender();
 		m_contentBrowserPanel->OnImGuiRender();

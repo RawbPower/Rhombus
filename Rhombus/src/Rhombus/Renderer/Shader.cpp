@@ -10,12 +10,12 @@ namespace rhombus {
 	{
 		switch (Renderer::GetAPI())
 		{
-			case RendererAPI::API::None:		RB_CORE_ASSERT(false, "RendererAPI::None is currently not supported"); return nullptr;
+			case RendererAPI::API::None:		Log::Assert(false, "RendererAPI::None is currently not supported"); return nullptr;
 
 			case RendererAPI::API::OpenGL:	return std::make_shared<OpenGLShader>(filepath);
 		}
 
-		RB_CORE_ASSERT(false, "Unknown RendererAPI");
+		Log::Assert(false, "Unknown RendererAPI");
 		return nullptr;
 	}
 
@@ -23,18 +23,18 @@ namespace rhombus {
 	{
 		switch (Renderer::GetAPI())
 		{
-			case RendererAPI::API::None:		RB_CORE_ASSERT(false, "RendererAPI::None is currently not supported"); return nullptr;
+			case RendererAPI::API::None:		Log::Assert(false, "RendererAPI::None is currently not supported"); return nullptr;
 
 			case RendererAPI::API::OpenGL:	return std::make_shared<OpenGLShader>(name, vertexSrc, pixelSrc);
 		}
 
-		RB_CORE_ASSERT(false, "Unknown RendererAPI");
+		Log::Assert(false, "Unknown RendererAPI");
 		return nullptr;
 	}
 
 	void ShaderLibrary::Add(const std::string& name, const Ref<Shader>& shader)
 	{
-		RB_CORE_ASSERT(!Exists(name), "Shader already exists!");
+		Log::Assert(!Exists(name), "Shader already exists!");
 		m_Shaders[name] = shader;
 	}
 
@@ -60,7 +60,7 @@ namespace rhombus {
 
 	rhombus::Ref<Shader> ShaderLibrary::Get(const std::string& name)
 	{
-		RB_CORE_ASSERT(Exists(name), "Shader not found!");
+		Log::Assert(Exists(name), "Shader not found!");
 		return m_Shaders[name];
 	}
 

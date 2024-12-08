@@ -61,7 +61,7 @@ namespace rhombus {
 			m_InternalFormat = internalFormat;
 			m_DataFormat = dataFormat;
 
-			RB_CORE_ASSERT(internalFormat & dataFormat, "Format not supported!");
+			Log::Assert(internalFormat & dataFormat, "Format not supported!");
 
 			// Upload to OpenGL
 			glCreateTextures(GL_TEXTURE_2D, 1, &m_RendererID);
@@ -94,7 +94,7 @@ namespace rhombus {
 		RB_PROFILE_FUNCTION();
 
 		uint32_t bytesPerPixel = m_DataFormat == GL_RGBA ? 4 : 3;
-		RB_CORE_ASSERT(size = m_Width * m_Height * bytesPerPixel, "Data must be entire texture!");
+		Log::Assert(size = m_Width * m_Height * bytesPerPixel, "Data must be entire texture!");
 		glTextureSubImage2D(m_RendererID, 0, 0, 0, m_Width, m_Height, m_DataFormat, GL_UNSIGNED_BYTE, data);
 	}
 

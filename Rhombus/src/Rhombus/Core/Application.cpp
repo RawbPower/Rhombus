@@ -213,8 +213,6 @@ namespace rhombus {
 
 	bool Application::OnKeyPressed(KeyPressedEvent& e)
 	{
-		RB_CORE_INFO(e.ToString());
-
 		if (e.GetKeyCode() == RB_KEY_HASH && !m_DebugStep)	// Can't pause while stepping
 		{
 			m_DebugPause = !m_DebugPause;
@@ -233,43 +231,31 @@ namespace rhombus {
 
 	bool Application::OnKeyReleased(KeyReleasedEvent& e)
 	{
-		RB_CORE_INFO(e.ToString());
-
 		return true;
 	}
 
 	bool Application::OnKeyTyped(KeyTypedEvent& e)
 	{
-		RB_CORE_INFO(e.ToString());
-
 		return false;
 	}
 
 	bool Application::OnMouseButtonPressed(MouseButtonPressedEvent& e)
 	{
-		RB_CORE_INFO(e.ToString());
-
 		return true;
 	}
 
 	bool Application::OnMouseButtonReleased(MouseButtonReleasedEvent& e)
 	{
-		RB_CORE_INFO(e.ToString());
-
 		return true;
 	}
 
 	bool Application::OnMouseScrolled(MouseScrolledEvent& e)
 	{
-		RB_CORE_INFO(e.ToString());
-
 		return true;
 	}
 
 	bool Application::OnMouseMoved(MouseMovedEvent& e)
 	{
-		RB_CORE_INFO(e.ToString());
-
 		return true;
 	}
 }

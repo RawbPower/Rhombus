@@ -54,7 +54,7 @@ namespace rhombus
 		}
 		catch (YAML::ParserException e)
 		{
-			RB_CORE_ERROR("Failed to load project file '{0}'\n     {1}", filepath, e.what());
+			Log::Error("Failed to load project file '%s'\n     {1}", filepath, e.what());
 			return false;
 		}
 

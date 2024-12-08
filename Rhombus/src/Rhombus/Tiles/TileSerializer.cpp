@@ -54,7 +54,7 @@ namespace rhombus
 		}
 		catch (YAML::ParserException e)
 		{
-			RB_CORE_ERROR("Failed to load tileset file '{0}'\n     {1}", filepath, e.what());
+			Log::Error("Failed to load tileset file '%s'\n     %s", filepath, e.what());
 			return nullptr;
 		}
 
@@ -103,7 +103,7 @@ namespace rhombus
 		}
 		catch (YAML::ParserException e)
 		{
-			RB_CORE_ERROR("Failed to load tileset file '{0}'\n     {1}", filepath, e.what());
+			Log::Error("Failed to load tileset file '%s'\n     %s", filepath, e.what());
 			return nullptr;
 		}
 

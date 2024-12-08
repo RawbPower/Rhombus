@@ -17,13 +17,13 @@ namespace rhombus {
 	{
 		switch (severity)
 		{
-		case GL_DEBUG_SEVERITY_HIGH:         RB_CORE_CRITICAL(message); return;
-		case GL_DEBUG_SEVERITY_MEDIUM:       RB_CORE_ERROR(message); return;
-		case GL_DEBUG_SEVERITY_LOW:          RB_CORE_WARN(message); return;
-		case GL_DEBUG_SEVERITY_NOTIFICATION: RB_CORE_TRACE(message); return;
+		case GL_DEBUG_SEVERITY_HIGH:         Log::Error(message); return;
+		case GL_DEBUG_SEVERITY_MEDIUM:       Log::Warn(message); return;
+		case GL_DEBUG_SEVERITY_LOW:          Log::Info(message); return;
+		case GL_DEBUG_SEVERITY_NOTIFICATION: Log::Debug(message); return;
 		}
 
-		RB_CORE_ASSERT(false, "Unknown severity level!");
+		Log::Assert(false, "Unknown severity level!");
 	}
 
 	void OpenGLRendererAPI::Init()

@@ -13,7 +13,7 @@ namespace rhombus {
 		if (type == "pixel" || type == "fragment")
 			return GL_FRAGMENT_SHADER;
 
-		RB_CORE_ASSERT(false, "Unknown shader type!");
+		Log::Assert(false, "Unknown shader type!");
 		return 0;
 	}
 
@@ -62,7 +62,7 @@ namespace rhombus {
 		// Get a program object.
 		GLuint program = glCreateProgram();
 
-		RB_CORE_ASSERT(shaderSources.size() <= 2, "We only support 2 shaders!");
+		Log::Assert(shaderSources.size() <= 2, "We only support 2 shaders!");
 		
 		// Keep track of shader IDs
 		std::array<GLenum, 2> glShaderIDs;
@@ -99,8 +99,8 @@ namespace rhombus {
 
 				// Use the infoLog as you see fit.
 
-				RB_CORE_ERROR("{0}", infoLog.data());
-				RB_CORE_ASSERT(false, "Shader Compilation Failure!");
+				Log::Error("%s", infoLog.data());
+				Log::Assert(false, "Shader Compilation Failure!");
 
 				break;
 			}
@@ -134,8 +134,8 @@ namespace rhombus {
 				glDeleteShader(id);
 
 			// Use the infoLog as you see fit.
-			RB_CORE_ERROR("{0}", infoLog.data());
-			RB_CORE_ASSERT(false, "Shader Link Failure!");
+			Log::Error("%s", infoLog.data());
+			Log::Assert(false, "Shader Link Failure!");
 
 			return;
 		}
@@ -168,7 +168,7 @@ namespace rhombus {
 		}
 		else
 		{
-			RB_CORE_ERROR("Could not open file '{0}'", filepath);
+			Log::Error("Could not open file '%s'", filepath);
 		}
 
 		return result;
@@ -186,13 +186,13 @@ namespace rhombus {
 		while (pos != std::string::npos)
 		{
 			size_t eol = source.find_first_of("\r\n", pos);			// End of shader type declaration line
-			RB_CORE_ASSERT(eol != std::string::npos, "Syntax error!");
+			Log::Assert(eol != std::string::npos, "Syntax error!");
 			size_t begin = pos + typeTokenLength + 1;		// Start of shader type name (after "#type" keyword)
 			std::string type = source.substr(begin, eol - begin);
-			RB_CORE_ASSERT(ShaderTypeFromString(type), "Invalid shader type specified!");
+			Log::Assert(ShaderTypeFromString(type), "Invalid shader type specified!");
 
 			size_t nextLinePos = source.find_first_not_of("\r\n", eol);		// Start of shader code after shader type declaration line
-			RB_CORE_ASSERT(nextLinePos != std::string::npos, "Syntax error");
+			Log::Assert(nextLinePos != std::string::npos, "Syntax error");
 			pos = source.find(typeToken, nextLinePos);		// Start of next shader type declaration line
 			shaderSources[ShaderTypeFromString(type)] = (pos == std::string::npos) ? source.substr(nextLinePos) : source.substr(nextLinePos, pos - nextLinePos);
 		}

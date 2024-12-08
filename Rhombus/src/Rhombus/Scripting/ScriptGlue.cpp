@@ -1,6 +1,7 @@
 #include "rbpch.h"
 #include "ScriptGlue.h"
 
+#include "Rhombus/Core/Log.h"
 #include "Rhombus/Core/Input.h"
 #include "Rhombus/Core/KeyCodes.h"
 #include "Rhombus/Scenes/Scene.h"
@@ -39,7 +40,7 @@ namespace rhombus
 
 	int HostFunction(lua_State* state)
 	{
-		RB_CORE_ASSERT(lua_gettop(state) == 2, "Invalid number of arguments passed to function");
+		Log::Assert(lua_gettop(state) == 2, "Invalid number of arguments passed to function");
 
 		float a = (float)lua_tonumber(state, 1);		// indexed as if this is a fresh stack
 		float b = (float)lua_tonumber(state	, 2);		// indexed as if this is a fresh stack
@@ -50,9 +51,9 @@ namespace rhombus
 
 	int Log(lua_State* state)
 	{
-		RB_CORE_ASSERT(lua_gettop(state) == 1, "Invalid number of arguments passed to function");
+		Log::Assert(lua_gettop(state) == 1, "Invalid number of arguments passed to function");
 		std::string logString = lua_tostring(state, 1);
-		RB_CORE_INFO(logString);
+		Log::Debug(logString.c_str());
 		return 0;
 	}
 
@@ -68,7 +69,7 @@ namespace rhombus
 
 	int IsKeyDown(lua_State* state)
 	{
-		RB_CORE_ASSERT(lua_gettop(state) == 1, "Invalid number of arguments passed to function");
+		Log::Assert(lua_gettop(state) == 1, "Invalid number of arguments passed to function");
 
 		int key = (int)lua_tonumber(state, 1);		// indexed as if this is a fresh stack
 		bool keyPressed = Input::IsKeyPressed(key);
@@ -78,13 +79,13 @@ namespace rhombus
 
 	int ApplyLinearImpulse(lua_State* state)
 	{
-		RB_CORE_ASSERT(lua_gettop(state) == 3, "Invalid number of arguments passed to function");
+		Log::Assert(lua_gettop(state) == 3, "Invalid number of arguments passed to function");
 
 		UUID entityID = GetEntityUUIDFromLua(state);
 		float impulseX = (float)lua_tonumber(state, 2);		// indexed as if this is a fresh stack
 		float impulseY = (float)lua_tonumber(state, 3);		// indexed as if this is a fresh stack
 		Scene* scene = ScriptEngine::GetSceneContext();
-		RB_CORE_ASSERT(scene, "Invalid Scene in ApplyLinearImpulse");
+		Log::Assert(scene, "Invalid Scene in ApplyLinearImpulse");
 		Entity entity = scene->GetEntityByUUID(entityID);
 		std::string name = entity.GetComponent<TagComponent>().m_tag;
 		//RB_CORE_ASSERT(entity, "Invalid Entity in ApplyLinearImpulse");
@@ -98,13 +99,13 @@ namespace rhombus
 
 	int Translate(lua_State* state)
 	{
-		RB_CORE_ASSERT(lua_gettop(state) == 3, "Invalid number of arguments passed to function");
+		Log::Assert(lua_gettop(state) == 3, "Invalid number of arguments passed to function");
 
 		UUID entityID = GetEntityUUIDFromLua(state);
 		float translateX = (float)lua_tonumber(state, 2);		// indexed as if this is a fresh stack
 		float translateY = (float)lua_tonumber(state, 3);		// indexed as if this is a fresh stack
 		Scene* scene = ScriptEngine::GetSceneContext();
-		RB_CORE_ASSERT(scene, "Invalid Scene in Translate");
+		Log::Assert(scene, "Invalid Scene in Translate");
 		Entity entity = scene->GetEntityByUUID(entityID);
 		std::string name = entity.GetComponent<TagComponent>().m_tag;
 
@@ -116,14 +117,14 @@ namespace rhombus
 
 	int SetPosition(lua_State* state)
 	{
-		RB_CORE_ASSERT(lua_gettop(state) == 4, "Invalid number of arguments passed to function");
+		Log::Assert(lua_gettop(state) == 4, "Invalid number of arguments passed to function");
 
 		UUID entityID = GetEntityUUIDFromLua(state);
 		float positionX = (float)lua_tonumber(state, 2);		// indexed as if this is a fresh stack
 		float positionY = (float)lua_tonumber(state, 3);		// indexed as if this is a fresh stack
 		float positionZ = (float)lua_tonumber(state, 4);		// indexed as if this is a fresh stack
 		Scene* scene = ScriptEngine::GetSceneContext();
-		RB_CORE_ASSERT(scene, "Invalid Scene in Translate");
+		Log::Assert(scene, "Invalid Scene in Translate");
 		Entity entity = scene->GetEntityByUUID(entityID);
 		std::string name = entity.GetComponent<TagComponent>().m_tag;
 
@@ -135,11 +136,11 @@ namespace rhombus
 
 	int GetPosition(lua_State* state)
 	{
-		RB_CORE_ASSERT(lua_gettop(state) == 1, "Invalid number of arguments passed to function");
+		Log::Assert(lua_gettop(state) == 1, "Invalid number of arguments passed to function");
 
 		UUID entityID = GetEntityUUIDFromLua(state);
 		Scene* scene = ScriptEngine::GetSceneContext();
-		RB_CORE_ASSERT(scene, "Invalid Scene in Translate");
+		Log::Assert(scene, "Invalid Scene in Translate");
 		Entity entity = scene->GetEntityByUUID(entityID);
 		std::string name = entity.GetComponent<TagComponent>().m_tag;
 
@@ -153,7 +154,7 @@ namespace rhombus
 
 	int GetMousePosition(lua_State* state)
 	{
-		RB_CORE_ASSERT(lua_gettop(state) == 0, "Invalid number of arguments passed to function");
+		Log::Assert(lua_gettop(state) == 0, "Invalid number of arguments passed to function");
 
 		Vec3 mousePosition = Renderer2D::ConvertScreenToWorldSpace(Input::GetMouseX(), Input::GetMouseY());
 		lua_pushnumber(state, mousePosition.x);
@@ -164,7 +165,7 @@ namespace rhombus
 
 	int IsMouseInArea(lua_State* state)
 	{
-		RB_CORE_ASSERT(lua_gettop(state) == 1, "Invalid number of arguments passed to function");
+		Log::Assert(lua_gettop(state) == 1, "Invalid number of arguments passed to function");
 
 		UUID entityID = GetEntityUUIDFromLua(state);
 		Scene* scene = ScriptEngine::GetSceneContext();

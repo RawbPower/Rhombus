@@ -5,11 +5,30 @@
 #include "Rhombus/Math/Matrix.h"
 #include "Rhombus/Math/Quat.h"
 
+#if RB_ENABLE_IMGUI
+#include "Rhombus/ImGui/ImGuiWidgets.h"
+#endif
+
 // This ignores all warnings raised inside External headers
 #pragma warning(push, 0)
 #include "spdlog/spdlog.h"
 #include "spdlog/fmt/ostr.h"
+#include "spdlog/fmt/bundled/printf.h"
 #pragma warning(pop)
+
+// Core log macros
+#define RB_CORE_TRACE(...)    ::rhombus::Log::GetCoreLogger()->trace(__VA_ARGS__)
+#define RB_CORE_INFO(...)     ::rhombus::Log::GetCoreLogger()->info(__VA_ARGS__)
+#define RB_CORE_WARN(...)     ::rhombus::Log::GetCoreLogger()->warn(__VA_ARGS__)
+#define RB_CORE_ERROR(...)    ::rhombus::Log::GetCoreLogger()->error(__VA_ARGS__)
+#define RB_CORE_CRITICAL(...)    ::rhombus::Log::GetCoreLogger()->critical(__VA_ARGS__)
+
+// Client log macros
+#define RB_TRACE(...)    ::rhombus::Log::GetClientLogger()->trace(__VA_ARGS__)
+#define RB_INFO(...)     ::rhombus::Log::GetClientLogger()->info(__VA_ARGS__)
+#define RB_WARN(...)     ::rhombus::Log::GetClientLogger()->warn(__VA_ARGS__)
+#define RB_ERROR(...)    ::rhombus::Log::GetClientLogger()->error(__VA_ARGS__)
+#define RB_CRITICAL(...)    ::rhombus::Log::GetClientLogger()->critical(__VA_ARGS__)
 
 namespace rhombus {
 
@@ -22,6 +41,59 @@ namespace rhombus {
 
 		inline static std::shared_ptr<spdlog::logger>& GetCoreLogger() { return s_CoreLogger;  }
 		inline static std::shared_ptr<spdlog::logger>& GetClientLogger() { return s_ClientLogger; }
+
+		template <class... Args>
+		inline static void Debug(const char* fmt, const Args&... args)
+		{
+#if RB_ENABLE_IMGUI
+			ImGui::RhombusDebugLog(fmt, args...);
+#endif
+
+			RB_TRACE("{}", fmt::sprintf(fmt, args...));
+		}
+
+		template <class... Args>
+		inline static void Info(const char* fmt, const Args&... args)
+		{ 
+#if RB_ENABLE_IMGUI
+			ImGui::RhombusDebugLogInfo(fmt, args...);
+#endif
+
+			RB_INFO("{}", fmt::sprintf(fmt, args...));
+		}
+
+		template <class... Args>
+		inline static void Warn(const char* fmt, const Args&... args)
+		{
+#if RB_ENABLE_IMGUI
+			ImGui::RhombusDebugLogWarning(fmt, args...);
+#endif
+
+			RB_WARN("{}", fmt::sprintf(fmt, args...));
+		}
+
+		template <class... Args>
+		inline static void Error(const char* fmt, const Args&... args)
+		{
+#if RB_ENABLE_IMGUI
+			ImGui::RhombusDebugLogError(fmt, args...);
+#endif
+
+			RB_ERROR("{}", fmt::sprintf(fmt, args...));
+		}
+
+		template <class... Args>
+		inline static void Assert(bool x, const char* fmt, const Args&... args)
+		{
+#if RB_ENABLE_IMGUI
+			if (!x)
+			{
+				ImGui::RhombusDebugLogError(fmt, args...);
+			}
+#endif
+
+			RB_ASSERT(x, "{}", fmt::sprintf(fmt, args...));
+		}
 	private:
 		static std::shared_ptr<spdlog::logger> s_CoreLogger;
 		static std::shared_ptr<spdlog::logger> s_ClientLogger;
@@ -76,20 +148,6 @@ inline OStream& operator<<(OStream& os, const rhombus::Quat& quaternion)
 {
 	return os << "(" << quaternion.w << "{" << quaternion.x << "," << quaternion.y << "," << quaternion.z << "})";
 }
-
-// Core log macros
-#define RB_CORE_TRACE(...)    ::rhombus::Log::GetCoreLogger()->trace(__VA_ARGS__)
-#define RB_CORE_INFO(...)     ::rhombus::Log::GetCoreLogger()->info(__VA_ARGS__)
-#define RB_CORE_WARN(...)     ::rhombus::Log::GetCoreLogger()->warn(__VA_ARGS__)
-#define RB_CORE_ERROR(...)    ::rhombus::Log::GetCoreLogger()->error(__VA_ARGS__)
-#define RB_CORE_CRITICAL(...)    ::rhombus::Log::GetCoreLogger()->critical(__VA_ARGS__)
-
-// Client log macros
-#define RB_TRACE(...)    ::rhombus::Log::GetClientLogger()->trace(__VA_ARGS__)
-#define RB_INFO(...)     ::rhombus::Log::GetClientLogger()->info(__VA_ARGS__)
-#define RB_WARN(...)     ::rhombus::Log::GetClientLogger()->warn(__VA_ARGS__)
-#define RB_ERROR(...)    ::rhombus::Log::GetClientLogger()->error(__VA_ARGS__)
-#define RB_CRITICAL(...)    ::rhombus::Log::GetClientLogger()->critical(__VA_ARGS__)
 
 /* Macros are used here instead of functions so that they can be
 	stripped from the distribution built with

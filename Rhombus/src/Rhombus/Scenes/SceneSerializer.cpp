@@ -30,7 +30,7 @@ namespace rhombus
 		case Rigidbody2DComponent::BodyType::Kinematic: return "Kinematic";
 		}
 
-		RB_CORE_ASSERT(false, "Unknown body type");
+		Log::Assert(false, "Unknown body type");
 		return {};
 	}
 
@@ -40,7 +40,7 @@ namespace rhombus
 		if (bodyTypeString == "Dynamic")   return Rigidbody2DComponent::BodyType::Dynamic;
 		if (bodyTypeString == "Kinematic") return Rigidbody2DComponent::BodyType::Kinematic;
 
-		RB_CORE_ASSERT(false, "Unknown body type");
+		Log::Assert(false, "Unknown body type");
 		return Rigidbody2DComponent::BodyType::Static;
 	}
 
@@ -53,7 +53,7 @@ namespace rhombus
 		case PixelPlatformerBodyComponent::BodyType::Kinematic: return "Kinematic";
 		}
 
-		RB_CORE_ASSERT(false, "Unknown body type");
+		Log::Assert(false, "Unknown body type");
 		return {};
 	}
 
@@ -63,7 +63,7 @@ namespace rhombus
 		if (bodyTypeString == "Dynamic")   return PixelPlatformerBodyComponent::BodyType::Dynamic;
 		if (bodyTypeString == "Kinematic") return PixelPlatformerBodyComponent::BodyType::Kinematic;
 
-		RB_CORE_ASSERT(false, "Unknown body type");
+		Log::Assert(false, "Unknown body type");
 		return PixelPlatformerBodyComponent::BodyType::Static;
 	}
 
@@ -74,7 +74,7 @@ namespace rhombus
 
 	static void SerializeEntity(YAML::Emitter& out, Entity entity, Ref<Scene>& scene)
 	{
-		RB_CORE_ASSERT(entity.HasComponent<IDComponent>(), "Entity does not have a UUID");
+		Log::Assert(entity.HasComponent<IDComponent>(), "Entity does not have a UUID");
 
 		out << YAML::BeginMap; // Entity
 		out << YAML::Key << "Entity" << YAML::Value << entity.GetUUID();
@@ -306,7 +306,7 @@ namespace rhombus
 	void SceneSerializer::SerializeRuntime(const std::string& filepath)
 	{
 		// Not implemented
-		RB_CORE_ASSERT(false, "");
+		Log::Assert(false, "");
 	}
 
 	bool SceneSerializer::Deserialize(const std::string& filepath, bool includeDisabledEntities)
@@ -318,7 +318,7 @@ namespace rhombus
 		}
 		catch (YAML::ParserException e)
 		{
-			RB_CORE_ERROR("Failed to load .hazel file '{0}'\n     {1}", filepath, e.what());
+			Log::Error("Failed to load .hazel file '%s'\n     %s", filepath, e.what());
 			return false;
 		}
 
@@ -326,7 +326,7 @@ namespace rhombus
 			return false;
 
 		std::string sceneName = data["Scene"].as<std::string>();
-		RB_CORE_TRACE("Deserializing scene '{0}'", sceneName);
+		Log::Debug("Deserializing scene '%s'", sceneName.c_str());
 
 		std::unordered_map<EntityID, bool>& entityEnabledMap = m_scene->GetEntityEnabledMap();
 
@@ -348,7 +348,8 @@ namespace rhombus
 				if (tagComponent)
 					name = tagComponent["Tag"].as<std::string>();
 
-				RB_CORE_TRACE("Deserialized entity with ID = {0}, name = {1}", uuid, name);
+				//RB_CORE_TRACE("Deserialized entity with ID = {0}, name = {1}", uuid, name);
+				Log::Debug("Deserialized entity with ID = %u, name = %s", uuid, name.c_str());
 
 				Entity deserializedEntity = m_scene->CreateEntityWithUUID(uuid, name);
 				entityEnabledMap[(EntityID)deserializedEntity] = enabled;
@@ -514,7 +515,7 @@ namespace rhombus
 	bool SceneSerializer::DeserializeRuntime(const std::string& filepath)
 	{
 		// Not implemented
-		RB_CORE_ASSERT(false, "");
+		Log::Assert(false, "");
 		return false;
 	}
 }

@@ -62,6 +62,8 @@ namespace rhombus {
 		// Setup Platform/Renderer bindings
 		ImGui_ImplSDL2_InitForOpenGL(window, context);
 		ImGui_ImplOpenGL3_Init("#version 410");
+
+		ImGui::RhombusDebugLog("Starting ImGui Log");
 	}
 
 	void ImGuiLayer::OnDetach()

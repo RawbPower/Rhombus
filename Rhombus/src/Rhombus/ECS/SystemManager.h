@@ -22,7 +22,7 @@ namespace rhombus
 		{
 			const char* typeName = typeid(T).name();
 
-			RB_CORE_ASSERT(m_systems.find(typeName) == m_systems.end(), "Register system more than once.");
+			Log::Assert(m_systems.find(typeName) == m_systems.end(), "Register system more than once.");
 
 			// Create a pointer to the system and return it so it can be used externally
 			auto system = std::make_shared<T>(scene);
@@ -35,7 +35,7 @@ namespace rhombus
 		{
 			const char* typeName = typeid(T).name();
 
-			RB_CORE_ASSERT(m_systems.find(typeName) != m_systems.end(), "System used before registered.");
+			Log::Assert(m_systems.find(typeName) != m_systems.end(), "System used before registered.");
 
 			// Set the signature for this system
 			m_signatures.insert({ typeName, signature });

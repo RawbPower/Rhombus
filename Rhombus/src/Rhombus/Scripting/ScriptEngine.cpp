@@ -23,7 +23,7 @@ namespace rhombus
 		if (r != LUA_OK)
 		{
 			std::string errormsg = lua_tostring(state, -1);
-			RB_CORE_ERROR("[Lua Error] {0}", errormsg);
+			Log::Error("[Lua Error] %s", errormsg);
 			return false;
 		}
 		return true;
@@ -59,7 +59,7 @@ namespace rhombus
 				{
 					if (lua_isstring(L, -1))
 					{
-						RB_CORE_INFO("[LUA] {0}", lua_tostring(L, -1));
+						Log::Info("[LUA] %s", lua_tostring(L, -1));
 					}
 				}
 			}
@@ -72,7 +72,7 @@ namespace rhombus
 				{
 					if (lua_isstring(L, -1))
 					{
-						RB_CORE_INFO("[LUA] {0}", lua_tostring(L, -1));
+						Log::Info("[LUA] %s", lua_tostring(L, -1));
 					}
 				}
 			}
@@ -86,7 +86,7 @@ namespace rhombus
 				{
 					if (lua_isstring(L, -1))
 					{
-						RB_CORE_INFO("[LUA] {0}", lua_tostring(L, -1));
+						Log::Info("[LUA] %s", lua_tostring(L, -1));
 					}
 				}
 			}
@@ -99,7 +99,7 @@ namespace rhombus
 				{
 					if (lua_isstring(L, -1))
 					{
-						RB_CORE_INFO("[LUA] {0}", lua_tostring(L, -1));
+						Log::Info("[LUA] %s", lua_tostring(L, -1));
 					}
 				}
 			}
@@ -113,7 +113,7 @@ namespace rhombus
 				{
 					if (lua_isnumber(L, -1))
 					{
-						RB_CORE_INFO("Lua used HostFunction to got {0}", lua_tonumber(L, -1));
+						Log::Info("Lua used HostFunction to got %s", lua_tonumber(L, -1));
 					}
 				}
 			}

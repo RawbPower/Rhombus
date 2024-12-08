@@ -20,15 +20,15 @@ namespace rhombus
 {
 	int Log(lua_State* state)
 	{
-		RB_CORE_ASSERT(lua_gettop(state) == 1, "Invalid number of arguments passed to function");
+		Log::Assert(lua_gettop(state) == 1, "Invalid number of arguments passed to function");
 		std::string logString = lua_tostring(state, 1);
-		RB_CORE_INFO(logString);
+		Log::Debug(logString.c_str());
 		return 0;
 	}
 
 	int IsKeyDown(lua_State* state)
 	{
-		RB_CORE_ASSERT(lua_gettop(state) == 1, "Invalid number of arguments passed to function");
+		Log::Assert(lua_gettop(state) == 1, "Invalid number of arguments passed to function");
 
 		int key = (int)lua_tonumber(state, 1);		// indexed as if this is a fresh stack
 		bool keyPressed = Input::IsKeyPressed(key);

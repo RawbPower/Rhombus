@@ -24,7 +24,7 @@ namespace rhombus
 	public:
 		T& InsertData(EntityID entity)
 		{
-			RB_CORE_ASSERT(m_entityToIndexMap.find(entity) == m_entityToIndexMap.end(), "Component added to same entity more than once.");
+			Log::Assert(m_entityToIndexMap.find(entity) == m_entityToIndexMap.end(), "Component added to same entity more than once.");
 
 			// Put new entry at the end and update the maps
 			size_t newIndex = m_size;
@@ -36,7 +36,7 @@ namespace rhombus
 
 		T& InsertData(EntityID entity, T component)
 		{
-			RB_CORE_ASSERT(m_entityToIndexMap.find(entity) == m_entityToIndexMap.end(), "Component added to same entity more than once.");
+			Log::Assert(m_entityToIndexMap.find(entity) == m_entityToIndexMap.end(), "Component added to same entity more than once.");
 
 			// Put new entry at the end and update the maps
 			size_t newIndex = m_size;
@@ -50,7 +50,7 @@ namespace rhombus
 		// Is there too much copying when using registry wrapper?
 		T& ReplaceData(EntityID entity, T component)
 		{
-			RB_CORE_ASSERT(m_entityToIndexMap.find(entity) != m_entityToIndexMap.end(), "Replacing non-existent component.");
+			Log::Assert(m_entityToIndexMap.find(entity) != m_entityToIndexMap.end(), "Replacing non-existent component.");
 
 			m_componentArray[m_entityToIndexMap[entity]] = component;
 			return m_componentArray[m_entityToIndexMap[entity]];
@@ -58,7 +58,7 @@ namespace rhombus
 
 		void RemoveData(EntityID entity)
 		{
-			RB_CORE_ASSERT(m_entityToIndexMap.find(entity) != m_entityToIndexMap.end(), "Removing non-existent component.");
+			Log::Assert(m_entityToIndexMap.find(entity) != m_entityToIndexMap.end(), "Removing non-existent component.");
 
 			// Copy element at end into deleted element's place to maintain density
 			size_t indexOfRemovedEntity = m_entityToIndexMap[entity];
@@ -78,7 +78,7 @@ namespace rhombus
 
 		T& GetData(EntityID entity)
 		{
-			RB_CORE_ASSERT(m_entityToIndexMap.find(entity) != m_entityToIndexMap.end(), "Retrieving non-existent component.");
+			Log::Assert(m_entityToIndexMap.find(entity) != m_entityToIndexMap.end(), "Retrieving non-existent component.");
 
 			// Return a reference to the entity's component
 			return m_componentArray[m_entityToIndexMap[entity]];

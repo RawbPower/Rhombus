@@ -17,7 +17,7 @@ namespace rhombus
 		{
 			const char* typeName = typeid(T).name();
 
-			RB_CORE_ASSERT(m_componentTypes.find(typeName) == m_componentTypes.end(), "Registering component type more than once.");
+			Log::Assert(m_componentTypes.find(typeName) == m_componentTypes.end(), "Registering component type more than once.");
 
 			// Add this component type to the component type map
 			m_componentTypes.insert({ typeName, m_nextComponentType });
@@ -34,7 +34,7 @@ namespace rhombus
 		{
 			const char* typeName = typeid(T).name();
 
-			RB_CORE_ASSERT(m_componentTypes.find(typeName) != m_componentTypes.end(), "Component not registered before use.");
+			Log::Assert(m_componentTypes.find(typeName) != m_componentTypes.end(), "Component not registered before use.");
 
 			// Return this component's type - used for creating signatures
 			return m_componentTypes[typeName];
@@ -122,7 +122,7 @@ namespace rhombus
 		{
 			const char* typeName = typeid(T).name();
 
-			RB_CORE_ASSERT(m_componentTypes.find(typeName) != m_componentTypes.end(), "Component not registered before use.");
+			Log::Assert(m_componentTypes.find(typeName) != m_componentTypes.end(), "Component not registered before use.");
 
 			return std::static_pointer_cast<ComponentArray<T>>(m_componentArrays[typeName]);
 		}

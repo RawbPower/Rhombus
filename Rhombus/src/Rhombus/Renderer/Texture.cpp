@@ -10,12 +10,12 @@ namespace rhombus {
 	{
 		switch (Renderer::GetAPI())
 		{
-		case RendererAPI::API::None:		RB_CORE_ASSERT(false, "RendererAPI::None is currently not supported"); return nullptr;
+		case RendererAPI::API::None:		Log::Assert(false, "RendererAPI::None is currently not supported"); return nullptr;
 
 		case RendererAPI::API::OpenGL:	return std::make_shared<OpenGLTexture2D>(width, height);
 		}
 
-		RB_CORE_ASSERT(false, "Unknown RendererAPI");
+		Log::Assert(false, "Unknown RendererAPI");
 		return nullptr;
 	}
 
@@ -23,12 +23,12 @@ namespace rhombus {
 	{
 		switch (Renderer::GetAPI())
 		{
-			case RendererAPI::API::None:		RB_CORE_ASSERT(false, "RendererAPI::None is currently not supported"); return nullptr;
+			case RendererAPI::API::None:		Log::Assert(false, "RendererAPI::None is currently not supported"); return nullptr;
 
 			case RendererAPI::API::OpenGL:	return std::make_shared<OpenGLTexture2D>(path);
 		}
 
-		RB_CORE_ASSERT(false, "Unknown RendererAPI");
+		Log::Assert(false, "Unknown RendererAPI");
 		return nullptr;
 	}
 }

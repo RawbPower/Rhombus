@@ -115,29 +115,46 @@ namespace ImGui
 	{
 		// Event types
 		RhombusDebugLogFlags_None = 0,
-		RhombusDebugLogFlags_Trace = 1 << 0,
-		RhombusDebugLogFlags_Debug = 1 << 1,
-		RhombusDebugLogFlags_Info = 1 << 2,
-		RhombusDebugLogFlags_Warn = 1 << 3,
-		RhombusDebugLogFlags_Error = 1 << 4,
-		RhombusDebugLogFlags_Critical = 1 << 5,
-		RhombusDebugLogFlags_All = RhombusDebugLogFlags_Trace | RhombusDebugLogFlags_Debug | RhombusDebugLogFlags_Info | RhombusDebugLogFlags_Warn | RhombusDebugLogFlags_Error | RhombusDebugLogFlags_Critical
+		RhombusDebugLogFlags_Debug = 1 << 0,
+		RhombusDebugLogFlags_Info = 1 << 1,
+		RhombusDebugLogFlags_Warn = 1 << 2,
+		RhombusDebugLogFlags_Error = 1 << 3,
+		RhombusDebugLogFlags_All = RhombusDebugLogFlags_Debug | RhombusDebugLogFlags_Info | RhombusDebugLogFlags_Warn | RhombusDebugLogFlags_Error
 	};
+
+	static int debugLogFlags = RhombusDebugLogFlags_All;
+
+	bool PushLogLineStyle(const char* begin)
+	{
+		if (strncmp(begin, "[INFO]", 6) == 0)
+		{
+			ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.75f, 1.0f, 0.75f, 1.0f));
+			return true;
+		}
+		else if (strncmp(begin, "[WARNING]", 9) == 0)
+		{
+			ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 1.0f, 0.5f, 1.0f));
+			return true;
+		}
+		else if (strncmp(begin, "[ERROR]", 7) == 0)
+		{
+			ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 0.5f, 0.25f, 1.0f));
+			return true;
+		}
+
+		return false;
+	}
 
 	void ShowRhombusDebugLogWindow()
 	{
 		ImGuiContext& g = *GImGui;
 		ImGui::Begin("Debug Log");
 
-		static int placeholder = RhombusDebugLogFlags_All;
-
-		ImGui::CheckboxFlags("All", &placeholder, RhombusDebugLogFlags_All);
-		ImGui::SameLine(); ImGui::CheckboxFlags("Trace", &placeholder, RhombusDebugLogFlags_Trace);
-		ImGui::SameLine(); ImGui::CheckboxFlags("Debug", &placeholder, RhombusDebugLogFlags_Debug);
-		ImGui::SameLine(); ImGui::CheckboxFlags("Info", &placeholder, RhombusDebugLogFlags_Info);
-		ImGui::SameLine(); ImGui::CheckboxFlags("Warn", &placeholder, RhombusDebugLogFlags_Warn);
-		ImGui::SameLine(); ImGui::CheckboxFlags("Error", &placeholder, RhombusDebugLogFlags_Error);
-		ImGui::SameLine(); ImGui::CheckboxFlags("Critical", &placeholder, RhombusDebugLogFlags_Critical);
+		ImGui::CheckboxFlags("All", &debugLogFlags, RhombusDebugLogFlags_All);
+		ImGui::SameLine(); ImGui::CheckboxFlags("Debug", &debugLogFlags, RhombusDebugLogFlags_Debug);
+		ImGui::SameLine(); ImGui::CheckboxFlags("Info", &debugLogFlags, RhombusDebugLogFlags_Info);
+		ImGui::SameLine(); ImGui::CheckboxFlags("Warn", &debugLogFlags, RhombusDebugLogFlags_Warn);
+		ImGui::SameLine(); ImGui::CheckboxFlags("Error", &debugLogFlags, RhombusDebugLogFlags_Error);
 
 		if (ImGui::SmallButton("Clear"))
 		{
@@ -151,13 +168,25 @@ namespace ImGui
 
 		ImGuiListClipper clipper;
 		clipper.Begin(g.DebugLogIndex.size());
+		int stepIndex = 0;
 		while (clipper.Step())
+		{
 			for (int line_no = clipper.DisplayStart; line_no < clipper.DisplayEnd; line_no++)
 			{
 				const char* line_begin = g.DebugLogIndex.get_line_begin(g.DebugLogBuf.c_str(), line_no);
 				const char* line_end = g.DebugLogIndex.get_line_end(g.DebugLogBuf.c_str(), line_no);
+
+				bool needsStylePop = PushLogLineStyle(line_begin);
+
 				ImGui::TextUnformatted(line_begin, line_end);
+
+				if (needsStylePop)
+				{
+					ImGui::PopStyleColor();
+				}
 			}
+			stepIndex++;
+		}
 		if (ImGui::GetScrollY() >= ImGui::GetScrollMaxY())
 			ImGui::SetScrollHereY(1.0f);
 		ImGui::EndChild();
@@ -167,18 +196,80 @@ namespace ImGui
 
 	void RhombusDebugLog(const char* fmt, ...)
 	{
-		va_list args;
-		va_start(args, fmt);
+		if (debugLogFlags & RhombusDebugLogFlags_Debug)
+		{
+			va_list args;
+			va_start(args, fmt);
+			RhombusDebugLog(RhombusLogType::LOG_DEBUG, fmt, args);
+			va_end(args);
+		}
+	}
+
+	void RhombusDebugLogInfo(const char* fmt, ...)
+	{
+		if (debugLogFlags & RhombusDebugLogFlags_Info)
+		{
+			va_list args;
+			va_start(args, fmt);
+			RhombusDebugLog(RhombusLogType::LOG_INFO, fmt, args);
+			va_end(args);
+		}
+	}
+
+	void RhombusDebugLogWarning(const char* fmt, ...)
+	{
+		if (debugLogFlags & RhombusDebugLogFlags_Warn)
+		{
+			va_list args;
+			va_start(args, fmt);
+			RhombusDebugLog(RhombusLogType::LOG_WARNING, fmt, args);
+			va_end(args);
+		}
+	}
+
+	void RhombusDebugLogError(const char* fmt, ...)
+	{
+		if (debugLogFlags & RhombusDebugLogFlags_Error)
+		{
+			va_list args;
+			va_start(args, fmt);
+			RhombusDebugLog(RhombusLogType::LOG_ERROR, fmt, args);
+			va_end(args);
+		}
+	}
+
+
+	const char* GetLogTypeTag(RhombusLogType logType)
+	{
+		switch (logType)
+		{
+		case RhombusLogType::LOG_INFO:
+			return "[INFO] ";
+			break;
+		case RhombusLogType::LOG_WARNING:
+			return "[WARNING] ";
+			break;
+		case RhombusLogType::LOG_ERROR:
+			return "[ERROR] ";
+			break;
+		default:
+			return "";
+			break;
+		}
+	}
+
+	void RhombusDebugLog(RhombusLogType logType, const char* fmt, va_list args)
+	{
 		ImGuiContext& g = *GImGui;
 		const int old_size = g.DebugLogBuf.size();
+		g.DebugLogBuf.appendf(GetLogTypeTag(logType));
 		g.DebugLogBuf.appendf("[%05d] ", g.FrameCount);
 		g.DebugLogBuf.appendfv(fmt, args);
 		g.DebugLogBuf.appendf("\n");
 		g.DebugLogIndex.append(g.DebugLogBuf.c_str(), old_size, g.DebugLogBuf.size());
-		if (g.DebugLogFlags & ImGuiDebugLogFlags_OutputToTTY)
+		/*if (g.DebugLogFlags & ImGuiDebugLogFlags_OutputToTTY)
 		{
 			IMGUI_DEBUG_PRINTF("%s", g.DebugLogBuf.begin() + old_size);
-		}
-		va_end(args);
+		}*/
 	}
 }

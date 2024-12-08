@@ -51,7 +51,7 @@ namespace rhombus
 		case Rigidbody2DComponent::BodyType::Kinematic:		return b2_kinematicBody;
 		}
 
-		RB_CORE_ASSERT(false, "Unkown body type");
+		Log::Assert(false, "Unkown body type");
 		return b2_staticBody;
 	}
 

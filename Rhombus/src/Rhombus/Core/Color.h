@@ -221,13 +221,13 @@ namespace rhombus
 
 	inline float Color::operator [] (const int idx) const
 	{
-		RB_CORE_ASSERT(idx >= 0 && idx < 4, "Index {0} is out of bounds of Color", idx);
+		Log::Assert(idx >= 0 && idx < 4, "Index %i is out of bounds of Color", idx);
 		return (&r)[idx];
 	}
 
 	inline float& Color::operator [] (const int idx)
 	{
-		RB_CORE_ASSERT(idx >= 0 && idx < 4, "Index {0} is out of bounds of Color", idx);
+		Log::Assert(idx >= 0 && idx < 4, "Index %i is out of bounds of Color", idx);
 		return (&r)[idx];
 	}
 

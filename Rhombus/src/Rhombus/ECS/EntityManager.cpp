@@ -16,7 +16,7 @@ namespace rhombus
 
 	EntityID EntityManager::CreateEntity()
 	{
-		RB_CORE_ASSERT(m_activeEntityCount < MAX_ENTITIES, "Too many enities in exitence.");
+		Log::Assert(m_activeEntityCount < MAX_ENTITIES, "Too many enities in exitence.");
 
 		// Take an ID from the front of the queue
 		EntityID id = m_availableEntities.front();
@@ -28,7 +28,7 @@ namespace rhombus
 
 	void EntityManager::DestroyEntity(EntityID entity)
 	{
-		RB_CORE_ASSERT(entity < MAX_ENTITIES, "Entity out of range.");
+		Log::Assert(entity < MAX_ENTITIES, "Entity out of range.");
 
 		// Invalidate the destroyed entity's signature
 		m_signatures[entity].reset();
@@ -40,7 +40,7 @@ namespace rhombus
 
 	void EntityManager::SetSignature(EntityID entity, Signature signature)
 	{
-		RB_CORE_ASSERT(entity < MAX_ENTITIES, "Entity out of range.");
+		Log::Assert(entity < MAX_ENTITIES, "Entity out of range.");
 
 		// Put this entity's signature into the array
 		m_signatures[entity] = signature;
@@ -48,7 +48,7 @@ namespace rhombus
 
 	Signature EntityManager::GetSignature(EntityID entity)
 	{
-		RB_CORE_ASSERT(entity < MAX_ENTITIES, "Entity out of range.");
+		Log::Assert(entity < MAX_ENTITIES, "Entity out of range.");
 
 		return m_signatures[entity];
 	}

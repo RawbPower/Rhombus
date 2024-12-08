@@ -84,7 +84,7 @@ namespace rhombus
 			case FramebufferTextureFormat::RED_INTEGER: return GL_RED_INTEGER;
 			}
 
-			RB_CORE_ASSERT(false, "Unknown framebuffer texture format.");
+			Log::Assert(false, "Unknown framebuffer texture format.");
 			return 0;
 		}
 
@@ -163,7 +163,7 @@ namespace rhombus
 
 		if (m_colorAttachmentSpecifications.size())
 		{
-			RB_CORE_ASSERT(m_colorAttachmentIDs.size() <= 4, "Exceeded the maximum of 4 color buffers!");
+			Log::Assert(m_colorAttachmentIDs.size() <= 4, "Exceeded the maximum of 4 color buffers!");
 			GLenum buffers[4] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2, GL_COLOR_ATTACHMENT3 };
 			glDrawBuffers((GLsizei)m_colorAttachmentSpecifications.size(), buffers);
 		}
@@ -173,7 +173,7 @@ namespace rhombus
 			glDrawBuffer(GL_NONE);
 		}
 
-		RB_CORE_ASSERT(glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE, "Framebuffer is incomplete!");
+		Log::Assert(glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE, "Framebuffer is incomplete!");
 
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}
@@ -198,7 +198,7 @@ namespace rhombus
 	{
 		if (width == 0 || height == 0 || width > s_MaxFramebufferSize || height > s_MaxFramebufferSize)
 		{
-			RB_CORE_WARN("Attempted to rezize framebuffer to {0}, {1}", width, height);
+			Log::Warn("Attempted to rezize framebuffer to %i, %i", width, height);
 			return;
 		}
 
@@ -209,7 +209,7 @@ namespace rhombus
 
 	int OpenGLFramebuffer::ReadPixel(uint32_t attachmentIndex, int x, int y)
 	{
-		RB_CORE_ASSERT(attachmentIndex < m_colorAttachmentIDs.size(), "Invalid attachment index!");
+		Log::Assert(attachmentIndex < m_colorAttachmentIDs.size(), "Invalid attachment index!");
 		glReadBuffer(GL_COLOR_ATTACHMENT0 + attachmentIndex);
 		int pixelData;
 		glReadPixels(x, y, 1, 1, GL_RED_INTEGER, GL_INT, &pixelData);		// TODO: Bad hardcoding needs fix
@@ -218,7 +218,7 @@ namespace rhombus
 
 	void OpenGLFramebuffer::ClearAttachment(uint32_t attachmentIndex, int value)
 	{
-		RB_CORE_ASSERT(attachmentIndex < m_colorAttachmentIDs.size(), "Invalid color attachment ID!");
+		Log::Assert(attachmentIndex < m_colorAttachmentIDs.size(), "Invalid color attachment ID!");
 
 		auto& spec = m_colorAttachmentSpecifications[attachmentIndex];
 

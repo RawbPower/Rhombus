@@ -26,32 +26,32 @@ namespace rhombus
 	public:
 		static const std::filesystem::path& GetProjectDirectory()
 		{
-			RB_CORE_ASSERT(s_ActiveProject, "No valid active project");
+			Log::Assert(s_ActiveProject.get(), "No valid active project");
 			return s_ActiveProject->m_ProjectDirectory;
 		}
 
 		static std::filesystem::path GetAssetDirectory()
 		{
-			RB_CORE_ASSERT(s_ActiveProject, "No valid active project");
+			Log::Assert(s_ActiveProject.get(), "No valid active project");
 			return GetProjectDirectory() / s_ActiveProject->m_Config.AssetDirectory;
 		}
 
 		static std::filesystem::path GetScriptDirectory()
 		{
-			RB_CORE_ASSERT(s_ActiveProject, "No valid active project");
+			Log::Assert(s_ActiveProject.get(), "No valid active project");
 			return GetProjectDirectory() / s_ActiveProject->m_Config.AssetDirectory / s_ActiveProject->m_Config.ScriptDirectory;
 		}
 
 		// TODO: move to asset manager when we have one
 		static std::filesystem::path GetAssetFileSystemPath(const std::filesystem::path& path)
 		{
-			RB_CORE_ASSERT(s_ActiveProject, "No valid active project");
+			Log::Assert(s_ActiveProject.get(), "No valid active project");
 			return GetAssetDirectory() / path;
 		}
 
 		static std::string GetAssetFileLocalPath(const std::string& pathString)
 		{
-			RB_CORE_ASSERT(s_ActiveProject, "No valid active project");
+			Log::Assert(s_ActiveProject.get(), "No valid active project");
 			std::string assetPathString = GetAssetDirectory().string() + "\\";
 			std::string localPathString = pathString;
 

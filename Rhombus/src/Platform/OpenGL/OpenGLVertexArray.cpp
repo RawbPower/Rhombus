@@ -22,7 +22,7 @@ namespace rhombus {
 			case ShaderDataType::Int4:		return GL_INT;
 			case ShaderDataType::Bool:		return GL_BOOL;
 		}
-		RB_CORE_ASSERT(false, "Unknown ShaderDataType!");
+		Log::Assert(false, "Unknown ShaderDataType!");
 		return 0;
 	}
 
@@ -59,7 +59,7 @@ namespace rhombus {
 	{
 		RB_PROFILE_FUNCTION();
 
-		RB_CORE_ASSERT(vertexBuffer->GetLayout().GetElements().size(), "Vertex Buffer has no layout!")
+		Log::Assert(vertexBuffer->GetLayout().GetElements().size(), "Vertex Buffer has no layout!");
 
 		glBindVertexArray(m_RendererID);
 		vertexBuffer->Bind();
@@ -118,7 +118,7 @@ namespace rhombus {
 					break;
 				}
 				default:
-					RB_CORE_ASSERT(false, "Unknown ShaderDataType!");
+					Log::Assert(false, "Unknown ShaderDataType!");
 			}
 		}
 

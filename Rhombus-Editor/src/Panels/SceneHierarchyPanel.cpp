@@ -264,7 +264,7 @@ namespace rhombus
 				m_selectionMask = (1 << m_currentEntityIndex);
 			}
 			SetSelectedEntity(entity);
-			ImGui::RhombusDebugLog("Selected Entity: %s", entity.GetName().c_str());
+			Log::Info("Selected Entity: %s", entity.GetName().c_str());
 		}
 
 		m_currentEntityIndex++;
@@ -555,7 +555,7 @@ namespace rhombus
 					if (texture->IsLoaded())
 						component.m_texture = texture;
 					else
-						RB_WARN("Could not load texture {0}", texturePath.filename().string());
+						Log::Warn("Could not load texture {0}", texturePath.filename().string());
 				}
 				ImGui::EndDragDropTarget();
 			}

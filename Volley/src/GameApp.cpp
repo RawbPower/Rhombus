@@ -65,7 +65,7 @@ namespace rhombus
 
 		if (!bLoadedProject)
 		{
-			RB_CORE_ERROR("Invalid project file!\n");
+			Log::Error("Invalid project file!\n");
 		}
 #endif
 

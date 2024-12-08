@@ -24,7 +24,7 @@ namespace rhombus {
 			case ShaderDataType::Bool:		return 1;
 		}
 
-		RB_CORE_ASSERT(false, "Unknown ShaderDataType!");
+		Log::Assert(false, "Unknown ShaderDataType!");
 		return 0;
 	}
 
@@ -61,7 +61,7 @@ namespace rhombus {
 				case ShaderDataType::Bool:		return 1;
 			}
 
-			RB_CORE_ASSERT(false, "Unknown ShaderDataType!");
+			Log::Assert(false, "Unknown ShaderDataType!");
 			return 0;
 		}
 	};

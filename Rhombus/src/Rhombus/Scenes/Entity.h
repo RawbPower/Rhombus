@@ -23,7 +23,7 @@ namespace rhombus
 		template<typename T>
 		const T& GetComponentRead() const
 		{
-			RB_CORE_ASSERT(HasComponent<T>(), "Entity ({0}) does not have component that you are trying to get!", m_entityId);
+			Log::Assert(HasComponent<T>(), "Entity ({0}) does not have component that you are trying to get!", m_entityId);
 
 			return m_scene->m_Registry.GetComponent<T>(m_entityId);
 		}
@@ -31,7 +31,7 @@ namespace rhombus
 		template<typename T>
 		T& GetComponent()
 		{
-			RB_CORE_ASSERT(HasComponent<T>(), "Entity ({0}) does not have component that you are trying to get!", m_entityId);
+			Log::Assert(HasComponent<T>(), "Entity ({0}) does not have component that you are trying to get!", m_entityId);
 
 			return m_scene->m_Registry.GetComponent<T>(m_entityId);
 		}
@@ -39,7 +39,7 @@ namespace rhombus
 		template<typename T>
 		T& AddComponent()
 		{
-			RB_CORE_ASSERT(!HasComponent<T>(), "Entity ({0}) already has component that is being added!", m_entityId);
+			Log::Assert(!HasComponent<T>(), "Entity ({0}) already has component that is being added!", m_entityId);
 			//T& component = m_scene->m_Registry.emplace<T>(m_entityId, std::forward<Args>(args)...);
 			T& component = m_scene->m_Registry.AddComponent<T>(m_entityId);
 			component.SetOwnerEntity(*this);
@@ -50,7 +50,7 @@ namespace rhombus
 		template<typename T>
 		T& AddComponent(T srcComponent)
 		{
-			RB_CORE_ASSERT(!HasComponent<T>(), "Entity ({0}) already has component that is being added!", m_entityId);
+			Log::Assert(!HasComponent<T>(), "Entity ({0}) already has component that is being added!", m_entityId);
 			//T& component = m_scene->m_Registry.emplace<T>(m_entityId, std::forward<Args>(args)...);
 			T& component = m_scene->m_Registry.AddComponent<T>(m_entityId, srcComponent);
 			component.SetOwnerEntity(*this);
@@ -84,7 +84,7 @@ namespace rhombus
 		template<typename T>
 		void RemoveComponent()
 		{
-			RB_CORE_ASSERT(HasComponent<T>(), "Entity ({0}) does not have component trying to be removed!", m_entityId);
+			Log::Assert(HasComponent<T>(), "Entity ({0}) does not have component trying to be removed!", m_entityId);
 
 			m_scene->m_Registry.RemoveComponent<T>(m_entityId);
 		}

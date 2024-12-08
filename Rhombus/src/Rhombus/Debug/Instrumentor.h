@@ -45,7 +45,7 @@ namespace rhombus
 				// newly opened session instead.  That's better than having badly formatted
 				// profiling output.
 				if (Log::GetCoreLogger()) { // Edge case: BeginSession() might be before Log::Init()
-					RB_CORE_ERROR("Instrumentor::BeginSession('{0}') when session '{1}' already open.", name, m_CurrentSession->Name);
+					Log::Error("Instrumentor::BeginSession('{0}') when session '{1}' already open.", name, m_CurrentSession->Name);
 				}
 				InternalEndSession();
 			}
@@ -58,7 +58,7 @@ namespace rhombus
 			}
 			else {
 				if (Log::GetCoreLogger()) { // Edge case: BeginSession() might be before Log::Init()
-					RB_CORE_ERROR("Instrumentor could not open results file '{0}'.", filepath);
+					Log::Error("Instrumentor could not open results file '{0}'.", filepath);
 				}
 			}
 		}

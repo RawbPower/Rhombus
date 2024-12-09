@@ -349,6 +349,7 @@ namespace rhombus
 		m_entityViewPanel.OnImGuiRender();
 		m_contentBrowserPanel->OnImGuiRender();
 		m_tilesetPanel->OnImGuiRender();
+		m_animtationPanel.OnImGuiRender();
 
 		if (m_ShowRenderStats)
 		{

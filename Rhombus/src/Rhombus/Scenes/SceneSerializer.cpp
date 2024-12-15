@@ -6,8 +6,10 @@
 
 #include "Rhombus/Project/Project.h"
 #include "Rhombus/Tiles/TileSerializer.h"
+#include "Rhombus/Animation/AnimationSerializer.h"
 
 #include "Rhombus/ECS/Components/Area2DComponent.h"
+#include "Rhombus/ECS/Components/AnimatorComponent.h"
 #include "Rhombus/ECS/Components/CameraComponent.h"
 #include "Rhombus/ECS/Components/CircleRendererComponent.h"
 #include "Rhombus/ECS/Components/Collider2DComponent.h"
@@ -272,6 +274,16 @@ namespace rhombus
 			out << YAML::EndMap; // PlatformerPlayerControllerComponent
 		}
 
+		if (entity.HasComponent<AnimatorComponent>())
+		{
+			auto& animatorComponent = entity.GetComponent<AnimatorComponent>();
+
+			out << YAML::Key << "AnimatorComponent";
+			out << YAML::BeginMap;	// AnimatorComponent
+			out << YAML::Key << "FilePath" << YAML::Value << animatorComponent.m_filePath;
+			out << YAML::EndMap;	// AnimatorComponent
+		}
+
 		scene->SerializeEntity(&out, entity);
 
 		out << YAML::EndMap; // Entity
@@ -503,6 +515,15 @@ namespace rhombus
 					auto& controller = deserializedEntity.AddComponent<PlatformerPlayerControllerComponent>();
 					controller.m_speed = platformerPlayerControllerComponent["Speed"].as<float>();
 					controller.m_jumpHeight = platformerPlayerControllerComponent["JumpHeight"].as<float>();
+				}
+
+				auto animtorComponent = entity["AnimatorComponent"];
+				if (animtorComponent)
+				{
+					auto& sc = deserializedEntity.AddComponent<AnimatorComponent>();
+					sc.m_filePath = animtorComponent["FilePath"].as<std::string>();
+					auto path = Project::GetAssetFileSystemPath(sc.m_filePath);
+					AnimationSerializer::DeserializeAnimations(path.string(), deserializedEntity);
 				}
 
 				m_scene->DeserializeEntity(&entity, deserializedEntity);

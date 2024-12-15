@@ -73,6 +73,8 @@ Entities:
     PlatformerPlayerControllerComponent:
       Speed: 72
       JumpHeight: 48
+    AnimatorComponent:
+      FilePath: animations\Player.ranim
   - Entity: 4524564654659932807
     Enabled: true
     TagComponent:

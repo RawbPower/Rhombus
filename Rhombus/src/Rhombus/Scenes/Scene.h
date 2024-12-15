@@ -9,6 +9,7 @@
 #include "Rhombus/ECS/Systems/PixelPlatformerPhysicsSystem.h"
 #include "Rhombus/ECS/Systems/PlatformerPlayerControllerSystem.h"
 #include "Rhombus/ECS/Systems/TweeningSystem.h"
+#include "Rhombus/ECS/Systems/AnimationSystem.h"
 #include "Rhombus/Animation/EasingFunctions.h"
 
 class b2World;
@@ -191,6 +192,7 @@ namespace rhombus
 		Ref<TweeningSystem> tweeningSystem;
 		Ref<PixelPlatformerPhysicsSystem> pixelPlatformerPhysicsSystem;
 		Ref<PlatformerPlayerControllerSystem> platformerPlayerControllerSystem;
+		Ref<AnimationSystem> animationSystem;
 
 		std::unordered_map<UUID, EntityID> m_EntityMap;
 		std::unordered_map<EntityID, bool> m_entityEnabledMap;

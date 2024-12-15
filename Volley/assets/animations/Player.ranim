@@ -1,0 +1,50 @@
+Animator: Player
+Clips:
+  - Name: Idle
+    Looping: true
+    Samples:
+      - Duration: 0.25
+        Sprite: Player
+        Frame: 0
+      - Duration: 0.25
+        Sprite: Player
+        Frame: 1
+      - Duration: 0.25
+        Sprite: Player
+        Frame: 2
+      - Duration: 0.25
+        Sprite: Player
+        Frame: 3
+  - Name: Run
+    Looping: true
+    Samples:
+      - Duration: 0.1
+        Sprite: Player
+        Frame: 4
+      - Duration: 0.1
+        Sprite: Player
+        Frame: 5
+      - Duration: 0.1
+        Sprite: Player
+        Frame: 6
+      - Duration: 0.1
+        Sprite: Player
+        Frame: 7
+      - Duration: 0.1
+        Sprite: Player
+        Frame: 8
+      - Duration: 0.1
+        Sprite: Player
+        Frame: 9
+  - Name: Jump Up
+    Looping: true
+    Samples:
+      - Duration: 0.1
+        Sprite: Player
+        Frame: 10
+  - Name: Jump Down
+    Looping: true
+    Samples:
+      - Duration: 0.1
+        Sprite: Player
+        Frame: 11

@@ -1,8 +1,11 @@
 #include "SceneHierarchyPanel.h"
 
+#include "Rhombus/Project/Project.h"
+
 #include "Rhombus/Scripting/ScriptEngine.h"
 #include "Rhombus/ECS/ECSTypes.h"
 #include "Rhombus/ECS/Components/Component.h"
+#include "Rhombus/ECS/Components/AnimatorComponent.h"
 #include "Rhombus/ECS/Components/Area2DComponent.h"
 #include "Rhombus/ECS/Components/CameraComponent.h"
 #include "Rhombus/ECS/Components/CircleRendererComponent.h"
@@ -491,6 +494,7 @@ namespace rhombus
 			DisplayAddComponentEntry<BoxArea2DComponent>("Box Area 2D");
 			DisplayAddComponentEntry<TileMapComponent>("Tile Map");
 			DisplayAddComponentEntry<PlatformerPlayerControllerComponent>("Platformer Player Controller");
+			DisplayAddComponentEntry<AnimatorComponent>("Animator");
 
 			// Game
 			if (m_editorExtension)
@@ -726,6 +730,26 @@ namespace rhombus
 		{
 			ImGui::DragFloat("Speed", &component.m_speed, 0.025f, 0.0f, 100.0f);
 			ImGui::DragFloat("Jump Height", &component.m_jumpHeight, 0.025f, 0.0f, 100.0f);
+		});
+
+		DrawComponent<AnimatorComponent>("Animator", entity, [](auto& component)
+		{
+			static char buffer[64];
+			strcpy(buffer, component.m_filePath.c_str());
+
+			if (ImGui::InputText("Animator File", buffer, sizeof(buffer)))
+				component.m_filePath = buffer;
+
+			if (ImGui::BeginDragDropTarget())
+			{
+				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
+				{
+					const wchar_t* path = (const wchar_t*)payload->Data;
+					std::filesystem::path filePath(path);
+					component.m_filePath = Project::GetAssetFileLocalPath(filePath.string());
+				}
+				ImGui::EndDragDropTarget();
+			}
 		});
 
 		m_editorExtension->DisplayComponentProperties(entity);

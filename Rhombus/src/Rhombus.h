@@ -22,6 +22,7 @@
 #include "Rhombus/Scenes/ScriptableEntity.h"
 
 #include "Rhombus/ECS/Components/Component.h"
+#include "Rhombus/ECS/Components/AnimatorComponent.h"
 #include "Rhombus/ECS/Components/Area2DComponent.h"
 #include "Rhombus/ECS/Components/CameraComponent.h"
 #include "Rhombus/ECS/Components/CircleRendererComponent.h"

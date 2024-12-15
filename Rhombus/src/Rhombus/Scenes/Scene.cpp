@@ -11,6 +11,7 @@
 #include "Rhombus/Tiles/TileMap.h"
 
 // To Remove
+#include "Rhombus/ECS/Components/AnimatorComponent.h"
 #include "Rhombus/ECS/Components/Area2DComponent.h"
 #include "Rhombus/ECS/Components/CameraComponent.h"
 #include "Rhombus/ECS/Components/CircleRendererComponent.h"
@@ -39,7 +40,7 @@ namespace rhombus
 		ComponentGroup<TransformComponent, SpriteRendererComponent,
 		CircleRendererComponent, CameraComponent, ScriptComponent, NativeScriptComponent,
 		Rigidbody2DComponent, PixelPlatformerBodyComponent, BoxCollider2DComponent, CircleCollider2DComponent, BoxArea2DComponent,
-		TweenComponent, TileMapComponent, PlatformerPlayerControllerComponent>;
+		TweenComponent, TileMapComponent, PlatformerPlayerControllerComponent, AnimatorComponent>;
 	// -----------------------------------------------------
 
 	static b2BodyType Rigidbody2DTypetoBox2DType(Rigidbody2DComponent::BodyType bodyType)
@@ -100,6 +101,12 @@ namespace rhombus
 			m_Registry.SetSystemSignature<PlatformerPlayerControllerSystem>(signature);
 		}
 
+		animationSystem = m_Registry.RegisterSystem<AnimationSystem>(this);
+		{
+			Signature signature;
+			signature.set(m_Registry.GetComponentType<AnimatorComponent>());
+			m_Registry.SetSystemSignature<AnimationSystem>(signature);
+		}
 
 		m_rootSceneNode = CreateRef<SceneGraphNode>(this);
 	}
@@ -287,6 +294,7 @@ namespace rhombus
 			platformerPlayerControllerSystem->Update(dt);
 			pixelPlatformerPhysicsSystem->Update(dt);
 			tweeningSystem->UpdateTweens(dt);
+			animationSystem->Update(dt);
 		}
 
 		SceneCamera* mainCamera = nullptr;

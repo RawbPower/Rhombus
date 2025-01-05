@@ -14,6 +14,9 @@ namespace rhombus
 		void AddAnimation(AnimationClip clip) { m_animations.push_back(clip); }
 		const AnimationClip& GetCurrentAnimation() const { return m_animations[m_currentAnimIndex]; }
 
+		int GetAnimationCount() const { return m_animations.size(); }
+		AnimationClip GetAnimationClip(int index) const { return m_animations[index]; }
+
 		std::string m_filePath;
 		float m_normalizedTime = 0.0f;
 

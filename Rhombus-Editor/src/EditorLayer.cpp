@@ -1000,6 +1000,7 @@ namespace rhombus
 		}*/
 
 		m_entityViewPanel.SetCurrentEntity(entity);
+		m_animtationPanel.SetCurrentEntity(entity);
 	}
 
 	void EditorLayer::DuplicateSelectedEntities()

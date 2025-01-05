@@ -168,5 +168,10 @@ namespace rhombus {
 		colors[ImGuiCol_ScrollbarGrab] = orange;
 		colors[ImGuiCol_ScrollbarGrabHovered] = orange;
 		colors[ImGuiCol_ScrollbarGrabActive] = orangeLight2;
+
+		// Table
+		colors[ImGuiCol_TableHeaderBg] = orangeDark;
+		colors[ImGuiCol_TableBorderStrong] = orange;
+		colors[ImGuiCol_TableBorderLight] = orange;
 	}
 }

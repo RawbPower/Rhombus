@@ -12,6 +12,7 @@ namespace rhombus
 		{
 		}
 
+		void Init();
 		void Update(DeltaTime dt);
 
 	private:

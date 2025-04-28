@@ -213,14 +213,14 @@ namespace rhombus {
 
 	bool Application::OnKeyPressed(KeyPressedEvent& e)
 	{
-		if (e.GetKeyCode() == RB_KEY_HASH && !m_DebugStep)	// Can't pause while stepping
+		if (e.GetKeyCode() == RB_KEY_LEFT_BRACKET && !m_DebugStep)	// Can't pause while stepping
 		{
 			m_DebugPause = !m_DebugPause;
 		}
 		
 		if (m_DebugPause)
 		{
-			if (e.GetKeyCode() == RB_KEY_EQUAL)
+			if (e.GetKeyCode() == RB_KEY_RIGHT_BRACKET)
 			{
 				m_DebugStep = true;
 			}

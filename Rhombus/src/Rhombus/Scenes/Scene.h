@@ -189,10 +189,10 @@ namespace rhombus
 		Ref<SceneGraphNode> m_rootSceneNode;
 
 		b2World* m_PhysicsWorld = nullptr;
-		Ref<TweeningSystem> tweeningSystem;
-		Ref<PixelPlatformerPhysicsSystem> pixelPlatformerPhysicsSystem;
-		Ref<PlatformerPlayerControllerSystem> platformerPlayerControllerSystem;
-		Ref<AnimationSystem> animationSystem;
+		Ref<TweeningSystem> m_tweeningSystem;
+		Ref<PixelPlatformerPhysicsSystem> m_pixelPlatformerPhysicsSystem;
+		Ref<PlatformerPlayerControllerSystem> m_platformerPlayerControllerSystem;
+		Ref<AnimationSystem> m_animationSystem;
 
 		std::unordered_map<UUID, EntityID> m_EntityMap;
 		std::unordered_map<EntityID, bool> m_entityEnabledMap;

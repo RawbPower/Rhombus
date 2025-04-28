@@ -123,7 +123,7 @@ namespace rhombus
 		// Panels
 		SceneHierarchyPanel m_sceneHierarchyPanel;
 		EntityViewPanel m_entityViewPanel;
-		AnimationPanel m_animtationPanel;
+		AnimationPanel m_animationPanel;
 		Scope<ContentBrowserPanel> m_contentBrowserPanel;
 		Scope<TilesetPanel> m_tilesetPanel;
 		Ref<EditorExtension> m_editorExtension;

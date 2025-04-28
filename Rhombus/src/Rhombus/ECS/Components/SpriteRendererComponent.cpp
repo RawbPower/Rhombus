@@ -26,7 +26,7 @@ namespace rhombus
 			}
 			else
 			{
-				m_subtexture = SubTexture2D::CreateFromCoords(m_texture, Vec2(m_frame % m_columns, m_rows - 1.0f - m_frame / m_rows), spriteSize, m_padding);
+				m_subtexture = SubTexture2D::CreateFromCoords(m_texture, Vec2(m_frame % m_columns, m_rows - 1.0f - m_frame / m_columns), spriteSize, m_padding);
 			}
 		}
 	}

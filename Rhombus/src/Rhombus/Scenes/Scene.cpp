@@ -80,28 +80,28 @@ namespace rhombus
 
 		RegisterComponents(RhombusComponents{});
 
-		tweeningSystem = m_Registry.RegisterSystem<TweeningSystem>(this);
+		m_tweeningSystem = m_Registry.RegisterSystem<TweeningSystem>(this);
 		{
 			Signature signature;
 			signature.set(m_Registry.GetComponentType<TweenComponent>());
 			m_Registry.SetSystemSignature<TweeningSystem>(signature);
 		}
 
-		pixelPlatformerPhysicsSystem = m_Registry.RegisterSystem<PixelPlatformerPhysicsSystem>(this);
+		m_pixelPlatformerPhysicsSystem = m_Registry.RegisterSystem<PixelPlatformerPhysicsSystem>(this);
 		{
 			Signature signature;
 			signature.set(m_Registry.GetComponentType<PixelPlatformerBodyComponent>());
 			m_Registry.SetSystemSignature<PixelPlatformerPhysicsSystem>(signature);
 		}
 
-		platformerPlayerControllerSystem = m_Registry.RegisterSystem<PlatformerPlayerControllerSystem>(this);
+		m_platformerPlayerControllerSystem = m_Registry.RegisterSystem<PlatformerPlayerControllerSystem>(this);
 		{
 			Signature signature;
 			signature.set(m_Registry.GetComponentType<PlatformerPlayerControllerComponent>());
 			m_Registry.SetSystemSignature<PlatformerPlayerControllerSystem>(signature);
 		}
 
-		animationSystem = m_Registry.RegisterSystem<AnimationSystem>(this);
+		m_animationSystem = m_Registry.RegisterSystem<AnimationSystem>(this);
 		{
 			Signature signature;
 			signature.set(m_Registry.GetComponentType<AnimatorComponent>());
@@ -217,6 +217,7 @@ namespace rhombus
 		RB_PROFILE_FUNCTION();
 
 		InitPhyics2D();
+		m_animationSystem->Init();
 
 		// Scripting
 		ScriptEngine::OnRuntimeStart(this);
@@ -291,10 +292,10 @@ namespace rhombus
 				}
 			}
 
-			platformerPlayerControllerSystem->Update(dt);
-			pixelPlatformerPhysicsSystem->Update(dt);
-			tweeningSystem->UpdateTweens(dt);
-			animationSystem->Update(dt);
+			m_platformerPlayerControllerSystem->Update(dt);
+			m_pixelPlatformerPhysicsSystem->Update(dt);
+			m_tweeningSystem->UpdateTweens(dt);
+			m_animationSystem->Update(dt);
 		}
 
 		SceneCamera* mainCamera = nullptr;
@@ -512,7 +513,7 @@ namespace rhombus
 
 	void Scene::OnKeyPressed(int keycode, bool isRepeat)
 	{
-		platformerPlayerControllerSystem->OnKeyPressed(keycode, isRepeat);
+		m_platformerPlayerControllerSystem->OnKeyPressed(keycode, isRepeat);
 	}
 
 	void Scene::OnViewportResize(uint32_t width, uint32_t height)

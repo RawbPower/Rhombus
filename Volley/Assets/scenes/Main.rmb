@@ -14,7 +14,7 @@ Entities:
         PerspectiveFOV: 0.785385013
         PerspectiveNear: 0.00999999978
         PerspectiveFar: 1000
-        OrthographicSize: 630
+        OrthographicSize: 740
         OrthographicNear: -1
         OrthographicFar: 1
         PixelPerfect: true
@@ -50,7 +50,7 @@ Entities:
     TagComponent:
       Tag: Player
     TransformComponent:
-      Position: [-38, 31, 0]
+      Position: [-38, -62, 0]
       Rotation: [0, -0, 0]
       Scale: [1, 1, 1]
     SpriteRendererComponent:
@@ -58,7 +58,7 @@ Entities:
       Rows: 3
       Columns: 7
       Padding: 1
-      Frame: 0
+      Frame: 7
       Texture: sprites\Player.png
     PixelPlatformerBodyComponent:
       BodyType: Dynamic
@@ -80,7 +80,7 @@ Entities:
     TagComponent:
       Tag: Ball
     TransformComponent:
-      Position: [4, 8, 0]
+      Position: [-4, -50, 0]
       Rotation: [0, -0, 0]
       Scale: [1, 1, 1]
     SpriteRendererComponent:

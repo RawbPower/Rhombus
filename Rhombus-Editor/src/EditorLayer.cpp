@@ -158,6 +158,12 @@ namespace rhombus
 
 			m_EditorCamera.OnUpdate(dt);
 
+			if (m_animationPanel.HasValidCurrentEntity() && m_animationPanel.IsPlaying())
+			{
+				AnimatorComponent& animator = m_animationPanel.GetCurrentEntity().GetComponent<AnimatorComponent>();
+				animator.Step(dt);
+			}
+
 			m_ActiveScene->OnUpdateEditor(dt, m_EditorCamera);
 			break;
 		}
@@ -349,7 +355,7 @@ namespace rhombus
 		m_entityViewPanel.OnImGuiRender();
 		m_contentBrowserPanel->OnImGuiRender();
 		m_tilesetPanel->OnImGuiRender();
-		m_animtationPanel.OnImGuiRender();
+		m_animationPanel.OnImGuiRender();
 
 		if (m_ShowRenderStats)
 		{
@@ -1000,7 +1006,7 @@ namespace rhombus
 		}*/
 
 		m_entityViewPanel.SetCurrentEntity(entity);
-		m_animtationPanel.SetCurrentEntity(entity);
+		m_animationPanel.SetCurrentEntity(entity);
 	}
 
 	void EditorLayer::DuplicateSelectedEntities()

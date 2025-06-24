@@ -445,7 +445,7 @@ namespace rhombus
 		s_Data.Stats.QuadCount++;
 	}
 
-	void Renderer2D::DrawQuad(const Mat4& transform, const Ref<Texture2D>& texture, const Color& color, float tilingFactor, int entityID, bool pixelPerfect)
+	void Renderer2D::DrawQuad(const Mat4& transform, const Ref<Texture2D>& texture, const Color& color, float tilingFactor, int entityID, Vec2 flip, bool pixelPerfect)
 	{
 		RB_PROFILE_FUNCTION();
 
@@ -455,7 +455,7 @@ namespace rhombus
 		Mat4 renderTransform = pixelPerfect ? CorrectTransformForPixelPerfect(transform, texture) : transform;
 		
 		// TODO: Add PPU
-		Mat4 scaledTransform = math::Scale(renderTransform, Vec3((float)texture->GetWidth(), (float)texture->GetHeight(), 1.0f));
+		Mat4 scaledTransform = math::Scale(renderTransform, Vec3(flip.x * (float)texture->GetWidth(), flip.y * (float)texture->GetHeight(), 1.0f));
 
 		if (s_Data.QuadIndexCount >= Renderer2DData::MaxIndices)
 		{
@@ -501,7 +501,7 @@ namespace rhombus
 		s_Data.Stats.QuadCount++;
 	}
 
-	void Renderer2D::DrawQuad(const Mat4& transform, const Ref<SubTexture2D>& subTexture, const Color& color, float tilingFactor, int entityID, bool pixelPerfect)
+	void Renderer2D::DrawQuad(const Mat4& transform, const Ref<SubTexture2D>& subTexture, const Color& color, float tilingFactor, int entityID, Vec2 flip, bool pixelPerfect)
 	{
 		RB_PROFILE_FUNCTION();
 
@@ -514,7 +514,7 @@ namespace rhombus
 		Mat4 renderTransform = pixelPerfect ? CorrectTransformForPixelPerfect(transform, texture) : transform;
 
 		// TODO: Add PPU
-		Mat4 scaledTransform = math::Scale(renderTransform, Vec3(width, height, 1.0f));
+		Mat4 scaledTransform = math::Scale(renderTransform, Vec3(flip.x * width, flip.y * height, 1.0f));
 
 		if (s_Data.QuadIndexCount >= Renderer2DData::MaxIndices)
 		{
@@ -694,11 +694,11 @@ namespace rhombus
 	{
 		if (src.UseSubTexture())
 		{
-			DrawQuad(transform, src.m_subtexture, src.GetColor(), 1.0f, entityID);
+			DrawQuad(transform, src.m_subtexture, src.GetColor(), 1.0f, entityID, src.GetFlip());
 		}
 		else if (src.m_texture)
 		{
-			DrawQuad(transform, src.m_texture, src.GetColor(), 1.0f, entityID);
+			DrawQuad(transform, src.m_texture, src.GetColor(), 1.0f, entityID, src.GetFlip());
 		}
 		else
 		{

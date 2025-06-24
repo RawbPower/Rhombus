@@ -15,6 +15,7 @@ namespace rhombus
 
 		void SetCurrentEntity(Entity entity) { m_currentEntity = entity; m_currentSampleIndex = -1; }
 		Entity GetCurrentEntity() const { return m_currentEntity; }
+		void ResetCurrentEntity() { m_currentEntity = {}; }
 		bool HasValidCurrentEntity() const { return (EntityID)m_currentEntity != INVALID_ENTITY; }
 		bool IsPlaying() const { return m_isPlaying; }
 

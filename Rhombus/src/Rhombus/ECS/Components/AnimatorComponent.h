@@ -18,7 +18,8 @@ namespace rhombus
 		void AddAnimation(AnimationClip clip) { m_animations.push_back(clip); }
 		const AnimationClip& GetCurrentAnimation() const { return m_animations[m_currentAnimIndex]; }
 
-		void Start(std::string name);
+		void Play(std::string name);
+		bool IsPlaying(std::string name);
 
 		int GetAnimationCount() const { return m_animations.size(); }
 		AnimationClip GetAnimationClip(int index) const { return m_animations[index]; }

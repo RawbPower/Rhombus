@@ -51,6 +51,8 @@ namespace rhombus
 		int xTranslation = math::RoundInt(remainder.x);
 		int yTranslation = math::RoundInt(remainder.y);
 
+		bool isInAir = ppbComponent.m_isInAir;
+
 		// We are going to step forward per pixel. We can afford to do this
 		// since there are generally very few entities simulating on screen
 		// Note: We can optimize as it become required
@@ -80,6 +82,8 @@ namespace rhombus
 		// Y direction
 		if (yTranslation != 0)
 		{
+			isInAir = true;
+
 			// Remove the whole translation from the remainer once we move (even if we collide)
 			remainder.y -= (float)yTranslation;
 			int step = math::Sign(yTranslation);
@@ -94,11 +98,13 @@ namespace rhombus
 				else
 				{
 					ppbComponent.m_velocity.y = 0.0f;
+					isInAir = false;
 					break;
 				}
 			}
 		}
 
+		ppbComponent.m_isInAir = isInAir;
 		transformComponent.SetWorldPosition(transformComponent.GetWorldPosition() + appliedTranslation);
 	}
 

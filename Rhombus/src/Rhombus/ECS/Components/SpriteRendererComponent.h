@@ -31,6 +31,10 @@ namespace rhombus
 		Vec2 GetSpriteSize() const;
 		void UpdateSubTexture();
 
+		Vec2 GetFlip() const { return m_flip; }
+		void SetFlipX(bool flip) { m_flip.x = flip ? -1.0f : 1.0f; }
+		void SetFlipY(bool flip) { m_flip.y = flip ? -1.0f : 1.0f; }
+
 		Ref<Texture2D> m_texture;
 		Ref<SubTexture2D> m_subtexture;
 
@@ -40,5 +44,7 @@ namespace rhombus
 		uint32_t m_columns = 1;
 		uint32_t m_padding = 0;
 		uint32_t m_frame = 0;
+
+		Vec2 m_flip = Vec2(1.0f);
 	};
 }

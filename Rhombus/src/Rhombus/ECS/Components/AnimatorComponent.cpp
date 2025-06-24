@@ -30,7 +30,7 @@ namespace rhombus
 		}
 	}
 
-	void AnimatorComponent::Start(std::string name)
+	void AnimatorComponent::Play(std::string name)
 	{
 		for (int i = 0; i < m_animations.size(); i++)
 		{
@@ -42,5 +42,16 @@ namespace rhombus
 				break;
 			}
 		}
+	}
+
+	bool AnimatorComponent::IsPlaying(std::string name)
+	{
+		AnimationClip clip = m_animations[m_currentAnimIndex];
+		if (clip.m_name == name)
+		{
+			return true;
+		}
+
+		return false;
 	}
 }

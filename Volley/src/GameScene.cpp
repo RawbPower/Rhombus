@@ -17,6 +17,12 @@ void GameScene::InitScene()
 {
 	Scene::InitScene();
 
+	playerInputSystem = m_Registry.RegisterSystem<PlayerInputSystem>(this);
+	{
+		Signature signature;
+		signature.set(m_Registry.GetComponentType<AnimatorComponent>());
+		m_Registry.SetSystemSignature<PlayerInputSystem>(signature);
+	}
 }
 
 void GameScene::OnRuntimeStart()
@@ -27,6 +33,8 @@ void GameScene::OnRuntimeStart()
 void GameScene::OnUpdateRuntime(DeltaTime dt)
 {
 	Scene::OnUpdateRuntime(dt);
+
+	playerInputSystem->Update();
 }
 
 void GameScene::OnDraw()

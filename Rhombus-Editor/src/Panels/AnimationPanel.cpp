@@ -64,7 +64,7 @@ namespace rhombus
 				{
 					item_current_idx = n;
 					AnimatorComponent& animator = m_currentEntity.GetComponent<AnimatorComponent>();
-					animator.Start(animator.GetAnimationClip(n).m_name);
+					animator.Play(animator.GetAnimationClip(n).m_name);
 				}
 
 				// Set the initial focus when opening the combo (scrolling + keyboard navigation focus)

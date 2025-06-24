@@ -14,10 +14,13 @@ namespace rhombus
 		PixelPlatformerBodyComponent() = default;
 		PixelPlatformerBodyComponent(const PixelPlatformerBodyComponent& other) = default;
 
+		bool GetIsInAir() const { return m_isInAir; }
+
 		Vec2 m_velocity = Vec2(0.0f);
 	private:
 		friend class PixelPlatformerPhysicsSystem;
 
 		Vec2 m_translationRemainder = Vec2(0.0f);
+		bool m_isInAir = false;
 	};
 }

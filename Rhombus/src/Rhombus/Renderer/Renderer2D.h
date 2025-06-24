@@ -36,8 +36,8 @@ namespace rhombus
 		static void DrawQuad(const Vec3& position, const float& angle, const Vec2& scale, const Ref<SubTexture2D>& subTexture, const Color& color, float tilingFactor = 1.0f);
 
 		static void DrawQuad(const Mat4& transform, const Color& color, int entityID = -1);
-		static void DrawQuad(const Mat4& transform, const Ref<Texture2D>& texture, const Color& color = Color(1.0f), float tilingFactor = 1.0f, int entityID = -1, bool pixelPerfect = true);
-		static void DrawQuad(const Mat4& transform, const Ref<SubTexture2D>& subTexture, const Color& color = Color(1.0f), float tilingFactor = 1.0f, int entityID = -1, bool pixelPerfect = true);
+		static void DrawQuad(const Mat4& transform, const Ref<Texture2D>& texture, const Color& color = Color(1.0f), float tilingFactor = 1.0f, int entityID = -1, Vec2 flip = Vec2(1.0f), bool pixelPerfect = true);
+		static void DrawQuad(const Mat4& transform, const Ref<SubTexture2D>& subTexture, const Color& color = Color(1.0f), float tilingFactor = 1.0f, int entityID = -1, Vec2 flip = Vec2(1.0f), bool pixelPerfect = true);
 
 		static void DrawQuadOverlay(const Vec2& position, const float& angle, const Vec2& scale, const Ref<Texture2D>& texture, const Color& color = Color(1.0f), float tilingFactor = 1.0f);
 

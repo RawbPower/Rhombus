@@ -993,6 +993,9 @@ namespace rhombus
 		m_ActiveScene->OnRuntimeStop();
 		m_ActiveScene = m_EditorScene;
 
+		m_entityViewPanel.ResetCurrentEntity();
+		m_animationPanel.ResetCurrentEntity();
+
 		m_sceneHierarchyPanel.SetContext(m_ActiveScene);
 	}
 

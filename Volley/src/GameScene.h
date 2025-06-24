@@ -2,6 +2,8 @@
 
 #include "Rhombus.h"
 
+#include "Systems/PlayerInputSystem.h"
+
 class GameScene : public Scene
 {
 public:
@@ -25,4 +27,5 @@ public:
 
 private:
 	// Systems
+	Ref<PlayerInputSystem> playerInputSystem;
 };

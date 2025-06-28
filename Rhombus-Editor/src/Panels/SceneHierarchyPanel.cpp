@@ -694,10 +694,10 @@ namespace rhombus
 		{
 			ImGui::DragFloat2("Offset", component.m_offset.ToPtr(), 0.01f);
 			ImGui::InputFloat("Radius", &component.m_radius);
-			ImGui::DragFloat("Density", &component.m_density, 0.01f, 0.0f, 1.0f);
-			ImGui::DragFloat("Friction", &component.m_friction, 0.01f, 0.0f, 1.0f);
-			ImGui::DragFloat("Restitution", &component.m_restitution, 0.01f, 0.0f, 1.0f);
-			ImGui::DragFloat("Restitution Threshold", &component.m_restitutionThreshold, 0.01f, 0.0f);
+			ImGui::DragFloat("Density", &component.m_density, 0.001f, 0.0f, 1.0f);
+			ImGui::DragFloat("Friction", &component.m_friction, 0.001f, 0.0f, 1.0f);
+			ImGui::DragFloat("Restitution", &component.m_restitution, 0.001f, 0.0f, 1.0f);
+			ImGui::DragFloat("Restitution Threshold", &component.m_restitutionThreshold, 0.001f, 0.0f);
 		});
 
 		DrawComponent<BoxArea2DComponent>("Box Area 2D", entity, [](auto& component)

@@ -41,7 +41,8 @@ namespace rhombus {
 #endif
 
 		//Use Vsync
-		if (SDL_GL_SetSwapInterval(1) < 0)
+		static bool enableVSync = true;
+		if (SDL_GL_SetSwapInterval(enableVSync ? 1 : 0) < 0)
 		{
 			RB_CORE_ERROR("Warning: Unable to set VSync! SDL Error: {0}\n", SDL_GetError());
 		}

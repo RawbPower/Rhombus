@@ -37,7 +37,9 @@ namespace rhombus::math
 	inline float Round(float x) { return round(x); }
 	inline int RoundInt(float x) { return round(x); }
 	inline float Ceil(float x) { return ceil(x); }
+	inline int CeilInt(float x) { return ceil(x); }
 	inline float Floor(float x) { return floor(x); }
+	inline int FloorInt(float x) { return floor(x); }
 
 	inline float Abs(float x) { return abs(x); }
 	inline int Sign(int x) { return (0 < x) - (x < 0); }

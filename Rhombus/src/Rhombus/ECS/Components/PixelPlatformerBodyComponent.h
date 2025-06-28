@@ -21,6 +21,7 @@ namespace rhombus
 		friend class PixelPlatformerPhysicsSystem;
 
 		Vec2 m_translationRemainder = Vec2(0.0f);
+		float m_lastMovementVelocity = 0.0f;
 		bool m_isInAir = false;
 	};
 }

@@ -10,6 +10,17 @@ namespace rhombus
 {
 	void PixelPlatformerPhysicsSystem::Update(DeltaTime dt)
 	{
+		// Keep physics updating at constant rate
+		m_accumulator += dt;
+		while (m_accumulator >= STEP_TIME)
+		{
+			Integrate(STEP_TIME);
+			m_accumulator -= STEP_TIME;
+		}
+	}
+
+	void PixelPlatformerPhysicsSystem::Integrate(DeltaTime dt)
+	{
 		for (Entity entity : GetEntities())
 		{
 			auto& ppbComponent = entity.GetComponent<PixelPlatformerBodyComponent>();
@@ -21,7 +32,7 @@ namespace rhombus
 			case PixelPlatformerBodyComponent::BodyType::Kinematic:
 				break;
 			case PixelPlatformerBodyComponent::BodyType::Dynamic:
-				UpdateDynamicBody(entity, dt);
+				IntegrateDynamicBody(entity, dt);
 				break;
 			default:
 				break;
@@ -29,11 +40,12 @@ namespace rhombus
 		}
 	}
 
-	void PixelPlatformerPhysicsSystem::UpdateDynamicBody(Entity entity, DeltaTime dt)
+	void PixelPlatformerPhysicsSystem::IntegrateDynamicBody(Entity entity, DeltaTime dt)
 	{
 		PixelPlatformerBodyComponent& ppbComponent = entity.GetComponent<PixelPlatformerBodyComponent>();
 
-		ppbComponent.m_velocity += Vec2(0.0f, GRAVITY * dt);
+		Vec2 acceleration = Vec2(0.0f, GRAVITY * dt);
+		ppbComponent.m_velocity += acceleration;
 
 		Vec2 translation = ppbComponent.m_velocity * dt;
 		Move(entity, translation);
@@ -48,8 +60,8 @@ namespace rhombus
 		Vec2 appliedTranslation = Vec2(0.0f);
 
 		remainder += translation;
-		int xTranslation = math::RoundInt(remainder.x);
-		int yTranslation = math::RoundInt(remainder.y);
+		int xTranslation = math::Sign(remainder.x) * math::FloorInt(math::Abs(remainder.x));
+		int yTranslation = math::Sign(remainder.y) * math::FloorInt(math::Abs(remainder.y));
 
 		bool isInAir = ppbComponent.m_isInAir;
 
@@ -82,6 +94,8 @@ namespace rhombus
 		// Y direction
 		if (yTranslation != 0)
 		{
+			float totalTranslation = remainder.y;
+			float currentTranslation = 0.0f;
 			isInAir = true;
 
 			// Remove the whole translation from the remainer once we move (even if we collide)
@@ -93,14 +107,35 @@ namespace rhombus
 				if (!Collide(entity, position + appliedTranslation + Vec2(0.0f, step)))
 				{
 					appliedTranslation.y += step;
+					ppbComponent.m_lastMovementVelocity = ppbComponent.m_velocity.y;
 					yTranslation -= step;
 				}
 				else
 				{
-					ppbComponent.m_velocity.y = 0.0f;
+					float restitution = 0.0f;
+					if (entity.HasComponent<BoxCollider2DComponent>())
+					{
+						auto& collider = entity.GetComponent<BoxCollider2DComponent>();
+						restitution = collider.m_restitution;
+					}
+					else if (entity.HasComponent<CircleCollider2DComponent>())
+					{
+						auto& collider = entity.GetComponent<CircleCollider2DComponent>();
+						restitution = collider.m_restitution;
+					}
+					else
+					{
+						ppbComponent.m_velocity.y = 0.0f;
+					}
+
+					// Here we use the velocity from the last actual movement 
+					// (the current velocity is what it would be if it hadn't collided)
+					ppbComponent.m_velocity.y = -restitution * ppbComponent.m_lastMovementVelocity;
+					ppbComponent.m_translationRemainder.y = 0.0f;
 					isInAir = false;
 					break;
 				}
+				currentTranslation += step;
 			}
 		}
 

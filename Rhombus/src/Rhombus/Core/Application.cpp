@@ -128,11 +128,14 @@ namespace rhombus {
 			RB_PROFILE_SCOPE("Run Loop");
 
 			float time = Time::GetTime();
-			static int MIN_FPS = 15;
 			DeltaTime deltaTime = time - m_LastFrameTime;
-			if (1.0f / deltaTime < MIN_FPS)
+
+			// When these is a long timestep (caused by breakpoint)
+			// then just artifically set the fps to the target
+			static float TARGET_FPS = 60.0f;
+			if (deltaTime > 1.0f)
 			{
-				deltaTime = (1.0f / (float)MIN_FPS);
+				deltaTime = (1.0f / TARGET_FPS);
 			}
 
 			m_LastFrameTime = time;

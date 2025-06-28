@@ -23,6 +23,8 @@ private:
 	bool OnMouseButtonReleased(MouseButtonReleasedEvent& e);
 	bool OnMouseMoved(MouseMovedEvent& e);
 	bool OnWindowResized(WindowResizeEvent& e);
+	bool OnGamepadAxis(GamepadAxisEvent& e);
+	bool OnGamepadButtonDown(GamepadButtonDownEvent& e);
 
 	bool OpenProject();
 	void OpenProject(const std::filesystem::path& path);

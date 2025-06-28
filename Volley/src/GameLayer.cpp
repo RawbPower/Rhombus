@@ -72,6 +72,8 @@ void GameLayer::OnEvent(rhombus::Event& e)
 	dispatcher.Dispatch<MouseButtonPressedEvent>(RB_BIND_EVENT_FN(GameLayer::OnMouseButtonPressed));
 	dispatcher.Dispatch<MouseButtonReleasedEvent>(RB_BIND_EVENT_FN(GameLayer::OnMouseButtonReleased));
 	dispatcher.Dispatch<MouseMovedEvent>(RB_BIND_EVENT_FN(GameLayer::OnMouseMoved));
+	dispatcher.Dispatch<GamepadAxisEvent>(RB_BIND_EVENT_FN(GameLayer::OnGamepadAxis));
+	dispatcher.Dispatch<GamepadButtonDownEvent>(RB_BIND_EVENT_FN(GameLayer::OnGamepadButtonDown));
 }
 
 // Try KeyTypedEvent
@@ -103,6 +105,20 @@ bool GameLayer::OnMouseMoved(MouseMovedEvent& e)
 
 bool GameLayer::OnWindowResized(WindowResizeEvent& e)
 {
+	return false;
+}
+
+bool GameLayer::OnGamepadAxis(GamepadAxisEvent& e)
+{
+	m_ActiveScene->OnGamepadAxis(e.GetAxis(), e.GetValue());
+
+	return false;
+}
+
+bool GameLayer::OnGamepadButtonDown(GamepadButtonDownEvent& e)
+{
+	m_ActiveScene->OnGamepadButtonDown(e.GetGamepadButton());
+
 	return false;
 }
 

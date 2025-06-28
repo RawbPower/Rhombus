@@ -12,5 +12,7 @@ namespace rhombus {
 		static Vec2 GetMousePosition();
 		static float GetMouseX();
 		static float GetMouseY();
+		static bool IsGamepadButtonPressed(int button);
+		static float GetGamepadAxis(int axis);
 	};
 }

@@ -695,6 +695,8 @@ namespace rhombus
 		dispatcher.Dispatch<MouseButtonPressedEvent>(RB_BIND_EVENT_FN(EditorLayer::OnMouseButtonPressed));
 		dispatcher.Dispatch<MouseButtonReleasedEvent>(RB_BIND_EVENT_FN(EditorLayer::OnMouseButtonReleased));
 		dispatcher.Dispatch<MouseMovedEvent>(RB_BIND_EVENT_FN(EditorLayer::OnMouseMoved));
+		dispatcher.Dispatch<GamepadAxisEvent>(RB_BIND_EVENT_FN(EditorLayer::OnGamepadAxis));
+		dispatcher.Dispatch<GamepadButtonDownEvent>(RB_BIND_EVENT_FN(EditorLayer::OnGamepadButtonDown));
 	}
 
 	// Try KeyTypedEvent
@@ -842,6 +844,26 @@ namespace rhombus
 		{
 			m_ActiveScene->OnMouseMoved(e.GetX(), e.GetY());
 		}
+		return false;
+	}
+
+	bool EditorLayer::OnGamepadAxis(GamepadAxisEvent& e)
+	{
+		if (m_SceneState == SceneState::Play && !Application::Get().GetIsDebugPaused())
+		{
+			m_ActiveScene->OnGamepadAxis(e.GetAxis(), e.GetValue());
+		}
+
+		return false;
+	}
+
+	bool EditorLayer::OnGamepadButtonDown(GamepadButtonDownEvent& e)
+	{
+		if (m_SceneState == SceneState::Play && !Application::Get().GetIsDebugPaused())
+		{
+			m_ActiveScene->OnGamepadButtonDown(e.GetGamepadButton());
+		}
+
 		return false;
 	}
 

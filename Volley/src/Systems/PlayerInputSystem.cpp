@@ -2,7 +2,9 @@
 
 void PlayerInputSystem::Update()
 {
-	float input = Input::IsKeyPressed(RB_KEY_D) - Input::IsKeyPressed(RB_KEY_A);
+	float keyboardInput = Input::IsKeyPressed(RB_KEY_D) - Input::IsKeyPressed(RB_KEY_A);
+	float gamepadInput = Input::GetGamepadAxis(0);
+	float input = math::Abs(keyboardInput) > math::Abs(gamepadInput) ? keyboardInput : gamepadInput;
 
 	for (Entity entity : GetEntities())
 	{

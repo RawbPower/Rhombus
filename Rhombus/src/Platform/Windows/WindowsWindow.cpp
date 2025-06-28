@@ -2,9 +2,11 @@
 #include "WindowsWindow.h"
 
 #include "Rhombus/Core/Application.h"
+#include "Rhombus/Core/Input.h"
 #include "Rhombus/Events/ApplicationEvent.h"
 #include "Rhombus/Events/MouseEvent.h"
 #include "Rhombus/Events/KeyEvent.h"
+#include "Rhombus/Events/GamepadEvent.h"
 
 #include "Rhombus/Renderer/Renderer.h"
 
@@ -52,7 +54,7 @@ namespace rhombus
 		bool sdlFail = false;
 		{
 			RB_PROFILE_SCOPE("SDL_Init");
-			sdlFail = SDL_Init(SDL_INIT_VIDEO) < 0;
+			sdlFail = SDL_Init(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK) < 0;
 		}
 		if (sdlFail)
 		{
@@ -79,6 +81,14 @@ namespace rhombus
 				if (Renderer::GetAPI() == RendererAPI::API::OpenGL)
 					SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_DEBUG_FLAG);
 			#endif
+
+			// Initialize joystick is present
+			m_Joystick = nullptr;
+			if (SDL_NumJoysticks() > 0)
+			{
+				SDL_JoystickEventState(SDL_ENABLE);
+				m_Joystick = SDL_JoystickOpen(0);
+			}
 
 			//Create window
 			{
@@ -125,6 +135,10 @@ namespace rhombus
 		//Destroy window
 		SDL_DestroyWindow(m_Window);
 		m_Window = NULL;
+
+		// Destroy joystick
+		SDL_JoystickClose(m_Joystick);
+		m_Joystick = NULL;
 
 		//Quit SDL subsystems
 		SDL_Quit();
@@ -237,6 +251,22 @@ namespace rhombus
 				case SDL_MOUSEMOTION:
 				{
 					MouseMovedEvent event(e.motion.x, e.motion.y);
+					m_Data.EventCallback(event);
+					break;
+				}
+				case SDL_JOYAXISMOTION:
+				{
+					if ((e.jaxis.value < -3200) || (e.jaxis.value > 3200))
+					{
+						float valueNorm = e.jaxis.value > 0 ? ((float)e.jaxis.value) / SDL_JOYSTICK_AXIS_MAX : ((float)e.jaxis.value) / SDL_JOYSTICK_AXIS_MIN;
+						GamepadAxisEvent event(e.jaxis.axis, valueNorm);
+						m_Data.EventCallback(event);
+					}
+					break;
+				}
+				case SDL_JOYBUTTONDOWN:
+				{
+					GamepadButtonDownEvent event(e.jbutton.button);
 					m_Data.EventCallback(event);
 					break;
 				}

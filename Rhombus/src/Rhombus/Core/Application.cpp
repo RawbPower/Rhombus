@@ -103,6 +103,10 @@ namespace rhombus {
 
 		dispatcher.Dispatch<KeyReleasedEvent>(BIND_EVENT_FN(OnKeyReleased));
 
+		dispatcher.Dispatch<GamepadAxisEvent>(BIND_EVENT_FN(OnGamepadAxis));
+
+		dispatcher.Dispatch<GamepadButtonDownEvent>(BIND_EVENT_FN(OnGamepadButtonDown));
+
 		//dispatcher.Dispatch<MouseButtonPressedEvent>(BIND_EVENT_FN(OnMouseButtonPressed));
 
 		//dispatcher.Dispatch<MouseButtonReleasedEvent>(BIND_EVENT_FN(OnMouseButtonReleased));
@@ -260,5 +264,15 @@ namespace rhombus {
 	bool Application::OnMouseMoved(MouseMovedEvent& e)
 	{
 		return true;
+	}
+
+	bool Application::OnGamepadAxis(GamepadAxisEvent& e)
+	{
+		return true;
+	}
+
+	bool Application::OnGamepadButtonDown(GamepadButtonDownEvent& e)
+	{
+		return false;
 	}
 }

@@ -15,7 +15,8 @@ namespace rhombus {
 		WindowClose, WindowResize, WindowFocus, WindowLostFocus, WindowMoved,
 		AppTick, AppUpdate, AppRender,
 		KeyPressed, KeyReleased, KeyTyped,
-		MouseButtonPressed, MouseButtonReleased, MouseMoved, MouseScrolled
+		MouseButtonPressed, MouseButtonReleased, MouseMoved, MouseScrolled,
+		GamepadButtonDown, GamepadAxis
 	};
 
 	// This is used if we want to filter events
@@ -25,7 +26,9 @@ namespace rhombus {
 		EventCategoryInput = BIT(1),
 		EventCategoryKeyboard = BIT(2),
 		EventCategoryMouse = BIT(3),
-		EventCategoryMouseButton = BIT(4)
+		EventCategoryMouseButton = BIT(4),
+		EventCategoryGamepad = BIT(5),
+		EventCategoryGamepadButton = BIT(6)
 	};
 
 

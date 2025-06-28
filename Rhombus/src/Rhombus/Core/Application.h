@@ -7,6 +7,10 @@
 #include "Rhombus/Events/Event.h"
 #include "Rhombus/Events/ApplicationEvent.h"
 
+#include "Rhombus/Events/KeyEvent.h"
+#include "Rhombus/Events/MouseEvent.h"
+#include "Rhombus/Events/GamepadEvent.h"
+
 #include "Rhombus/Core/DeltaTime.h"
 
 #include "Rhombus/ImGui/ImGuiLayer.h"
@@ -90,6 +94,9 @@ namespace rhombus {
 		bool OnMouseButtonReleased(MouseButtonReleasedEvent& e);
 		bool OnMouseScrolled(MouseScrolledEvent& e);
 		bool OnMouseMoved(MouseMovedEvent& e);
+
+		bool OnGamepadAxis(GamepadAxisEvent& e);
+		bool OnGamepadButtonDown(GamepadButtonDownEvent& e);
 
 	private:
 		ApplicationSpecification m_Specification;

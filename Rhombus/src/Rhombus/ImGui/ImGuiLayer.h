@@ -3,8 +3,6 @@
 #include "Rhombus/Core/Layer.h"
 
 #include "Rhombus/Events/ApplicationEvent.h"
-#include "Rhombus/Events/KeyEvent.h"
-#include "Rhombus/Events/MouseEvent.h"
 
 namespace rhombus {
 

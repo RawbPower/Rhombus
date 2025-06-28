@@ -26,6 +26,7 @@ namespace rhombus {
 
 		inline virtual void* GetNativeWindow() const { return m_Window; }
 		inline virtual void* GetNativeContext() const { return m_SDLContext; }
+		inline virtual void* GetJoystick() const { return m_Joystick; }
 	private:
 		virtual void Init(const WindowParams& params);
 		virtual void Shutdown();
@@ -39,6 +40,8 @@ namespace rhombus {
 		//The window we'll be rendering to
 		SDL_Window* m_Window;
 		SDL_GLContext m_SDLContext;
+
+		SDL_Joystick* m_Joystick;
 
 		struct WindowData
 		{

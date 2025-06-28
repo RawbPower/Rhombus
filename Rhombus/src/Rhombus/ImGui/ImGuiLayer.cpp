@@ -3,6 +3,9 @@
 #include "rbpch.h"
 #include "ImGuiLayer.h"
 
+#include "Rhombus/Events/KeyEvent.h"
+#include "Rhombus/Events/MouseEvent.h"
+
 #include "imgui.h"
 #include "backends/imgui_impl_opengl3.h"
 #include "backends/imgui_impl_sdl2.h"

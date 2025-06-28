@@ -36,6 +36,8 @@ namespace rhombus
 		bool OnMouseButtonPressed(MouseButtonPressedEvent& e);
 		bool OnMouseButtonReleased(MouseButtonReleasedEvent& e);
 		bool OnMouseMoved(MouseMovedEvent& e);
+		bool OnGamepadAxis(GamepadAxisEvent& e);
+		bool OnGamepadButtonDown(GamepadButtonDownEvent& e);
 		bool OnWindowResized(WindowResizeEvent& e);
 		void NewScene();
 		void OpenScene();

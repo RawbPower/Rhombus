@@ -18,7 +18,7 @@ extern "C"
 
 namespace rhombus
 {
-	int Log(lua_State* state)
+	static int Log(lua_State* state)
 	{
 		Log::Assert(lua_gettop(state) == 1, "Invalid number of arguments passed to function");
 		std::string logString = lua_tostring(state, 1);
@@ -26,7 +26,7 @@ namespace rhombus
 		return 0;
 	}
 
-	int IsKeyDown(lua_State* state)
+	static int IsKeyDown(lua_State* state)
 	{
 		Log::Assert(lua_gettop(state) == 1, "Invalid number of arguments passed to function");
 

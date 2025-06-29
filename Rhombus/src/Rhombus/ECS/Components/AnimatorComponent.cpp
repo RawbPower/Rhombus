@@ -30,6 +30,18 @@ namespace rhombus
 		}
 	}
 
+	void AnimatorComponent::RemoveAnimation(std::string name)
+	{
+		for (int i = 0; i < m_animations.size(); i++)
+		{
+			if (m_animations[i].m_name == name)
+			{
+				m_animations.erase(m_animations.begin() + i);
+				break;
+			}
+		}
+	}
+
 	void AnimatorComponent::Play(std::string name)
 	{
 		for (int i = 0; i < m_animations.size(); i++)

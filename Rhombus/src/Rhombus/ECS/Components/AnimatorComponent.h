@@ -16,6 +16,7 @@ namespace rhombus
 		void Step(DeltaTime dt);
 
 		void AddAnimation(AnimationClip clip) { m_animations.push_back(clip); }
+		void RemoveAnimation(std::string name);
 		const AnimationClip& GetCurrentAnimation() const { return m_animations[m_currentAnimIndex]; }
 
 		void Play(std::string name);

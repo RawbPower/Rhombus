@@ -101,6 +101,8 @@ namespace rhombus
 		Mat4 GetTransform() const;
 		Scene* GetContext() const { return m_scene; }
 
+		bool IsValid() const { return m_entityId != INVALID_ENTITY; }
+
 		Ref<SceneGraphNode> GetSceneGraphNode() const;
 
 	private:

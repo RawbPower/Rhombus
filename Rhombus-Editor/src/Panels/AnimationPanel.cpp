@@ -7,6 +7,7 @@
 #include "Rhombus/ECS/Components/SpriteRendererComponent.h"
 
 #include <imgui/imgui.h>
+#include <imgui/misc/cpp/imgui_stdlib.h>
 
 namespace rhombus
 {
@@ -33,6 +34,8 @@ namespace rhombus
 		float spacing = 48.0f;
 		float margin = 64.0f;
 
+		static bool renaming = false;
+		static bool refocus_to_rename = false;
 		static int item_current_idx = 0; // Here we store our selection data as an index.
 
 		// Need to clean up the management here when switching animations to one with a different number of clips
@@ -55,23 +58,50 @@ namespace rhombus
 		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(4, 8));
 
 		std::string combo_preview_value = items[item_current_idx];  // Pass in the preview value visible before opening the combo (it could be anything)
-		if (ImGui::BeginCombo("##Animation", combo_preview_value.c_str()))
+		if (!renaming)
 		{
-			for (int n = 0; n < items.size(); n++)
+			if (ImGui::BeginCombo("##Animation", combo_preview_value.c_str()))
 			{
-				const bool is_selected = (item_current_idx == n);
-				if (ImGui::Selectable(items[n].c_str(), is_selected))
+				for (int n = 0; n < items.size(); n++)
 				{
-					item_current_idx = n;
-					AnimatorComponent& animator = m_currentEntity.GetComponent<AnimatorComponent>();
-					animator.Play(animator.GetAnimationClip(n).m_name);
-				}
+					const bool is_selected = (item_current_idx == n);
+					if (ImGui::Selectable(items[n].c_str(), is_selected))
+					{
+						item_current_idx = n;
+						AnimatorComponent& animator = m_currentEntity.GetComponent<AnimatorComponent>();
+						animator.Play(animator.GetAnimationClip(n).m_name);
+					}
 
-				// Set the initial focus when opening the combo (scrolling + keyboard navigation focus)
-				if (is_selected)
-					ImGui::SetItemDefaultFocus();
+					// Set the initial focus when opening the combo (scrolling + keyboard navigation focus)
+					if (is_selected)
+						ImGui::SetItemDefaultFocus();
+				}
+				ImGui::EndCombo();
 			}
-			ImGui::EndCombo();
+		}
+		else
+		{
+			char buffer[64];
+			memset(buffer, 0, sizeof(buffer));
+			strcpy_s(buffer, sizeof(buffer), combo_preview_value.c_str());
+			if (refocus_to_rename)
+			{
+				ImGui::SetKeyboardFocusHere(0);
+			}
+
+			const bool nameEntered = ImGui::InputText("##Rename", buffer, sizeof(buffer), ImGuiInputTextFlags_EnterReturnsTrue);
+			
+			const bool textBoxOutOfFocus = !refocus_to_rename && !ImGui::IsItemActive();
+
+			refocus_to_rename = false;
+
+			const bool nameFinished = nameEntered || textBoxOutOfFocus;
+			if (nameFinished)
+			{
+				AnimatorComponent& animator = m_currentEntity.GetComponent<AnimatorComponent>();
+				animator.GetAnimationClipRef(item_current_idx).m_name = buffer;
+				renaming = false;
+			}
 		}
 
 		ImGui::PopStyleVar();
@@ -85,15 +115,32 @@ namespace rhombus
 		const auto& buttonActive = colors[ImGuiCol_ButtonActive];
 		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(buttonActive.x, buttonActive.y, buttonActive.z, 0.5f));
 
-		ImGui::ImageButton((ImTextureID)m_IconAdd->GetRendererID(), ImVec2(size, size), ImVec2(0, 1), ImVec2(1, 0), 0);
+		if (ImGui::ImageButton((ImTextureID)m_IconAdd->GetRendererID(), ImVec2(size, size), ImVec2(0, 1), ImVec2(1, 0), 0))
+		{
+			AnimatorComponent& animator = m_currentEntity.GetComponent<AnimatorComponent>();
+			AnimationClip clip;
+			clip.m_name = "Animation " + std::to_string(animator.GetAnimationCount()+1);
+			animator.AddAnimation(clip);
+			animator.Play(clip.m_name);
+			item_current_idx = animator.GetAnimationCount() - 1;
+		}
 
 		ImGui::SameLine();
 
-		ImGui::ImageButton((ImTextureID)m_IconRename->GetRendererID(), ImVec2(size, size), ImVec2(0, 1), ImVec2(1, 0), 0);
+		if (ImGui::ImageButton((ImTextureID)m_IconRename->GetRendererID(), ImVec2(size, size), ImVec2(0, 1), ImVec2(1, 0), 0))
+		{
+			renaming = !renaming;
+			refocus_to_rename = renaming;
+		}
 
 		ImGui::SameLine();
 
-		ImGui::ImageButton((ImTextureID)m_IconDelete->GetRendererID(), ImVec2(size, size), ImVec2(0, 1), ImVec2(1, 0), 0);
+		if (ImGui::ImageButton((ImTextureID)m_IconDelete->GetRendererID(), ImVec2(size, size), ImVec2(0, 1), ImVec2(1, 0), 0))
+		{
+			AnimatorComponent& animator = m_currentEntity.GetComponent<AnimatorComponent>();
+			animator.RemoveAnimation(animator.GetAnimationClip(item_current_idx).m_name);
+			item_current_idx = std::max(item_current_idx-1, 0);
+		}
 
 		ImGui::SameLine();
 

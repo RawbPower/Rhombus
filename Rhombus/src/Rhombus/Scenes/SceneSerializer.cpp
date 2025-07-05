@@ -313,6 +313,20 @@ namespace rhombus
 
 		std::ofstream fout(filepath);
 		fout << out.c_str();
+
+		// Save other files
+		for (EntityID e : orderedEntities)
+		{
+			Entity entity = { e, m_scene.get() };
+			if (!entity)
+				return;
+
+			if (entity.HasComponent<AnimatorComponent>())
+			{
+				auto& animatorComponent = entity.GetComponent<AnimatorComponent>();
+				AnimationSerializer::SerializeAnimations(Project::GetAssetFileSystemPath(animatorComponent.m_filePath).string(), entity);
+			}
+		}
 	}
 
 	void SceneSerializer::SerializeRuntime(const std::string& filepath)
@@ -520,9 +534,9 @@ namespace rhombus
 				auto animtorComponent = entity["AnimatorComponent"];
 				if (animtorComponent)
 				{
-					auto& sc = deserializedEntity.AddComponent<AnimatorComponent>();
-					sc.m_filePath = animtorComponent["FilePath"].as<std::string>();
-					auto path = Project::GetAssetFileSystemPath(sc.m_filePath);
+					auto& animator = deserializedEntity.AddComponent<AnimatorComponent>();
+					animator.m_filePath = animtorComponent["FilePath"].as<std::string>();
+					auto path = Project::GetAssetFileSystemPath(animator.m_filePath);
 					AnimationSerializer::DeserializeAnimations(path.string(), deserializedEntity);
 				}
 

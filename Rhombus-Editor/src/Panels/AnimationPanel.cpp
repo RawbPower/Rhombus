@@ -123,6 +123,7 @@ namespace rhombus
 			animator.AddAnimation(clip);
 			animator.Play(clip.m_name);
 			item_current_idx = animator.GetAnimationCount() - 1;
+			m_currentSampleIndex = 0;
 		}
 
 		ImGui::SameLine();
@@ -196,9 +197,11 @@ namespace rhombus
 			const float thumbnailSize = 64.0f;
 			const float thumbnailPadding = 8.0f;
 
-			const AnimatorComponent& animator = m_currentEntity.GetComponentRead<AnimatorComponent>();
+			AnimatorComponent& animator = m_currentEntity.GetComponent<AnimatorComponent>();
 			const SpriteRendererComponent& spriteRenderer = m_currentEntity.GetComponentRead<SpriteRendererComponent>();
-			const AnimationClip clip = animator.GetAnimationClip(item_current_idx);
+			AnimationClip& clip = animator.GetAnimationClipRef(item_current_idx);
+			bool addNewSample = false;
+
 			static ImGuiTableFlags flags = ImGuiTableFlags_SizingFixedFit | ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg | ImGuiTableFlags_NoHostExtendX;
 			if (ImGui::BeginTable("Timeline", clip.m_samples.size() + 1, flags))
 			{
@@ -261,7 +264,10 @@ namespace rhombus
 				const ImVec2 iconPadding = bWideImage ? ImVec2(thumbnailPadding, fSmallDimensionPadding + thumbnailPadding) : ImVec2(fSmallDimensionPadding + thumbnailPadding, thumbnailPadding);
 
 				ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, iconPadding);
-				ImGui::ImageButton((ImTextureID)m_IconAdd->GetRendererID(), iconSize, { 0,1 }, { 1,0 });
+				if (ImGui::ImageButton((ImTextureID)m_IconAdd->GetRendererID(), iconSize, { 0,1 }, { 1,0 }))
+				{
+					addNewSample = true;
+				}
 				ImGui::PopStyleVar();
 
 				//ImGui::PopStyleVar();
@@ -289,6 +295,13 @@ namespace rhombus
 
 				ImGui::EndTable();
 			}
+
+			if (addNewSample)
+			{
+				AnimationSample sample;
+				clip.m_duration += sample.m_duration;
+				clip.m_samples.push_back(sample);
+			}
 		}
 
 		ImGui::PopStyleColor();
@@ -297,63 +310,66 @@ namespace rhombus
 
 		if (m_currentSampleIndex >= 0 && (EntityID)m_currentEntity != INVALID_ENTITY && m_currentEntity.HasComponent<AnimatorComponent>())
 		{
-			ImGui::Begin("Sample Properties");
-
 			AnimatorComponent& animator = m_currentEntity.GetComponent<AnimatorComponent>();
 			const SpriteRendererComponent& spriteRenderer = m_currentEntity.GetComponentRead<SpriteRendererComponent>();
-			AnimationClip clip = animator.GetAnimationClip(item_current_idx);
+			AnimationClip& clip = animator.GetAnimationClipRef(item_current_idx);
 
-			float duration = clip.m_samples[m_currentSampleIndex].m_duration;
-			int frame = clip.m_samples[m_currentSampleIndex].m_spriteFrame;
-
-			if (spriteRenderer.m_texture)
+			if (clip.m_samples.size())
 			{
-				const float thumbnailSize = 96.0f;
-				const float thumbnailPadding = 8.0f;
+				ImGui::Begin("Sample Properties");
 
-				int frameRow = clip.m_samples[m_currentSampleIndex].m_spriteFrame % spriteRenderer.GetColumns();
-				int frameCol = spriteRenderer.GetRows() - 1.0f - clip.m_samples[m_currentSampleIndex].m_spriteFrame / spriteRenderer.GetColumns();
-				Ref<SubTexture2D> sampleFrame = SubTexture2D::CreateFromCoords(spriteRenderer.m_texture, Vec2(frameRow, frameCol), spriteRenderer.GetSpriteSize(), spriteRenderer.GetPadding());
-				ImVec2 uv0 = ImVec2(sampleFrame->GetTexCoords()[3].x, sampleFrame->GetTexCoords()[3].y);
-				ImVec2 uv1 = ImVec2(sampleFrame->GetTexCoords()[1].x, sampleFrame->GetTexCoords()[1].y);
-				float textureWidth = (float)sampleFrame->GetWidth();
-				float textureHeight = (float)sampleFrame->GetHeight();
+				float duration = clip.m_samples[m_currentSampleIndex].m_duration;
+				int frame = clip.m_samples[m_currentSampleIndex].m_spriteFrame;
 
-				// Caclulate image size
-				const float fAspectRatio = textureWidth / textureHeight;
-				const bool bWideImage = fAspectRatio >= 1.0f;
-				const ImVec2 iconSize = bWideImage ? ImVec2(thumbnailSize, thumbnailSize * (1.0f / fAspectRatio)) : ImVec2(thumbnailSize * fAspectRatio, thumbnailSize);
+				if (spriteRenderer.m_texture)
+				{
+					const float thumbnailSize = 96.0f;
+					const float thumbnailPadding = 8.0f;
 
-				// Caclulate image padding needed to make square button
-				const float fDimensionDifference = math::Abs(textureWidth - textureHeight);
-				const float fMaxDimension = bWideImage ? textureWidth : textureHeight;
-				const float fSmallDimensionPadding = (fDimensionDifference / fMaxDimension) * thumbnailSize * 0.5f;
-				const ImVec2 iconPadding = bWideImage ? ImVec2(thumbnailPadding, fSmallDimensionPadding + thumbnailPadding) : ImVec2(fSmallDimensionPadding + thumbnailPadding, thumbnailPadding);
+					int frameRow = clip.m_samples[m_currentSampleIndex].m_spriteFrame % spriteRenderer.GetColumns();
+					int frameCol = spriteRenderer.GetRows() - 1.0f - clip.m_samples[m_currentSampleIndex].m_spriteFrame / spriteRenderer.GetColumns();
+					Ref<SubTexture2D> sampleFrame = SubTexture2D::CreateFromCoords(spriteRenderer.m_texture, Vec2(frameRow, frameCol), spriteRenderer.GetSpriteSize(), spriteRenderer.GetPadding());
+					ImVec2 uv0 = ImVec2(sampleFrame->GetTexCoords()[3].x, sampleFrame->GetTexCoords()[3].y);
+					ImVec2 uv1 = ImVec2(sampleFrame->GetTexCoords()[1].x, sampleFrame->GetTexCoords()[1].y);
+					float textureWidth = (float)sampleFrame->GetWidth();
+					float textureHeight = (float)sampleFrame->GetHeight();
 
-				ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, iconPadding);
-				ImGui::Image((ImTextureID)spriteRenderer.m_texture->GetRendererID(), iconSize, uv0, uv1);
-				ImGui::PopStyleVar();
+					// Caclulate image size
+					const float fAspectRatio = textureWidth / textureHeight;
+					const bool bWideImage = fAspectRatio >= 1.0f;
+					const ImVec2 iconSize = bWideImage ? ImVec2(thumbnailSize, thumbnailSize * (1.0f / fAspectRatio)) : ImVec2(thumbnailSize * fAspectRatio, thumbnailSize);
+
+					// Caclulate image padding needed to make square button
+					const float fDimensionDifference = math::Abs(textureWidth - textureHeight);
+					const float fMaxDimension = bWideImage ? textureWidth : textureHeight;
+					const float fSmallDimensionPadding = (fDimensionDifference / fMaxDimension) * thumbnailSize * 0.5f;
+					const ImVec2 iconPadding = bWideImage ? ImVec2(thumbnailPadding, fSmallDimensionPadding + thumbnailPadding) : ImVec2(fSmallDimensionPadding + thumbnailPadding, thumbnailPadding);
+
+					ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, iconPadding);
+					ImGui::Image((ImTextureID)spriteRenderer.m_texture->GetRendererID(), iconSize, uv0, uv1);
+					ImGui::PopStyleVar();
+
+					ImGui::Spacing();
+				}
+				else
+				{
+					ImGui::Button("Drag Texture", ImVec2(100.0f, 0.0f));
+				}
 
 				ImGui::Spacing();
-			}
-			else
-			{
-				ImGui::Button("Drag Texture", ImVec2(100.0f, 0.0f));
-			}
 
-			ImGui::Spacing();
+				if (ImGui::InputFloat("Duration", &duration) && duration >= 0.0f)
+				{
+					clip.m_samples[m_currentSampleIndex].m_duration = duration;
+				}
 
-			if (ImGui::InputFloat("Duration", &duration) && duration >= 0.0f)
-			{
-				clip.m_samples[m_currentSampleIndex].m_duration = duration;
+				if (ImGui::InputInt("Frame", &frame) && frame >= 0)
+				{
+					clip.m_samples[m_currentSampleIndex].m_spriteFrame = frame;
+				}
+
+				ImGui::End();
 			}
-
-			if (ImGui::InputInt("Frame", &frame) && frame >= 0)
-			{
-				clip.m_samples[m_currentSampleIndex].m_spriteFrame = frame;
-			}
-
-			ImGui::End();
 		}
 	}
 }

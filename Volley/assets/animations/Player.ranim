@@ -18,33 +18,87 @@ Clips:
   - Name: Run
     Looping: true
     Samples:
-      - Duration: 0.1
+      - Duration: 0.100000001
         Sprite: Player
         Frame: 4
-      - Duration: 0.1
+      - Duration: 0.100000001
         Sprite: Player
         Frame: 5
-      - Duration: 0.1
+      - Duration: 0.100000001
         Sprite: Player
         Frame: 6
-      - Duration: 0.1
+      - Duration: 0.100000001
         Sprite: Player
         Frame: 7
-      - Duration: 0.1
+      - Duration: 0.100000001
         Sprite: Player
         Frame: 8
-      - Duration: 0.1
+      - Duration: 0.100000001
         Sprite: Player
         Frame: 9
   - Name: Jump Up
     Looping: true
     Samples:
-      - Duration: 0.1
+      - Duration: 0.100000001
         Sprite: Player
         Frame: 10
   - Name: Jump Down
     Looping: true
     Samples:
-      - Duration: 0.1
+      - Duration: 0.100000001
         Sprite: Player
         Frame: 11
+  - Name: Wall Slide
+    Looping: true
+    Samples:
+      - Duration: 0.100000001
+        Sprite: Player
+        Frame: 12
+  - Name: Kick R
+    Looping: true
+    Samples:
+      - Duration: 0.100000001
+        Sprite: Player
+        Frame: 13
+  - Name: Kick RD
+    Looping: true
+    Samples:
+      - Duration: 0.100000001
+        Sprite: Player
+        Frame: 14
+  - Name: Kick D
+    Looping: true
+    Samples:
+      - Duration: 0.100000001
+        Sprite: Player
+        Frame: 15
+  - Name: Kick LD
+    Looping: true
+    Samples:
+      - Duration: 0.100000001
+        Sprite: Player
+        Frame: 16
+  - Name: Kick L
+    Looping: true
+    Samples:
+      - Duration: 0.100000001
+        Sprite: Player
+        Frame: 17
+  - Name: Kick LU
+    Looping: true
+    Samples:
+      - Duration: 0.100000001
+        Sprite: Player
+        Frame: 18
+  - Name: Kick U
+    Looping: true
+    Samples:
+      - Duration: 0.100000001
+        Sprite: Player
+        Frame: 19
+  - Name: Kick RU
+    Looping: true
+    Samples:
+      - Duration: 0.100000001
+        Sprite: Player
+        Frame: 20

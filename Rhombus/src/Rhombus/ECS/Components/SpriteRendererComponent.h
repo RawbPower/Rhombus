@@ -31,6 +31,8 @@ namespace rhombus
 		Vec2 GetSpriteSize() const;
 		void UpdateSubTexture();
 
+		std::string GetTexturePath() const { return m_subtexture->GetTexture()->GetPath(); }
+
 		Vec2 GetFlip() const { return m_flip; }
 		void SetFlipX(bool flip) { m_flip.x = flip ? -1.0f : 1.0f; }
 		void SetFlipY(bool flip) { m_flip.y = flip ? -1.0f : 1.0f; }

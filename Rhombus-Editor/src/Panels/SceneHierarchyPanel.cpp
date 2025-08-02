@@ -730,6 +730,7 @@ namespace rhombus
 		{
 			ImGui::DragFloat("Speed", &component.m_speed, 0.025f, 0.0f, 100.0f);
 			ImGui::DragFloat("Jump Height", &component.m_jumpHeight, 0.025f, 0.0f, 100.0f);
+			ImGui::DragFloat("Double Jump Height", &component.m_doubleJumpHeight, 0.025f, 0.0f, 100.0f);
 		});
 
 		DrawComponent<AnimatorComponent>("Animator", entity, [](auto& component)

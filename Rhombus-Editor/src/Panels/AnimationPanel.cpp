@@ -165,7 +165,7 @@ namespace rhombus
 		ImGui::SameLine();
 
 		ImGui::SetCursorPosX(ImGui::GetContentRegionMax().x - margin);
-		ImGui::ImageButton((ImTextureID)m_IconLoop->GetRendererID(), ImVec2(size, size), ImVec2(0, 1), ImVec2(1, 0), 0);
+		ImGui::Image((ImTextureID)m_IconLoop->GetRendererID(), ImVec2(size, size), ImVec2(0, 1), ImVec2(1, 0));
 		ImGui::SameLine();
 
 		ImGuiStyle& style = ImGui::GetStyle();

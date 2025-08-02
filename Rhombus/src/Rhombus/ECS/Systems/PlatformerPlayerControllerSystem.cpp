@@ -17,7 +17,7 @@ namespace rhombus
 
 		for (Entity entity : GetEntities())
 		{
-			const PlatformerPlayerControllerComponent& playerController = entity.GetComponentRead<PlatformerPlayerControllerComponent>();
+			PlatformerPlayerControllerComponent& playerController = entity.GetComponent<PlatformerPlayerControllerComponent>();
 			float speed = 0.0f;
 
 			if (input != 0.0f)
@@ -33,6 +33,31 @@ namespace rhombus
 			{
 				PixelPlatformerBodyComponent& physicsBody = entity.GetComponent<PixelPlatformerBodyComponent>();
 				physicsBody.m_velocity.x = speed;
+
+				if (!physicsBody.GetIsInAir())
+				{
+					playerController.ResetJumps();
+				}
+
+				// Jump code
+				if (playerController.GetShouldJump())
+				{
+					if (playerController.CanJump())
+					{
+						// Linear equation of motion v^2 = u^2 + 2as
+						float jumpVelocity = math::Sqrt(-2 * GRAVITY * playerController.m_jumpHeight) - GRAVITY * dt;
+
+						if (entity.HasComponent<PixelPlatformerBodyComponent>())
+						{
+							PixelPlatformerBodyComponent& physicsBody = entity.GetComponent<PixelPlatformerBodyComponent>();
+							physicsBody.m_velocity.y = jumpVelocity;
+						}
+
+						playerController.AddJump();
+					}
+
+					playerController.SetShouldJump(false);
+				}
 			}
 		}
 	}
@@ -60,18 +85,8 @@ namespace rhombus
 		for (Entity entity : GetEntities())
 		{
 			// Jump code
-			const PlatformerPlayerControllerComponent& playerController = entity.GetComponentRead<PlatformerPlayerControllerComponent>();
-			if (playerController.m_jumpHeight > 0.0f)
-			{
-				// Linear equation of motion v^2 = u^2 + 2as
-				float jumpVelocity = math::Sqrt(-2 * GRAVITY * playerController.m_jumpHeight);
-
-				if (entity.HasComponent<PixelPlatformerBodyComponent>())
-				{
-					PixelPlatformerBodyComponent& physicsBody = entity.GetComponent<PixelPlatformerBodyComponent>();
-					physicsBody.m_velocity.y = jumpVelocity;
-				}
-			}
+			PlatformerPlayerControllerComponent& playerController = entity.GetComponent<PlatformerPlayerControllerComponent>();
+			playerController.SetShouldJump(true);
 		}
 	}
 }

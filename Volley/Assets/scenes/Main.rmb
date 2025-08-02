@@ -35,7 +35,7 @@ Entities:
     TagComponent:
       Tag: Player
     TransformComponent:
-      Position: [-38, -62, 0]
+      Position: [11, -62, 0]
       Rotation: [0, -0, 0]
       Scale: [1, 1, 1]
     SpriteRendererComponent:
@@ -43,14 +43,14 @@ Entities:
       Rows: 3
       Columns: 7
       Padding: 1
-      Frame: 1
+      Frame: 0
       Texture: sprites\Player.png
     PixelPlatformerBodyComponent:
       BodyType: Dynamic
       FixedRotation: true
     BoxCollider2DComponent:
       Offset: [0.5, 0]
-      Size: [5.5, 8]
+      Size: [3.5, 8]
       Density: 1
       Friction: 0.5
       Restitution: 0
@@ -58,6 +58,7 @@ Entities:
     PlatformerPlayerControllerComponent:
       Speed: 72
       JumpHeight: 48
+      DoubleJumpHeight: 32
     AnimatorComponent:
       FilePath: animations\Player.ranim
   - Entity: 4524564654659932807
@@ -65,7 +66,7 @@ Entities:
     TagComponent:
       Tag: Ball
     TransformComponent:
-      Position: [-4, -50, 0]
+      Position: [-4, -64, 0]
       Rotation: [0, -0, 0]
       Scale: [1, 1, 1]
     SpriteRendererComponent:
@@ -162,7 +163,7 @@ Entities:
     TagComponent:
       Tag: Platform
     TransformComponent:
-      Position: [56, 2, 0]
+      Position: [56, -30, 0]
       Rotation: [0, -0, 0]
       Scale: [1, 1, 1]
     PixelPlatformerBodyComponent:

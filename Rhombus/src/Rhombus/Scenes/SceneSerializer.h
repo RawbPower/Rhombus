@@ -3,6 +3,7 @@
 #include "Scene.h"
 
 #include "Rhombus/Math/Vector.h"
+#include "Rhombus/Core/Color.h"
 
 #include <fstream>
 
@@ -30,6 +31,13 @@ namespace rhombus
 	{
 		out << YAML::Flow;
 		out << YAML::BeginSeq << v.x << v.y << v.z << v.w << YAML::EndSeq;
+		return out;
+	}
+
+	inline YAML::Emitter& operator<<(YAML::Emitter& out, const Color& c)
+	{
+		out << YAML::Flow;
+		out << YAML::BeginSeq << c.r << c.g << c.b << c.a << YAML::EndSeq;
 		return out;
 	}
 
@@ -123,6 +131,33 @@ namespace YAML {
 			rhs.y = node[1].as<float>();
 			rhs.z = node[2].as<float>();
 			rhs.w = node[3].as<float>();
+			return true;
+		}
+	};
+
+	template<>
+	struct convert<rhombus::Color>
+	{
+		static Node encode(const rhombus::Color& rhs)
+		{
+			Node node;
+			node.push_back(rhs.r);
+			node.push_back(rhs.g);
+			node.push_back(rhs.b);
+			node.push_back(rhs.a);
+			node.SetStyle(EmitterStyle::Flow);
+			return node;
+		}
+
+		static bool decode(const Node& node, rhombus::Color& rhs)
+		{
+			if (!node.IsSequence() || node.size() != 4)
+				return false;
+
+			rhs.r = node[0].as<float>();
+			rhs.g = node[1].as<float>();
+			rhs.b = node[2].as<float>();
+			rhs.a = node[3].as<float>();
 			return true;
 		}
 	};

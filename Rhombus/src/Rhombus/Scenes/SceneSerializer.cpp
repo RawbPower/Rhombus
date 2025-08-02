@@ -270,6 +270,7 @@ namespace rhombus
 			auto& controller = entity.GetComponent<PlatformerPlayerControllerComponent>();
 			out << YAML::Key << "Speed" << YAML::Value << controller.m_speed;
 			out << YAML::Key << "JumpHeight" << YAML::Value << controller.m_jumpHeight;
+			out << YAML::Key << "DoubleJumpHeight" << YAML::Value << controller.m_doubleJumpHeight;
 
 			out << YAML::EndMap; // PlatformerPlayerControllerComponent
 		}
@@ -335,6 +336,33 @@ namespace rhombus
 		Log::Assert(false, "");
 	}
 
+	template<typename T>
+	void DeserializeData(std::string value, YAML::Node node, T& output)
+	{
+		if (node[value].IsDefined())
+		{
+			output = node[value].as<T>();
+		}
+	}
+
+	template<typename T>
+	void DeserializeData(std::string value, YAML::Node node, std::function<void(T)> f)
+	{
+		if (node[value].IsDefined())
+		{
+			f(node[value].as<T>());
+		}
+	}
+
+	template<typename T>
+	void DeserializeDataEnum(std::string value, YAML::Node node, T& output, std::function<T(const std::string&)> f)
+	{
+		if (node[value].IsDefined())
+		{
+			output = f(node[value].as<std::string>());
+		}
+	}
+
 	bool SceneSerializer::Deserialize(const std::string& filepath, bool includeDisabledEntities)
 	{ 
 		YAML::Node data;
@@ -394,9 +422,9 @@ namespace rhombus
 				{
 					// Entities always have transforms
 					auto& tc = deserializedEntity.GetComponent<TransformComponent>();
-					tc.SetPosition(transformComponent["Position"].as<Vec3>());
-					tc.SetRotation(transformComponent["Rotation"].as<Vec3>());
-					tc.SetScale(transformComponent["Scale"].as<Vec3>());
+					DeserializeData<Vec3>("Position", transformComponent, [&tc](Vec3 val) { tc.SetPosition(val); });
+					DeserializeData<Vec3>("Rotation", transformComponent, [&tc](Vec3 val) { tc.SetRotation(val); });
+					DeserializeData<Vec3>("Scale", transformComponent, [&tc](Vec3 val) { tc.SetScale(val); });
 				}
 
 				auto cameraComponent = entity["CameraComponent"];
@@ -405,53 +433,43 @@ namespace rhombus
 					auto& cc = deserializedEntity.AddComponent<CameraComponent>();
 
 					auto& cameraProps = cameraComponent["Camera"];
-					if (cameraProps["ProjectionType"])
-						cc.GetCamera().SetProjectionType((SceneCamera::ProjectionType)cameraProps["ProjectionType"].as<int>());
+					DeserializeData<int>("ProjectionType", cameraProps, [&cc](int val) { cc.GetCamera().SetProjectionType((SceneCamera::ProjectionType)val); });
 
-					if (cameraProps["PerspectiveFOV"])
-						cc.GetCamera().SetPerspectiveVerticalFOV(cameraProps["PerspectiveFOV"].as<float>());
-					if (cameraProps["PerspectiveNear"])
-						cc.GetCamera().SetPerspectiveNearClip(cameraProps["PerspectiveNear"].as<float>());
-					if (cameraProps["PerspectiveFar"])
-						cc.GetCamera().SetPerspectiveFarClip(cameraProps["PerspectiveFar"].as<float>());
+					DeserializeData<float>("PerspectiveFOV", cameraProps, [&cc](float val) { cc.GetCamera().SetPerspectiveVerticalFOV(val); });
+					DeserializeData<float>("PerspectiveNear", cameraProps, [&cc](float val) { cc.GetCamera().SetPerspectiveNearClip(val); });
+					DeserializeData<float>("PerspectiveFar", cameraProps, [&cc](float val) { cc.GetCamera().SetPerspectiveFarClip(val); });
 
-					if (cameraProps["OrthographicSize"])
-						cc.GetCamera().SetOrthographicSize(cameraProps["OrthographicSize"].as<float>());
-					if (cameraProps["OrthographicNear"])
-						cc.GetCamera().SetOrthographicNearClip(cameraProps["OrthographicNear"].as<float>());
-					if (cameraProps["OrthographicFar"])
-						cc.GetCamera().SetOrthographicFarClip(cameraProps["OrthographicFar"].as<float>());
-					if (cameraProps["PixelPerfect"])
-						cc.GetCamera().SetPixelPerfect(cameraProps["PixelPerfect"].as<bool>());
+					DeserializeData<float>("OrthographicSize", cameraProps, [&cc](float val) { cc.GetCamera().SetOrthographicSize(val); });
+					DeserializeData<float>("OrthographicNear", cameraProps, [&cc](float val) { cc.GetCamera().SetOrthographicNearClip(val); });
+					DeserializeData<float>("OrthographicFar", cameraProps, [&cc](float val) { cc.GetCamera().SetOrthographicFarClip(val); });
+					DeserializeData<bool>("PixelPerfect", cameraProps, [&cc](bool val) { cc.GetCamera().SetPixelPerfect(val); });
 
-					if (cameraProps["Primary"])
-						cc.SetIsPrimaryCamera(cameraComponent["Primary"].as<bool>());
-					if (cameraProps["FixedAspectRatio"])
-						cc.SetHasFixedAspectRatio(cameraComponent["FixedAspectRatio"].as<bool>());
+					DeserializeData<bool>("Primary", cameraComponent, [&cc](bool val) { cc.SetIsPrimaryCamera(val); });
+					DeserializeData<bool>("FixedAspectRatio", cameraComponent, [&cc](bool val) { cc.SetHasFixedAspectRatio(val); });
 				}
 
 				auto scriptComponent = entity["ScriptComponent"];
 				if (scriptComponent)
 				{
 					auto& sc = deserializedEntity.AddComponent<ScriptComponent>();
-					sc.m_scriptName = scriptComponent["ScriptName"].as<std::string>();
+					DeserializeData<std::string>("ScriptName", scriptComponent, sc.m_scriptName);
 				}
 
 				auto spriteRendererComponent = entity["SpriteRendererComponent"];
 				if (spriteRendererComponent)
 				{
 					auto& src = deserializedEntity.AddComponent<SpriteRendererComponent>();
-					src.GetColor() = spriteRendererComponent["Color"].as<Vec4>();
+					DeserializeData<Color>("Color", spriteRendererComponent, src.GetColor());
 					if (spriteRendererComponent["Texture"].Type() != YAML::NodeType::Undefined)
 					{
-						std::string texturePath = spriteRendererComponent["Texture"].as<std::string>();
+						std::string texturePath;
+						DeserializeData<std::string>("Texture", spriteRendererComponent, texturePath);
 						auto path = Project::GetAssetFileSystemPath(texturePath);
 						src.m_texture = Texture2D::Create(path.string());
-
-						src.SetRows(spriteRendererComponent["Rows"].as<int>());
-						src.SetColumns(spriteRendererComponent["Columns"].as<int>());
-						src.SetPadding(spriteRendererComponent["Padding"].as<int>());
-						src.SetFrame(spriteRendererComponent["Frame"].as<int>());
+						DeserializeData<int>("Rows", spriteRendererComponent, [&src](int val) { src.SetRows(val); });
+						DeserializeData<int>("Columns", spriteRendererComponent, [&src](int val) { src.SetColumns(val); });
+						DeserializeData<int>("Padding", spriteRendererComponent, [&src](int val) { src.SetPadding(val); });
+						DeserializeData<int>("Frame", spriteRendererComponent, [&src](int val) { src.SetFrame(val); });
 					}
 				}
 
@@ -459,58 +477,58 @@ namespace rhombus
 				if (circleRendererComponent)
 				{
 					auto& crc = deserializedEntity.AddComponent<CircleRendererComponent>();
-					crc.m_color = circleRendererComponent["Color"].as<Vec4>();
-					crc.m_thickness = circleRendererComponent["Thickness"].as<float>();
-					crc.m_fade = circleRendererComponent["Fade"].as<float>();
+					DeserializeData<Color>("Color", circleRendererComponent, crc.m_color);
+					DeserializeData<float>("Thickness", circleRendererComponent, crc.m_thickness);
+					DeserializeData<float>("Fade", circleRendererComponent, crc.m_fade);
 				}
 
 				auto rigidbody2DComponent = entity["Rigidbody2DComponent"];
 				if (rigidbody2DComponent)
 				{
 					auto& rb = deserializedEntity.AddComponent<Rigidbody2DComponent>();
-					rb.m_type = RigidBody2DBodyTypeFromString(rigidbody2DComponent["BodyType"].as<std::string>());
-					rb.m_fixedRotation = rigidbody2DComponent["FixedRotation"].as<bool>();
+					DeserializeDataEnum<Rigidbody2DComponent::BodyType>("BodyType", rigidbody2DComponent, rb.m_type, &RigidBody2DBodyTypeFromString);
+					DeserializeData<bool>("FixedRotation", rigidbody2DComponent, rb.m_fixedRotation);
 				}
 
 				auto pixelPlatformerBodyComponent = entity["PixelPlatformerBodyComponent"];
 				if (pixelPlatformerBodyComponent)
 				{
 					auto& ppb = deserializedEntity.AddComponent<PixelPlatformerBodyComponent>();
-					ppb.m_type = PixelPlatformerBodyTypeFromString(pixelPlatformerBodyComponent["BodyType"].as<std::string>());
-					ppb.m_fixedRotation = pixelPlatformerBodyComponent["FixedRotation"].as<bool>();
+					DeserializeDataEnum<PixelPlatformerBodyComponent::BodyType>("BodyType", pixelPlatformerBodyComponent, ppb.m_type, &PixelPlatformerBodyTypeFromString);
+					DeserializeData<bool>("FixedRotation", pixelPlatformerBodyComponent, ppb.m_fixedRotation);
 				}
 
 				auto boxCollider2DComponent = entity["BoxCollider2DComponent"];
 				if (boxCollider2DComponent)
 				{
 					auto& coll = deserializedEntity.AddComponent<BoxCollider2DComponent>();
-					coll.m_offset = boxCollider2DComponent["Offset"].as<Vec2>();
-					coll.m_size = boxCollider2DComponent["Size"].as<Vec2>();
-					coll.m_density = boxCollider2DComponent["Density"].as<float>();
-					coll.m_friction = boxCollider2DComponent["Friction"].as<float>();
-					coll.m_restitution = boxCollider2DComponent["Restitution"].as<float>();
-					coll.m_restitutionThreshold = boxCollider2DComponent["RestitutionThreshold"].as<float>();
+					DeserializeData<Vec2>("Offset", boxCollider2DComponent, coll.m_offset);
+					DeserializeData<Vec2>("Size", boxCollider2DComponent, coll.m_size);
+					DeserializeData<float>("Density", boxCollider2DComponent, coll.m_density);
+					DeserializeData<float>("Friction", boxCollider2DComponent, coll.m_friction);
+					DeserializeData<float>("Restitution", boxCollider2DComponent, coll.m_restitution);
+					DeserializeData<float>("RestitutionThreshold", boxCollider2DComponent, coll.m_restitutionThreshold);
 				}
 
 				auto circleCollider2DComponent = entity["CircleCollider2DComponent"];
 				if (circleCollider2DComponent)
 				{
 					auto& coll = deserializedEntity.AddComponent<CircleCollider2DComponent>();
-					coll.m_offset = circleCollider2DComponent["Offset"].as<Vec2>();
-					coll.m_radius = circleCollider2DComponent["Radius"].as<float>();
-					coll.m_density = circleCollider2DComponent["Density"].as<float>();
-					coll.m_friction = circleCollider2DComponent["Friction"].as<float>();
-					coll.m_restitution = circleCollider2DComponent["Restitution"].as<float>();
-					coll.m_restitutionThreshold = circleCollider2DComponent["RestitutionThreshold"].as<float>();
+					DeserializeData<Vec2>("Offset", circleCollider2DComponent, coll.m_offset);
+					DeserializeData<float>("Radius", circleCollider2DComponent, coll.m_radius);
+					DeserializeData<float>("Density", circleCollider2DComponent, coll.m_density);
+					DeserializeData<float>("Friction", circleCollider2DComponent, coll.m_friction);
+					DeserializeData<float>("Restitution", circleCollider2DComponent, coll.m_restitution);
+					DeserializeData<float>("RestitutionThreshold", circleCollider2DComponent, coll.m_restitutionThreshold);
 				}
 
 				auto boxArea2DComponent = entity["BoxArea2DComponent"];
 				if (boxArea2DComponent)
 				{
 					auto& coll = deserializedEntity.AddComponent<BoxArea2DComponent>();
-					coll.m_offset = boxArea2DComponent["Offset"].as<Vec2>();
-					coll.m_size = boxArea2DComponent["Size"].as<Vec2>();
-					coll.GetDebugColor() = boxArea2DComponent["DebugColor"].as<Vec4>();
+					DeserializeData<Vec2>("Offset", boxArea2DComponent, coll.m_offset);
+					DeserializeData<Vec2>("Size", boxArea2DComponent, coll.m_size);
+					DeserializeData<Color>("DebugColor", boxArea2DComponent, coll.GetDebugColor());
 				}
 
 				auto tileMapComponent = entity["TileMapComponent"];
@@ -527,15 +545,16 @@ namespace rhombus
 				if (platformerPlayerControllerComponent)
 				{
 					auto& controller = deserializedEntity.AddComponent<PlatformerPlayerControllerComponent>();
-					controller.m_speed = platformerPlayerControllerComponent["Speed"].as<float>();
-					controller.m_jumpHeight = platformerPlayerControllerComponent["JumpHeight"].as<float>();
+					DeserializeData<float>("Speed", platformerPlayerControllerComponent, controller.m_speed);
+					DeserializeData<float>("JumpHeight", platformerPlayerControllerComponent, controller.m_jumpHeight);
+					DeserializeData<float>("DoubleJumpHeight", platformerPlayerControllerComponent, controller.m_doubleJumpHeight);
 				}
 
 				auto animtorComponent = entity["AnimatorComponent"];
 				if (animtorComponent)
 				{
 					auto& animator = deserializedEntity.AddComponent<AnimatorComponent>();
-					animator.m_filePath = animtorComponent["FilePath"].as<std::string>();
+					DeserializeData<std::string>("FilePath", animtorComponent, animator.m_filePath);
 					auto path = Project::GetAssetFileSystemPath(animator.m_filePath);
 					AnimationSerializer::DeserializeAnimations(path.string(), deserializedEntity);
 				}

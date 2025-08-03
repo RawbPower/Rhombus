@@ -80,6 +80,7 @@ void GameLayer::OnEvent(rhombus::Event& e)
 {
 	EventDispatcher dispatcher(e);
 	dispatcher.Dispatch<KeyPressedEvent>(RB_BIND_EVENT_FN(GameLayer::OnKeyPressed));
+	dispatcher.Dispatch<KeyReleasedEvent>(RB_BIND_EVENT_FN(GameLayer::OnKeyReleased));
 	dispatcher.Dispatch<MouseButtonPressedEvent>(RB_BIND_EVENT_FN(GameLayer::OnMouseButtonPressed));
 	dispatcher.Dispatch<MouseButtonReleasedEvent>(RB_BIND_EVENT_FN(GameLayer::OnMouseButtonReleased));
 	dispatcher.Dispatch<MouseMovedEvent>(RB_BIND_EVENT_FN(GameLayer::OnMouseMoved));
@@ -89,6 +90,13 @@ void GameLayer::OnEvent(rhombus::Event& e)
 bool GameLayer::OnKeyPressed(KeyPressedEvent& e)
 {
 	m_ActiveScene->OnKeyPressed(e.GetKeyCode(), e.IsRepeat());
+
+	return false;
+}
+
+bool GameLayer::OnKeyReleased(KeyReleasedEvent& e)
+{
+	m_ActiveScene->OnKeyReleased(e.GetKeyCode());
 
 	return false;
 }

@@ -48,6 +48,18 @@ namespace rhombus
 		}
 
 		template<typename T>
+		T& AddComponent(std::function<void(T&)> OnCreated)
+		{
+			Log::Assert(!HasComponent<T>(), "Entity ({0}) already has component that is being added!", m_entityId);
+			//T& component = m_scene->m_Registry.emplace<T>(m_entityId, std::forward<Args>(args)...);
+			T& component = m_scene->m_Registry.AddComponent<T>(m_entityId);
+			OnCreated(component);
+			component.SetOwnerEntity(*this);
+			component.OnComponentAdded();
+			return component;
+		}
+
+		template<typename T>
 		T& AddComponent(T srcComponent)
 		{
 			Log::Assert(!HasComponent<T>(), "Entity ({0}) already has component that is being added!", m_entityId);

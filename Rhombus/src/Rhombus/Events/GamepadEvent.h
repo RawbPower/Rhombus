@@ -47,4 +47,25 @@ namespace rhombus {
 	private:
 		int m_Button;
 	};
+
+	class RB_API GamepadButtonUpEvent : public Event
+	{
+	public:
+		GamepadButtonUpEvent(int button)
+			: m_Button(button) {}
+
+		inline int GetGamepadButton() const { return m_Button; }
+
+		std::string ToString() const override
+		{
+			std::stringstream ss;
+			ss << "GamepadButtonUpEvent: " << m_Button;
+			return ss.str();
+		}
+
+		EVENT_CLASS_TYPE(GamepadButtonUp);
+		EVENT_CLASS_CATEGORY(EventCategoryGamepad | EventCategoryInput | EventCategoryGamepadButton)
+	private:
+		int m_Button;
+	};
 }

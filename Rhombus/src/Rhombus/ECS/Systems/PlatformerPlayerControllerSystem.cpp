@@ -45,18 +45,23 @@ namespace rhombus
 					if (playerController.CanJump())
 					{
 						// Linear equation of motion v^2 = u^2 + 2as
-						float jumpVelocity = math::Sqrt(-2 * GRAVITY * playerController.m_jumpHeight) - GRAVITY * dt;
-
-						if (entity.HasComponent<PixelPlatformerBodyComponent>())
-						{
-							PixelPlatformerBodyComponent& physicsBody = entity.GetComponent<PixelPlatformerBodyComponent>();
-							physicsBody.m_velocity.y = jumpVelocity;
-						}
+						float jumpVelocity = playerController.m_maxJumpSpeed - GRAVITY * dt;
+						physicsBody.m_velocity.y = jumpVelocity;
 
 						playerController.AddJump();
 					}
 
 					playerController.SetShouldJump(false);
+				}
+
+				if (playerController.m_cancelJump)
+				{
+					if (physicsBody.GetIsInAir() && playerController.m_currentJumpCount > 0 && physicsBody.m_velocity.y > playerController.m_minJumpSpeed)
+					{
+						physicsBody.m_velocity.y = playerController.m_minJumpSpeed;
+					}
+
+					playerController.m_cancelJump = false;
 				}
 			}
 		}
@@ -64,19 +69,35 @@ namespace rhombus
 
 	void PlatformerPlayerControllerSystem::OnKeyPressed(int keycode, bool isRepeat)
 	{
-		bool shouldJump = !isRepeat && keycode == RB_KEY_SPACE;	// Check if on ground too
+		bool shouldJump = !isRepeat && keycode == RB_KEY_SPACE;
 		if (shouldJump)
 		{
 			ProcessJump();
 		}
 	}
 
+	void PlatformerPlayerControllerSystem::OnKeyReleased(int keycode)
+	{
+		if (keycode == RB_KEY_SPACE)
+		{
+			CancelJump();
+		}
+	}
+
 	void PlatformerPlayerControllerSystem::OnGamepadButtonDown(int button)
 	{
-		bool shouldJump = button == RB_GAMEPAD_BUTTON_A;	// Check if on ground too
+		bool shouldJump = button == RB_GAMEPAD_BUTTON_A;
 		if (shouldJump)
 		{
 			ProcessJump();
+		}
+	}
+
+	void PlatformerPlayerControllerSystem::OnGamepadButtonUp(int button)
+	{
+		if (button == RB_GAMEPAD_BUTTON_A)
+		{
+			CancelJump();
 		}
 	}
 
@@ -87,6 +108,16 @@ namespace rhombus
 			// Jump code
 			PlatformerPlayerControllerComponent& playerController = entity.GetComponent<PlatformerPlayerControllerComponent>();
 			playerController.SetShouldJump(true);
+		}
+	}
+
+	void PlatformerPlayerControllerSystem::CancelJump()
+	{
+		for (Entity entity : GetEntities())
+		{
+
+			PlatformerPlayerControllerComponent& playerController = entity.GetComponent<PlatformerPlayerControllerComponent>();
+			playerController.m_cancelJump = true;
 		}
 	}
 }

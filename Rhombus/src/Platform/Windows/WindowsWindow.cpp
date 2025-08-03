@@ -270,6 +270,12 @@ namespace rhombus
 					m_Data.EventCallback(event);
 					break;
 				}
+				case SDL_JOYBUTTONUP:
+				{
+					GamepadButtonUpEvent event(e.jbutton.button);
+					m_Data.EventCallback(event);
+					break;
+				}
 				default:
 					break;
 			}

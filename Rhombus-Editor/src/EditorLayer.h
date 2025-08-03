@@ -33,11 +33,13 @@ namespace rhombus
 
 	private:
 		bool OnKeyPressed(KeyPressedEvent& e);
+		bool OnKeyReleased(KeyReleasedEvent& e);
 		bool OnMouseButtonPressed(MouseButtonPressedEvent& e);
 		bool OnMouseButtonReleased(MouseButtonReleasedEvent& e);
 		bool OnMouseMoved(MouseMovedEvent& e);
 		bool OnGamepadAxis(GamepadAxisEvent& e);
 		bool OnGamepadButtonDown(GamepadButtonDownEvent& e);
+		bool OnGamepadButtonUp(GamepadButtonUpEvent& e);
 		bool OnWindowResized(WindowResizeEvent& e);
 		void NewScene();
 		void OpenScene();

@@ -69,15 +69,22 @@ void GameLayer::OnEvent(rhombus::Event& e)
 {
 	EventDispatcher dispatcher(e);
 	dispatcher.Dispatch<KeyPressedEvent>(RB_BIND_EVENT_FN(GameLayer::OnKeyPressed));
+	dispatcher.Dispatch<KeyReleasedEvent>(RB_BIND_EVENT_FN(GameLayer::OnKeyReleased));
 	dispatcher.Dispatch<MouseButtonPressedEvent>(RB_BIND_EVENT_FN(GameLayer::OnMouseButtonPressed));
 	dispatcher.Dispatch<MouseButtonReleasedEvent>(RB_BIND_EVENT_FN(GameLayer::OnMouseButtonReleased));
 	dispatcher.Dispatch<MouseMovedEvent>(RB_BIND_EVENT_FN(GameLayer::OnMouseMoved));
 	dispatcher.Dispatch<GamepadAxisEvent>(RB_BIND_EVENT_FN(GameLayer::OnGamepadAxis));
 	dispatcher.Dispatch<GamepadButtonDownEvent>(RB_BIND_EVENT_FN(GameLayer::OnGamepadButtonDown));
+	dispatcher.Dispatch<GamepadButtonUpEvent>(RB_BIND_EVENT_FN(GameLayer::OnGamepadButtonUp));
 }
 
 // Try KeyTypedEvent
 bool GameLayer::OnKeyPressed(KeyPressedEvent& e)
+{
+	return false;
+}
+
+bool GameLayer::OnKeyReleased(KeyReleasedEvent& e)
 {
 	return false;
 }
@@ -118,6 +125,13 @@ bool GameLayer::OnGamepadAxis(GamepadAxisEvent& e)
 bool GameLayer::OnGamepadButtonDown(GamepadButtonDownEvent& e)
 {
 	m_ActiveScene->OnGamepadButtonDown(e.GetGamepadButton());
+
+	return false;
+}
+
+bool GameLayer::OnGamepadButtonUp(GamepadButtonUpEvent& e)
+{
+	m_ActiveScene->OnGamepadButtonUp(e.GetGamepadButton());
 
 	return false;
 }

@@ -729,7 +729,8 @@ namespace rhombus
 		DrawComponent<PlatformerPlayerControllerComponent>("Platformer Player Controller", entity, [](auto& component)
 		{
 			ImGui::DragFloat("Speed", &component.m_speed, 0.025f, 0.0f, 100.0f);
-			ImGui::DragFloat("Jump Height", &component.m_jumpHeight, 0.025f, 0.0f, 100.0f);
+			ImGui::DragFloat("Max Jump Height", &component.m_maxJumpHeight, 0.025f, 0.0f, 100.0f);
+			ImGui::DragFloat("Min Jump Height", &component.m_minJumpHeight, 0.025f, 0.0f, 100.0f);
 			ImGui::DragFloat("Double Jump Height", &component.m_doubleJumpHeight, 0.025f, 0.0f, 100.0f);
 		});
 

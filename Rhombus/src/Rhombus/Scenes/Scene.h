@@ -55,8 +55,10 @@ namespace rhombus
 		virtual void OnMouseButtonPressed(int button);
 		virtual void OnMouseButtonReleased(int button);
 		virtual void OnKeyPressed(int keycode, bool isRepeat);
+		virtual void OnKeyReleased(int keycode);
 		virtual void OnGamepadAxis(int axis, float value);
 		virtual void OnGamepadButtonDown(int button);
+		virtual void OnGamepadButtonUp(int button);
 
 		void OnViewportResize(uint32_t width, uint32_t height);
 

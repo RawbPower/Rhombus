@@ -19,6 +19,7 @@ public:
 
 private:
 	bool OnKeyPressed(KeyPressedEvent& e);
+	bool OnKeyReleased(KeyReleasedEvent& e);
 	bool OnMouseButtonPressed(MouseButtonPressedEvent& e);
 	bool OnMouseButtonReleased(MouseButtonReleasedEvent& e);
 	bool OnMouseMoved(MouseMovedEvent& e);

@@ -16,7 +16,7 @@ namespace rhombus {
 		AppTick, AppUpdate, AppRender,
 		KeyPressed, KeyReleased, KeyTyped,
 		MouseButtonPressed, MouseButtonReleased, MouseMoved, MouseScrolled,
-		GamepadButtonDown, GamepadAxis
+		GamepadButtonDown, GamepadButtonUp, GamepadAxis
 	};
 
 	// This is used if we want to filter events

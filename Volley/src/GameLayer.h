@@ -19,12 +19,14 @@ public:
 
 private:
 	bool OnKeyPressed(KeyPressedEvent& e);
+	bool OnKeyReleased(KeyReleasedEvent& e);
 	bool OnMouseButtonPressed(MouseButtonPressedEvent& e);
 	bool OnMouseButtonReleased(MouseButtonReleasedEvent& e);
 	bool OnMouseMoved(MouseMovedEvent& e);
 	bool OnWindowResized(WindowResizeEvent& e);
 	bool OnGamepadAxis(GamepadAxisEvent& e);
 	bool OnGamepadButtonDown(GamepadButtonDownEvent& e);
+	bool OnGamepadButtonUp(GamepadButtonUpEvent& e);
 
 	bool OpenProject();
 	void OpenProject(const std::filesystem::path& path);

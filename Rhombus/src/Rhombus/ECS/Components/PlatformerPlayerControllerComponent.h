@@ -7,11 +7,16 @@ namespace rhombus
 	class PlatformerPlayerControllerComponent : public ComponentBase
 	{
 	public:
+		friend class PlatformerPlayerControllerSystem;
+
 		PlatformerPlayerControllerComponent() = default;
 		PlatformerPlayerControllerComponent(const PlatformerPlayerControllerComponent& other) = default;
 
+		virtual void OnComponentAdded() override;
+
 		float m_speed = 0.0f;
-		float m_jumpHeight = 0.0f;
+		float m_minJumpHeight = 0.0f;
+		float m_maxJumpHeight = 0.0f;
 		float m_doubleJumpHeight = 0.0f;
 
 		bool GetShouldJump() const { return m_shouldJump; }
@@ -22,6 +27,9 @@ namespace rhombus
 		bool CanJump() const { return m_currentJumpCount < 2; }
 	private:
 		bool m_shouldJump = false;
+		bool m_cancelJump = false;
+		float m_minJumpSpeed = 0.0f;
+		float m_maxJumpSpeed = 0.0f;
 		int m_currentJumpCount = 0;
 	};
 }

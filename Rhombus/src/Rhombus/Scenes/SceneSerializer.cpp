@@ -269,7 +269,8 @@ namespace rhombus
 
 			auto& controller = entity.GetComponent<PlatformerPlayerControllerComponent>();
 			out << YAML::Key << "Speed" << YAML::Value << controller.m_speed;
-			out << YAML::Key << "JumpHeight" << YAML::Value << controller.m_jumpHeight;
+			out << YAML::Key << "MinJumpHeight" << YAML::Value << controller.m_minJumpHeight;
+			out << YAML::Key << "MaxJumpHeight" << YAML::Value << controller.m_maxJumpHeight;
 			out << YAML::Key << "DoubleJumpHeight" << YAML::Value << controller.m_doubleJumpHeight;
 
 			out << YAML::EndMap; // PlatformerPlayerControllerComponent
@@ -430,133 +431,181 @@ namespace rhombus
 				auto cameraComponent = entity["CameraComponent"];
 				if (cameraComponent)
 				{
-					auto& cc = deserializedEntity.AddComponent<CameraComponent>();
+					auto& cc = deserializedEntity.AddComponent<CameraComponent>(
+						[&](CameraComponent& c)
+						{
+							auto& cameraProps = cameraComponent["Camera"];
+							DeserializeData<int>("ProjectionType", cameraProps, [&c](int val) { c.GetCamera().SetProjectionType((SceneCamera::ProjectionType)val); });
 
-					auto& cameraProps = cameraComponent["Camera"];
-					DeserializeData<int>("ProjectionType", cameraProps, [&cc](int val) { cc.GetCamera().SetProjectionType((SceneCamera::ProjectionType)val); });
+							DeserializeData<float>("PerspectiveFOV", cameraProps, [&c](float val) { c.GetCamera().SetPerspectiveVerticalFOV(val); });
+							DeserializeData<float>("PerspectiveNear", cameraProps, [&c](float val) { c.GetCamera().SetPerspectiveNearClip(val); });
+							DeserializeData<float>("PerspectiveFar", cameraProps, [&c](float val) { c.GetCamera().SetPerspectiveFarClip(val); });
 
-					DeserializeData<float>("PerspectiveFOV", cameraProps, [&cc](float val) { cc.GetCamera().SetPerspectiveVerticalFOV(val); });
-					DeserializeData<float>("PerspectiveNear", cameraProps, [&cc](float val) { cc.GetCamera().SetPerspectiveNearClip(val); });
-					DeserializeData<float>("PerspectiveFar", cameraProps, [&cc](float val) { cc.GetCamera().SetPerspectiveFarClip(val); });
+							DeserializeData<float>("OrthographicSize", cameraProps, [&c](float val) { c.GetCamera().SetOrthographicSize(val); });
+							DeserializeData<float>("OrthographicNear", cameraProps, [&c](float val) { c.GetCamera().SetOrthographicNearClip(val); });
+							DeserializeData<float>("OrthographicFar", cameraProps, [&c](float val) { c.GetCamera().SetOrthographicFarClip(val); });
+							DeserializeData<bool>("PixelPerfect", cameraProps, [&c](bool val) { c.GetCamera().SetPixelPerfect(val); });
 
-					DeserializeData<float>("OrthographicSize", cameraProps, [&cc](float val) { cc.GetCamera().SetOrthographicSize(val); });
-					DeserializeData<float>("OrthographicNear", cameraProps, [&cc](float val) { cc.GetCamera().SetOrthographicNearClip(val); });
-					DeserializeData<float>("OrthographicFar", cameraProps, [&cc](float val) { cc.GetCamera().SetOrthographicFarClip(val); });
-					DeserializeData<bool>("PixelPerfect", cameraProps, [&cc](bool val) { cc.GetCamera().SetPixelPerfect(val); });
-
-					DeserializeData<bool>("Primary", cameraComponent, [&cc](bool val) { cc.SetIsPrimaryCamera(val); });
-					DeserializeData<bool>("FixedAspectRatio", cameraComponent, [&cc](bool val) { cc.SetHasFixedAspectRatio(val); });
+							DeserializeData<bool>("Primary", cameraComponent, [&c](bool val) { c.SetIsPrimaryCamera(val); });
+							DeserializeData<bool>("FixedAspectRatio", cameraComponent, [&c](bool val) { c.SetHasFixedAspectRatio(val); });
+						}
+					);
 				}
 
 				auto scriptComponent = entity["ScriptComponent"];
 				if (scriptComponent)
 				{
-					auto& sc = deserializedEntity.AddComponent<ScriptComponent>();
-					DeserializeData<std::string>("ScriptName", scriptComponent, sc.m_scriptName);
+					auto& sc = deserializedEntity.AddComponent<ScriptComponent>(
+						[&](ScriptComponent& c)
+						{
+							DeserializeData<std::string>("ScriptName", scriptComponent, c.m_scriptName);
+						}
+					);
 				}
 
 				auto spriteRendererComponent = entity["SpriteRendererComponent"];
 				if (spriteRendererComponent)
 				{
-					auto& src = deserializedEntity.AddComponent<SpriteRendererComponent>();
-					DeserializeData<Color>("Color", spriteRendererComponent, src.GetColor());
-					if (spriteRendererComponent["Texture"].Type() != YAML::NodeType::Undefined)
-					{
-						std::string texturePath;
-						DeserializeData<std::string>("Texture", spriteRendererComponent, texturePath);
-						auto path = Project::GetAssetFileSystemPath(texturePath);
-						src.m_texture = Texture2D::Create(path.string());
-						DeserializeData<int>("Rows", spriteRendererComponent, [&src](int val) { src.SetRows(val); });
-						DeserializeData<int>("Columns", spriteRendererComponent, [&src](int val) { src.SetColumns(val); });
-						DeserializeData<int>("Padding", spriteRendererComponent, [&src](int val) { src.SetPadding(val); });
-						DeserializeData<int>("Frame", spriteRendererComponent, [&src](int val) { src.SetFrame(val); });
-					}
+					auto& src = deserializedEntity.AddComponent<SpriteRendererComponent>(
+						[&](SpriteRendererComponent& c)
+						{
+							DeserializeData<Color>("Color", spriteRendererComponent, c.GetColor());
+							if (spriteRendererComponent["Texture"].Type() != YAML::NodeType::Undefined)
+							{
+								std::string texturePath;
+								DeserializeData<std::string>("Texture", spriteRendererComponent, texturePath);
+								auto path = Project::GetAssetFileSystemPath(texturePath);
+								c.m_texture = Texture2D::Create(path.string());
+								DeserializeData<int>("Rows", spriteRendererComponent, [&c](int val) { c.SetRows(val); });
+								DeserializeData<int>("Columns", spriteRendererComponent, [&c](int val) { c.SetColumns(val); });
+								DeserializeData<int>("Padding", spriteRendererComponent, [&c](int val) { c.SetPadding(val); });
+								DeserializeData<int>("Frame", spriteRendererComponent, [&c](int val) { c.SetFrame(val); });
+							}
+						}
+					);
 				}
 
 				auto circleRendererComponent = entity["CircleRendererComponent"];
 				if (circleRendererComponent)
 				{
-					auto& crc = deserializedEntity.AddComponent<CircleRendererComponent>();
-					DeserializeData<Color>("Color", circleRendererComponent, crc.m_color);
-					DeserializeData<float>("Thickness", circleRendererComponent, crc.m_thickness);
-					DeserializeData<float>("Fade", circleRendererComponent, crc.m_fade);
+					auto& crc = deserializedEntity.AddComponent<CircleRendererComponent>(
+						[&](CircleRendererComponent& c)
+						{
+							DeserializeData<Color>("Color", circleRendererComponent, c.m_color);
+							DeserializeData<float>("Thickness", circleRendererComponent, c.m_thickness);
+							DeserializeData<float>("Fade", circleRendererComponent, c.m_fade);
+						}
+					);
 				}
 
 				auto rigidbody2DComponent = entity["Rigidbody2DComponent"];
 				if (rigidbody2DComponent)
 				{
-					auto& rb = deserializedEntity.AddComponent<Rigidbody2DComponent>();
-					DeserializeDataEnum<Rigidbody2DComponent::BodyType>("BodyType", rigidbody2DComponent, rb.m_type, &RigidBody2DBodyTypeFromString);
-					DeserializeData<bool>("FixedRotation", rigidbody2DComponent, rb.m_fixedRotation);
+					auto& rb = deserializedEntity.AddComponent<Rigidbody2DComponent>(
+						[&](Rigidbody2DComponent& c)
+						{
+							DeserializeDataEnum<Rigidbody2DComponent::BodyType>("BodyType", rigidbody2DComponent, c.m_type, &RigidBody2DBodyTypeFromString);
+							DeserializeData<bool>("FixedRotation", rigidbody2DComponent, c.m_fixedRotation);
+						}
+					);
 				}
 
 				auto pixelPlatformerBodyComponent = entity["PixelPlatformerBodyComponent"];
 				if (pixelPlatformerBodyComponent)
 				{
-					auto& ppb = deserializedEntity.AddComponent<PixelPlatformerBodyComponent>();
-					DeserializeDataEnum<PixelPlatformerBodyComponent::BodyType>("BodyType", pixelPlatformerBodyComponent, ppb.m_type, &PixelPlatformerBodyTypeFromString);
-					DeserializeData<bool>("FixedRotation", pixelPlatformerBodyComponent, ppb.m_fixedRotation);
+					auto& ppb = deserializedEntity.AddComponent<PixelPlatformerBodyComponent>(
+						[&](PixelPlatformerBodyComponent& c)
+						{
+							DeserializeDataEnum<PixelPlatformerBodyComponent::BodyType>("BodyType", pixelPlatformerBodyComponent, c.m_type, &PixelPlatformerBodyTypeFromString);
+							DeserializeData<bool>("FixedRotation", pixelPlatformerBodyComponent, c.m_fixedRotation);
+						}
+					);
 				}
 
 				auto boxCollider2DComponent = entity["BoxCollider2DComponent"];
 				if (boxCollider2DComponent)
 				{
-					auto& coll = deserializedEntity.AddComponent<BoxCollider2DComponent>();
-					DeserializeData<Vec2>("Offset", boxCollider2DComponent, coll.m_offset);
-					DeserializeData<Vec2>("Size", boxCollider2DComponent, coll.m_size);
-					DeserializeData<float>("Density", boxCollider2DComponent, coll.m_density);
-					DeserializeData<float>("Friction", boxCollider2DComponent, coll.m_friction);
-					DeserializeData<float>("Restitution", boxCollider2DComponent, coll.m_restitution);
-					DeserializeData<float>("RestitutionThreshold", boxCollider2DComponent, coll.m_restitutionThreshold);
+					auto& coll = deserializedEntity.AddComponent<BoxCollider2DComponent>(
+						[&](BoxCollider2DComponent& c)
+						{
+							DeserializeData<Vec2>("Offset", boxCollider2DComponent, c.m_offset);
+							DeserializeData<Vec2>("Size", boxCollider2DComponent, c.m_size);
+							DeserializeData<float>("Density", boxCollider2DComponent, c.m_density);
+							DeserializeData<float>("Friction", boxCollider2DComponent, c.m_friction);
+							DeserializeData<float>("Restitution", boxCollider2DComponent, c.m_restitution);
+							DeserializeData<float>("RestitutionThreshold", boxCollider2DComponent, c.m_restitutionThreshold);
+						}
+					);
 				}
 
 				auto circleCollider2DComponent = entity["CircleCollider2DComponent"];
 				if (circleCollider2DComponent)
 				{
-					auto& coll = deserializedEntity.AddComponent<CircleCollider2DComponent>();
-					DeserializeData<Vec2>("Offset", circleCollider2DComponent, coll.m_offset);
-					DeserializeData<float>("Radius", circleCollider2DComponent, coll.m_radius);
-					DeserializeData<float>("Density", circleCollider2DComponent, coll.m_density);
-					DeserializeData<float>("Friction", circleCollider2DComponent, coll.m_friction);
-					DeserializeData<float>("Restitution", circleCollider2DComponent, coll.m_restitution);
-					DeserializeData<float>("RestitutionThreshold", circleCollider2DComponent, coll.m_restitutionThreshold);
+					auto& coll = deserializedEntity.AddComponent<CircleCollider2DComponent>(
+						[&](CircleCollider2DComponent& c)
+						{
+							DeserializeData<Vec2>("Offset", circleCollider2DComponent, c.m_offset);
+							DeserializeData<float>("Radius", circleCollider2DComponent, c.m_radius);
+							DeserializeData<float>("Density", circleCollider2DComponent, c.m_density);
+							DeserializeData<float>("Friction", circleCollider2DComponent, c.m_friction);
+							DeserializeData<float>("Restitution", circleCollider2DComponent, c.m_restitution);
+							DeserializeData<float>("RestitutionThreshold", circleCollider2DComponent, c.m_restitutionThreshold);
+						}
+					);
 				}
 
 				auto boxArea2DComponent = entity["BoxArea2DComponent"];
 				if (boxArea2DComponent)
 				{
-					auto& coll = deserializedEntity.AddComponent<BoxArea2DComponent>();
-					DeserializeData<Vec2>("Offset", boxArea2DComponent, coll.m_offset);
-					DeserializeData<Vec2>("Size", boxArea2DComponent, coll.m_size);
-					DeserializeData<Color>("DebugColor", boxArea2DComponent, coll.GetDebugColor());
+					auto& coll = deserializedEntity.AddComponent<BoxArea2DComponent>(
+						[&](BoxArea2DComponent& c)
+						{
+							DeserializeData<Vec2>("Offset", boxArea2DComponent, c.m_offset);
+							DeserializeData<Vec2>("Size", boxArea2DComponent, c.m_size);
+							DeserializeData<Color>("DebugColor", boxArea2DComponent, c.GetDebugColor());
+						}
+					);
 				}
 
 				auto tileMapComponent = entity["TileMapComponent"];
 				if (tileMapComponent)
 				{
-					auto& tilemap = deserializedEntity.AddComponent<TileMapComponent>();
-					if (tileMapComponent["TileMap"].Type() != YAML::NodeType::Undefined)
-					{
-						tilemap.m_tilemap = TileSerializer::DeserializeTileMap(tileMapComponent["TileMap"].as<std::string>());
-					}
+					auto& tilemap = deserializedEntity.AddComponent<TileMapComponent>(
+						[&](TileMapComponent& c)
+						{
+							if (tileMapComponent["TileMap"].Type() != YAML::NodeType::Undefined)
+							{
+								c.m_tilemap = TileSerializer::DeserializeTileMap(tileMapComponent["TileMap"].as<std::string>());
+							}
+						}
+					);
 				}
 
 				auto platformerPlayerControllerComponent = entity["PlatformerPlayerControllerComponent"];
 				if (platformerPlayerControllerComponent)
 				{
-					auto& controller = deserializedEntity.AddComponent<PlatformerPlayerControllerComponent>();
-					DeserializeData<float>("Speed", platformerPlayerControllerComponent, controller.m_speed);
-					DeserializeData<float>("JumpHeight", platformerPlayerControllerComponent, controller.m_jumpHeight);
-					DeserializeData<float>("DoubleJumpHeight", platformerPlayerControllerComponent, controller.m_doubleJumpHeight);
+					auto& controller = deserializedEntity.AddComponent<PlatformerPlayerControllerComponent>(
+						[&](PlatformerPlayerControllerComponent& c) 
+						{
+							DeserializeData<float>("Speed", platformerPlayerControllerComponent, c.m_speed);
+							DeserializeData<float>("MinJumpHeight", platformerPlayerControllerComponent, c.m_minJumpHeight);
+							DeserializeData<float>("MaxJumpHeight", platformerPlayerControllerComponent, c.m_maxJumpHeight);
+							DeserializeData<float>("DoubleJumpHeight", platformerPlayerControllerComponent, c.m_doubleJumpHeight);
+						}
+					);
 				}
 
 				auto animtorComponent = entity["AnimatorComponent"];
 				if (animtorComponent)
 				{
-					auto& animator = deserializedEntity.AddComponent<AnimatorComponent>();
-					DeserializeData<std::string>("FilePath", animtorComponent, animator.m_filePath);
-					auto path = Project::GetAssetFileSystemPath(animator.m_filePath);
-					AnimationSerializer::DeserializeAnimations(path.string(), deserializedEntity);
+					auto& animator = deserializedEntity.AddComponent<AnimatorComponent>(
+						[&](AnimatorComponent& c)
+						{
+							DeserializeData<std::string>("FilePath", animtorComponent, c.m_filePath);
+							auto path = Project::GetAssetFileSystemPath(c.m_filePath);
+							AnimationSerializer::DeserializeAnimations(path.string(), deserializedEntity);
+						}
+					);
 				}
 
 				m_scene->DeserializeEntity(&entity, deserializedEntity);

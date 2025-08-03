@@ -516,6 +516,11 @@ namespace rhombus
 		m_platformerPlayerControllerSystem->OnKeyPressed(keycode, isRepeat);
 	}
 
+	void Scene::OnKeyReleased(int keycode)
+	{
+		m_platformerPlayerControllerSystem->OnKeyReleased(keycode);
+	}
+
 	void Scene::OnGamepadAxis(int axis, float value)
 	{
 	}
@@ -523,6 +528,11 @@ namespace rhombus
 	void Scene::OnGamepadButtonDown(int button)
 	{
 		m_platformerPlayerControllerSystem->OnGamepadButtonDown(button);
+	}
+
+	void Scene::OnGamepadButtonUp(int button)
+	{
+		m_platformerPlayerControllerSystem->OnGamepadButtonUp(button);
 	}
 
 	void Scene::OnViewportResize(uint32_t width, uint32_t height)

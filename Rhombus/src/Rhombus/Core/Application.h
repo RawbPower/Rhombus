@@ -97,6 +97,7 @@ namespace rhombus {
 
 		bool OnGamepadAxis(GamepadAxisEvent& e);
 		bool OnGamepadButtonDown(GamepadButtonDownEvent& e);
+		bool OnGamepadButtonUp(GamepadButtonUpEvent& e);
 
 	private:
 		ApplicationSpecification m_Specification;

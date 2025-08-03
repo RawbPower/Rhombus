@@ -35,7 +35,7 @@ Entities:
     TagComponent:
       Tag: Player
     TransformComponent:
-      Position: [11, -62, 0]
+      Position: [93, -62, 0]
       Rotation: [0, -0, 0]
       Scale: [1, 1, 1]
     SpriteRendererComponent:
@@ -57,7 +57,8 @@ Entities:
       RestitutionThreshold: 0.5
     PlatformerPlayerControllerComponent:
       Speed: 72
-      JumpHeight: 48
+      MinJumpHeight: 16
+      MaxJumpHeight: 56
       DoubleJumpHeight: 32
     AnimatorComponent:
       FilePath: animations\Player.ranim

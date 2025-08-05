@@ -525,7 +525,7 @@ namespace rhombus
 		DrawComponent<ScriptComponent>("Script", entity, [](auto& component)
 		{
 			static char buffer[64];
-			strcpy(buffer, component.m_scriptName.c_str());
+			strcpy_s(buffer, component.m_scriptName.c_str());
 
 			if (ImGui::InputText("Script", buffer, sizeof(buffer)))
 				component.m_scriptName = buffer;
@@ -732,12 +732,14 @@ namespace rhombus
 			ImGui::DragFloat("Max Jump Height", &component.m_maxJumpHeight, 0.025f, 0.0f, 100.0f);
 			ImGui::DragFloat("Min Jump Height", &component.m_minJumpHeight, 0.025f, 0.0f, 100.0f);
 			ImGui::DragFloat("Double Jump Height", &component.m_doubleJumpHeight, 0.025f, 0.0f, 100.0f);
+			ImGui::DragFloat("Jump Buffer Time", &component.m_jumpBufferTime, 0.025f, 0.0f, 100.0f);
+			ImGui::DragFloat("Coyote Time", &component.m_coyoteTime, 0.025f, 0.0f, 100.0f);
 		});
 
 		DrawComponent<AnimatorComponent>("Animator", entity, [](auto& component)
 		{
 			static char buffer[64];
-			strcpy(buffer, component.m_filePath.c_str());
+			strcpy_s(buffer, component.m_filePath.c_str());
 
 			if (ImGui::InputText("Animator File", buffer, sizeof(buffer)))
 				component.m_filePath = buffer;

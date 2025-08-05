@@ -272,6 +272,8 @@ namespace rhombus
 			out << YAML::Key << "MinJumpHeight" << YAML::Value << controller.m_minJumpHeight;
 			out << YAML::Key << "MaxJumpHeight" << YAML::Value << controller.m_maxJumpHeight;
 			out << YAML::Key << "DoubleJumpHeight" << YAML::Value << controller.m_doubleJumpHeight;
+			out << YAML::Key << "JumpBufferTime" << YAML::Value << controller.m_jumpBufferTime;
+			out << YAML::Key << "CoyoteTime" << YAML::Value << controller.m_coyoteTime;
 
 			out << YAML::EndMap; // PlatformerPlayerControllerComponent
 		}
@@ -591,6 +593,8 @@ namespace rhombus
 							DeserializeData<float>("MinJumpHeight", platformerPlayerControllerComponent, c.m_minJumpHeight);
 							DeserializeData<float>("MaxJumpHeight", platformerPlayerControllerComponent, c.m_maxJumpHeight);
 							DeserializeData<float>("DoubleJumpHeight", platformerPlayerControllerComponent, c.m_doubleJumpHeight);
+							DeserializeData<float>("JumpBufferTime", platformerPlayerControllerComponent, c.m_jumpBufferTime);
+							DeserializeData<float>("CoyoteTime", platformerPlayerControllerComponent, c.m_coyoteTime);
 						}
 					);
 				}

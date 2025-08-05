@@ -60,6 +60,8 @@ Entities:
       MinJumpHeight: 16
       MaxJumpHeight: 56
       DoubleJumpHeight: 32
+      JumpBufferTime: 0.100000001
+      CoyoteTime: 0.100000001
     AnimatorComponent:
       FilePath: animations\Player.ranim
   - Entity: 4524564654659932807

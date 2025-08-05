@@ -40,7 +40,7 @@ namespace rhombus
 				}
 
 				// Jump code
-				if (playerController.GetShouldJump())
+				if (playerController.m_jumpBufferCount > 0.0f && playerController.m_coyoteTimeCount > 0.0f)
 				{
 					if (playerController.CanJump())
 					{
@@ -49,9 +49,8 @@ namespace rhombus
 						physicsBody.m_velocity.y = jumpVelocity;
 
 						playerController.AddJump();
+						playerController.m_jumpBufferCount = 0.0f;
 					}
-
-					playerController.SetShouldJump(false);
 				}
 
 				if (playerController.m_cancelJump)
@@ -63,6 +62,22 @@ namespace rhombus
 
 					playerController.m_cancelJump = false;
 				}
+
+				// Coyote timer
+				if (physicsBody.GetIsInAir())
+				{
+					playerController.m_coyoteTimeCount -= dt;
+				}
+				else
+				{
+					playerController.m_coyoteTimeCount = playerController.m_coyoteTime;
+				}
+			}
+
+			// Jump buffer
+			if (playerController.m_jumpBufferCount >= 0)
+			{
+				playerController.m_jumpBufferCount -= dt;
 			}
 		}
 	}
@@ -107,7 +122,7 @@ namespace rhombus
 		{
 			// Jump code
 			PlatformerPlayerControllerComponent& playerController = entity.GetComponent<PlatformerPlayerControllerComponent>();
-			playerController.SetShouldJump(true);
+			playerController.m_jumpBufferCount = playerController.m_jumpBufferTime;
 		}
 	}
 

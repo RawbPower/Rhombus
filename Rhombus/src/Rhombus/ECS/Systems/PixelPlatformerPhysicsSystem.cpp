@@ -139,6 +139,7 @@ namespace rhombus
 			}
 		}
 
+		ppbComponent.m_wasInAir = ppbComponent.m_isInAir;
 		ppbComponent.m_isInAir = isInAir;
 		transformComponent.SetWorldPosition(transformComponent.GetWorldPosition() + appliedTranslation);
 	}

@@ -15,6 +15,7 @@ namespace rhombus
 		PixelPlatformerBodyComponent(const PixelPlatformerBodyComponent& other) = default;
 
 		bool GetIsInAir() const { return m_isInAir; }
+		bool GetWasInAir() const { return m_wasInAir; }
 
 		Vec2 m_velocity = Vec2(0.0f);
 	private:
@@ -23,5 +24,6 @@ namespace rhombus
 		Vec2 m_translationRemainder = Vec2(0.0f);
 		float m_lastMovementVelocity = 0.0f;
 		bool m_isInAir = false;
+		bool m_wasInAir = false;
 	};
 }

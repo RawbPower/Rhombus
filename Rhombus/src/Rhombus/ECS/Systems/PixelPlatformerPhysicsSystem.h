@@ -5,7 +5,8 @@
 
 namespace rhombus
 {
-	const float GRAVITY = -16.0f * 9.8f;			// 16 pixels -> 1 meter
+	const float GRAVITY_SCALE = 2.0f;
+	const float GRAVITY = -16.0f * 9.8f * GRAVITY_SCALE;			// 16 pixels -> 1 meter
 	const DeltaTime STEP_TIME = 1.0f / 240.0f;		// 240 Hz physics update (might need to lower as we go)
 
 	class PixelPlatformerPhysicsSystem : public System

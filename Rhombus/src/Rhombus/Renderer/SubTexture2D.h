@@ -13,8 +13,8 @@ namespace rhombus
 
 		const Ref<Texture2D> GetTexture() const { return m_Texture; }
 		const Vec2* GetTexCoords() const { return m_TexCoords; }
-		uint32_t GetWidth() const { return m_size.x; }
-		uint32_t GetHeight() const { return m_size.y; }
+		uint32_t GetWidth() const { return (uint32_t)m_size.x; }
+		uint32_t GetHeight() const { return (uint32_t)m_size.y; }
 
 		void UpdateTexCoords(const Vec2& coords, const Vec2& cellSize, float padding, const Vec2& spriteSize = { 1, 1 });
 

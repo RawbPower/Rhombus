@@ -421,8 +421,8 @@ namespace rhombus
 		ImVec2 imageSize = { viewportPanelSize.x, viewportPanelSize.y };
 		if (m_SceneState == SceneState::Play)
 		{
-			const int panelScaleX = math::Floor(viewportPanelSize.x / Project::GetGameWidth());
-			const int panelScaleY = math::Floor(viewportPanelSize.y / Project::GetGameHeight());
+			const int panelScaleX = math::FloorInt(viewportPanelSize.x / Project::GetGameWidth());
+			const int panelScaleY = math::FloorInt(viewportPanelSize.y / Project::GetGameHeight());
 			const int panelScale = panelScaleX <= panelScaleY ? panelScaleX : panelScaleY;
 			imageSize = { (float)Project::GetGameWidth() * panelScale, (float)Project::GetGameHeight() * panelScale };
 		}
@@ -762,6 +762,7 @@ namespace rhombus
 			{
 				DeleteSelectedEntities();
 				m_sceneHierarchyPanel.ResetSelectedEntities();
+				break;
 			}
 
 			// Gizmos
@@ -1225,7 +1226,7 @@ namespace rhombus
 
 			Vec2 tileSize = tilemap->GetTileSize();
 			Vec2 tileHalfSize = tilemap->GetTileSize() * 0.5f;
-			Vec2 gridSize = Vec2(tilemap->GetGridWidth(), tilemap->GetGridHeight());
+			Vec2 gridSize = Vec2((float)tilemap->GetGridWidth(), (float)tilemap->GetGridHeight());
 
 			TransformComponent& transform = entity.GetComponent<TransformComponent>();
 			Mat4 topLeftTileTransform = transform.GetWorldTransform();
@@ -1246,7 +1247,7 @@ namespace rhombus
 
 					Vec2 mousePos = Input::GetMousePosition();
 
-					if (!Renderer2D::IsScreenPositionWithViewPort(mousePos.x, mousePos.y))
+					if (!Renderer2D::IsScreenPositionWithViewPort((int)mousePos.x, (int)mousePos.y))
 					{
 						continue;
 					}
@@ -1258,16 +1259,16 @@ namespace rhombus
 						const SceneCamera& sceneCamera = camera.GetComponentRead<CameraComponent>().GetCamera();
 						if (sceneCamera.GetProjectionType() == SceneCamera::ProjectionType::Perspective)
 						{
-							cursorCoords = Renderer2D::RaycastScreenPositionToWorldSpace(mousePos.x, mousePos.y, transform.GetPosition().z, sceneCamera.GetProjection(), camera.GetTransform());
+							cursorCoords = Renderer2D::RaycastScreenPositionToWorldSpace((int)mousePos.x, (int)mousePos.y, transform.GetPosition().z, sceneCamera.GetProjection(), camera.GetTransform());
 						}
 						else
 						{
-							cursorCoords = Renderer2D::ConvertScreenToWorldSpace(mousePos.x, mousePos.y);
+							cursorCoords = Renderer2D::ConvertScreenToWorldSpace((int)mousePos.x, (int)mousePos.y);
 						}
 					}
 					else
 					{
-						cursorCoords = Renderer2D::RaycastScreenPositionToWorldSpace(mousePos.x, mousePos.y, transform.GetPosition().z, m_EditorCamera.GetProjection(), m_EditorCamera.GetViewMatrix());
+						cursorCoords = Renderer2D::RaycastScreenPositionToWorldSpace((int)mousePos.x, (int)mousePos.y, transform.GetPosition().z, m_EditorCamera.GetProjection(), m_EditorCamera.GetViewMatrix());
 					}
 
 					if ((cursorCoords.x < tileTransform.d().x + tileHalfSize.x) && (cursorCoords.x > tileTransform.d().x - tileHalfSize.x))
@@ -1317,7 +1318,7 @@ namespace rhombus
 		if (m_SceneState == SceneState::Edit && m_ShowGameScreenSizeRect)
 		{
 			Vec3 translation = Vec3(0.0f);
-			Vec3 scale = Vec3(Project::GetGameWidth(), Project::GetGameHeight(), 1.0f);
+			Vec3 scale = Vec3((float)Project::GetGameWidth(), (float)Project::GetGameHeight(), 1.0f);
 
 			Mat4 transform = math::Translate(Mat4::Identity(), translation)
 				* math::Rotate(Mat4::Identity(), 0.0f, Vec3(0.0f, 0.0f, 1.0f))

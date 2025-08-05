@@ -2,7 +2,7 @@
 
 #include <algorithm>
 #include <chrono>
-#include <fstream>w
+#include <fstream>
 #include <iomanip>
 #include <string>
 #include <thread>

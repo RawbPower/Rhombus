@@ -128,6 +128,6 @@ namespace rhombus
 		std::unordered_map<size_t, EntityID> m_indexToEntityMap;
 
 		// Total size of valid entries in the array
-		size_t m_size;
+		size_t m_size {};
 	};
 }

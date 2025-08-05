@@ -156,7 +156,7 @@ namespace rhombus
 	{
 		Log::Assert(lua_gettop(state) == 0, "Invalid number of arguments passed to function");
 
-		Vec3 mousePosition = Renderer2D::ConvertScreenToWorldSpace(Input::GetMouseX(), Input::GetMouseY());
+		Vec3 mousePosition = Renderer2D::ConvertScreenToWorldSpace((int)Input::GetMouseX(), (int)Input::GetMouseY());
 		lua_pushnumber(state, mousePosition.x);
 		lua_pushnumber(state, mousePosition.y);
 

@@ -18,7 +18,7 @@ namespace rhombus
 			Viewport viewport = Application::Get().GetViewport();
 			if (viewport.width > 0 && viewport.height > 0)
 			{
-				GetCamera().SetViewportResize(viewport.width, viewport.height);
+				GetCamera().SetViewportResize((uint32_t)viewport.width, (uint32_t)viewport.height);
 			}
 		}
 

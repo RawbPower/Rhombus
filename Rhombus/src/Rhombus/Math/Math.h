@@ -30,16 +30,16 @@ namespace rhombus::math
 	inline float Atan(float x) { return atan(x); }
 	inline float Atan2(float y, float x) { return atan2(y, x); }
 
-	inline float Pow(float x, int a) { return pow(x, a); }
-	inline float Pow(float x, float a) { return pow(x, a); }
+	inline float Pow(float x, int a) { return powf(x, (float)a); }
+	inline float Pow(float x, float a) { return powf(x, a); }
 	inline float Sqrt(float x) { return sqrt(x); }
 
 	inline float Round(float x) { return round(x); }
-	inline int RoundInt(float x) { return round(x); }
+	inline int RoundInt(float x) { return (int)round(x); }
 	inline float Ceil(float x) { return ceil(x); }
-	inline int CeilInt(float x) { return ceil(x); }
+	inline int CeilInt(float x) { return (int)ceil(x); }
 	inline float Floor(float x) { return floor(x); }
-	inline int FloorInt(float x) { return floor(x); }
+	inline int FloorInt(float x) { return (int)floor(x); }
 
 	inline float Abs(float x) { return abs(x); }
 	inline int Sign(int x) { return (0 < x) - (x < 0); }

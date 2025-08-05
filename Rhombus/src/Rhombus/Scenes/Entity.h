@@ -118,7 +118,7 @@ namespace rhombus
 		Ref<SceneGraphNode> GetSceneGraphNode() const;
 
 	private:
-		EntityID m_rbEntityId;
+		EntityID m_rbEntityId = 0xFFFFFFFF;
 		EntityID m_entityId = 0xFFFFFFFF;
 		Scene* m_scene = nullptr;
 	};

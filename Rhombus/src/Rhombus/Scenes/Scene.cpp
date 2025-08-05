@@ -262,8 +262,7 @@ namespace rhombus
 					if (!nsc.m_instance)
 					{
 						nsc.m_instance = nsc.InstantiateScript();
-						nsc.m_instance->m_entity = Entity(e, this);
-						//nsc.m_instance->m_entity = Entity{entity, this}; ?????
+						nsc.m_instance->m_entity = Entity{ e, this };
 						nsc.m_instance->OnReady();
 					}
 
@@ -429,7 +428,7 @@ namespace rhombus
 		{
 			Vec2 tileSize = tilemap->GetTileSize();
 			Vec2 tileHalfSize = tilemap->GetTileSize() * 0.5f;
-			Vec2 gridSize = Vec2(tilemap->GetGridWidth(), tilemap->GetGridHeight());
+			Vec2 gridSize = Vec2((float)tilemap->GetGridWidth(), (float)tilemap->GetGridHeight());
 			Mat4 topLeftTileTransform = transform;
 			float tileMapHalfWidth = (gridSize.x * tileSize.x) / 2.0f;
 			float tileMapHalfHeight = (gridSize.y * tileSize.y) / 2.0f;

@@ -22,7 +22,7 @@ namespace rhombus
 		void Play(std::string name);
 		bool IsPlaying(std::string name);
 
-		int GetAnimationCount() const { return m_animations.size(); }
+		int GetAnimationCount() const { return (int)m_animations.size(); }
 		AnimationClip GetAnimationClip(int index) const { return m_animations[index]; }
 		AnimationClip& GetAnimationClipRef(int index) { return m_animations[index]; }
 

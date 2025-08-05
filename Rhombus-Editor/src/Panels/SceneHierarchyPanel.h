@@ -51,9 +51,9 @@ namespace rhombus
 		Ref<EditorExtension> m_editorExtension;
 		std::unordered_map<EntityID, float> m_hierarchyEntityPositionMap;
 		Entity m_selectionContext;		// Main selected entity (shown in Property View)
-		int m_selectionMask;			// All selected entities (can all be dragged at once)
-		int m_currentEntityIndex;
-		bool m_handledReorderDragAndDrop;
+		int m_selectionMask = 0;		// All selected entities (can all be dragged at once)
+		int m_currentEntityIndex = 0;
+		bool m_handledReorderDragAndDrop = false;
 
 		std::queue<Entity> m_destroyQueue;
 

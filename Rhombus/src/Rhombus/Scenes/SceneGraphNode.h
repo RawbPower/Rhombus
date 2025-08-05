@@ -31,7 +31,7 @@ namespace rhombus
 		bool GetIsRootNode() const { return m_entity.GetContext() == nullptr; }
 
 		bool HasChildren() const { return m_children.size() > 0; }
-		int GetChildrenCount() const { return m_children.size(); }
+		int GetChildrenCount() const { return (int)m_children.size(); }
 		const std::vector<Ref<SceneGraphNode>>& GetChildren() const { return m_children; }
 		std::vector<Ref<SceneGraphNode>>& GetChildrenNonConst() { return m_children; }
 		std::vector<Ref<SceneGraphNode>>::const_iterator GetChildIteratorStart() { return m_children.begin(); }

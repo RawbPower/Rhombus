@@ -29,6 +29,7 @@
 #include "Rhombus/ECS/Components/Collider2DComponent.h"
 #include "Rhombus/ECS/Components/Rigidbody2DComponent.h"
 #include "Rhombus/ECS/Components/PixelPlatformerBodyComponent.h"
+#include "Rhombus/ECS/Components/PlatformerPlayerControllerComponent.h"
 #include "Rhombus/ECS/Components/ScriptComponent.h"
 #include "Rhombus/ECS/Components/SpriteRendererComponent.h"
 #include "Rhombus/ECS/Components/TransformComponent.h"
@@ -60,5 +61,7 @@
 #include "Rhombus/Animation/Tween.h"
 #include "Rhombus/Animation/EasingFunctions.h"
 //--------------------------------
+
+#include "Rhombus/Reflection/ReflectionHelper.h"
 
 using namespace rhombus;

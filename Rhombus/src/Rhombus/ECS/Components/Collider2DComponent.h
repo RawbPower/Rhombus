@@ -21,7 +21,7 @@ namespace rhombus
 		// Storage for runtime
 		void* m_runtimeFixture = nullptr;
 
-		BoxCollider2DComponent() = default;
+		BoxCollider2DComponent();
 		BoxCollider2DComponent(const BoxCollider2DComponent& other) = default;
 	};
 

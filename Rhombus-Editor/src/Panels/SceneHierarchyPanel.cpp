@@ -1,23 +1,11 @@
 #include "SceneHierarchyPanel.h"
 
+#include "Rhombus.h"
+
 #include "Rhombus/Project/Project.h"
 
 #include "Rhombus/Scripting/ScriptEngine.h"
 #include "Rhombus/ECS/ECSTypes.h"
-#include "Rhombus/ECS/Components/Component.h"
-#include "Rhombus/ECS/Components/AnimatorComponent.h"
-#include "Rhombus/ECS/Components/Area2DComponent.h"
-#include "Rhombus/ECS/Components/CameraComponent.h"
-#include "Rhombus/ECS/Components/CircleRendererComponent.h"
-#include "Rhombus/ECS/Components/Collider2DComponent.h"
-#include "Rhombus/ECS/Components/Rigidbody2DComponent.h"
-#include "Rhombus/ECS/Components/PixelPlatformerBodyComponent.h"
-#include "Rhombus/ECS/Components/PlatformerPlayerControllerComponent.h"
-#include "Rhombus/ECS/Components/ScriptComponent.h"
-#include "Rhombus/ECS/Components/SpriteRendererComponent.h"
-#include "Rhombus/ECS/Components/TransformComponent.h"
-#include "Rhombus/ECS/Components/TweenComponent.h"
-#include "Rhombus/ECS/Components/TileMapComponent.h"
 #include "Rhombus/Scenes/SceneGraphNode.h"
 #include "Rhombus/Tiles/TileSerializer.h"
 
@@ -459,6 +447,21 @@ namespace rhombus
 		}
 	}
 
+	void DrawComponentPropertiesUI(const std::string& memberName, const std::string& typeName, const void* dataPtr)
+	{
+		if (typeName == "float")
+		{
+			float unit = *static_cast<const float*>(dataPtr);
+			ImGui::DragFloat(memberName.c_str(), &unit, 0.001f, 0.0f, 1.0f);
+		}
+	}
+
+	template<typename T>
+	void DrawComponentPropertiesUI(T& component)
+	{
+		reflection::DrawPropertiesImGUI<T>(component, [](const std::string& memberName, const std::string& typeName, const void* dataPtr) { DrawComponentPropertiesUI(memberName, typeName, dataPtr); });
+	}
+
 	void SceneHierarchyPanel::DrawComponents(Entity entity)
 	{
 		if (entity.HasComponent<TagComponent>())
@@ -682,6 +685,7 @@ namespace rhombus
 
 		DrawComponent<BoxCollider2DComponent>("Box Collider 2D", entity, [](auto& component)
 		{
+			//DrawComponentPropertiesUI<BoxCollider2DComponent>(component);
 			ImGui::DragFloat2("Offset", component.m_offset.ToPtr(), 0.01f);
 			ImGui::DragFloat2("Size", component.m_size.ToPtr());
 			ImGui::DragFloat("Density", &component.m_density, 0.01f, 0.0f, 1.0f);

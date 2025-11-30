@@ -3,6 +3,8 @@
 #include "rbpch.h"
 #include "TypeHash.h"
 
+#include "Rhombus/Core/Core.h"
+
 namespace rhombus
 {
 	struct TypeInfo final
@@ -10,6 +12,8 @@ namespace rhombus
 		std::string_view m_name;
 		uint32_t m_size;
 		uint32_t m_align;
+
+		//std::function<void(const void*)> DrawImGUI{};
 
 		template <typename T>
 		static constexpr TypeInfo Create();
@@ -91,21 +95,18 @@ namespace rhombus
 		inline static RegisterTypeOnce Register{};
 	};
 
-#define _REGISTER_TYPE_INTERNAL(TYPE, VARNAME) RegisterType<TYPE> VARNAME##TYPE {};
-#define REGISTER_TYPE(TYPE) _REGISTER_TYPE_INTERNAL(TYPE, RegisterType_)
-
 	// REGISTER_TYPE(int) == 
 	// RegisterType<int> RegisterType_int {};
 }
 
-template <>
-struct std::hash<TypeID>
+namespace std
 {
-	std::size_t operator()(const TypeID& id) const noexcept
+	template <>
+	struct hash<rhombus::TypeID>
 	{
-		return static_cast<size_t>(id.GetID());
-	}
-};
+		size_t operator()(const rhombus::TypeID& id) const noexcept;
+	};
+}
 
 namespace rhombus
 {

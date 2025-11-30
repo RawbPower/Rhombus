@@ -106,8 +106,6 @@ namespace rhombus
 		}
 	};
 
-#define REGISTER_MEMBER(TYPE, FIELD) inline static RegisterMember TYPE##FIELD{TypeID::Create<TYPE>(), VariableID::Create<decltype(TYPE::FIELD)>(), #FIELD, offsetof(TYPE, FIELD), sizeof(decltype(TYPE::FIELD)), alignof(decltype(TYPE::FIELD))};
-
 	inline MemberID MemberID::RegisterField(TypeID classId, VariableID memberId, const std::string& fieldName, uint32_t offset, uint32_t size, uint32_t align)
 	{
 		MemberInfo info{};

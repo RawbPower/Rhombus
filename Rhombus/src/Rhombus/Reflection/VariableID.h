@@ -139,24 +139,18 @@ namespace rhombus
 	}
 }
 
-template <>
-struct std::hash<VariableID>
+namespace std 
 {
-	std::size_t operator()(const VariableID& id) const noexcept
+	template <>
+	struct hash<rhombus::VariableID>
 	{
-		return static_cast<size_t>(id.GetHash());
-	}
-};
+		size_t operator()(const rhombus::VariableID& id) const noexcept;
+	};
+}
 
 namespace rhombus
 {
-	bool operator==(const VariableID& lhs, const VariableID& rhs)
-	{
-		return lhs.m_type == rhs.m_type &&
-			lhs.m_arraySize == rhs.m_arraySize &&
-			lhs.m_pointerCount == rhs.m_pointerCount &&
-			lhs.m_traitFlags == rhs.m_traitFlags;
-	}
+	bool operator==(const VariableID& lhs, const VariableID& rhs);
 
 	inline const std::string& GetVariableName(const VariableID& variableID)
 	{

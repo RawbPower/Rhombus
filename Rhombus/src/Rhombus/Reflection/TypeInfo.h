@@ -10,8 +10,8 @@ namespace rhombus
 	struct TypeInfo final
 	{
 		std::string_view m_name;
-		uint32_t m_size;
-		uint32_t m_align;
+		uint32_t m_size = 0;
+		uint32_t m_align = 0;
 
 		//std::function<void(const void*)> DrawImGUI{};
 

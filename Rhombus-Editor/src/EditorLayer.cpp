@@ -433,7 +433,7 @@ namespace rhombus
 		Application::Get().SetViewport(m_ViewportBounds[0].x + docSpaceOffset.x + imageOffset.x, m_ViewportBounds[0].y - docSpaceOffset.y + imageOffset.y, imageSize.x, imageSize.y);
 
 		uint32_t textureID = m_Framebuffer->GetColorAttachmentRendererID();
-		ImGui::Image((void*)textureID, imageSize, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+		ImGui::Image((void*)(intptr_t)textureID, imageSize, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 
 		// TODO: Might be better to open a scene from double clicking in the content browser
 		// Would need to listen to some even though
@@ -664,7 +664,7 @@ namespace rhombus
 		float size = ImGui::GetWindowHeight() - 4.0f;
 		Ref<Texture2D> icon = m_SceneState == SceneState::Edit ? m_IconPlay : m_IconStop;
 		ImGui::SetCursorPosX((ImGui::GetContentRegionMax().x * 0.5f) - (size * 0.5f));
-		if (ImGui::ImageButton((ImTextureID)icon->GetRendererID(), ImVec2(size, size), ImVec2(0, 0), ImVec2(1, 1), 0))
+		if (ImGui::ImageButton((ImTextureID)(intptr_t)icon->GetRendererID(), ImVec2(size, size), ImVec2(0, 0), ImVec2(1, 1), 0))
 		{
 			if (m_SceneState == SceneState::Edit)
 			{

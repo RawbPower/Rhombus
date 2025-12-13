@@ -42,5 +42,7 @@ namespace rhombus::math
 	inline int FloorInt(float x) { return (int)floor(x); }
 
 	inline float Abs(float x) { return abs(x); }
+	inline int Abs(int x) { return abs(x); }
+	inline int Sign(float x) { return (0.0f < x) - (x < 0.0f); }
 	inline int Sign(int x) { return (0 < x) - (x < 0); }
 }

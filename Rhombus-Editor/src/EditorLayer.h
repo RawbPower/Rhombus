@@ -4,10 +4,10 @@
 
 #include "EditorExtension.h"
 #include "Panels/SceneHierarchyPanel.h"
-#include "Panels/ContentBrowerPanel.h";
-#include "Panels/TilesetPanel.h";
-#include "Panels/EntityViewPanel.h";
-#include "Panels/AnimationPanel.h";
+#include "Panels/ContentBrowerPanel.h"
+#include "Panels/TilesetPanel.h"
+#include "Panels/EntityViewPanel.h"
+#include "Panels/AnimationPanel.h"
 #include "Rhombus/Renderer/EditorCamera.h"
 
 #define RB_EDITOR 1

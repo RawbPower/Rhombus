@@ -74,13 +74,13 @@ namespace rhombus
 			const ImVec2 iconSize = bWideImage ? ImVec2(thumbnailSize, thumbnailSize * (1.0f / fAspectRatio)) : ImVec2(thumbnailSize * fAspectRatio, thumbnailSize);
 			
 			// Caclulate image padding needed to make square button
-			const float fDimensionDifference = math::Abs(icon->GetWidth() - icon->GetHeight());
-			const float fMaxDimension = bWideImage ? icon->GetWidth() : icon->GetHeight();
+			const float fDimensionDifference = math::Abs(float(icon->GetWidth() - icon->GetHeight()));
+			const float fMaxDimension = bWideImage ? (float)icon->GetWidth() : (float)icon->GetHeight();
 			const float fSmallDimensionPadding = (fDimensionDifference / fMaxDimension) * thumbnailSize * 0.5f;
 			const ImVec2 iconPadding = bWideImage ? ImVec2(thumbnailPadding, fSmallDimensionPadding + thumbnailPadding) : ImVec2(fSmallDimensionPadding + thumbnailPadding, thumbnailPadding);
 			
 			ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, iconPadding);
-			ImGui::ImageButton((ImTextureID)icon->GetRendererID(), iconSize, {0,1}, {1,0});
+			ImGui::ImageButton((ImTextureID)(intptr_t)icon->GetRendererID(), iconSize, {0,1}, {1,0});
 			ImGui::PopStyleVar();
 			//ImGui::ImageButton((ImTextureID)icon->GetRendererID(), { thumbnailSize, thumbnailSize }, { 0,1 }, { 1,0 });
 

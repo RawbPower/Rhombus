@@ -115,7 +115,7 @@ namespace rhombus
 		const auto& buttonActive = colors[ImGuiCol_ButtonActive];
 		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(buttonActive.x, buttonActive.y, buttonActive.z, 0.5f));
 
-		if (ImGui::ImageButton((ImTextureID)m_IconAdd->GetRendererID(), ImVec2(size, size), ImVec2(0, 1), ImVec2(1, 0), 0))
+		if (ImGui::ImageButton((ImTextureID)(intptr_t)m_IconAdd->GetRendererID(), ImVec2(size, size), ImVec2(0, 1), ImVec2(1, 0), 0))
 		{
 			AnimatorComponent& animator = m_currentEntity.GetComponent<AnimatorComponent>();
 			AnimationClip clip;
@@ -128,7 +128,7 @@ namespace rhombus
 
 		ImGui::SameLine();
 
-		if (ImGui::ImageButton((ImTextureID)m_IconRename->GetRendererID(), ImVec2(size, size), ImVec2(0, 1), ImVec2(1, 0), 0))
+		if (ImGui::ImageButton((ImTextureID)(intptr_t)m_IconRename->GetRendererID(), ImVec2(size, size), ImVec2(0, 1), ImVec2(1, 0), 0))
 		{
 			renaming = !renaming;
 			refocus_to_rename = renaming;
@@ -136,7 +136,7 @@ namespace rhombus
 
 		ImGui::SameLine();
 
-		if (ImGui::ImageButton((ImTextureID)m_IconDelete->GetRendererID(), ImVec2(size, size), ImVec2(0, 1), ImVec2(1, 0), 0))
+		if (ImGui::ImageButton((ImTextureID)(intptr_t)m_IconDelete->GetRendererID(), ImVec2(size, size), ImVec2(0, 1), ImVec2(1, 0), 0))
 		{
 			AnimatorComponent& animator = m_currentEntity.GetComponent<AnimatorComponent>();
 			animator.RemoveAnimation(animator.GetAnimationClip(item_current_idx).m_name);
@@ -146,12 +146,12 @@ namespace rhombus
 		ImGui::SameLine();
 
 		ImGui::SetCursorPosX((ImGui::GetContentRegionMax().x * 0.5f) - (size * 0.5f) - spacing);
-		ImGui::ImageButton((ImTextureID)m_IconBackward->GetRendererID(), ImVec2(size, size), ImVec2(0, 1), ImVec2(1, 0), 0);
+		ImGui::ImageButton((ImTextureID)(intptr_t)m_IconBackward->GetRendererID(), ImVec2(size, size), ImVec2(0, 1), ImVec2(1, 0), 0);
 
 		ImGui::SameLine();
 
 		ImGui::SetCursorPosX((ImGui::GetContentRegionMax().x * 0.5f) - (size * 0.5f));
-		ImTextureID playPauseRendererID = m_isPlaying ? (ImTextureID)m_IconPause->GetRendererID() : (ImTextureID)m_IconPlay->GetRendererID();
+		ImTextureID playPauseRendererID = m_isPlaying ? (ImTextureID)(intptr_t)m_IconPause->GetRendererID() : (ImTextureID)(intptr_t)m_IconPlay->GetRendererID();
 		if (ImGui::ImageButton(playPauseRendererID, ImVec2(size, size), ImVec2(0, 1), ImVec2(1, 0), 0))
 		{
 			m_isPlaying = !m_isPlaying;
@@ -160,12 +160,12 @@ namespace rhombus
 		ImGui::SameLine();
 
 		ImGui::SetCursorPosX((ImGui::GetContentRegionMax().x * 0.5f) - (size * 0.5f) + spacing);
-		ImGui::ImageButton((ImTextureID)m_IconForward->GetRendererID(), ImVec2(size, size), ImVec2(0, 1), ImVec2(1, 0), 0);
+		ImGui::ImageButton((ImTextureID)(intptr_t)m_IconForward->GetRendererID(), ImVec2(size, size), ImVec2(0, 1), ImVec2(1, 0), 0);
 
 		ImGui::SameLine();
 
 		ImGui::SetCursorPosX(ImGui::GetContentRegionMax().x - margin);
-		ImGui::Image((ImTextureID)m_IconLoop->GetRendererID(), ImVec2(size, size), ImVec2(0, 1), ImVec2(1, 0));
+		ImGui::Image((ImTextureID)(intptr_t)m_IconLoop->GetRendererID(), ImVec2(size, size), ImVec2(0, 1), ImVec2(1, 0));
 		ImGui::SameLine();
 
 		ImGuiStyle& style = ImGui::GetStyle();
@@ -203,12 +203,12 @@ namespace rhombus
 			bool addNewSample = false;
 
 			static ImGuiTableFlags flags = ImGuiTableFlags_SizingFixedFit | ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg | ImGuiTableFlags_NoHostExtendX;
-			if (ImGui::BeginTable("Timeline", clip.m_samples.size() + 1, flags))
+			if (ImGui::BeginTable("Timeline", (int)clip.m_samples.size() + 1, flags))
 			{
 				for (int i = 0; i < clip.m_samples.size()+1; i++)
 				{
 					char buf[32];
-					sprintf(buf, "Frame %d", i+1);
+					sprintf_s(buf, "Frame %d", i+1);
 					ImGui::TableSetupColumn(buf);
 				}
 				ImGui::TableHeadersRow();
@@ -223,8 +223,8 @@ namespace rhombus
 					ImGui::TableSetColumnIndex(column);
 
 					int frameRow = clip.m_samples[column].m_spriteFrame % spriteRenderer.GetColumns();
-					int frameCol = spriteRenderer.GetRows() - 1.0f - clip.m_samples[column].m_spriteFrame / spriteRenderer.GetColumns();
-					Ref<SubTexture2D> sampleFrame = SubTexture2D::CreateFromCoords(spriteRenderer.m_texture, Vec2(frameRow, frameCol), spriteRenderer.GetSpriteSize(), spriteRenderer.GetPadding());
+					int frameCol = spriteRenderer.GetRows() - 1 - clip.m_samples[column].m_spriteFrame / spriteRenderer.GetColumns();
+					Ref<SubTexture2D> sampleFrame = SubTexture2D::CreateFromCoords(spriteRenderer.m_texture, Vec2(frameRow, frameCol), spriteRenderer.GetSpriteSize(), (float)spriteRenderer.GetPadding());
 					ImVec2 uv0 = ImVec2(sampleFrame->GetTexCoords()[3].x, sampleFrame->GetTexCoords()[3].y);
 					ImVec2 uv1 = ImVec2(sampleFrame->GetTexCoords()[1].x, sampleFrame->GetTexCoords()[1].y);
 					float textureWidth = (float)sampleFrame->GetWidth();
@@ -243,7 +243,7 @@ namespace rhombus
 
 					ImGui::PushID(column);
 					ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, iconPadding);
-					if (ImGui::ImageButton((ImTextureID)spriteRenderer.m_texture->GetRendererID(), iconSize, uv0, uv1))
+					if (ImGui::ImageButton((ImTextureID)(intptr_t)spriteRenderer.m_texture->GetRendererID(), iconSize, uv0, uv1))
 					{
 						m_currentSampleIndex = column;
 					}
@@ -251,20 +251,20 @@ namespace rhombus
 					ImGui::PopID();
 				}
 
-				ImGui::TableSetColumnIndex(clip.m_samples.size());
+				ImGui::TableSetColumnIndex((int)clip.m_samples.size());
 				// Caclulate image size
 				const float fAspectRatio = (float)m_IconAdd->GetWidth() / (float)m_IconAdd->GetHeight();
 				const bool bWideImage = fAspectRatio >= 1.0f;
 				const ImVec2 iconSize = bWideImage ? ImVec2(thumbnailSize, thumbnailSize * (1.0f / fAspectRatio)) : ImVec2(thumbnailSize * fAspectRatio, thumbnailSize);
 
 				// Caclulate image padding needed to make square button
-				const float fDimensionDifference = math::Abs(m_IconAdd->GetWidth() - m_IconAdd->GetHeight());
-				const float fMaxDimension = bWideImage ? m_IconAdd->GetWidth() : m_IconAdd->GetHeight();
+				const float fDimensionDifference = math::Abs(float(m_IconAdd->GetWidth() - m_IconAdd->GetHeight()));
+				const float fMaxDimension = bWideImage ? (float)m_IconAdd->GetWidth() : (float)m_IconAdd->GetHeight();
 				const float fSmallDimensionPadding = (fDimensionDifference / fMaxDimension) * thumbnailSize * 0.5f;
 				const ImVec2 iconPadding = bWideImage ? ImVec2(thumbnailPadding, fSmallDimensionPadding + thumbnailPadding) : ImVec2(fSmallDimensionPadding + thumbnailPadding, thumbnailPadding);
 
 				ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, iconPadding);
-				if (ImGui::ImageButton((ImTextureID)m_IconAdd->GetRendererID(), iconSize, { 0,1 }, { 1,0 }))
+				if (ImGui::ImageButton((ImTextureID)(intptr_t)m_IconAdd->GetRendererID(), iconSize, { 0,1 }, { 1,0 }))
 				{
 					addNewSample = true;
 				}
@@ -282,12 +282,12 @@ namespace rhombus
 					ImGui::TableSetColumnIndex(column);
 
 					char frameTimeLabel[32];
-					sprintf(frameTimeLabel, "%.02fs", clip.m_samples[column].m_duration);
+					sprintf_s(frameTimeLabel, "%.02fs", clip.m_samples[column].m_duration);
 					ImGui::SetCursorPosX(ImGui::GetCursorPos().x + thumbnailSize * 0.5f + thumbnailPadding - ImGui::CalcTextSize(frameTimeLabel).x * 0.5f);
 					ImGui::Text(frameTimeLabel);
 				}
 
-				ImGui::TableSetColumnIndex(clip.m_samples.size());
+				ImGui::TableSetColumnIndex((int)clip.m_samples.size());
 				ImGui::SetCursorPosX(ImGui::GetCursorPos().x + thumbnailSize * 0.5f + thumbnailPadding - ImGui::CalcTextSize("Add").x * 0.5f);
 				ImGui::Text("Add");
 
@@ -327,8 +327,8 @@ namespace rhombus
 					const float thumbnailPadding = 8.0f;
 
 					int frameRow = clip.m_samples[m_currentSampleIndex].m_spriteFrame % spriteRenderer.GetColumns();
-					int frameCol = spriteRenderer.GetRows() - 1.0f - clip.m_samples[m_currentSampleIndex].m_spriteFrame / spriteRenderer.GetColumns();
-					Ref<SubTexture2D> sampleFrame = SubTexture2D::CreateFromCoords(spriteRenderer.m_texture, Vec2(frameRow, frameCol), spriteRenderer.GetSpriteSize(), spriteRenderer.GetPadding());
+					int frameCol = spriteRenderer.GetRows() - 1 - clip.m_samples[m_currentSampleIndex].m_spriteFrame / spriteRenderer.GetColumns();
+					Ref<SubTexture2D> sampleFrame = SubTexture2D::CreateFromCoords(spriteRenderer.m_texture, Vec2(frameRow, frameCol), spriteRenderer.GetSpriteSize(), (float)spriteRenderer.GetPadding());
 					ImVec2 uv0 = ImVec2(sampleFrame->GetTexCoords()[3].x, sampleFrame->GetTexCoords()[3].y);
 					ImVec2 uv1 = ImVec2(sampleFrame->GetTexCoords()[1].x, sampleFrame->GetTexCoords()[1].y);
 					float textureWidth = (float)sampleFrame->GetWidth();
@@ -346,7 +346,7 @@ namespace rhombus
 					const ImVec2 iconPadding = bWideImage ? ImVec2(thumbnailPadding, fSmallDimensionPadding + thumbnailPadding) : ImVec2(fSmallDimensionPadding + thumbnailPadding, thumbnailPadding);
 
 					ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, iconPadding);
-					ImGui::Image((ImTextureID)spriteRenderer.m_texture->GetRendererID(), iconSize, uv0, uv1);
+					ImGui::Image((ImTextureID)(intptr_t)spriteRenderer.m_texture->GetRendererID(), iconSize, uv0, uv1);
 					ImGui::PopStyleVar();
 
 					ImGui::Spacing();

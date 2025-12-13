@@ -8,10 +8,10 @@
 #define GAME_EDITOR 1
 
 #if GAME_EDITOR
-#include "EditorLayer.h";
-#include "Rhombus/Scenes/Scene.h";
-#include "GameScene.h";
-#include "GameEditorExtension.h";
+#include "EditorLayer.h"
+#include "Rhombus/Scenes/Scene.h"
+#include "GameScene.h"
+#include "GameEditorExtension.h"
 #endif
 
 namespace rhombus

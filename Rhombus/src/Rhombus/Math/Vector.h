@@ -24,6 +24,8 @@ namespace rhombus
 		Vec2(const Vec2& rhs);
 		Vec2(const Vec3& rhs);
 		Vec2(float X, float Y);
+		Vec2(int X, int Y);
+		Vec2(uint32_t X, uint32_t Y);
 		Vec2(const float* xy);
 		Vec2& operator = ( const Vec2& rhs );
 
@@ -204,6 +206,16 @@ namespace rhombus
 	inline Vec2::Vec2(float X, float Y) :
 		x(X),
 		y(Y)
+	{
+	}
+
+	inline Vec2::Vec2(int X, int Y) :
+		Vec2((float)X, (float)Y)
+	{
+	}
+
+	inline Vec2::Vec2(uint32_t X, uint32_t Y) :
+		Vec2((float)X, (float)Y)
 	{
 	}
 

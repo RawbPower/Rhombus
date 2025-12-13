@@ -20,6 +20,6 @@ namespace rhombus
 		std::string m_name;
 		bool m_looping = true;
 		std::vector<AnimationSample> m_samples;
-		float m_duration;
+		float m_duration = 0.0f;
 	};
 }

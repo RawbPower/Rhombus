@@ -2239,7 +2239,7 @@ FMT_CONSTEXPR const Char* parse_arg_id(const Char* begin, const Char* end,
   auto it = begin;
   do {
     ++it;
-  } while (it != end && (is_name_start(c = *it) || ('0' <= c && c <= '9')));
+  } while (it != end && (is_name_start(c == *it) || ('0' <= c && c <= '9')));
   handler(basic_string_view<Char>(begin, to_unsigned(it - begin)));
   return it;
 }

@@ -2,7 +2,9 @@
 
 extern "C"
 {
-	class lua_State;
+#include <lua.h>
+
+	struct lua_State;
 }
 
 namespace rhombus

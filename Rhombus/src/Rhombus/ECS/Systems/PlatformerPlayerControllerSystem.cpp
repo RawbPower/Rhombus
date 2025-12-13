@@ -11,7 +11,7 @@ namespace rhombus
 {
 	void PlatformerPlayerControllerSystem::Update(DeltaTime dt)
 	{
-		float keyboardInput = Input::IsKeyPressed(RB_KEY_D) - Input::IsKeyPressed(RB_KEY_A);
+		float keyboardInput = float(Input::IsKeyPressed(RB_KEY_D) - Input::IsKeyPressed(RB_KEY_A));
 		float gamepadInput = Input::GetGamepadAxis(0);
 		float input = math::Abs(keyboardInput) > math::Abs(gamepadInput) ? keyboardInput : gamepadInput;
 

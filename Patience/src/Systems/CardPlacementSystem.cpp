@@ -39,7 +39,7 @@ void CardPlacementSystem::OnMouseMoved(int x, int y)
 		if (card.GetIsHeld())
 		{
 			transform.SetWorldPosition(Vec3(cursorCoords.x, cursorCoords.y, transform.GetPosition().z) + card.GetHeldOffset());
-			transform.SetPositionByLayerSection(Z_LAYER::FOREGROUND_3_LAYER, card.GetHeldOffset().GetMagnitude() / cardSlot.m_staggeredOffset.GetMagnitude(), 10);
+			transform.SetPositionByLayerSection(Z_LAYER::FOREGROUND_3_LAYER, math::FloorInt(card.GetHeldOffset().GetMagnitude() / cardSlot.m_staggeredOffset.GetMagnitude()), 10);
 
 			bIsCardHeld = true;
 		}
@@ -77,7 +77,7 @@ void CardPlacementSystem::OnMouseButtonPressed(int button)
 			const CardSlotComponent& cardSlot = card.GetCurrentSlot().GetComponentRead<CardSlotComponent>();
 			std::queue<Entity> cardSequence;
 			cardSlot.GetCardSequence(card.GetOwnerEntity(), cardSequence);
-			int numCardInSequnce = cardSequence.size();
+			size_t numCardInSequnce = cardSequence.size();
 			while (cardSequence.size() > 0)
 			{
 				Entity nextCardInSequence = cardSequence.front();
@@ -249,7 +249,7 @@ bool CardPlacementSystem::DamageMonster(Entity siteEntity)
 	// Rearrange damagin card so they card be reused
 	if (monsterDamaged)
 	{
-		int siteCount = cardSite.m_cardStack.size();
+		size_t siteCount = cardSite.m_cardStack.size();
 		for (int i = 0; i < siteCount; i++)
 		{
 			Entity cardEntity = cardSite.m_cardStack.back();

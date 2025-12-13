@@ -20,19 +20,19 @@ public:
 
 	struct CardSlotData
 	{
-		int columns;
-		int sites;
-		int freecells;
-		int stocks;
-		int wastepiles;
+		int columns = 0;
+		int sites = 0;
+		int freecells = 0;
+		int stocks = 0;
+		int wastepiles = 0;
 
-		Revelation revelation;
+		Revelation revelation = REVELATION_OPEN;
 
-		RankOrdering packingRankOrder;
-		SuitOrdering packingSuitOrder;
+		RankOrdering packingRankOrder = RANK_ORDERING_ANY;
+		SuitOrdering packingSuitOrder = SUIT_ORDERING_ANY;
 		bool canLoop = false;
 		int loopMax = 13;
-		EmptyColumnType emptyColumnType;
+		EmptyColumnType emptyColumnType = EMPTY_COLUMN_ANY;
 
 		EntityID mainDiscard = INVALID_ENTITY;
 		EntityID monsterDiscard = INVALID_ENTITY;
@@ -153,7 +153,7 @@ private:
 
 	uint32_t m_allowedRanks;
 	uint32_t m_allowedSuits;
-	uint32_t m_sequenceLength = 1;
+	int m_sequenceLength = 1;
 
 public:
 	inline static CardSlotData sm_cardSlotData;

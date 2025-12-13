@@ -64,7 +64,7 @@ void GameEditorExtension::DisplayComponentProperties(Entity entity)
 			Entity siteEntity = entityScene->GetEntityByUUID(component.m_monsterBattleSite);
 			std::string entityName = ((EntityID)siteEntity != INVALID_ENTITY) ? siteEntity.GetName() : "None";
 			char entityChar[128];
-			std::strcpy(entityChar, entityName.c_str());
+			strcpy_s(entityChar, entityName.c_str());
 			ImGui::InputText("MonsterBattleSite", entityChar, sizeof(entityChar), ImGuiInputTextFlags_ReadOnly);
 
 			if (ImGui::BeginDragDropTarget())
@@ -90,7 +90,7 @@ void GameEditorExtension::DisplayComponentProperties(Entity entity)
 	DrawComponent<PatienceComponent>("Patience", entity, [](auto& component)
 	{
 		static char buffer[64];
-		strcpy(buffer, component.m_setupScript.c_str());
+		strcpy_s(buffer, component.m_setupScript.c_str());
 
 		if (ImGui::InputText("Setup Script", buffer, sizeof(buffer)))
 			component.m_setupScript = buffer;

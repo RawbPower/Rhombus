@@ -78,7 +78,7 @@ namespace rhombus
 
 			while (xTranslation != 0)
 			{
-				if (!Collide(entity, position + appliedTranslation + Vec2(step, 0.0f)))
+				if (!Collide(entity, position + appliedTranslation + Vec2((float)step, 0.0f)))
 				{
 					appliedTranslation.x += step;
 					xTranslation -= step;
@@ -104,7 +104,7 @@ namespace rhombus
 
 			while (yTranslation != 0)
 			{
-				if (!Collide(entity, position + appliedTranslation + Vec2(0.0f, step)))
+				if (!Collide(entity, position + appliedTranslation + Vec2(0.0f, (float)step)))
 				{
 					appliedTranslation.y += step;
 					ppbComponent.m_lastMovementVelocity = ppbComponent.m_velocity.y;

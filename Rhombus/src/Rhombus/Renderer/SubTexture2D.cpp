@@ -52,7 +52,7 @@ namespace rhombus
 		{
 			for (int c = 0; c < cols; c++)
 			{
-				tiles.push_back(CreateFromCoords(texture, Vec2(c, rows - 1 - r), tileSize, padding));
+				tiles.push_back(CreateFromCoords(texture, Vec2(c, rows - 1 - r), tileSize, (float)padding));
 			}
 		}
 	}

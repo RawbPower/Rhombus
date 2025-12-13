@@ -25,7 +25,6 @@ void CardSlotComponent::UpdateAllowedCards()
 	case SLOT_TYPE_COLUMN:
 		if (topCardData)
 		{
-			uint32_t allowedRanks, allowedSuits;
 			SuitOrdering suitOrdering = (topCardData->m_packingSuitOrderOverride >= 0 && topCardData->m_packingSuitOrderOverride != SUIT_ORDERING_COUNT) ? (SuitOrdering)topCardData->m_packingSuitOrderOverride : sm_cardSlotData.packingSuitOrder;
 			GetAllowedNextCardsInSequence(*topCardData, sm_cardSlotData.packingRankOrder, suitOrdering, sm_cardSlotData.canLoop, sm_cardSlotData.loopMax, m_allowedRanks, m_allowedSuits);
 		}
@@ -241,7 +240,7 @@ void CardSlotComponent::RemoveCard(Entity card)
 
 void CardSlotComponent::UpdateCardStack()
 {
-	const int numOfCards = m_cardStack.size();
+	const int numOfCards = (int)m_cardStack.size();
 	int i = 0;
 	for (Entity card : m_cardStack)
 	{
@@ -285,7 +284,7 @@ void CardSlotComponent::UpdateCardStack()
 
 void CardSlotComponent::GetCardSequence(Entity topCard, std::queue<Entity>& cardSequenceOut) const
 {
-	int cardsLeftInSlot = m_cardStack.size();
+	int cardsLeftInSlot = (int)m_cardStack.size();
 	bool foundSequence = false;
 	std::list<Entity>::const_iterator it;
 	for (it = m_cardStack.begin(); it != m_cardStack.end(); ++it) 

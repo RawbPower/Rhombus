@@ -25,7 +25,7 @@ namespace rhombus
 	Ref<Tileset> TileMap::CreateTileset(Ref<Tileset>& tileset)
 	{
 		m_tilesets.push_back(CreateRef<Tileset>(tileset->GetID(), tileset->GetPath(), tileset->GetTileset(), tileset->GetRowCount(), tileset->GetColumnCount(), tileset->GetPadding()));
-		m_idToIndexMap[tileset->GetID()] = m_tilesets.size() - 1;;
+		m_idToIndexMap[tileset->GetID()] = (uint32_t)m_tilesets.size() - 1;
 		return m_tilesets.back();
 	}
 

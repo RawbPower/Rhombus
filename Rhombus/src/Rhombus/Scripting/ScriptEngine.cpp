@@ -3,8 +3,8 @@
 #include "ScriptGlue.h"
 
 #include "Rhombus/Core/Log.h"
-#include "Rhombus/Project/Project.h"
 #include "Rhombus/ECS/Components/ScriptComponent.h"
+#include "Rhombus/Project/Project.h"
 
 extern "C"
 {
@@ -179,7 +179,7 @@ namespace rhombus
 	void ScriptEngine::GetListOfStringValueFromField(const char* fieldName, std::list<std::string>& list, int tableIndex)
 	{
 		lua_getfield(L, tableIndex, fieldName);
-		int len = lua_rawlen(L, -1);
+		int len = (int)lua_rawlen(L, -1);
 		for (int i = 1; i <= len; i++)
 		{
 			lua_pushinteger(L, i);

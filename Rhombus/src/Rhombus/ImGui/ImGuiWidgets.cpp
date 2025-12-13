@@ -58,8 +58,8 @@ namespace ImGui
 		{
 			uv0 = ImVec2(src.m_subtexture->GetTexCoords()[3].x, src.m_subtexture->GetTexCoords()[3].y);
 			uv1 = ImVec2(src.m_subtexture->GetTexCoords()[1].x, src.m_subtexture->GetTexCoords()[1].y);
-			textureWidth = src.m_subtexture->GetWidth();
-			textureHeight = src.m_subtexture->GetHeight();
+			textureWidth = (float)src.m_subtexture->GetWidth();
+			textureHeight = (float)src.m_subtexture->GetHeight();
 		}
 
 		const float fAspectRatio = textureWidth / textureHeight;
@@ -73,7 +73,7 @@ namespace ImGui
 		}
 
 		uint32_t textureID = src.m_texture->GetRendererID();
-		ImGui::Image((void*)textureID, ImVec2(imageSize.x, imageSize.y), uv0, uv1);
+		ImGui::Image((void*)(intptr_t)textureID, ImVec2(imageSize.x, imageSize.y), uv0, uv1);
 	}
 
 	void SpriteButton(const rhombus::SpriteRendererComponent& src, float size)
@@ -86,8 +86,8 @@ namespace ImGui
 		{
 			uv0 = ImVec2(src.m_subtexture->GetTexCoords()[3].x, src.m_subtexture->GetTexCoords()[3].y);
 			uv1 = ImVec2(src.m_subtexture->GetTexCoords()[1].x, src.m_subtexture->GetTexCoords()[1].y);
-			textureWidth = src.m_subtexture->GetWidth();
-			textureHeight = src.m_subtexture->GetHeight();
+			textureWidth = (float)src.m_subtexture->GetWidth();
+			textureHeight = (float)src.m_subtexture->GetHeight();
 		}
 
 		// Caclulate image size
@@ -105,7 +105,7 @@ namespace ImGui
 		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, iconPadding);
 		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0, 0));
 		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0, 0, 0, 0));
-		ImGui::ImageButton((void*)textureID, ImVec2(iconSize.x, iconSize.y), uv0, uv1);
+		ImGui::ImageButton((void*)(intptr_t)textureID, ImVec2(iconSize.x, iconSize.y), uv0, uv1);
 		ImGui::PopStyleColor();
 		ImGui::PopStyleColor();
 		ImGui::PopStyleVar();
